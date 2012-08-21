@@ -24,6 +24,7 @@
 # '/metocean' is a graph label that becomes part of the SPARQL endpoint query URL
 #      e.g. http://127.0.0.1:3030/metocean/query?
 
+PORT=3131
 
 if [ X"$1" = X"start" ]
 then
@@ -38,12 +39,12 @@ fi
 
 if [ "$word" = "start" ]
 then
-    /usr/bin/nohup $FUSEKI_HOME/fuseki-server --loc=./metocean_store/ --update --port=3131 /metocean &
+    /usr/bin/nohup $FUSEKI_HOME/fuseki-server --loc=./metocean_store/ --update --port=$PORT /metocean &
 fi
 
 if [ "$word" = "stop" ]
 then
-    EE=`ps -ef | grep 'fuseki-server' | grep -v grep | awk '{print $2}'`
+    EE=`ps -ef | grep 'fuseki-server' | fgrep "port=$PORT" | grep -v grep | awk '{print $2}'`
     if [ X"$EE" != X"" ]
     then
         kill $EE

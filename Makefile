@@ -47,6 +47,6 @@ clean: stop dump
 
 dump:
 	$$JENAROOT/bin/tdbdump --loc="./metocean_store/" |\
-		 gzip -9c > tdbdump.metocean_store.`date +'%F_%T'`
+		 xz -9c > tdbdump.metocean_store.`date +'%F_%T'`.xz
 
 

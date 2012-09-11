@@ -18,16 +18,15 @@
 
 
 
-DRAFT=$(wildcard draft/*)
-DEFAULT=$(wildcard default/*)
-STORE=$(wildcard metocean_store/*)
+DRAFT := $(wildcard draft/*)
+DEFAULT := $(wildcard default/*)
+STORE := $(wildcard metocean_store/*)
 
 all: load start
 
 .PHONY: force
 
 load: clean
-	@#$$JENAROOT/bin/tdbloader --graph=http://draft --loc="./metocean_store/" $(DRAFT)
 	@for i in $(DRAFT); \
 	do \
 		$$JENAROOT/bin/tdbloader --graph=http://$$i --loc="./metocean_store/" $$i ;\

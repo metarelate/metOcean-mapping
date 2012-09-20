@@ -1,6 +1,8 @@
 @prefix cf: <http://cf-pcmdi.llnl.gov/documents/> .
 @prefix fcode: <http://www-hc/~umdoc/pp_package_ibm_docs/fcodes/> .
 @prefix iso19135: <http://reference.metoffice.gov.uk/data/wmo/def/iso19135/> .
+@prefix link: <http://www.metarelate.net/metOcean/linkage/> .
+@prefix map: <http://www.metarelate.net/metOcean/mapping/> .
 @prefix metExtra: <http://reference.metoffice.gov.uk/data/wmo/def/met/> .
 @prefix mof: <http://reference.metoffice.gov.uk/data/fieldcode/> .
 @prefix mon: <http://reference.metoffice.gov.uk/data/none/> .
@@ -8,6 +10,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 mos: mos:header "(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping. metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/." .
 

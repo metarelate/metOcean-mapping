@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export metOcean="/net/home/h04/itmh/metarelate/metOcean-mapping"
+export metOcean="."
 
 $JENAROOT/bin/tdbquery --loc=$metOcean/metocean_store --query=saveCacheQuery.qu > $metOcean/default/zzztmp.ttl
 

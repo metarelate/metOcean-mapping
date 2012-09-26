@@ -15,12 +15,10 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 CONSTRUCT
 {
     ?s ?p ?o .
-    ?s metExtra:cacheSaved "True".
 }
 WHERE
 {
 ?s ?p ?o ;
-    metExtra:hasOwner ?own ;
     metExtra:saveCache "True" .
-MINUS { ?s metExtra:cacheSaved "True" }
 } 
+

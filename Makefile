@@ -31,14 +31,19 @@ load: clean
 	do \
 		$$JENAROOT/bin/tdbloader --graph=http://$$i --loc="./metocean_store/" $$i ;\
 	done
-	# now load the default data into the default (unnamed) graph
+# now load the default data into the default (unnamed) graph
 	$$JENAROOT/bin/tdbloader --loc="./metocean_store/" $(DEFAULT)
 
 start: 
 	./run_fuseki.sh start
 
-stop: 
+stop: save kill
+
+kill:
 	./run_fuseki.sh stop
+
+save:
+	./tdbSaveCache.sh
 
 clean: stop dump
 	rm -f nohup.out

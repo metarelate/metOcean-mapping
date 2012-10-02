@@ -89,5 +89,5 @@ temp.close()
 
 md5 = str(FileHash(tfile))
 
-os.rename(tfile, '../default/%s' % md5)
+os.rename(tfile, '../default/%s.ttl' % md5)
 

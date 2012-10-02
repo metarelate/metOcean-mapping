@@ -47,10 +47,13 @@ stop: save kill
 kill:
 	./run_fuseki.sh stop
 
+revert:
+	./tdbRevertCache.sh
+
 save:
 	./tdbSaveCache.sh
 
-clean: kill dump
+clean: kill #dump
 	rm -f nohup.out
 	rm -f $(STORE)
 

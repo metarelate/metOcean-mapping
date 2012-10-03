@@ -18,9 +18,10 @@
 
 
 
-STASH := $(wildcard stash/*)
-GRIB := $(wildcard grib/*)
-DEFAULT := $(wildcard default/*)
+UM := $(wildcard staticData/um/*)
+GRIB := $(wildcard staticData/grib/*)
+CF := $(wildcard staticData/cf/*)
+DEFAULT := $(wildcard staticData/default/*)
 STORE := $(wildcard metocean_store/*)
 
 all: load start
@@ -28,10 +29,15 @@ all: load start
 .PHONY: force
 
 load: clean
-	@for i in $(STASH); \
+	@for i in $(UM); \
 	do \
 		$$JENAROOT/bin/tdbloader --graph=http://$$i --loc="./metocean_store/" $$i ;\
 	done
+	@for i in $(CF); \
+	do \
+		$$JENAROOT/bin/tdbloader --graph=http://$$i --loc="./metocean_store/" $$i ;\
+	done
+
 	@for i in $(GRIB); \
 	do \
 		$$JENAROOT/bin/tdbloader --graph=http://$$i --loc="./metocean_store/" $$i ;\

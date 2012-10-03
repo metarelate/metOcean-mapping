@@ -2,7 +2,7 @@
 
 export metOcean="."
 
-$JENAROOT/bin/tdbquery --loc=$metOcean/metocean_store --query=saveCacheQuery.qu > $metOcean/default/zzztmp.ttl
+$JENAROOT/bin/tdbquery --loc=$metOcean/metocean_store --query=saveCacheQuery.qu > $metOcean/staticData/default/zzztmp.ttl
 $JENAROOT/bin/tdbupdate --loc=$metOcean/metocean_store --update=clearCacheQuery.qu
 
 sed -i 's/metExtra:saveCache  "True"//g' $metOcean/default/zzztmp.ttl

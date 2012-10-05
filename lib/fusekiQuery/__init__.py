@@ -21,7 +21,7 @@ from urllib import urlencode
 from urllib2 import urlopen, Request, ProxyHandler, build_opener, install_opener, URLError
 import json
 
-import metOceanPrefixes as prefixes
+import metocean.prefixes as prefixes
 
 def run_query(query_string, output='json', update=False):
     # use null ProxyHandler to ignore proxy for localhost access

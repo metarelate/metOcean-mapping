@@ -21,7 +21,7 @@
 UM := $(wildcard staticData/um/*)
 GRIB := $(wildcard staticData/grib/*)
 CF := $(wildcard staticData/cf/*)
-DEFAULT := $(wildcard staticData/default/*)
+DEFAULT := $(wildcard staticData/mappings/*)
 STORE := $(wildcard metocean_store/*)
 
 all: load start

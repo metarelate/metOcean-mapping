@@ -1,8 +1,9 @@
 import metocean.prefixes
 import fusekiQuery as query
+import hashlib
 
 
-def revert_cache(graph):
+def revert_cache(graph, debug=False):
     '''
     update a graph in the triple database removing all shards flagged with the saveCache predicate
     '''
@@ -18,11 +19,11 @@ def revert_cache(graph):
         mr:saveCache "True" .
     } 
     ''' % graph
-    results = query.run_query(qstr, update=True)
+    results = query.run_query(qstr, update=True, debug=debug)
     return results
 
 
-def save_cache(graph):
+def save_cache(graph, debug=False):
     '''
     export new records from a graph in the triple store to an external location, as flagged by the manager application
     '''
@@ -35,13 +36,13 @@ def save_cache(graph):
     WHERE
     {
     ?s ?p ?o ;
-        metExtra:saveCache "True" .
+        mr:saveCache "True" .
     } 
     ''' % graph
     results = query.run_query(qstr, output="text")
     return results
 
-def clear_cache(graph):
+def clear_cache(graph, debug=False):
     '''
     clear the 'not saved' flags on records, updating a graph in the tiple store with the fact that changes have been persisted to ttl 
     '''
@@ -49,18 +50,18 @@ def clear_cache(graph):
     DELETE
     FROM <%s>
     {
-        ?s metExtra:saveCache "True" .
+        ?s mr:saveCache "True" .
     }
     WHERE
     {
     ?s ?p ?o ;
-        metExtra:saveCache "True" .
+        mr:saveCache "True" .
     } 
     ''' % graph
-    results = query.run_query(qstr, update=True)
+    results = query.run_query(qstr, update=True, debug=debug)
     return results
 
-def select_graph(graph):
+def select_graph(graph, debug=False):
     '''
     selects a particular graph from the TDB
     '''
@@ -73,11 +74,11 @@ def select_graph(graph):
         }
 
     ''' % graph
-    results = query.run_query(qstr)
+    results = query.run_query(qstr, debug=debug)
     return results
 
 
-def subject_by_graph(graph):
+def subject_by_graph(graph, debug=False):
     '''
     selects distinct subject from a particular graph
     '''
@@ -91,43 +92,199 @@ def subject_by_graph(graph):
         ORDER BY ?subject
 
     ''' % graph
-    results = query.run_query(qstr)
+    
+    results = query.run_query(qstr, debug=debug)
     return results
 
-def insert_link(link_dict):
-    '''
-    take a dictionary of linkage values and insert into the tdb
-    '''
-    qstr = '''
-    INSERT DATA {
-    }
-    '''
-    results = query.run_query(qstr)
-    return results
 
-def insert_cf(cf_dict):
-    '''
-    insert a new cf record 
-    '''
-    qstr = '''
-    INSERT DATA {
-    }
-    '''
-    results = query.run_query(qstr)
-    return results
 
-# def ():
+
+# def get_cflink_by_id(cfID, debug=False):
 #     '''
+#     return a cflink record, if one exists, using the MD5 ID
 #     '''
 #     qstr = '''
-#     '''
-#     results = query.run_query(qstr)
+#     SELECT ?s ?p ?o
+#     FROM <http://mappings/>
+#     WHERE
+#     {
+#     ?s ?p ?o.
+#     FILTER (?s = <%s%s>)
+#     }
+#     ''' % ('http://www.metarelate.net/metOcean/CF/' ,cfID)
+#     results = query.run_query(qstr, debug=debug)
+
 #     return results
 
-# def ():
+        
+
+def get_by_attrs(po_dict, debug=False):
+    '''
+    return records, if they exists, using the dictionary of predicates and lists of objects
+    a list of triple dictionaries is returned.  The list is ordered by subject, but no grouping is explicit in the list.
+
+    '''
+    pred_obj = ''
+    for pred, obj in po_dict.iteritems():
+        for ob in obj:
+            pattern_string = ''';
+            %s %s ''' % (pred, obj)
+            pred_obj += pattern_string
+
+    qstr = '''
+    SELECT ?s ?p ?o
+    FROM <http://mappings/>
+    WHERE
+    {
+    ?s ?p ?o
+    %s
+    .
+    }
+    ''' % pred_obj
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+
+def create_link(po_dict, subj_pref, debug=False):
+    '''
+    create a new link, using the provided predicates:objectsList dictionary, if one does not already exists.
+    if one already exists, use this in preference
+    subj_pref is the prefix for the subject, e.g. http://www.metarelate.net/metocean/cf, http://www.metarelate.net/metocean/linkage
+    '''
+
+    mmd5 = hashlib.md5()
+    
+    for pred in po_dict.keys():
+        for obj in po_dict[pred]:
+            mmd5.update(pred)
+            mmd5.update(obj)
+
+    md5 = str(mmd5.hexdigest())
+    #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
+    #current_cflink = get_cflink_by_id(md5)
+    current_cflink = get_by_attrs(po_dict)
+    if len(current_cflink) == 0:
+        pred_obj = ''
+        for pred in po_dict.keys():
+            for obj in po_dict[pred]:
+                pattern_string = ''' %s %s ;
+                ''' % (pred, obj)
+                pred_obj += pattern_string
+        qstr = '''
+        INSERT DATA
+        { GRAPH <http://mappings/>
+        { <%s/%s> %s
+        mr:saveCache "True" .
+        }
+        }
+        ''' % (subj_pref, md5, pred_obj)
+        results = query.run_query(qstr, update=True, debug=debug)
+    elif len(current_cflink) ==1:
+        
+    else:
+        md5 = None
+    return md5
+
+
+# def get_linkage(linkID, debug=False):
+#     '''
+#     return a linkage if one exists, using the MD5 ID
+#     '''
+#     qstr = '''
+#     SELECT ?s ?p ?o
+#     FROM <http://mappings/>
+#     WHERE
+#     {
+#     ?s ?p ?o.
+#     FILTER (?s = <%s%s>)
+#     }
+#     ''' % ('http://www.metarelate.net/metOcean/linkage/' ,linkID)
+
+#     results = query.run_query(qstr, debug=debug)
+#     return results
+
+
+# def create_linkage(po_dict, debug=False):
+#     '''
+#     create a new linkage, using the provided predicates:objects dictionary, if one does not already exists.
+#     if one already exists, use this in preference
+#     '''
+#     qstr = '''
+#     '''
+#     results = query.run_query(qstr, update=True, debug=debug)
+#     return linkID
+
+# def get_mapping(pred_obj, debug=False):
+#     '''
+#     return a mapping record, if one exists, using the relevant predicate:objectList dictionary
+#     '''
+#     pred_obj = ''
+#     for pred in po_dict.keys():
+#         for obj in po_dict[pred]:
+#             pattern_string = ''' ;
+#             %s %s ''' % (pred, obj)
+#             pred_obj += pattern_string
+
+#     qstr = '''
+#     SELECT ?s ?p ?o
+#     FROM <http://mappings/>
+#     WHERE
+#     {
+#     ?s ?p ?o %s
+#     .
+#     FILTER (?s = <%s>)
+#     }
+#     ''' % (pred_obj, 'http://www.metarelate.net/metOcean/mapping/')
+
+#     results = query.run_query(qstr, debug=debug)
+#     return results
+
+
+def create_mapping(po_dict, debug=False):
+    '''
+    create a new mapping record
+    '''
+    subj_pref = 'http://www.metarelate.net/metocean/mapping'
+    results = None
+    if po_dict.has_key('owner') and
+        po_dict.has_key('watcher') and
+        po_dict.has_key('creator') and len(po_dict['creator'])==1 and
+        po_dict.has_key('status') and len(po_dict['status'])==1 and
+        po_dict.has_key('previous') and len(po_dict['previous'])==1 and
+        po_dict.has_key('comment') and len(po_dict['comment'])==1 and
+        po_dict.has_key('reason') and len(po_dict['reason'])==1 and
+        po_dict.has_key('linkage') and len(po_dict['linkage'])==1:
+        
+        mmd5 = hashlib.md5()
+
+        pred_obj = ''
+        for pred in po_dict.keys():
+            for obj in po_dict[pred]:
+                pattern_string = ''' %s %s ;
+                ''' % (pred, obj)
+                pred_obj += pattern_string
+                mmd5.update(pred)
+                mmd5.update(obj)
+
+        md5 = str(mmd5.hexdigest())
+
+        qstr = '''
+        INSERT DATA
+        { GRAPH <http://mappings/>
+        { <%s/%s> %s
+        mr:saveCache "True" .
+        }
+        }
+        ''' % (subj_pref, md5, pred_obj)
+        results = query.run_query(qstr, update=True, debug=debug)
+    return results
+
+        
+    
+# def (, debug=False):
 #     '''
 #     '''
 #     qstr = '''
 #     '''
-#     results = query.run_query(qstr)
+#     results = query.run_query(qstr, debug=debug)
 #     return results

@@ -66,6 +66,7 @@ def clear_cache(graph, debug=False):
 def current_mappings(debug=False):
     '''
     '''
+    
     qstr = '''
     SELECT ?s ?p ?o
     FROM <http://mappings/>
@@ -81,10 +82,10 @@ def current_mappings(debug=False):
           WHERE
           {
 
-           ?map mr:previous ?previous . 
+           ?map mr:previous ?previous .
+
            MINUS {?map ^mr:previous+ ?map}
-         
-          }  
+           }
         }
     }
     '''
@@ -94,24 +95,24 @@ def current_mappings(debug=False):
 def mapping_by_link(dataformat,linklist,debug=False):
     '''
     '''
-
     linkpattern = ''
     for link in linklist:
         linkpattern += '''
                 mr:%slink <%s> ;
         ''' % (dataformat.upper(),link)
     qstr = '''
-    SELECT (GROUP_CONCAT(DISTINCT(?map)) as ?Map)
-       (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?Owners)
-       (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?Watchers) 
-       (GROUP_CONCAT(DISTINCT(?creator); SEPARATOR = ",") AS ?Creator) 
-       (GROUP_CONCAT(DISTINCT(?creation); SEPARATOR = ",") AS ?Creation) 
-       (GROUP_CONCAT(DISTINCT(?status); SEPARATOR = ",") AS ?Status) 
-       (GROUP_CONCAT(DISTINCT(?previous); SEPARATOR = ",") AS ?Previous) 
-       (GROUP_CONCAT(DISTINCT(?comment); SEPARATOR = ",") AS ?Comment) 
-       (GROUP_CONCAT(DISTINCT(?reason); SEPARATOR = ",") AS ?Reason) 
+    SELECT ?map
+       (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
+       (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
+       ?creator 
+       ?creation 
+       ?status 
+       ?previous
+       ?comment
+       ?reason
+       ?link
        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
-       (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks) 
+       (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
        
     FROM <http://mappings/>
@@ -135,6 +136,7 @@ def mapping_by_link(dataformat,linklist,debug=False):
            {?link mr:GRIBlink ?griblink .}
        MINUS {?map ^mr:previous+ ?map}
     }
+    GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
     return results
@@ -234,22 +236,28 @@ def subject_graph_pattern(graph,pattern,debug=False):
 
 
 
-# def get_cflink_by_id(cfID, debug=False):
-#     '''
-#     return a cflink record, if one exists, using the MD5 ID
-#     '''
-#     qstr = '''
-#     SELECT ?s ?p ?o
-#     FROM <http://mappings/>
-#     WHERE
-#     {
-#     ?s ?p ?o.
-#     FILTER (?s = <%s%s>)
-#     }
-#     ''' % ('http://www.metarelate.net/metOcean/CF/' ,cfID)
-#     results = query.run_query(qstr, debug=debug)
+def get_cflink_by_id(cflink, debug=False):
+    '''
+    return a cflink record, if one exists, using the MD5 ID
+    '''
+    qstr = '''
+    SELECT ?type ?standard_name ?units ?long_name
+    FROM <http://mappings/>
+    WHERE
+    {
+    ?s mrcf:type ?type .
+    OPTIONAL
+    { ?s mrcf:standard_name?standard_name .}
+    OPTIONAL
+    { ?s mrcf:units ?units . }
+    OPTIONAL
+    { ?s mrcf:long_name ?long_name . }
+    FILTER (?s = <%s>)
+    }
+    ''' % cflink
+    results = query.run_query(qstr, debug=debug)
 
-#     return results
+    return results
 
         
 

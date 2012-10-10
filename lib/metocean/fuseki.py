@@ -64,7 +64,13 @@ def start():
     '''
     initialise the fuseki process, using the created tdb in root_path/metocean 
     '''
-    fuseki = subprocess.Popen(['nohup', fusekiroot + '/fuseki-server', '--loc=%s/metocean_store/'%root_path, '--update', '--port=%s' % fport, '/metocean'])
+    fuseki = subprocess.Popen(['nohup',
+                               fusekiroot +
+                               '/fuseki-server',
+                               '--loc=%s/metocean_store/'%root_path,
+                               '--update',
+                               '--port=%s' % fport,
+                               '/metocean'])
     return fuseki
 
 

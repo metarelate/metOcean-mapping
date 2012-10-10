@@ -31,6 +31,7 @@ all: load start
 load: clean
 	@for i in $(UM); \
 	do \
+		echo $$JENAROOT/bin/tdbloader --graph=http://$$i --loc="./metocean_store/" $$i ;\
 		$$JENAROOT/bin/tdbloader --graph=http://$$i --loc="./metocean_store/" $$i ;\
 	done
 	@for i in $(CF); \

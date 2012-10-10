@@ -29,17 +29,19 @@ def save_cache(graph, debug=False):
     '''
     qstr = '''
     CONSTRUCT
-    FROM <%s>
     {
         ?s ?p ?o .
     }
     WHERE
     {
+    GRAPH <%s>
+    {
     ?s ?p ?o ;
         mr:saveCache "True" .
+    }
     } 
     ''' % graph
-    results = query.run_query(qstr, output="text")
+    results = query.run_query(qstr, output="text", debug=debug)
     return results
 
 def clear_cache(graph, debug=False):
@@ -61,21 +63,137 @@ def clear_cache(graph, debug=False):
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
+def current_mappings(debug=False):
+    '''
+    '''
+    qstr = '''
+    SELECT ?s ?p ?o
+    FROM <http://mappings/>
+    WHERE
+    {
+    ?s ?p ?o ;
+        mr:status ?status.
+
+        FILTER (?status NOT IN ("Deprecated", "Broken")) .
+
+        {
+          SELECT ?map ?previous
+          WHERE
+          {
+
+           ?map mr:previous ?previous . 
+           MINUS {?map ^mr:previous+ ?map}
+         
+          }  
+        }
+    }
+    '''
+    results = query.run_query(qstr, update=True, debug=debug)
+    return results
+
+def mapping_by_link(dataformat,linklist,debug=False):
+    '''
+    '''
+
+    linkpattern = ''
+    for link in linklist:
+        linkpattern += '''
+                mr:%slink <%s> ;
+        ''' % (dataformat.upper(),link)
+    qstr = '''
+    SELECT (GROUP_CONCAT(DISTINCT(?map)) as ?Map)
+       (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?Owners)
+       (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?Watchers) 
+       (GROUP_CONCAT(DISTINCT(?creator); SEPARATOR = ",") AS ?Creator) 
+       (GROUP_CONCAT(DISTINCT(?creation); SEPARATOR = ",") AS ?Creation) 
+       (GROUP_CONCAT(DISTINCT(?status); SEPARATOR = ",") AS ?Status) 
+       (GROUP_CONCAT(DISTINCT(?previous); SEPARATOR = ",") AS ?Previous) 
+       (GROUP_CONCAT(DISTINCT(?comment); SEPARATOR = ",") AS ?Comment) 
+       (GROUP_CONCAT(DISTINCT(?reason); SEPARATOR = ",") AS ?Reason) 
+       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+       (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks) 
+       (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
+       
+    FROM <http://mappings/>
+    WHERE
+    {
+           ?map mr:owner ?owner ;
+                mr:watcher ?watcher ;
+                mr:creator ?creator ;
+                mr:creation ?creation ;
+                mr:status ?status ;
+                mr:previous ?previous ;
+                mr:comment ?comment ;
+                mr:reason ?reason ;
+                mr:linkage ?link .
+          ?link %s .
+       OPTIONAL
+           {?link mr:CFlink ?cflink . }
+       OPTIONAL
+           {?link mr:UMlink ?umlink . }
+       OPTIONAL
+           {?link mr:GRIBlink ?griblink .}
+       MINUS {?map ^mr:previous+ ?map}
+    }
+    ''' % (linkpattern)
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+
+
 def select_graph(graph, debug=False):
     '''
     selects a particular graph from the TDB
     '''
-    #used in 'list'
+    #used in 'list' query deprecate
     qstr = '''
         SELECT DISTINCT ?g
         WHERE {
             GRAPH ?g { ?s ?p ?o } .
-            FILTER( REGEX(str(?g), 'http://%s/') ) .
+            FILTER( REGEX(str(?g), '%s') ) .
         }
 
     ''' % graph
     results = query.run_query(qstr, debug=debug)
     return results
+
+
+def counts_by_graph(graph, debug=False):
+    #deprecated
+    '''This query relies on a feature of Jena that is not yet in the official
+    SPARQL v1.1 standard insofar as 'GRAPH ?g' has undetermined behaviour
+    under the standard but Jena interprets and treats the '?g' 
+    just like any other variable.
+    '''
+    qstr = '''
+        SELECT ?g (COUNT(DISTINCT ?s) as ?count)
+        WHERE {
+            GRAPH ?g { ?s ?p ?o } .
+            FILTER( REGEX(str(?g), '%s') ) .
+        }
+        GROUP by ?g
+        ORDER by ?g
+    ''' % graph
+    results = query.run_query(qstr)
+    return results
+
+def count_by_graph(debug=False):
+    '''This query relies on a feature of Jena that is not yet in the official
+    SPARQL v1.1 standard insofar as 'GRAPH ?g' has undetermined behaviour
+    under the standard but Jena interprets and treats the '?g' 
+    just like any other variable.
+    '''
+    qstr = '''
+        SELECT ?g (COUNT(DISTINCT ?s) as ?count)
+        WHERE {
+            GRAPH ?g { ?s ?p ?o } .
+        }
+        GROUP by ?g
+        ORDER by ?g
+    ''' 
+    results = query.run_query(qstr)
+    return results
+
 
 
 def subject_by_graph(graph, debug=False):
@@ -87,7 +205,6 @@ def subject_by_graph(graph, debug=False):
         SELECT DISTINCT ?subject
         WHERE {
             GRAPH <%s> { ?subject ?p ?o } .
-            FILTER( ?p != mos:header )
         }
         ORDER BY ?subject
 
@@ -96,6 +213,24 @@ def subject_by_graph(graph, debug=False):
     results = query.run_query(qstr, debug=debug)
     return results
 
+def subject_graph_pattern(graph,pattern,debug=False):
+    '''
+    selects distinct subject from a particular graph matching a pattern
+    '''
+    #used in listtype
+    qstr = '''
+        SELECT DISTINCT ?subject
+        WHERE {
+            GRAPH <%s> { ?subject ?p ?o } .
+            FILTER( REGEX(str(?subject), '%s') ) .            
+        }
+        ORDER BY ?subject
+
+    ''' % (graph,pattern)
+    
+    results = query.run_query(qstr, debug=debug)
+    return results
+    
 
 
 
@@ -180,7 +315,7 @@ def create_link(po_dict, subj_pref, debug=False):
         ''' % (subj_pref, md5, pred_obj)
         results = query.run_query(qstr, update=True, debug=debug)
     elif len(current_cflink) ==1:
-        
+        md5 = md5
     else:
         md5 = None
     return md5
@@ -246,13 +381,13 @@ def create_mapping(po_dict, debug=False):
     '''
     subj_pref = 'http://www.metarelate.net/metocean/mapping'
     results = None
-    if po_dict.has_key('owner') and
-        po_dict.has_key('watcher') and
-        po_dict.has_key('creator') and len(po_dict['creator'])==1 and
-        po_dict.has_key('status') and len(po_dict['status'])==1 and
-        po_dict.has_key('previous') and len(po_dict['previous'])==1 and
-        po_dict.has_key('comment') and len(po_dict['comment'])==1 and
-        po_dict.has_key('reason') and len(po_dict['reason'])==1 and
+    if po_dict.has_key('owner') and \
+        po_dict.has_key('watcher') and \
+        po_dict.has_key('creator') and len(po_dict['creator'])==1 and \
+        po_dict.has_key('status') and len(po_dict['status'])==1 and \
+        po_dict.has_key('previous') and len(po_dict['previous'])==1 and \
+        po_dict.has_key('comment') and len(po_dict['comment'])==1 and \
+        po_dict.has_key('reason') and len(po_dict['reason'])==1 and \
         po_dict.has_key('linkage') and len(po_dict['linkage'])==1:
         
         mmd5 = hashlib.md5()

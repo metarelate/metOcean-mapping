@@ -48,11 +48,14 @@ def load():
     clean()
     for ingraph in glob.glob(root_path + '/staticData/*'):
         #print ingraph
-        graph = ingraph.split('/')[-1]
+        graph = ingraph.split('/')[-1] + '/'
         for infile in glob.glob(ingraph + '/*.ttl'):
+            subgraph = ''
+            if graph == 'um/':
+                subgraph = infile.split('/')[-1]#.rstrip('.ttl')
             space = ' '
-            loadCall = [jenaroot + '/bin/tdbloader', '--graph=http://%s/' % graph, '--loc=%s/metocean_store/'% root_path, infile]
-            #print space.join(loadCall)
+            loadCall = [jenaroot + '/bin/tdbloader', '--graph=http://%s%s' % (graph,subgraph), '--loc=%s/metocean_store/'% root_path, infile]
+            print space.join(loadCall)
             subprocess.check_call(loadCall)
 
 

@@ -1,3 +1,22 @@
+
+# (C) British Crown Copyright 2011 - 2012, Met Office
+#
+# This file is part of metOcean-mapping.
+#
+# metOcean-mapping is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU Lesser General Public License 
+# as published by the Free Software Foundation, either version 3 of 
+# the License, or (at your option) any later version.
+#
+# metOcean-mapping is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+
+
 import metocean.prefixes
 import fusekiQuery as query
 import hashlib
@@ -9,16 +28,19 @@ def revert_cache(graph, debug=False):
     '''
     qstr = '''
     DELETE
-    FROM <%s>
-    {
+    {  GRAPH <%s>
+        {
         ?s ?p ?o .
+        }
     }
     WHERE
-    {
-    ?s ?p ?o ;
+    {  GRAPH <%s>
+        {
+        ?s ?p ?o ;
         mr:saveCache "True" .
+        }
     } 
-    ''' % graph
+    ''' % (graph,graph)
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
@@ -51,15 +73,19 @@ def clear_cache(graph, debug=False):
     qstr = '''
     DELETE
     FROM <%s>
-    {
+    {  GRAPH <%s>
+        {
         ?s mr:saveCache "True" .
+        }
     }
     WHERE
-    {
+    {  GRAPH <%s>
+        {
     ?s ?p ?o ;
         mr:saveCache "True" .
+        }
     } 
-    ''' % graph
+    ''' % (graph,graph)
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
@@ -114,7 +140,7 @@ def mapping_by_link(dataformat,linklist,debug=False):
        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-       
+
     FROM <http://mappings/>
     WHERE
     {
@@ -134,6 +160,7 @@ def mapping_by_link(dataformat,linklist,debug=False):
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^mr:previous+ ?map}
     }
     GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
@@ -385,10 +412,11 @@ def create_link(po_dict, subj_pref, debug=False):
 
 def create_mapping(po_dict, debug=False):
     '''
-    create a new mapping record
+    create a new mapping record from a dictionary of predicates and lists of objects
     '''
     subj_pref = 'http://www.metarelate.net/metocean/mapping'
     results = None
+
     if po_dict.has_key('owner') and \
         po_dict.has_key('watcher') and \
         po_dict.has_key('creator') and len(po_dict['creator'])==1 and \
@@ -401,9 +429,11 @@ def create_mapping(po_dict, debug=False):
         mmd5 = hashlib.md5()
 
         pred_obj = ''
-        for pred in po_dict.keys():
-            for obj in po_dict[pred]:
-                pattern_string = ''' %s %s ;
+        for pred,objects in po_dict.iteritems():
+            for obj in objects:
+#        for pred in po_dict.keys():
+#            for obj in po_dict[pred]:
+                pattern_string = ''' mr:%s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
                 mmd5.update(pred)

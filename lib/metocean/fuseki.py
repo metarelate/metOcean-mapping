@@ -23,12 +23,15 @@ import subprocess
 import metocean.queries as queries
 
 home = '/net/home/h04/itmh/'
-
+home = '/home/marky/work/'
 root_path = '%smetarelate/metOcean-mapping' % home
 
 jenaroot = '%sjena/apache-jena-2.7.3' % home
 fusekiroot = '%sjena/jena-fuseki-0.2.4' % home
 fport = 3131
+
+os.environ['JENAROOT'] = jenaroot
+os.environ['FUSEKI_HOME'] = fusekiroot
 
 
 def FileHash(file):

@@ -1,0 +1,58 @@
+digraph records {
+
+## basic setup 
+
+   	rankdir = LR;
+        node [
+        fontsize = 32,
+        shape = Mrecord
+        ];
+
+        edge [
+        fontsize = 24
+        ];
+
+## class definitions
+
+   	cflink [
+	label = "<title> CFlink |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units|<cflink>CFlink + "
+	];
+
+        linkage [
+	label = "<title> Linkage |ID: md5 |<umlink>umlink + |<griblink>griblink + |<cflink>cflink + "
+	];
+
+	mapping [
+	label = "<title> Mapping |ID: md5 |previous |date |editor |owner + |watcher + |<plink>linkage |status |comment |reason "
+	];
+
+	release [
+	label = "<title> Release |version|previous|date|<con>constituent + |standard"
+	];
+
+
+	um [
+	label = "UM Namespace"
+	];
+
+	grib [
+	label = "GRIB Namespace"
+	];
+
+
+
+## relations
+
+	mapping:plink -> linkage:title;
+
+	release:con -> mapping:title
+
+	linkage:umlink -> um
+
+	linkage:griblink -> grib
+
+	linkage:cflink -> cflink
+
+	cflink:cflink -> cflink:title 
+
+}

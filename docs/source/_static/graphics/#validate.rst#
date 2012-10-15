@@ -1,0 +1,121 @@
+Translation Use Case: Validate
+*******************************
+
+Author: Mark Hedley
+Owner: AVD Team
+Version: 1
+
+Use Case
+========
+
+Profile
+--------
+
+
+ * Primary actor: an editor 
+ * Goal: confirmation that the dataset is valid, according to the internal consistency rules
+
+
+% \begin{itemize}
+% * Dependencies:
+%   \begin{itemize}
+%   * 
+%   \end{itemize}
+% \end{itemize}
+
+\section*{Main Success Scenario}
+To achieve the goal the actor will:
+ \begin{enumerate}
+  * Run the validation rules on the dataset 
+  * Obtain feedback on each validation failure:
+    \begin{itemize}
+    * listing shards are involved in the failure
+    * for each shard, which validation rule they failed
+    \end{itemize}
+ \end{enumerate}
+
+
+
+
+\section*{Validation Rules}
+
+\subsection*{Terms}
+
+\begin{itemize}
+* Namespace: MO-UM:
+\begin{itemize}
+* MO-UM.STASH:
+  \begin{itemize}
+  * Met Office STASH Code
+  \end{itemize}
+* MO-UM.FC:
+  \begin{itemize}
+  * Met Office Field Code
+  \end{itemize}
+\end{itemize}
+
+* Namespace: CF
+\begin{itemize}
+* CF.SN:
+  \begin{itemize}
+  * CF standard\_name
+  \end{itemize}
+* CF.CU:
+  \begin{itemize}
+  * CF canonical unit
+  \end{itemize}
+\end{itemize}
+
+* Namespace: WMO-GRIB
+\begin{itemize}
+* WMO-GRIB.PC:
+  \begin{itemize}
+  * WMO-GRIB Parameter Code
+  \end{itemize}
+\end{itemize}
+
+* Namespace: MO-NI
+\begin{itemize}
+* MO-NI.PC:
+  \begin{itemize}
+  * Met Office NIMROD Parameter Code
+  \end{itemize}
+\end{itemize}
+
+\end{itemize}
+
+\subsection*{Rules}
+\label{val}
+\begin{enumerate}
+  * No attribute may have a value of `': an empty string
+  * MO-UM.STASH to CF.SN:
+    \begin{enumerate}
+    * one MO-UM.STASH shard to many CF.SN shards is banned 
+    \end{enumerate}
+  * MO-UM.FC to CF.SN:
+    \begin{enumerate}
+    * one MO-UM.FC shard to many CF.SN is banned
+    * many MO-UM.FC shards to one CF.SN is banned
+    \end{enumerate}
+  * WMO-GRIB.PC to CF.SN:
+    \begin{enumerate}
+    * one WMO-GRIB.PC shard to many CF.SN is banned
+    \end{enumerate}
+  * WMO-NI.PC to CF.SN:
+    \begin{enumerate}
+    * one MO-NI.PC shard to many CF.SN shards is banned
+    * many MO-NI.PC shard to one CF.SN shard is banned
+    \end{enumerate}
+  * No closed paths may exist between namespaces:
+\label{closedPath}
+    \begin{enumerate}
+    * directed acyclic graphs only
+    \end{enumerate}
+  * All units of measure which link to CF shards must be able to be transformed to the relevant CF.CU
+
+
+
+Preferred Routing
+
+Where validation rule ~\ref{closedPath} requires a deprecation change, the preferred path is through the CF namespace.
+

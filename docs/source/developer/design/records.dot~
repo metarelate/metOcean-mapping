@@ -1,0 +1,55 @@
+digraph records {
+
+## basic setup 
+
+   	rankdir = LR;
+        node [
+        fontsize = 32,
+        shape = Mrecord
+        ];
+
+        edge [
+        fontsize = 24
+        ];
+
+## class definitions
+
+        mapping [
+	label = "<title> Linkage |+ ID: md5 |<origin>+ origin |+ long name |+ units|<target>+ target "
+	];
+
+	provenance [
+	label = "<title> Mapping |+ ID: md5 |+ has previous |+ date |+ editor |+ owners |+ watchers|<plink>+ linkage|+ status |+ comment|+ reason"
+	];
+
+	release [
+	label = "<title> Release |+ version|+ has previous|+ date|<con>+ constituents|+ standard"
+	];
+
+	cf [
+	label = "CF Namespace"
+	];
+
+	stash [
+	label = "STASH Namespace"
+	];
+
+	grib [
+	label = "GRIB Namespace"
+	];
+
+
+
+## relations
+
+	provenance:plink -> mapping:title;
+
+	release:con -> provenance:title
+
+	mapping:target -> cf
+
+	mapping:origin -> stash
+
+	mapping:origin -> grib
+
+}

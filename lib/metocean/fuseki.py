@@ -23,7 +23,7 @@ import subprocess
 import metocean.queries as queries
 
 home = '/net/home/h04/itmh/'
-home = '/home/marky/work/'
+
 root_path = '%smetarelate/metOcean-mapping' % home
 
 jenaroot = '%sjena/apache-jena-2.7.3' % home

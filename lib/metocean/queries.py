@@ -118,14 +118,86 @@ def current_mappings(debug=False):
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
-def mapping_by_link(dataformat,linklist,debug=False):
+def mapping_by_link(dataformat,linklist=False,debug=False):
     '''
+    return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
+    or all mappings if linklist is left as False 
     '''
     linkpattern = ''
-    for link in linklist:
-        linkpattern += '''
-                mr:%slink <%s> ;
-        ''' % (dataformat.upper(),link)
+    if linklist:
+        linkpattern = '''          ?link '''
+        for link in linklist:
+            linkpattern += '''
+                    mr:%slink <%s> ;
+            ''' % (dataformat.upper(),link)
+        linkpattern.rstrip(';')
+        linkpattern += ' .'
+    qstr = '''
+    SELECT ?map
+       (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
+       (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
+       ?creator 
+       ?creation 
+       ?status 
+       ?previous
+       ?comment
+       ?reason
+       ?link
+       (GROUP_CONCAT(?cfitem; SEPARATOR = "&") AS ?cfelems) 
+       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+       (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+       (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
+
+
+    WHERE
+      {
+              GRAPH <http://mappings/> {
+              ?cflink ?cfp ?cfo .
+              BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?cfitem)
+              }
+      { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?previous ?comment ?reason ?link ?cflink ?umlink ?griblink
+
+        WHERE { GRAPH <http://mappings/> {
+           ?map mr:owner ?owner ;
+                mr:watcher ?watcher ;
+                mr:creator ?creator ;
+                mr:creation ?creation ;
+                mr:status ?status ;
+                mr:previous ?previous ;
+                mr:comment ?comment ;
+                mr:reason ?reason ;
+                mr:linkage ?link .
+%s
+       OPTIONAL
+           {?link mr:CFlink ?cflink .         
+           }
+       OPTIONAL
+           {?link mr:UMlink ?umlink . }
+       OPTIONAL
+           {?link mr:GRIBlink ?griblink .}
+       }
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^mr:previous+ ?map}
+    } } }
+    GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
+    ''' % (linkpattern)
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+def fast_mapping_by_link(dataformat,linklist=False,debug=False):
+    '''
+    return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
+    or all mappings if linklist is left as False 
+    '''
+    linkpattern = ''
+    if linklist:
+        linkpattern = '''          ?link '''
+        for link in linklist:
+            linkpattern += '''
+                    mr:%slink <%s> ;
+            ''' % (dataformat.upper(),link)
+        linkpattern.rstrip(';')
+        linkpattern += ' .'
     qstr = '''
     SELECT ?map
        (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
@@ -141,9 +213,10 @@ def mapping_by_link(dataformat,linklist,debug=False):
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
 
-    FROM <http://mappings/>
+
     WHERE
-    {
+      
+ { GRAPH <http://mappings/> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
@@ -153,13 +226,15 @@ def mapping_by_link(dataformat,linklist,debug=False):
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
-          ?link %s .
+%s
        OPTIONAL
-           {?link mr:CFlink ?cflink . }
+           {?link mr:CFlink ?cflink .         
+           }
        OPTIONAL
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
+       }
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^mr:previous+ ?map}
     }
@@ -167,6 +242,7 @@ def mapping_by_link(dataformat,linklist,debug=False):
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
     return results
+
 
 
 
@@ -286,6 +362,26 @@ def get_cflink_by_id(cflink, debug=False):
 
     return results
 
+def get_cflinks(debug=False):
+    '''
+    '''
+    qstr  = '''
+    SELECT ?s ?type ?standard_name ?units ?long_name
+    FROM <http://mappings/>
+    WHERE
+    {
+    ?s mrcf:type ?type .
+    OPTIONAL
+    { ?s mrcf:standard_name?standard_name .}
+    OPTIONAL
+    { ?s mrcf:units ?units . }
+    OPTIONAL
+    { ?s mrcf:long_name ?long_name . }
+    }
+    ''' 
+    results = query.run_query(qstr, debug=debug)
+
+    return results
         
 
 def get_by_attrs(po_dict, debug=False):

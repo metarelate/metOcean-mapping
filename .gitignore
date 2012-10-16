@@ -1,4 +1,4 @@
-nohup.out
+lib/nohup.out
 tdbdump.*
 *.pyc
 settings_local.py

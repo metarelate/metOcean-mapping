@@ -117,6 +117,7 @@ TEMPLATE_DIRS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.messages.context_processors.messages',
+    'manager.managerapp.context_processors',
     #'django.contrib.auth.context_processors.auth',
 )
 

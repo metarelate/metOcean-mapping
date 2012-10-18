@@ -25,12 +25,13 @@ import metocean.prefixes as prefixes
 
 def run_query(query_string, output='json', update=False, debug=False):
     # use null ProxyHandler to ignore proxy for localhost access
-    if debug == True:
-        print query_string
     proxy_support = ProxyHandler({})
     opener = build_opener(proxy_support)
     install_opener(opener)
     pre = prefixes.Prefixes()
+    if debug == True:
+        print pre.sparql
+        print query_string
     if update:
         action = 'update'
         qstr = urlencode([

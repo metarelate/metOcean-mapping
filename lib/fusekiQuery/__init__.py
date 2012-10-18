@@ -21,10 +21,12 @@ from urllib import urlencode
 from urllib2 import urlopen, Request, ProxyHandler, build_opener, install_opener, URLError
 import json
 
-import metOceanPrefixes as prefixes
+import metocean.prefixes as prefixes
 
-def run_query(query_string, output='json', update=False):
+def run_query(query_string, output='json', update=False, debug=False):
     # use null ProxyHandler to ignore proxy for localhost access
+    if debug == True:
+        print query_string
     proxy_support = ProxyHandler({})
     opener = build_opener(proxy_support)
     install_opener(opener)
@@ -44,8 +46,8 @@ def run_query(query_string, output='json', update=False):
     data = ''
     try:
         data = opener.open(Request(BASEURL), qstr).read()
-    except URLError:
-        raise Exception("Unable to contact Fuseki server on %s" % BASEURL)
+    except URLError as err:
+        raise Exception("Error connection to Fuseki server on %s. server returned" % BASEURL)
     if output == "json":
         return process_data(data)
     elif output == "text":

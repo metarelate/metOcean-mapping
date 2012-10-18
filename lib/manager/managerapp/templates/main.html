@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+<!--
+# (C) British Crown Copyright 2011 - 2012, Met Office
+#
+# This file is part of metOcean-mapping.
+#
+# metOcean-mapping is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU Lesser General Public License 
+# as published by the Free Software Foundation, either version 3 of 
+# the License, or (at your option) any later version.
+#
+# metOcean-mapping is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+{% block title %}: {{ title }}{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+    var ref;
+    $('#search').val('');
+
+    $("#search").keyup(function(e){
+        window.clearTimeout(ref);
+        $('#search').css('background','palegreen');
+        $('#action').show()
+        ref = window.setTimeout(search, 300);
+    })
+
+    function search(){
+        ref = null;
+        var searchstr = $('#search').val();
+        if( searchstr == '' ){
+            $("div.format").show();
+        }else{
+            console.time('foo');
+            $('div.urllabel').each(function(){
+                var uri = $(this).text();
+                if( uri.indexOf(searchstr) == -1 ){
+                    $(this).parent().parent().hide();
+                }else{
+                    $(this).parent().parent().show();
+                }
+            });
+        }
+        console.timeEnd('foo');
+        $('#action').hide()
+        $('#search').css('background','');
+    }
+})
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+{% if formset %}
+
+<form action="" method="post">
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Submit Changes"/>
+<table class="recordtable">
+<tr>
+{% for form in formset %}
+<td>
+{% csrf_token %}
+{{ formset.management_form }}
+<table class="recordtable">
+{{ form.as_table }}
+</table>
+</td>
+{% endfor %}
+</tr>
+</table?
+
+</form>
+
+{% else %}
+
+<div class="toplistbar">
+{% if not read_only %}
+<a href="{{ newrecord }}" class="listbar">
+    <div class="divleft">New...</div>
+</a>
+{% endif %}
+<div class="listbar">
+    <div class="divleft">Filter:</div>
+</div>
+<input id="search" type="text" name="fname" class="fname"/>
+<img id="action" src="{{ STATIC_URL }}indicator.white.gif" style="display:none;"/>
+</div>
+
+{% for item in itemlist %}
+<div class="format">
+<a href="{{ item.url }}" class="list">
+    <div class="divleft urllabel">{{ item.label }}</div>
+</a>
+</div>
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}
+

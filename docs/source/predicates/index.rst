@@ -99,6 +99,38 @@ Definition: A flag to indicate that changes exist in the triple store which are 
 
 Label:  saveCache
 
+contactList
+-----------
+
+URI:  http://www.metarelate.net/predicates/index.html#contactList
+
+Definition: A collection of contact accounts.
+
+Label:  contactList
+
+
+contact
+-------
+
+URI:  http://www.metarelate.net/predicates/index.html#contact
+
+Definition: A contact accounts; a person or an organisation.
+
+Label:  contact
+
+
+
+retired
+---------
+
+
+URI:  http://www.metarelate.net/predicates/index.html#retired
+
+Definition: A datetime stamp for a contact who is defined no longer active.
+
+Label: retired
+
+
 
 MetaRelate Formats
 ==================

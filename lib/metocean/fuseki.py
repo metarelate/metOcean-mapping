@@ -15,20 +15,24 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+import ConfigParser
 import glob
+import os
 import subprocess
+import sys
 
 import metocean.queries as queries
 
-home = '/net/home/h04/itmh/'
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+CONFIG_PATH = os.path.join(ROOT_PATH, 'etc')
+parser = ConfigParser.SafeConfigParser()
+parser.read(os.path.join(CONFIG_PATH,'metocean.config'))
 
-root_path = '%smetarelate/metOcean-mapping' % home
-
-jenaroot = '%sjena/apache-jena-2.7.3' % home
-fusekiroot = '%sjena/jena-fuseki-0.2.4' % home
-fport = 3131
+staticDataPath = parser.get('metocean','staticData')
+tdb = parser.get('metocean','tdb')
+jenaroot = parser.get('metocean','jenaroot')
+fusekiroot = parser.get('metocean','fusekiroot')
+fport = parser.get('metocean','port')
 
 os.environ['JENAROOT'] = jenaroot
 os.environ['FUSEKI_HOME'] = fusekiroot
@@ -49,7 +53,7 @@ def load():
     load data from all the ttl files in the staticData folder into a new tdb
     '''
     clean()
-    for ingraph in glob.glob(root_path + '/staticData/*'):
+    for ingraph in glob.glob(staticData + '*'):
         #print ingraph
         graph = ingraph.split('/')[-1] + '/'
         for infile in glob.glob(ingraph + '/*.ttl'):
@@ -57,7 +61,7 @@ def load():
             if graph == 'um/':
                 subgraph = infile.split('/')[-1]#.rstrip('.ttl')
             space = ' '
-            loadCall = [jenaroot + '/bin/tdbloader', '--graph=http://%s%s' % (graph,subgraph), '--loc=%s/metocean_store/'% root_path, infile]
+            loadCall = [jenaroot + '/bin/tdbloader', '--graph=http://%s%s' % (graph,subgraph), '--loc=%s'% tdb, infile]
             print space.join(loadCall)
             subprocess.check_call(loadCall)
 
@@ -70,14 +74,14 @@ def start():
     fuseki = subprocess.Popen(['nohup',
                                fusekiroot +
                                '/fuseki-server',
-                               '--loc=%s/metocean_store/'%root_path,
+                               '--loc=%s'%tdb,
                                '--update',
                                '--port=%s' % fport,
                                '/metocean'])
     return fuseki
 
 
-def stop(fuseki, save=True):
+def stop(fuseki, save=False):
     '''
     stop the fuseki process
     '''
@@ -94,7 +98,7 @@ def clean(fuseki=None):
     if fuseki:
         fuseki.terminate()
 #    os.remove('nohup.out')
-    for tdbfile in glob.glob("%s/metocean_store/*"% root_path):
+    for tdbfile in glob.glob("%s*"% tdb):
         os.remove(tdbfile)
 
 
@@ -104,7 +108,7 @@ def save_cache():
     write out all saveCache flagged changes to new ttl files
     remove saveCache flags after saving
     '''
-    for ingraph in glob.glob(root_path + '/staticData/*'):
+    for ingraph in glob.glob('%s*' % staticData):
         graph = ingraph.split('/')[-1]
         save_string = queries.save_cache(graph)
         clear_result = queries.clear_cache(graph)
@@ -121,7 +125,7 @@ def revert_cache():
     '''
     identify all cached changes in the system and remove them, reverting the tdb to the same state as the saved ttl files
     '''
-    for ingraph in glob.glob(root_path + '/staticData/*'):
+    for ingraph in glob.glob('%s*' % staticData):
         graph = ingraph.split('/')[-1]
         revert_string = queries.revert_cache(graph)
     

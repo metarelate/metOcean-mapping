@@ -23,6 +23,7 @@ import sys
 
 import metocean.queries as queries
 
+# configure paths for the data, triple database and jena install
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 CONFIG_PATH = os.path.join(ROOT_PATH, 'etc')
 parser = ConfigParser.SafeConfigParser()
@@ -38,14 +39,13 @@ os.environ['JENAROOT'] = jenaroot
 os.environ['FUSEKI_HOME'] = fusekiroot
 
 
-def FileHash(file):
+def filehash(file):
     '''large file md5 hash generation'''
     md5 = hashlib.md5()
     with open(file,'rb') as f: 
         for chunk in iter(lambda: f.read(8192), b''): 
              md5.update(chunk)
     return md5.hexdigest()
-
 
 
 def load():
@@ -66,41 +66,38 @@ def load():
             subprocess.check_call(loadCall)
 
 
-
 def start():
     '''
-    initialise the fuseki process, using the created tdb in root_path/metocean 
+    initialise the fuseki process, using the created tdb in root_path/metocean
+    returns a popen instance, the running fuseki server process
     '''
-    fuseki = subprocess.Popen(['nohup',
+    fuseki_server = subprocess.Popen(['nohup',
                                fusekiroot +
                                '/fuseki-server',
                                '--loc=%s'%tdb,
                                '--update',
                                '--port=%s' % fport,
                                '/metocean'])
-    return fuseki
+    return fuseki_server
 
 
-def stop(fuseki, save=False):
+def stop(fuseki_server, save=False):
     '''
     stop the fuseki process
     '''
     if save:
         save_cache()
-    fuseki.terminate()
+    fuseki_server.terminate()
 
 
-
-def clean(fuseki=None):
+def clean(fuseki_server=None):
     '''
     remove all of the files supporting the tbd instance
     '''
-    if fuseki:
-        fuseki.terminate()
-#    os.remove('nohup.out')
+    if fuseki_server:
+        stop(fuseki_server)
     for tdbfile in glob.glob("%s*"% tdb):
         os.remove(tdbfile)
-
 
 
 def save_cache():
@@ -113,13 +110,11 @@ def save_cache():
         save_string = queries.save_cache(graph)
         clear_result = queries.clear_cache(graph)
         tfile = '%s/save_tmp.ttl' % ingraph
-        temp = open(tfile, 'w')
-        temp.write(save_string)
-        temp.close()
-        md5 = str(FileHash(tfile))
+        with open(tfile, 'w') as temp:
+            temp.write(save_string)
+        md5 = str(filehash(tfile))
         os.rename(tfile, '%s/%s.ttl' % (ingraph,md5))
 
-    
     
 def revert_cache():
     '''

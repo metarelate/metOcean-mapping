@@ -17,19 +17,18 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import time
-import sys
-
-import metocean.prefixes as prefixes
-
-from settings import READ_ONLY
 from django import forms
-from string import Template
 from django.utils.safestring import mark_safe
 from django.utils import formats
 from django.core.urlresolvers import reverse
+from string import Template
+import sys
+import time
 
+from managerapp.widgets import SelectWithPopUp
+import metocean.prefixes as prefixes
 import metocean.queries as moq
+from settings import READ_ONLY
 
 
 def get_states():
@@ -97,7 +96,20 @@ class RecordForm(forms.Form):
         else:
             return self.cleaned_data
 
-    
+class ContactForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+    isoformat = ("%Y-%m-%dT%H:%M:%S.%f",)
+    github_name = forms.CharField(max_length=50)
+    register = forms.ChoiceField(choices=(('http://www.metarelate.net/metOcean/people','people'),('http://www.metarelate.net/metOcean/organisations','organisations')))
+
+
+    def clean(self):
+        if READ_ONLY:
+            raise ValidationError('System in Read-Only mode') 
+        else:
+            return self.cleaned_data
+
 
 class MappingEditForm(forms.Form):
     required_css_class = 'required'
@@ -107,7 +119,9 @@ class MappingEditForm(forms.Form):
     linkage = forms.URLField()
     last_edit = forms.CharField(max_length=50)
     last_editor = forms.CharField(max_length=50)
-    editor = forms.CharField(max_length=50, required=False)
+    #editor = forms.CharField(max_length=50, required=False)
+    #editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')])
+    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')], widget=SelectWithPopUp)
     last_comment = forms.CharField(max_length=200)
     comment = forms.CharField(max_length=200,required=False)
     last_reason = forms.CharField(max_length=50)
@@ -127,7 +141,7 @@ class MappingEditForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(MappingEditForm, self).__init__(*args, **kwargs)
-        pre = prefixes.Prefixes()
+        #pre = prefixes.Prefixes()
         self.fields['current_status'].widget.attrs['readonly'] = True
         self.fields['owners'].widget.attrs['readonly'] = True
         self.fields['watchers'].widget.attrs['readonly'] = True

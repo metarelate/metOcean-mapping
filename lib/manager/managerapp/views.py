@@ -199,6 +199,31 @@ def newrecord(request, dataFormat, datatype):
             'formset' : formset,
             }) )
 
+
+def add(request,newtypes):
+    if newtypes == 'contact':
+        form = forms.ContactForm
+
+
+    if request.method == 'POST':
+        form = form(request.POST)
+        if form.is_valid():
+            process_add(form, newtypes, request)
+            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
+                    (escape(form.cleaned_data['github_name']),escape(form.cleaned_data['github_name'])))
+
+    else:
+        form = form()
+
+    page_context = {'form': form}#, 'field': normal_model_name}
+    return render_to_response('popup.html', page_context, context_instance=RequestContext(request))
+
+def process_add(form, newtypes, request):
+    if newtypes == 'contact':
+        #only creat new ones
+        if len(get_contact(name)) == 0:
+            moq.create_contact(register, contact, creation) 
+
 def edit(request, dataFormat, datatype):
     '''form view to edit one or more records, retrieved based on a format specific request'''
     request_search_path = request.GET.get('ref', '')

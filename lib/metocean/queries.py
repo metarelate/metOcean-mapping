@@ -551,6 +551,42 @@ def create_mapping(po_dict, debug=False):
         results = query.run_query(qstr, update=True, debug=debug)
     return results
 
+
+def get_contacts(register, debug=False):
+    '''
+    return a list of contacts from the tdb which are part of the named register 
+    '''
+    qstr = '''
+    SELECT ?s
+    WHERE
+    {GRAPH <http://contacts/>{
+        ?s iso19135:definedInRegister ?register .
+           OPTIONAL{
+               ?s mr:retired ?retired}
+               }
+    FILTER (!bound(?retired))
+    FILTER (regex(str(?register),"%s", "i"))
+    }
+    ''' % register
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+def create_contact(register, contact, creation, debug=False):
+    '''
+    create a new contact
+    '''
+    qstr = '''
+    INSERT DATA
+    {
+    %s a mr:contact ;
+    iso19135:definedInRegister %s ;
+    mr:creation "%s"^^xsd:dateTime .
+    }
+    ''' % (contact, register, creation)
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+    
         
     
 # def (, debug=False):

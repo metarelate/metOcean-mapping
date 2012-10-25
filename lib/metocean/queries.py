@@ -16,10 +16,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
+import hashlib
 
 import metocean.prefixes
 import fusekiQuery as query
-import hashlib
+
 
 
 def revert_cache(graph, debug=False):
@@ -47,7 +48,8 @@ def revert_cache(graph, debug=False):
 
 def save_cache(graph, debug=False):
     '''
-    export new records from a graph in the triple store to an external location, as flagged by the manager application
+    export new records from a graph in the triple store to an external location,
+    as flagged by the manager application
     '''
     qstr = '''
     CONSTRUCT
@@ -68,7 +70,8 @@ def save_cache(graph, debug=False):
 
 def clear_cache(graph, debug=False):
     '''
-    clear the 'not saved' flags on records, updating a graph in the tiple store with the fact that changes have been persisted to ttl 
+    clear the 'not saved' flags on records, updating a graph in the triple store
+    with the fact that changes have been persisted to ttl 
     '''
     qstr = '''
     DELETE
@@ -118,18 +121,18 @@ def current_mappings(debug=False):
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
-def mapping_by_link(dataformat,linklist=False,debug=False):
+def mapping_by_link(paramlist=False,debug=False):
     '''
     return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
     or all mappings if linklist is left as False 
     '''
     linkpattern = ''
-    if linklist:
+    if paramlist:
         linkpattern = '''          ?link '''
-        for link in linklist:
+        for param in paramlist:
             linkpattern += '''
                     mr:%slink <%s> ;
-            ''' % (dataformat.upper(),link)
+            ''' % (param[0].upper(),param[1])
         linkpattern.rstrip(';')
         linkpattern += ' .'
     qstr = '''
@@ -350,7 +353,7 @@ def get_cflink_by_id(cflink, debug=False):
     {
     ?s mrcf:type ?type .
     OPTIONAL
-    { ?s mrcf:standard_name?standard_name .}
+    { ?s mrcf:standard_name ?standard_name .}
     OPTIONAL
     { ?s mrcf:units ?units . }
     OPTIONAL
@@ -362,9 +365,16 @@ def get_cflink_by_id(cflink, debug=False):
 
     return results
 
-def get_cflinks(debug=False):
+def get_cflinks(pred_obj=None, debug=False):
     '''
     '''
+    filterstr = ''
+    if pred_obj:
+        for key in pred_obj.keys():
+#        if pred_obj.has_key('standard_name'):
+            filterstr += '''FILTER (bound(?%s))
+            FILTER (regex(str(?%s), "%s", "i"))
+            ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
     FROM <http://mappings/>
@@ -372,17 +382,18 @@ def get_cflinks(debug=False):
     {
     ?s mrcf:type ?type .
     OPTIONAL
-    { ?s mrcf:standard_name?standard_name .}
+    { ?s mrcf:standard_name ?standard_name .}
     OPTIONAL
     { ?s mrcf:units ?units . }
     OPTIONAL
     { ?s mrcf:long_name ?long_name . }
+    %s
     }
-    ''' 
+    ''' % filterstr 
     results = query.run_query(qstr, debug=debug)
 
     return results
-        
+
 
 def get_by_attrs(po_dict, debug=False):
     '''
@@ -548,6 +559,42 @@ def create_mapping(po_dict, debug=False):
         results = query.run_query(qstr, update=True, debug=debug)
     return results
 
+
+def get_contacts(register, debug=False):
+    '''
+    return a list of contacts from the tdb which are part of the named register 
+    '''
+    qstr = '''
+    SELECT ?s
+    WHERE
+    {GRAPH <http://contacts/>{
+        ?s iso19135:definedInRegister ?register .
+           OPTIONAL{
+               ?s mr:retired ?retired}
+               }
+    FILTER (!bound(?retired))
+    FILTER (regex(str(?register),"%s", "i"))
+    }
+    ''' % register
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+def create_contact(register, contact, creation, debug=False):
+    '''
+    create a new contact
+    '''
+    qstr = '''
+    INSERT DATA
+    {
+    %s a mr:contact ;
+    iso19135:definedInRegister %s ;
+    mr:creation "%s"^^xsd:dateTime .
+    }
+    ''' % (contact, register, creation)
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+    
         
     
 # def (, debug=False):

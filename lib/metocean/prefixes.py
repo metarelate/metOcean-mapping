@@ -24,7 +24,9 @@ class Prefixes(dict):
         'fcode'    : 'http://www-hc/~umdoc/pp_package_ibm_docs/fcodes/',
         'cf'       : 'http://cf-pcmdi.llnl.gov/documents/',
         'mr'       : 'http://www.metarelate.net/predicates/index.html#',
-        'mrcf'       : 'http://www.metarelate.net/predicates/CF.html#',        
+        'mrcf'     : 'http://www.metarelate.net/predicates/CF.html#',
+        'github'   : 'https://github.com/' ,
+        'metoc'    : 'http://www.metarelate.net/metOcean/' , 
         }
         self.update(prefixd)
 

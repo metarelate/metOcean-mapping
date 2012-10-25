@@ -23,6 +23,8 @@ import settings
 
 dataFormats = 'um|grib|cf'
 
+newtypes = 'contact'
+
 urlpatterns = patterns('managerapp.views',
     url(r'^$', 'formats', name='formats'),
     url(r'^list_format/(?P<dataFormat>(%s))/$' % dataFormats,
@@ -33,6 +35,8 @@ urlpatterns = patterns('managerapp.views',
         'newrecord', name='newrecord'),
     url(r'^edit/(?P<dataFormat>(%s))/(?P<datatype>[^/]+)/$' % dataFormats, 
         'edit', name='edit'),
+    url(r'^add/(?P<newtypes>(%s))/$' % newtypes,
+        'add', name='add'),
     url(r'^mapping/(?P<hashval>[a-f0-9]{32})/', 'mapdisplay', name='mapdisplay'),
     url(r'^search/$', 'search', name='search'),
 )

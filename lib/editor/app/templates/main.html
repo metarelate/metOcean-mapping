@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+<!--
+# (C) British Crown Copyright 2011 - 2012, Met Office
+#
+# This file is part of metOcean-mapping.
+#
+# metOcean-mapping is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU Lesser General Public License 
+# as published by the Free Software Foundation, either version 3 of 
+# the License, or (at your option) any later version.
+#
+# metOcean-mapping is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+{% block title %}: {{ title }}{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
+<script src="{{ ADMIN_MEDIA_PREFIX }}js/admin/RelatedObjectLookups.js"></script>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+{% if itemlist %}
+{% for item in itemlist %}
+<li>{{ item }}</li>
+{% endfor %}
+{% endif %}
+
+{% if umitems %}
+{% for item in umitems %}
+<li>{{ item }}</li>
+{% endfor %}
+{% endif %}
+
+{% if addum %}
+<li><a href="{{ addum.url }}"> {{ addum.label }} </a></li>
+{% endif %}
+
+{% if cfitems %}
+{% for item in cfitems %}
+<li>{{ item }}</li>
+{% endfor %}
+{% endif %}
+
+{% if addcf %}
+<li><a href="{{ addcf.url }}"> {{ addcf.label }} </a></li>
+{% endif %}
+
+{% if gribitems %}
+{% for item in gribitems %}
+<li>{{ item }}</li>
+{% endfor %}
+{% endif %}
+
+{% if addgrib %}
+<li><a href="{{ addgrib.url }}"> {{ addgrib.label }} </a></li>
+{% endif %}
+
+
+<p>
+{% if search %}
+<a href="{{ search.url }}"> {{ search.label }} </a>
+{% endif %}
+<p>
+{% if clear %}
+<a href="{{ clear.url }}"> {{ clear.label }} </a>
+{% endif %}
+
+
+{% endblock %}

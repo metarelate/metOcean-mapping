@@ -1,0 +1,263 @@
+
+# (C) British Crown Copyright 2011 - 2012, Met Office
+#
+# This file is part of metOcean-mapping.
+#
+# metOcean-mapping is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU Lesser General Public License 
+# as published by the Free Software Foundation, either version 3 of 
+# the License, or (at your option) any later version.
+#
+# metOcean-mapping is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+
+import datetime
+from django import forms
+from django.utils.safestring import mark_safe
+from django.utils import formats
+from django.core.urlresolvers import reverse
+from string import Template
+import sys
+import time
+
+#from .widgets import SelectWithPopUp
+import metocean.prefixes as prefixes
+import metocean.queries as moq
+from settings import READ_ONLY
+
+
+class SearchParam(forms.Form):
+    '''
+    '''
+    parameter = forms.ChoiceField()
+    def __init__(self,  *args, **kwargs):
+        super(SearchParam, self).__init__(*args, **kwargs)
+        choices = (('',''),('http://i.am.a/avocet', 'avocet'),('http://i.am.a/beaver', 'beaver'),('http://i.am.a/cheetah','cheetah'),('http://i.am.a/dugong','dugong'),('http://i.am.a/emu','emu'))
+        #define choices
+        #if dataFormat == 'um' and qualifier:
+        #print self.fields
+        self.fields['parameter'].choices = choices
+    # def clean(self):
+    #     return self.cleaned_data
+
+class UMParam(forms.Form):
+    '''
+    '''
+    parameter = forms.ChoiceField()
+    def __init__(self,  *args, **kwargs):
+        super(UMParam, self).__init__(*args, **kwargs)
+        version = '8.2'
+        stashRes = moq.subject_by_graph('http://um/stash.vn%s.ttl' % version)
+        #define choices
+        choices = [('um;'+stash['subject'],stash['subject'].split('/')[-2]) for stash in stashRes]
+        
+
+        self.fields['parameter'].choices = choices
+
+            
+class CFParam(forms.Form):
+    '''
+    '''
+    parameter = forms.CharField(max_length=100,required=False)
+    cf_type = forms.ChoiceField(choices=[('Field','Field')],required=False)
+    standard_name = forms.ChoiceField(required=False)
+    long_name = forms.CharField(max_length=50,required=False)
+    units = forms.CharField(max_length=16,required=False)
+    def __init__(self,  *args, **kwargs):
+        super(CFParam, self).__init__(*args, **kwargs)
+        snRes = moq.subject_by_graph('http://CF/')
+        #define choices
+        choices = [(name['subject'],name['subject'].split('/')[-1]) for name in snRes]
+
+        self.fields['standard_name'].choices = choices
+        self.fields['parameter'].widget = forms.HiddenInput()
+    def clean(self):
+        cleaned_data = super(CFParam, self).clean()
+        pred_obj = {}
+        pred_obj['mrcf:type'] = cleaned_data.get('cf_type')
+        if cleaned_data.get('standard_name') != 'http://cf-pcmdi.llnl.gov/documents/':
+            pred_obj['mrcf:standard_name'] = cleaned_data.get('standard_name')
+        if cleaned_data.get('long_name') != '':
+            pred_obj['mrcf:long_name'] = cleaned_data.get('long_name')
+        if cleaned_data.get('units') != '':
+            pred_obj['mrcf:units'] = cleaned_data.get('units')
+        print pred_obj
+        cflink = ''
+        cfres = moq.get_cflinks(pred_obj)
+        if len(cfres) == 1:
+            print 'found'
+            cflink = cfres[0]['s'] 
+        cleaned_data['parameter'] = 'cf;'+cflink
+        return cleaned_data
+        
+
+
+
+
+def get_states():
+
+    STATES = (
+        'Draft',
+        'Proposed',
+        'Approved',
+        'Broken',
+        'Deprecated',
+    )
+    return STATES
+
+def get_reasons():
+
+    REASONS = (
+        'new mapping',
+        'added metadata',
+        'corrected metadata',
+        'linked to new format',
+        'corrected links',
+        'changed status'
+        )
+    return REASONS
+
+
+
+class URLwidget(forms.TextInput):
+    def render(self, name, value, attrs=None):
+        if value in ('None', None):
+            tpl = value
+        else:
+            tpl = u'<a href="%s">%s</a>' % (reverse('mapdisplay', 
+                kwargs={'hashval' : value}), "go to previous")
+        return mark_safe(tpl)
+
+    def clean(self):
+        return self.cleaned_data
+
+
+class ContactForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+    isoformat = ("%Y-%m-%dT%H:%M:%S.%f",)
+    github_name = forms.CharField(max_length=50)
+    register = forms.ChoiceField(choices=(('http://www.metarelate.net/metOcean/people','people'),('http://www.metarelate.net/metOcean/organisations','organisations')))
+
+
+    def clean(self):
+        if READ_ONLY:
+            raise ValidationError('System in Read-Only mode') 
+        else:
+            return self.cleaned_data
+
+
+class MappingEditForm(forms.Form):
+    required_css_class = 'required'
+    error_css_class = 'error'
+    isoformat = ("%Y-%m-%dT%H:%M:%S.%f",)
+    mapping = forms.URLField()
+    linkage = forms.URLField()
+    last_edit = forms.CharField(max_length=50)
+    last_editor = forms.CharField(max_length=50)
+    #editor = forms.CharField(max_length=50, required=False)
+    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r
+    in moq.get_contacts('people')])
+#    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')], widget=SelectWithPopUp)
+    last_comment = forms.CharField(max_length=200)
+    comment = forms.CharField(max_length=200,required=False)
+    last_reason = forms.CharField(max_length=50)
+    reason = forms.ChoiceField(choices=[(x,x) for x in get_reasons()])
+    owners = forms.CharField(max_length=200)
+    add_owners = forms.CharField(max_length=200, required=False)
+    remove_owners = forms.CharField(max_length=200, required=False)
+    watchers = forms.CharField(max_length=200)
+    add_watchers = forms.CharField(max_length=200, required=False)
+    remove_watchers = forms.CharField(max_length=200, required=False)
+    previous = forms.CharField(max_length=32)
+    current_status = forms.CharField(max_length=15)
+    next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()])
+    cflinks = forms.CharField(max_length=1000, required=False)
+    umlinks = forms.CharField(max_length=1000, required=False)
+    griblinks  = forms.CharField(max_length=1000, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(MappingEditForm, self).__init__(*args, **kwargs)
+        #pre = prefixes.Prefixes()
+        self.fields['current_status'].widget.attrs['readonly'] = True
+        self.fields['owners'].widget.attrs['readonly'] = True
+        self.fields['watchers'].widget.attrs['readonly'] = True
+        self.fields['last_edit'].widget.attrs['readonly'] = True
+        self.fields['last_editor'].widget.attrs['readonly'] = True
+        self.fields['last_comment'].widget.attrs['readonly'] = True
+        self.fields['last_reason'].widget.attrs['readonly'] = True
+        self.fields['last_edit'].required = False
+        self.fields['previous'].widget = URLwidget()
+        self.fields['previous'].required = False
+        self.fields['mapping'].widget.attrs['readonly'] = True
+        self.fields['linkage'].widget = forms.HiddenInput()
+        self.fields['cflinks'].widget = forms.HiddenInput()
+        self.fields['umlinks'].widget = forms.HiddenInput()
+        self.fields['griblinks'].widget = forms.HiddenInput()
+        if kwargs.has_key('initial'):
+            cflinks = None
+            if kwargs['initial'].has_key('cflinks'):
+                cflinks = kwargs['initial']['cflinks']
+            if cflinks:
+                for i, cflink in enumerate(cflinks.split('&')):
+                    for k,v in moq.get_cflink_by_id(cflink)[0].iteritems():
+                        self.fields['cflink%i_%s' % (i,k)] = forms.URLField(initial=v)
+                        self.fields['cflink%i_%s' % (i,k)].widget.attrs['readonly'] = True
+                        self.fields['cflink%i_%s' % (i,k)].widget.attrs['size'] = 50
+            umlinks = None
+            if kwargs['initial'].has_key('umlinks'):
+                umlinks = kwargs['initial']['umlinks']
+            if umlinks:
+                for i, umlink in enumerate(umlinks.split('&')):
+                    self.fields['umlink%i' % i] = forms.URLField(initial=umlink)
+                    self.fields['umlink%i' % i].widget.attrs['readonly'] = True
+                    self.fields['umlink%i' % i].widget.attrs['size'] = 50
+            griblinks = None
+            if kwargs['initial'].has_key('cflinks'):
+                griblinks = kwargs['initial']['griblinks']
+            if griblinks:
+                for i, griblink in enumerate(griblinks.split('&')):
+                    self.fields['griblink%i' % i] = forms.URLField(initial=griblink)
+                    self.fields['griblink%i' % i].widget.attrs['readonly'] = True
+
+
+    def clean(self):
+        if READ_ONLY:
+            raise ValidationError('System in Read-Only mode') 
+        else:
+            return self.cleaned_data
+
+    def clean_last_edit(self):
+        data = self.cleaned_data.get('last_edit')
+        for format in self.isoformat:
+            try:
+                return str(datetime.datetime(*time.strptime(str(data), format)[:6]))
+            except ValueError:
+                continue
+        raise forms.ValidationError("Invalid ISO DateTime format")
+
+
+class MappingNewForm(MappingEditForm):
+    reason = forms.CharField(max_length=15, initial='new mapping')
+    next_status = forms.CharField(max_length=15, initial='Draft')
+
+    def __init__(self, *args, **kwargs):
+        super(MappingNewForm, self).__init__(*args, **kwargs)
+        self.fields['last_edit'].widget = forms.HiddenInput()
+        self.fields['last_editor'].widget = forms.HiddenInput()
+        self.fields['last_comment'].widget = forms.HiddenInput()
+        self.fields['last_reason'].widget = forms.HiddenInput()
+        self.fields['owners'].widget = forms.HiddenInput()
+        self.fields['remove_owners'].widget = forms.HiddenInput()
+        self.fields['watchers'].widget = forms.HiddenInput()
+        self.fields['remove_watchers'].widget = forms.HiddenInput()
+        self.fields['current_status'].widget = forms.HiddenInput()
+        self.fields['reason'].widget.attrs['readonly'] = True
+        self.fields['next_status'].widget.attrs['readonly'] = True
+        
+        

@@ -3,3 +3,4 @@ tdbdump.*
 *.pyc
 settings_local.py
 docs/build
+*~

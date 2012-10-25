@@ -121,18 +121,18 @@ def current_mappings(debug=False):
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
-def mapping_by_link(dataformat,linklist=False,debug=False):
+def mapping_by_link(paramlist=False,debug=False):
     '''
     return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
     or all mappings if linklist is left as False 
     '''
     linkpattern = ''
-    if linklist:
+    if paramlist:
         linkpattern = '''          ?link '''
-        for link in linklist:
+        for param in paramlist:
             linkpattern += '''
                     mr:%slink <%s> ;
-            ''' % (dataformat.upper(),link)
+            ''' % (param[0].upper(),param[1])
         linkpattern.rstrip(';')
         linkpattern += ' .'
     qstr = '''
@@ -353,7 +353,7 @@ def get_cflink_by_id(cflink, debug=False):
     {
     ?s mrcf:type ?type .
     OPTIONAL
-    { ?s mrcf:standard_name?standard_name .}
+    { ?s mrcf:standard_name ?standard_name .}
     OPTIONAL
     { ?s mrcf:units ?units . }
     OPTIONAL
@@ -365,9 +365,16 @@ def get_cflink_by_id(cflink, debug=False):
 
     return results
 
-def get_cflinks(debug=False):
+def get_cflinks(pred_obj=None, debug=False):
     '''
     '''
+    filterstr = ''
+    if pred_obj:
+        for key in pred_obj.keys():
+#        if pred_obj.has_key('standard_name'):
+            filterstr += '''FILTER (bound(?%s))
+            FILTER (regex(str(?%s), "%s", "i"))
+            ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
     FROM <http://mappings/>
@@ -375,17 +382,18 @@ def get_cflinks(debug=False):
     {
     ?s mrcf:type ?type .
     OPTIONAL
-    { ?s mrcf:standard_name?standard_name .}
+    { ?s mrcf:standard_name ?standard_name .}
     OPTIONAL
     { ?s mrcf:units ?units . }
     OPTIONAL
     { ?s mrcf:long_name ?long_name . }
+    %s
     }
-    ''' 
+    ''' % filterstr 
     results = query.run_query(qstr, debug=debug)
 
     return results
-        
+
 
 def get_by_attrs(po_dict, debug=False):
     '''

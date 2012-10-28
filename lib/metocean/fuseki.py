@@ -29,7 +29,7 @@ CONFIG_PATH = os.path.join(ROOT_PATH, 'etc')
 parser = ConfigParser.SafeConfigParser()
 parser.read(os.path.join(CONFIG_PATH,'metocean.config'))
 
-staticDataPath = parser.get('metocean','staticData')
+staticData = parser.get('metocean','staticData')
 tdb = parser.get('metocean','tdb')
 jenaroot = parser.get('metocean','jenaroot')
 fusekiroot = parser.get('metocean','fusekiroot')

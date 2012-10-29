@@ -94,6 +94,7 @@ def clear_cache(graph, debug=False):
 
 def current_mappings(debug=False):
     '''
+    return all triples currently valid in the mappings graph
     '''
     
     qstr = '''
@@ -253,7 +254,6 @@ def select_graph(graph, debug=False):
     '''
     selects a particular graph from the TDB
     '''
-    #used in 'list' query deprecate
     qstr = '''
         SELECT DISTINCT ?g
         WHERE {
@@ -367,6 +367,7 @@ def get_cflink_by_id(cflink, debug=False):
 
 def get_cflinks(pred_obj=None, debug=False):
     '''
+    return cflink records matching the predicate object dictionary items
     '''
     filterstr = ''
     if pred_obj:

@@ -79,19 +79,23 @@ class CFParam(forms.Form):
     def clean(self):
         cleaned_data = super(CFParam, self).clean()
         pred_obj = {}
-        pred_obj['mrcf:type'] = cleaned_data.get('cf_type')
+        pred_obj['mrcf:type'] = '"%s"' % cleaned_data.get('cf_type')
         if cleaned_data.get('standard_name') != 'http://cf-pcmdi.llnl.gov/documents/':
-            pred_obj['mrcf:standard_name'] = cleaned_data.get('standard_name')
+            pred_obj['mrcf:standard_name'] = '<%s>' % cleaned_data.get('standard_name')
         if cleaned_data.get('long_name') != '':
-            pred_obj['mrcf:long_name'] = cleaned_data.get('long_name')
+            pred_obj['mrcf:long_name'] = '"%s"' % cleaned_data.get('long_name')
         if cleaned_data.get('units') != '':
-            pred_obj['mrcf:units'] = cleaned_data.get('units')
-        print pred_obj
+            pred_obj['mrcf:units'] = '"%s"' % cleaned_data.get('units')
+        #print pred_obj
         cflink = ''
         cfres = moq.get_cflinks(pred_obj)
+        #if none, make one
+        if len(cfres) == 0:
+            moq.create_link(pred_obj,'http://www.metarelate.net/metocean/cf',True)
+            cfres = moq.get_cflinks(pred_obj)
         if len(cfres) == 1:
-            print 'found'
-            cflink = cfres[0]['s'] 
+            #print 'found'
+            cflink = cfres[0]['s']
         cleaned_data['parameter'] = 'cf;'+cflink
         return cleaned_data
         

@@ -190,7 +190,7 @@ def mapping(request):
         else:
             print formset.errors
     else:
-        urecordm = moq.mapping_by_link(search_path,debug=True)
+        urecordm = moq.mapping_by_link(search_path)
         if len(urecordm) > 1:
             warning_msg = (
                 'Warning: '

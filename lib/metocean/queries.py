@@ -75,7 +75,6 @@ def clear_cache(graph, debug=False):
     '''
     qstr = '''
     DELETE
-    FROM <%s>
     {  GRAPH <%s>
         {
         ?s mr:saveCache "True" .
@@ -91,6 +90,24 @@ def clear_cache(graph, debug=False):
     ''' % (graph,graph)
     results = query.run_query(qstr, update=True, debug=debug)
     return results
+
+def query_cache(graph, debug=False):
+    '''
+    return all triples cached for saving but not saved
+    '''
+    qstr = '''
+    SELECT ?s ?p ?o
+    WHERE
+    {  GRAPH <%s>
+        {
+    ?s ?p ?o ;
+        mr:saveCache "True" .
+        }
+    } 
+    ''' % (graph)
+    results = query.run_query(qstr, debug=debug)
+    return results
+
 
 def current_mappings(debug=False):
     '''
@@ -374,7 +391,7 @@ def get_cflinks(pred_obj=None, debug=False):
         for key in pred_obj.keys():
 #        if pred_obj.has_key('standard_name'):
             filterstr += '''FILTER (bound(?%s))
-            FILTER (regex(str(?%s), "%s", "i"))
+            FILTER (regex(str(?%s), str(%s), "i"))
             ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
@@ -404,10 +421,14 @@ def get_by_attrs(po_dict, debug=False):
     '''
     pred_obj = ''
     for pred, obj in po_dict.iteritems():
-        for ob in obj:
-            pattern_string = ''';
-            %s %s ''' % (pred, obj)
-            pred_obj += pattern_string
+        #for ob in obj:
+        # if po_dict[pred].split('//')[0] == 'http:':
+        #     po_dict[pred] = '<%s>'% po_dict[pred]
+        # else:
+        #     po_dict[pred] = '"%s"'% po_dict[pred]
+        pattern_string = ''';
+        %s %s ''' % (pred, po_dict[pred])
+        pred_obj += pattern_string
 
     qstr = '''
     SELECT ?s ?p ?o
@@ -433,9 +454,9 @@ def create_link(po_dict, subj_pref, debug=False):
     mmd5 = hashlib.md5()
     
     for pred in po_dict.keys():
-        for obj in po_dict[pred]:
-            mmd5.update(pred)
-            mmd5.update(obj)
+#        for obj in po_dict[pred]:
+        mmd5.update(pred)
+        mmd5.update(po_dict[pred])
 
     md5 = str(mmd5.hexdigest())
     #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
@@ -444,10 +465,14 @@ def create_link(po_dict, subj_pref, debug=False):
     if len(current_cflink) == 0:
         pred_obj = ''
         for pred in po_dict.keys():
-            for obj in po_dict[pred]:
-                pattern_string = ''' %s %s ;
-                ''' % (pred, obj)
-                pred_obj += pattern_string
+#            for obj in po_dict[pred]:
+            # if po_dict[pred].split('//')[0] == 'http:':
+            #     po_dict[pred] = '<%s>'% po_dict[pred]
+            # else:
+            #     po_dict[pred] = '"%s"'% po_dict[pred]
+            pattern_string = ''' %s %s ;
+            ''' % (pred, po_dict[pred])
+            pred_obj += pattern_string
         qstr = '''
         INSERT DATA
         { GRAPH <http://mappings/>

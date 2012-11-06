@@ -1,0 +1,4166 @@
+# (C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping. metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/.
+@prefix cf: <http://cf-pcmdi.llnl.gov/documents/> .
+@prefix fcode: <http://www-hc/~umdoc/pp_package_ibm_docs/fcodes/> .
+@prefix github: <https://github.com/> .
+@prefix iso19135: <http://reference.metoffice.gov.uk/data/wmo/def/iso19135/> .
+@prefix link: <http://www.metarelate.net/metOcean/linkage/> .
+@prefix map: <http://www.metarelate.net/metOcean/mapping/> .
+@prefix metExtra: <http://reference.metoffice.gov.uk/data/wmo/def/met/> .
+@prefix metoc: <http://www.metarelate.net/metOcean/> .
+@prefix mof: <http://reference.metoffice.gov.uk/data/fieldcode/> .
+@prefix mon: <http://reference.metoffice.gov.uk/data/none/> .
+@prefix mos: <http://reference.metoffice.gov.uk/data/stash/> .
+@prefix mr: <http://www.metarelate.net/predicates/index.html#> .
+@prefix mrcf: <http://www.metarelate.net/predicates/CF.html#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+<http://reference.metoffice.gov.uk/data/fcode/0> a skos:Concept;
+	 rdfs:label "Unspecified".
+
+<http://reference.metoffice.gov.uk/data/fcode/1> a skos:Concept;
+	 rdfs:label "Height".
+
+<http://reference.metoffice.gov.uk/data/fcode/2> a skos:Concept;
+	 rdfs:label "Depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/3> a skos:Concept;
+	 rdfs:label "Geopotential (= g*height)".
+
+<http://reference.metoffice.gov.uk/data/fcode/4> a skos:Concept;
+	 rdfs:label "ICAO height".
+
+<http://reference.metoffice.gov.uk/data/fcode/5> a skos:Concept;
+	 rdfs:label "Boundary layer height".
+
+<http://reference.metoffice.gov.uk/data/fcode/6> a skos:Concept;
+	 rdfs:label "Non-dimensional soil model level".
+
+<http://reference.metoffice.gov.uk/data/fcode/7> a skos:Concept;
+	 rdfs:label "Exner pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/8> a skos:Concept;
+	 rdfs:label "Pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/9> a skos:Concept;
+	 rdfs:label "Hybrid pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/10> a skos:Concept;
+	 rdfs:label "Sigma (= p/surface p)".
+
+<http://reference.metoffice.gov.uk/data/fcode/11> a skos:Concept;
+	 rdfs:label "T*u".
+
+<http://reference.metoffice.gov.uk/data/fcode/12> a skos:Concept;
+	 rdfs:label "T*v".
+
+<http://reference.metoffice.gov.uk/data/fcode/13> a skos:Concept;
+	 rdfs:label "T**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/14> a skos:Concept;
+	 rdfs:label "T*omega".
+
+<http://reference.metoffice.gov.uk/data/fcode/15> a skos:Concept;
+	 rdfs:label "Height**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/16> a skos:Concept;
+	 rdfs:label "Temperature T".
+
+<http://reference.metoffice.gov.uk/data/fcode/17> a skos:Concept;
+	 rdfs:label "Dew point temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/18> a skos:Concept;
+	 rdfs:label "Dew point depression".
+
+<http://reference.metoffice.gov.uk/data/fcode/19> a skos:Concept;
+	 rdfs:label "Potential temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/20> a skos:Concept;
+	 rdfs:label "Maximum temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/21> a skos:Concept;
+	 rdfs:label "Minimum temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/22> a skos:Concept;
+	 rdfs:label "Wet bulb potential temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/23> a skos:Concept;
+	 rdfs:label "Soil temperature (levels 2,3,4)".
+
+<http://reference.metoffice.gov.uk/data/fcode/24> a skos:Concept;
+	 rdfs:label "d theta/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/25> a skos:Concept;
+	 rdfs:label "Visibility".
+
+<http://reference.metoffice.gov.uk/data/fcode/26> a skos:Concept;
+	 rdfs:label "Brunt-Vaisala Frequency "N"".
+
+<http://reference.metoffice.gov.uk/data/fcode/27> a skos:Concept;
+	 rdfs:label "(Atmospheric) density".
+
+<http://reference.metoffice.gov.uk/data/fcode/28> a skos:Concept;
+	 rdfs:label "d(p*)/dt .  p* = surface pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/29> a skos:Concept;
+	 rdfs:label "Cloud fraction below a level in feet".
+
+<http://reference.metoffice.gov.uk/data/fcode/30> a skos:Concept;
+	 rdfs:label "Total cloud       See note (a) in @FCODES".
+
+<http://reference.metoffice.gov.uk/data/fcode/31> a skos:Concept;
+	 rdfs:label "High cloud        See note (a) in @FCODES".
+
+<http://reference.metoffice.gov.uk/data/fcode/32> a skos:Concept;
+	 rdfs:label "Medium cloud      See note (a) in @FCODES".
+
+<http://reference.metoffice.gov.uk/data/fcode/33> a skos:Concept;
+	 rdfs:label "Low cloud         See note (a) in @FCODES".
+
+<http://reference.metoffice.gov.uk/data/fcode/34> a skos:Concept;
+	 rdfs:label "Convective cloud  See note (a) in @FCODES".
+
+<http://reference.metoffice.gov.uk/data/fcode/35> a skos:Concept;
+	 rdfs:label "Contrail".
+
+<http://reference.metoffice.gov.uk/data/fcode/36> a skos:Concept;
+	 rdfs:label "Fractional land amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/37> a skos:Concept;
+	 rdfs:label "Fractional sea-ice cover".
+
+<http://reference.metoffice.gov.uk/data/fcode/38> a skos:Concept;
+	 rdfs:label "Atmospheric model land/sea mask   Land=1, Sea=0".
+
+<http://reference.metoffice.gov.uk/data/fcode/39> a skos:Concept;
+	 rdfs:label "Coriolis parameter".
+
+<http://reference.metoffice.gov.uk/data/fcode/40> a skos:Concept;
+	 rdfs:label "Omega  (= dp/dt)".
+
+<http://reference.metoffice.gov.uk/data/fcode/41> a skos:Concept;
+	 rdfs:label "Wet bulb temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/42> a skos:Concept;
+	 rdfs:label "Vertical velocity  (= dz/dt)".
+
+<http://reference.metoffice.gov.uk/data/fcode/43> a skos:Concept;
+	 rdfs:label "Eta dot".
+
+<http://reference.metoffice.gov.uk/data/fcode/44> a skos:Concept;
+	 rdfs:label "Time in seconds".
+
+<http://reference.metoffice.gov.uk/data/fcode/45> a skos:Concept;
+	 rdfs:label "d(sigma)/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/46> a skos:Concept;
+	 rdfs:label "u*q".
+
+<http://reference.metoffice.gov.uk/data/fcode/47> a skos:Concept;
+	 rdfs:label "v*q".
+
+<http://reference.metoffice.gov.uk/data/fcode/48> a skos:Concept;
+	 rdfs:label "'x' wind component (with respect to grid)".
+
+<http://reference.metoffice.gov.uk/data/fcode/49> a skos:Concept;
+	 rdfs:label "'y' wind component (with respect to grid)".
+
+<http://reference.metoffice.gov.uk/data/fcode/50> a skos:Concept;
+	 rdfs:label "Wind speed".
+
+<http://reference.metoffice.gov.uk/data/fcode/51> a skos:Concept;
+	 rdfs:label "Thermal wind speed".
+
+<http://reference.metoffice.gov.uk/data/fcode/52> a skos:Concept;
+	 rdfs:label "Vertical speed shear".
+
+<http://reference.metoffice.gov.uk/data/fcode/53> a skos:Concept;
+	 rdfs:label "u*omega".
+
+<http://reference.metoffice.gov.uk/data/fcode/54> a skos:Concept;
+	 rdfs:label "v*omega".
+
+<http://reference.metoffice.gov.uk/data/fcode/55> a skos:Concept;
+	 rdfs:label "Wind direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/56> a skos:Concept;
+	 rdfs:label "Westerly component of wind  u".
+
+<http://reference.metoffice.gov.uk/data/fcode/57> a skos:Concept;
+	 rdfs:label "Southerly component of wind v".
+
+<http://reference.metoffice.gov.uk/data/fcode/58> a skos:Concept;
+	 rdfs:label "u**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/59> a skos:Concept;
+	 rdfs:label "v**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/60> a skos:Concept;
+	 rdfs:label "Product of wind components  u*v".
+
+<http://reference.metoffice.gov.uk/data/fcode/61> a skos:Concept;
+	 rdfs:label "'x' component of wind stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/62> a skos:Concept;
+	 rdfs:label "'y' component of wind stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/63> a skos:Concept;
+	 rdfs:label "Kinetic energy".
+
+<http://reference.metoffice.gov.uk/data/fcode/64> a skos:Concept;
+	 rdfs:label "Wind in 'DDDFFF' format".
+
+<http://reference.metoffice.gov.uk/data/fcode/65> a skos:Concept;
+	 rdfs:label "Hybrid height".
+
+<http://reference.metoffice.gov.uk/data/fcode/66> a skos:Concept;
+	 rdfs:label "Reserved for M.Mawson, RR will advise, 2000".
+
+<http://reference.metoffice.gov.uk/data/fcode/67> a skos:Concept;
+	 rdfs:label "Reserved for M.Mawson, RR will advise, 2000".
+
+<http://reference.metoffice.gov.uk/data/fcode/68> a skos:Concept;
+	 rdfs:label "u-acceleration from saturated stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/69> a skos:Concept;
+	 rdfs:label "v-acceleration from saturated stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/70> a skos:Concept;
+	 rdfs:label "u-acceleration from hydraulic jump".
+
+<http://reference.metoffice.gov.uk/data/fcode/71> a skos:Concept;
+	 rdfs:label "v-acceleration from hydraulic jump".
+
+<http://reference.metoffice.gov.uk/data/fcode/72> a skos:Concept;
+	 rdfs:label "Absolute vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/73> a skos:Concept;
+	 rdfs:label "Relative vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/74> a skos:Concept;
+	 rdfs:label "Divergence".
+
+<http://reference.metoffice.gov.uk/data/fcode/75> a skos:Concept;
+	 rdfs:label "Height of base of lowest cloud in feet".
+
+<http://reference.metoffice.gov.uk/data/fcode/76> a skos:Concept;
+	 rdfs:label "Height of top of lowest cloud in feet".
+
+<http://reference.metoffice.gov.uk/data/fcode/77> a skos:Concept;
+	 rdfs:label "Total precipitation accumulation".
+
+<http://reference.metoffice.gov.uk/data/fcode/78> a skos:Concept;
+	 rdfs:label "QCF - Frozen cloud water".
+
+<http://reference.metoffice.gov.uk/data/fcode/79> a skos:Concept;
+	 rdfs:label "QCL - Liquid cloud water".
+
+<http://reference.metoffice.gov.uk/data/fcode/80> a skos:Concept;
+	 rdfs:label "Stream function".
+
+<http://reference.metoffice.gov.uk/data/fcode/81> a skos:Concept;
+	 rdfs:label "Velocity potential".
+
+<http://reference.metoffice.gov.uk/data/fcode/82> a skos:Concept;
+	 rdfs:label "Ertel potential vorticity (Q)".
+
+<http://reference.metoffice.gov.uk/data/fcode/83> a skos:Concept;
+	 rdfs:label "Thermal vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/84> a skos:Concept;
+	 rdfs:label "Quasi-geostrophic potential vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/85> a skos:Concept;
+	 rdfs:label "Montgomery stream function".
+
+<http://reference.metoffice.gov.uk/data/fcode/86> a skos:Concept;
+	 rdfs:label "Geostrophic absolute vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/87> a skos:Concept;
+	 rdfs:label "dq/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/88> a skos:Concept;
+	 rdfs:label "Relative humidity".
+
+<http://reference.metoffice.gov.uk/data/fcode/89> a skos:Concept;
+	 rdfs:label "Precipitable water".
+
+<http://reference.metoffice.gov.uk/data/fcode/90> a skos:Concept;
+	 rdfs:label "Total precipitation (= 94 + 102 + 103)".
+
+<http://reference.metoffice.gov.uk/data/fcode/91> a skos:Concept;
+	 rdfs:label "Equivalent ice depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/92> a skos:Concept;
+	 rdfs:label "Actual ice depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/93> a skos:Concept;
+	 rdfs:label "Snow depth (water equivalent)".
+
+<http://reference.metoffice.gov.uk/data/fcode/94> a skos:Concept;
+	 rdfs:label "Convective rain".
+
+<http://reference.metoffice.gov.uk/data/fcode/95> a skos:Concept;
+	 rdfs:label "Specific humidity q".
+
+<http://reference.metoffice.gov.uk/data/fcode/96> a skos:Concept;
+	 rdfs:label "Condensed water (per unit area)".
+
+<http://reference.metoffice.gov.uk/data/fcode/97> a skos:Concept;
+	 rdfs:label "Total rainfall rate".
+
+<http://reference.metoffice.gov.uk/data/fcode/98> a skos:Concept;
+	 rdfs:label "Convective rainfall rate".
+
+<http://reference.metoffice.gov.uk/data/fcode/99> a skos:Concept;
+	 rdfs:label "Dynamic rainfall rate".
+
+<http://reference.metoffice.gov.uk/data/fcode/100> a skos:Concept;
+	 rdfs:label "Local convective rainfall".
+
+<http://reference.metoffice.gov.uk/data/fcode/101> a skos:Concept;
+	 rdfs:label "Mixing ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/102> a skos:Concept;
+	 rdfs:label "Large scale rain".
+
+<http://reference.metoffice.gov.uk/data/fcode/103> a skos:Concept;
+	 rdfs:label "Snow".
+
+<http://reference.metoffice.gov.uk/data/fcode/104> a skos:Concept;
+	 rdfs:label "Total rain  (= 94 + 102)".
+
+<http://reference.metoffice.gov.uk/data/fcode/105> a skos:Concept;
+	 rdfs:label "Evaporation".
+
+<http://reference.metoffice.gov.uk/data/fcode/106> a skos:Concept;
+	 rdfs:label "Total soil moisture content (levels 1-4)".
+
+<http://reference.metoffice.gov.uk/data/fcode/107> a skos:Concept;
+	 rdfs:label "Sublimation".
+
+<http://reference.metoffice.gov.uk/data/fcode/108> a skos:Concept;
+	 rdfs:label "Snowfall rate mm/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/109> a skos:Concept;
+	 rdfs:label "Total runoff".
+
+<http://reference.metoffice.gov.uk/data/fcode/110> a skos:Concept;
+	 rdfs:label "Snowmelt".
+
+<http://reference.metoffice.gov.uk/data/fcode/111> a skos:Concept;
+	 rdfs:label "'Quick' runoff".
+
+<http://reference.metoffice.gov.uk/data/fcode/112> a skos:Concept;
+	 rdfs:label "'Slow' runoff".
+
+<http://reference.metoffice.gov.uk/data/fcode/113> a skos:Concept;
+	 rdfs:label "(Precipitation minus evaporation) rate (= 90 - 105)".
+
+<http://reference.metoffice.gov.uk/data/fcode/114> a skos:Concept;
+	 rdfs:label "Evaporation rate".
+
+<http://reference.metoffice.gov.uk/data/fcode/115> a skos:Concept;
+	 rdfs:label "Evaporation from soil surface".
+
+<http://reference.metoffice.gov.uk/data/fcode/116> a skos:Concept;
+	 rdfs:label "Large scale snowfall".
+
+<http://reference.metoffice.gov.uk/data/fcode/117> a skos:Concept;
+	 rdfs:label "Convective snowfall".
+
+<http://reference.metoffice.gov.uk/data/fcode/118> a skos:Concept;
+	 rdfs:label "Large scale snowfall rate mm/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/119> a skos:Concept;
+	 rdfs:label "Convective snowfall rate mm/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/120> a skos:Concept;
+	 rdfs:label "Total large-scale precipitation (102+116)".
+
+<http://reference.metoffice.gov.uk/data/fcode/121> a skos:Concept;
+	 rdfs:label "Total convective precipitation (94+117)".
+
+<http://reference.metoffice.gov.uk/data/fcode/122> a skos:Concept;
+	 rdfs:label "Soil moisture in each (of 4) levels".
+
+<http://reference.metoffice.gov.uk/data/fcode/123> a skos:Concept;
+	 rdfs:label "u-acceleration from trapped lee waves".
+
+<http://reference.metoffice.gov.uk/data/fcode/124> a skos:Concept;
+	 rdfs:label "v-acceleration from trapped lee waves".
+
+<http://reference.metoffice.gov.uk/data/fcode/125> a skos:Concept;
+	 rdfs:label "Vertical transmission coefficient".
+
+<http://reference.metoffice.gov.uk/data/fcode/126> a skos:Concept;
+	 rdfs:label "Max C.A.T. level".
+
+<http://reference.metoffice.gov.uk/data/fcode/127> a skos:Concept;
+	 rdfs:label "Sea bed level".
+
+<http://reference.metoffice.gov.uk/data/fcode/128> a skos:Concept;
+	 rdfs:label "Mean sea level".
+
+<http://reference.metoffice.gov.uk/data/fcode/129> a skos:Concept;
+	 rdfs:label "Surface".
+
+<http://reference.metoffice.gov.uk/data/fcode/130> a skos:Concept;
+	 rdfs:label "Tropopause level".
+
+<http://reference.metoffice.gov.uk/data/fcode/131> a skos:Concept;
+	 rdfs:label "Maximum wind level".
+
+<http://reference.metoffice.gov.uk/data/fcode/132> a skos:Concept;
+	 rdfs:label "Freezing level".
+
+<http://reference.metoffice.gov.uk/data/fcode/133> a skos:Concept;
+	 rdfs:label "Top of atmosphere".
+
+<http://reference.metoffice.gov.uk/data/fcode/134> a skos:Concept;
+	 rdfs:label "-20 deg.C level 135  Upper level (height)".
+
+<http://reference.metoffice.gov.uk/data/fcode/136> a skos:Concept;
+	 rdfs:label "Lower level (height)".
+
+<http://reference.metoffice.gov.uk/data/fcode/137> a skos:Concept;
+	 rdfs:label "Upper level (pressure)".
+
+<http://reference.metoffice.gov.uk/data/fcode/138> a skos:Concept;
+	 rdfs:label "Lower level (pressure)".
+
+<http://reference.metoffice.gov.uk/data/fcode/139> a skos:Concept;
+	 rdfs:label "Wet bulb freezing level height (asl) m".
+
+<http://reference.metoffice.gov.uk/data/fcode/140> a skos:Concept;
+	 rdfs:label "Salinity".
+
+<http://reference.metoffice.gov.uk/data/fcode/141> a skos:Concept;
+	 rdfs:label "Snowmelt heat flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/142> a skos:Concept;
+	 rdfs:label "Upper level (hybrid)".
+
+<http://reference.metoffice.gov.uk/data/fcode/143> a skos:Concept;
+	 rdfs:label "Lower level (hybrid)".
+
+<http://reference.metoffice.gov.uk/data/fcode/144> a skos:Concept;
+	 rdfs:label "Unified model test diagnostic for output no. 1".
+
+<http://reference.metoffice.gov.uk/data/fcode/145> a skos:Concept;
+	 rdfs:label "Unified model test diagnostic for output no. 2".
+
+<http://reference.metoffice.gov.uk/data/fcode/146> a skos:Concept;
+	 rdfs:label "Unified model test diagnostic for output no. 3".
+
+<http://reference.metoffice.gov.uk/data/fcode/147> a skos:Concept;
+	 rdfs:label "Unified model test diagnostic for output no. 4".
+
+<http://reference.metoffice.gov.uk/data/fcode/148> a skos:Concept;
+	 rdfs:label "'X' component of geostrophic wind".
+
+<http://reference.metoffice.gov.uk/data/fcode/149> a skos:Concept;
+	 rdfs:label "'Y' component of geostrophic wind".
+
+<http://reference.metoffice.gov.uk/data/fcode/150> a skos:Concept;
+	 rdfs:label "Standard deviation of orography".
+
+<http://reference.metoffice.gov.uk/data/fcode/151> a skos:Concept;
+	 rdfs:label "Distance to the centre of the earth".
+
+<http://reference.metoffice.gov.uk/data/fcode/152> a skos:Concept;
+	 rdfs:label "Orography XX gradient component".
+
+<http://reference.metoffice.gov.uk/data/fcode/153> a skos:Concept;
+	 rdfs:label "Orography XY gradient component".
+
+<http://reference.metoffice.gov.uk/data/fcode/154> a skos:Concept;
+	 rdfs:label "Orography YY gradient component".
+
+<http://reference.metoffice.gov.uk/data/fcode/155> a skos:Concept;
+	 rdfs:label "Orographic roughness".
+
+<http://reference.metoffice.gov.uk/data/fcode/156> a skos:Concept;
+	 rdfs:label "Total ozone climatology".
+
+<http://reference.metoffice.gov.uk/data/fcode/157> a skos:Concept;
+	 rdfs:label "Ultra violet index climatology".
+
+<http://reference.metoffice.gov.uk/data/fcode/158> a skos:Concept;
+	 rdfs:label "Total ozone field, Dobson units".
+
+<http://reference.metoffice.gov.uk/data/fcode/159> a skos:Concept;
+	 rdfs:label "UVB (Ultra violet index - dimensionless)".
+
+<http://reference.metoffice.gov.uk/data/fcode/160> a skos:Concept;
+	 rdfs:label "Drag coefficient CD".
+
+<http://reference.metoffice.gov.uk/data/fcode/161> a skos:Concept;
+	 rdfs:label "Theta_e".
+
+<http://reference.metoffice.gov.uk/data/fcode/162> a skos:Concept;
+	 rdfs:label "Sunshine hours".
+
+<http://reference.metoffice.gov.uk/data/fcode/163> a skos:Concept;
+	 rdfs:label "Convective cloud liquid re * convective cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/164> a skos:Concept;
+	 rdfs:label "Layer cloud liquid re * layer cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/165> a skos:Concept;
+	 rdfs:label "Convective cloud amount in SWRAD (microphysics)".
+
+<http://reference.metoffice.gov.uk/data/fcode/166> a skos:Concept;
+	 rdfs:label "Layer cloud amount in SWRAD (microphysics)".
+
+<http://reference.metoffice.gov.uk/data/fcode/167> a skos:Concept;
+	 rdfs:label "Layer cloud condensed water path * amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/168> a skos:Concept;
+	 rdfs:label "Cloud emissivity * cloud fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/169> a skos:Concept;
+	 rdfs:label "Cloud albedo * cloud fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/170> a skos:Concept;
+	 rdfs:label "Transmissivity".
+
+<http://reference.metoffice.gov.uk/data/fcode/171> a skos:Concept;
+	 rdfs:label "RHOKH (RHO* * CH * SURF_LAYER_WIND_SHEAR)".
+
+<http://reference.metoffice.gov.uk/data/fcode/172> a skos:Concept;
+	 rdfs:label "RHOKM (RHO* * CD * SURF_LAYER_WIND_SHEAR)".
+
+<http://reference.metoffice.gov.uk/data/fcode/173> a skos:Concept;
+	 rdfs:label "Probability of visibility less than 5 km".
+
+<http://reference.metoffice.gov.uk/data/fcode/174> a skos:Concept;
+	 rdfs:label "Silhouette area of unresolved orography per unit horizontal area".
+
+<http://reference.metoffice.gov.uk/data/fcode/175> a skos:Concept;
+	 rdfs:label "Peak to trough height of unresolved orography divided by 2 (metres".
+
+<http://reference.metoffice.gov.uk/data/fcode/176> a skos:Concept;
+	 rdfs:label "Latitude  (north positive)".
+
+<http://reference.metoffice.gov.uk/data/fcode/177> a skos:Concept;
+	 rdfs:label "Longitude  (east positive)".
+
+<http://reference.metoffice.gov.uk/data/fcode/178> a skos:Concept;
+	 rdfs:label "Sensible heat flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/179> a skos:Concept;
+	 rdfs:label "Soil heat flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/180> a skos:Concept;
+	 rdfs:label "Latent heat flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/181> a skos:Concept;
+	 rdfs:label "Bulk Richardson number".
+
+<http://reference.metoffice.gov.uk/data/fcode/182> a skos:Concept;
+	 rdfs:label "Wind mixing energy".
+
+<http://reference.metoffice.gov.uk/data/fcode/183> a skos:Concept;
+	 rdfs:label "CH - bulk transfer coefficient of heat".
+
+<http://reference.metoffice.gov.uk/data/fcode/184> a skos:Concept;
+	 rdfs:label "Moisture flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/185> a skos:Concept;
+	 rdfs:label "Mass flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/186> a skos:Concept;
+	 rdfs:label "Net short wave radiation flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/187> a skos:Concept;
+	 rdfs:label "Net long wave radiation flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/188> a skos:Concept;
+	 rdfs:label "Total surface heat flux (inc. sensible+latent)".
+
+<http://reference.metoffice.gov.uk/data/fcode/189> a skos:Concept;
+	 rdfs:label "Thermal advection".
+
+<http://reference.metoffice.gov.uk/data/fcode/190> a skos:Concept;
+	 rdfs:label "C.A.T. probability".
+
+<http://reference.metoffice.gov.uk/data/fcode/191> a skos:Concept;
+	 rdfs:label "Snow probability".
+
+<http://reference.metoffice.gov.uk/data/fcode/192> a skos:Concept;
+	 rdfs:label "Boundary mixing coeffs.".
+
+<http://reference.metoffice.gov.uk/data/fcode/193> a skos:Concept;
+	 rdfs:label "Convective heating rate".
+
+<http://reference.metoffice.gov.uk/data/fcode/194> a skos:Concept;
+	 rdfs:label "Convective moistening rate".
+
+<http://reference.metoffice.gov.uk/data/fcode/195> a skos:Concept;
+	 rdfs:label "Vertical momentum flux - U".
+
+<http://reference.metoffice.gov.uk/data/fcode/196> a skos:Concept;
+	 rdfs:label "Vertical momentum flux - V".
+
+<http://reference.metoffice.gov.uk/data/fcode/197> a skos:Concept;
+	 rdfs:label "Snow melt heating flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/198> a skos:Concept;
+	 rdfs:label "Evaporation duct height (previously called just 'Duct height')".
+
+<http://reference.metoffice.gov.uk/data/fcode/199> a skos:Concept;
+	 rdfs:label "Evap. duct intensity (max wavelength trapped) (p.c.j. 'Duct intens".
+
+<http://reference.metoffice.gov.uk/data/fcode/200> a skos:Concept;
+	 rdfs:label "Downward solar".
+
+<http://reference.metoffice.gov.uk/data/fcode/201> a skos:Concept;
+	 rdfs:label "Upward solar".
+
+<http://reference.metoffice.gov.uk/data/fcode/202> a skos:Concept;
+	 rdfs:label "Net surface radiation flux (No sensible or latent)".
+
+<http://reference.metoffice.gov.uk/data/fcode/203> a skos:Concept;
+	 rdfs:label "Total downward surface solar flux over sea-ice.".
+
+<http://reference.metoffice.gov.uk/data/fcode/204> a skos:Concept;
+	 rdfs:label "Reserved for M.Mawson, RR will advise, 2000".
+
+<http://reference.metoffice.gov.uk/data/fcode/205> a skos:Concept;
+	 rdfs:label "IR down".
+
+<http://reference.metoffice.gov.uk/data/fcode/206> a skos:Concept;
+	 rdfs:label "IR up".
+
+<http://reference.metoffice.gov.uk/data/fcode/207> a skos:Concept;
+	 rdfs:label "Clear-sky flux (type II) solar up".
+
+<http://reference.metoffice.gov.uk/data/fcode/208> a skos:Concept;
+	 rdfs:label "Clear-sky flux (type II) solar down".
+
+<http://reference.metoffice.gov.uk/data/fcode/209> a skos:Concept;
+	 rdfs:label "Sea-ice temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/210> a skos:Concept;
+	 rdfs:label "Clear-sky (type II) IR up".
+
+<http://reference.metoffice.gov.uk/data/fcode/211> a skos:Concept;
+	 rdfs:label "Clear-sky (type II) IR down".
+
+<http://reference.metoffice.gov.uk/data/fcode/212> a skos:Concept;
+	 rdfs:label "Convective cloud base times amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/213> a skos:Concept;
+	 rdfs:label "Dilute convectively available potential energy. J/kg (or equiv. m2".
+
+<http://reference.metoffice.gov.uk/data/fcode/214> a skos:Concept;
+	 rdfs:label "Clear-sky (type II) net shortwave flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/215> a skos:Concept;
+	 rdfs:label "Clear-sky (type II) net longwave flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/216> a skos:Concept;
+	 rdfs:label "Cloud top height (asl)  kft".
+
+<http://reference.metoffice.gov.uk/data/fcode/217> a skos:Concept;
+	 rdfs:label "Convective cloud top times amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/218> a skos:Concept;
+	 rdfs:label "Convective cloud water".
+
+<http://reference.metoffice.gov.uk/data/fcode/219> a skos:Concept;
+	 rdfs:label "Convective cloud condensed water path kg/m**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/220> a skos:Concept;
+	 rdfs:label "Cloud amount in a layer / at a level  (reworded 4/3/93)".
+
+<http://reference.metoffice.gov.uk/data/fcode/221> a skos:Concept;
+	 rdfs:label "Total water condensed by convection".
+
+<http://reference.metoffice.gov.uk/data/fcode/222> a skos:Concept;
+	 rdfs:label "Convective cloud base level-number".
+
+<http://reference.metoffice.gov.uk/data/fcode/223> a skos:Concept;
+	 rdfs:label "Convective cloud top level-number".
+
+<http://reference.metoffice.gov.uk/data/fcode/224> a skos:Concept;
+	 rdfs:label "Advecting u * layer thickness (pascals) = zonal mass-flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/225> a skos:Concept;
+	 rdfs:label "Advecting v * layer thickness (pascals) = meridional mass-flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/226> a skos:Concept;
+	 rdfs:label "Blocking index (Tibaldi & Molteni definition)".
+
+<http://reference.metoffice.gov.uk/data/fcode/227> a skos:Concept;
+	 rdfs:label "'EMAX' from convection scheme".
+
+<http://reference.metoffice.gov.uk/data/fcode/228> a skos:Concept;
+	 rdfs:label "Total net radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/229> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/230> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/231> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * specific humidity q".
+
+<http://reference.metoffice.gov.uk/data/fcode/232> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * specific humidity q".
+
+<http://reference.metoffice.gov.uk/data/fcode/233> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * liquid water temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/234> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * liquid water temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/235> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * total water".
+
+<http://reference.metoffice.gov.uk/data/fcode/236> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * total water".
+
+<http://reference.metoffice.gov.uk/data/fcode/237> a skos:Concept;
+	 rdfs:label "Clear-sky (type I) solar up".
+
+<http://reference.metoffice.gov.uk/data/fcode/238> a skos:Concept;
+	 rdfs:label "Clear-sky (type I) solar down".
+
+<http://reference.metoffice.gov.uk/data/fcode/239> a skos:Concept;
+	 rdfs:label "Vapour pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/240> a skos:Concept;
+	 rdfs:label "Clear-sky (type I) IR up".
+
+<http://reference.metoffice.gov.uk/data/fcode/241> a skos:Concept;
+	 rdfs:label "Clear-sky (type I) IR down".
+
+<http://reference.metoffice.gov.uk/data/fcode/242> a skos:Concept;
+	 rdfs:label "Probability of precipitation".
+
+<http://reference.metoffice.gov.uk/data/fcode/243> a skos:Concept;
+	 rdfs:label "Clear-sky (type I) net shortwave flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/244> a skos:Concept;
+	 rdfs:label "Clear-sky (type I) net longwave flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/245> a skos:Concept;
+	 rdfs:label "Clear-sky(type I) radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/246> a skos:Concept;
+	 rdfs:label "Clear-sky(type I) short-wave radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/247> a skos:Concept;
+	 rdfs:label "Clear-sky(type I) long wave radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/248> a skos:Concept;
+	 rdfs:label "'X' component of ageostrophic wind".
+
+<http://reference.metoffice.gov.uk/data/fcode/249> a skos:Concept;
+	 rdfs:label "'Y' component of ageostrophic wind".
+
+<http://reference.metoffice.gov.uk/data/fcode/250> a skos:Concept;
+	 rdfs:label "Clear-sky(type II) radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/251> a skos:Concept;
+	 rdfs:label "Short-wave radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/252> a skos:Concept;
+	 rdfs:label "Clear-sky(type II) ditto".
+
+<http://reference.metoffice.gov.uk/data/fcode/253> a skos:Concept;
+	 rdfs:label "Long-wave radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/254> a skos:Concept;
+	 rdfs:label "Clear-sky(type II) ditto".
+
+<http://reference.metoffice.gov.uk/data/fcode/255> a skos:Concept;
+	 rdfs:label "Convective cloud liquid re * convective cloud weighting (full leve".
+
+<http://reference.metoffice.gov.uk/data/fcode/256> a skos:Concept;
+	 rdfs:label "Convective cloud weighting for microphysics (full levels)".
+
+<http://reference.metoffice.gov.uk/data/fcode/257> a skos:Concept;
+	 rdfs:label "RHO_CD_MODV1 = rhostar*cD*modv1".
+
+<http://reference.metoffice.gov.uk/data/fcode/258> a skos:Concept;
+	 rdfs:label "RHO_KM = rho*Km (Km = turbulent mixing coefficient for momentum)".
+
+<http://reference.metoffice.gov.uk/data/fcode/259> a skos:Concept;
+	 rdfs:label "Atmospheric energy correction    W/m**2  (from UM 3.3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/260> a skos:Concept;
+	 rdfs:label "Sea-ice topmelt w/m2".
+
+<http://reference.metoffice.gov.uk/data/fcode/261> a skos:Concept;
+	 rdfs:label "Sea-ice botmelt w/m2".
+
+<http://reference.metoffice.gov.uk/data/fcode/262> a skos:Concept;
+	 rdfs:label "Fractional time of change of ice cover.".
+
+<http://reference.metoffice.gov.uk/data/fcode/263> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * u".
+
+<http://reference.metoffice.gov.uk/data/fcode/264> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * u".
+
+<http://reference.metoffice.gov.uk/data/fcode/265> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * v".
+
+<http://reference.metoffice.gov.uk/data/fcode/266> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * v".
+
+<http://reference.metoffice.gov.uk/data/fcode/267> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * geopotential".
+
+<http://reference.metoffice.gov.uk/data/fcode/268> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * geopotential".
+
+<http://reference.metoffice.gov.uk/data/fcode/269> a skos:Concept;
+	 rdfs:label "Zonal mass-flux * moist static energy".
+
+<http://reference.metoffice.gov.uk/data/fcode/270> a skos:Concept;
+	 rdfs:label "Meridional mass-flux * moist static energy".
+
+<http://reference.metoffice.gov.uk/data/fcode/271> a skos:Concept;
+	 rdfs:label "Canopy water content".
+
+<http://reference.metoffice.gov.uk/data/fcode/272> a skos:Concept;
+	 rdfs:label "Canopy condensation".
+
+<http://reference.metoffice.gov.uk/data/fcode/273> a skos:Concept;
+	 rdfs:label "Canopy evaporation".
+
+<http://reference.metoffice.gov.uk/data/fcode/274> a skos:Concept;
+	 rdfs:label "Canopy water throughfall".
+
+<http://reference.metoffice.gov.uk/data/fcode/275> a skos:Concept;
+	 rdfs:label "Canopy height (all vegetation)".
+
+<http://reference.metoffice.gov.uk/data/fcode/276> a skos:Concept;
+	 rdfs:label "Air concentration of radioactivity Becquerels(Bq) m**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/277> a skos:Concept;
+	 rdfs:label "Dosage of radioactivity Bq.seconds m**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/278> a skos:Concept;
+	 rdfs:label "Dry deposition of radioactivity Bq m**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/279> a skos:Concept;
+	 rdfs:label "Wet deposition of radioactivity Bq m**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/280> a skos:Concept;
+	 rdfs:label "Leads;net solar radiation wm-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/281> a skos:Concept;
+	 rdfs:label "Leads;net infra-red flux  wm-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/282> a skos:Concept;
+	 rdfs:label "Leads;sensible heat flux  wm-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/283> a skos:Concept;
+	 rdfs:label "Leads;latent heat flux    wm-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/284> a skos:Concept;
+	 rdfs:label "Total deposition of radioactivity Bq m**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/285> a skos:Concept;
+	 rdfs:label "Evap from sea * leads fraction.".
+
+<http://reference.metoffice.gov.uk/data/fcode/286> a skos:Concept;
+	 rdfs:label "Total aerosol (micro g/kg)".
+
+<http://reference.metoffice.gov.uk/data/fcode/287> a skos:Concept;
+	 rdfs:label "Total aerosol emissions (micro g/sq m/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/288> a skos:Concept;
+	 rdfs:label "Visibility assimilation weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/289> a skos:Concept;
+	 rdfs:label "Visibility assimilation increment".
+
+<http://reference.metoffice.gov.uk/data/fcode/290> a skos:Concept;
+	 rdfs:label "P* (surface pressure) weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/291> a skos:Concept;
+	 rdfs:label "Theta weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/292> a skos:Concept;
+	 rdfs:label "Wind weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/293> a skos:Concept;
+	 rdfs:label "Surface wind weights.......".
+
+<http://reference.metoffice.gov.uk/data/fcode/294> a skos:Concept;
+	 rdfs:label "RH weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/295> a skos:Concept;
+	 rdfs:label "Precipitation rate assimilation weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/296> a skos:Concept;
+	 rdfs:label "Spare for A/C".
+
+<http://reference.metoffice.gov.uk/data/fcode/297> a skos:Concept;
+	 rdfs:label "Spare for A/C".
+
+<http://reference.metoffice.gov.uk/data/fcode/298> a skos:Concept;
+	 rdfs:label "Spare for A/C".
+
+<http://reference.metoffice.gov.uk/data/fcode/299> a skos:Concept;
+	 rdfs:label "Specific layer cloud water content".
+
+<http://reference.metoffice.gov.uk/data/fcode/300> a skos:Concept;
+	 rdfs:label "Spare for A/C".
+
+<http://reference.metoffice.gov.uk/data/fcode/301> a skos:Concept;
+	 rdfs:label "Spare for A/C".
+
+<http://reference.metoffice.gov.uk/data/fcode/302> a skos:Concept;
+	 rdfs:label "Spare for A/C".
+
+<http://reference.metoffice.gov.uk/data/fcode/303> a skos:Concept;
+	 rdfs:label "P* (surface pressure) assimilation increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/304> a skos:Concept;
+	 rdfs:label "Theta assimilation increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/305> a skos:Concept;
+	 rdfs:label "u assimilation increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/306> a skos:Concept;
+	 rdfs:label "v assimilation increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/307> a skos:Concept;
+	 rdfs:label "Hydrostatic increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/308> a skos:Concept;
+	 rdfs:label "Probability of ground frost".
+
+<http://reference.metoffice.gov.uk/data/fcode/309> a skos:Concept;
+	 rdfs:label "RH assimilation increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/310> a skos:Concept;
+	 rdfs:label "Precipitation rate assimilation increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/311> a skos:Concept;
+	 rdfs:label "Reserved for M.Mawson, RR will advise, 2000".
+
+<http://reference.metoffice.gov.uk/data/fcode/312> a skos:Concept;
+	 rdfs:label "Reserved for M.Mawson, RR will advise, 2000".
+
+<http://reference.metoffice.gov.uk/data/fcode/313> a skos:Concept;
+	 rdfs:label "Reserved for M.Mawson, RR will advise, 2000".
+
+<http://reference.metoffice.gov.uk/data/fcode/314> a skos:Concept;
+	 rdfs:label "Reserved for M.Mawson, RR will advise, 2000".
+
+<http://reference.metoffice.gov.uk/data/fcode/315> a skos:Concept;
+	 rdfs:label "Increment in q from a routine".
+
+<http://reference.metoffice.gov.uk/data/fcode/316> a skos:Concept;
+	 rdfs:label "Increment in T from a routine".
+
+<http://reference.metoffice.gov.uk/data/fcode/317> a skos:Concept;
+	 rdfs:label "Increment in theta from a routine".
+
+<http://reference.metoffice.gov.uk/data/fcode/318> a skos:Concept;
+	 rdfs:label "Increment in u from a routine".
+
+<http://reference.metoffice.gov.uk/data/fcode/319> a skos:Concept;
+	 rdfs:label "Increment in v from a routine".
+
+<http://reference.metoffice.gov.uk/data/fcode/320> a skos:Concept;
+	 rdfs:label "Surface roughness (heat)".
+
+<http://reference.metoffice.gov.uk/data/fcode/321> a skos:Concept;
+	 rdfs:label "Root depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/322> a skos:Concept;
+	 rdfs:label "Snow free albedo (all types of land)".
+
+<http://reference.metoffice.gov.uk/data/fcode/323> a skos:Concept;
+	 rdfs:label "Surface resistance to evaporation".
+
+<http://reference.metoffice.gov.uk/data/fcode/324> a skos:Concept;
+	 rdfs:label "Surface roughness (momentum)".
+
+<http://reference.metoffice.gov.uk/data/fcode/325> a skos:Concept;
+	 rdfs:label "Surface capacity".
+
+<http://reference.metoffice.gov.uk/data/fcode/326> a skos:Concept;
+	 rdfs:label "Vegetation fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/327> a skos:Concept;
+	 rdfs:label "Veg. infilt. enhancement factor".
+
+<http://reference.metoffice.gov.uk/data/fcode/328> a skos:Concept;
+	 rdfs:label "Deep snow albedo".
+
+<http://reference.metoffice.gov.uk/data/fcode/329> a skos:Concept;
+	 rdfs:label "Wilting point".
+
+<http://reference.metoffice.gov.uk/data/fcode/330> a skos:Concept;
+	 rdfs:label "Critical point".
+
+<http://reference.metoffice.gov.uk/data/fcode/331> a skos:Concept;
+	 rdfs:label "Field capacity".
+
+<http://reference.metoffice.gov.uk/data/fcode/332> a skos:Concept;
+	 rdfs:label "Saturation".
+
+<http://reference.metoffice.gov.uk/data/fcode/333> a skos:Concept;
+	 rdfs:label "Saturated conductivity".
+
+<http://reference.metoffice.gov.uk/data/fcode/334> a skos:Concept;
+	 rdfs:label "Eagleson's exponent".
+
+<http://reference.metoffice.gov.uk/data/fcode/335> a skos:Concept;
+	 rdfs:label "Heat capacity".
+
+<http://reference.metoffice.gov.uk/data/fcode/336> a skos:Concept;
+	 rdfs:label "Heat conductivity".
+
+<http://reference.metoffice.gov.uk/data/fcode/337> a skos:Concept;
+	 rdfs:label "SOILB (Soil hydrology parameter "BS")".
+
+<http://reference.metoffice.gov.uk/data/fcode/338> a skos:Concept;
+	 rdfs:label "Field capacity-root depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/339> a skos:Concept;
+	 rdfs:label "Surface infilt.-infilt. factor".
+
+<http://reference.metoffice.gov.uk/data/fcode/340> a skos:Concept;
+	 rdfs:label "Thermal inertia-(lambda C ** 1/2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/341> a skos:Concept;
+	 rdfs:label "Veg. infilt. enhancement factor * Saturated conductivity (327*333)".
+
+<http://reference.metoffice.gov.uk/data/fcode/342> a skos:Concept;
+	 rdfs:label "Saturated soil water suction (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/343> a skos:Concept;
+	 rdfs:label "Lowest convective cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/344> a skos:Concept;
+	 rdfs:label "Lowest convective cloud base (pa)".
+
+<http://reference.metoffice.gov.uk/data/fcode/345> a skos:Concept;
+	 rdfs:label "Lowest convective cloud top (pa)".
+
+<http://reference.metoffice.gov.uk/data/fcode/346> a skos:Concept;
+	 rdfs:label "Lowest convective cloud base (Kft)".
+
+<http://reference.metoffice.gov.uk/data/fcode/347> a skos:Concept;
+	 rdfs:label "Lowest convective cloud top (Kft)".
+
+<http://reference.metoffice.gov.uk/data/fcode/348> a skos:Concept;
+	 rdfs:label "'X' component of 'Q'".
+
+<http://reference.metoffice.gov.uk/data/fcode/349> a skos:Concept;
+	 rdfs:label "'Y' component of 'Q'".
+
+<http://reference.metoffice.gov.uk/data/fcode/350> a skos:Concept;
+	 rdfs:label "DIV(Q)".
+
+<http://reference.metoffice.gov.uk/data/fcode/351> a skos:Concept;
+	 rdfs:label "Wave/ Spectral wave energy component".
+
+<http://reference.metoffice.gov.uk/data/fcode/352> a skos:Concept;
+	 rdfs:label "Wave/".
+
+<http://reference.metoffice.gov.uk/data/fcode/353> a skos:Concept;
+	 rdfs:label "Wave/ Energy increments after propagation".
+
+<http://reference.metoffice.gov.uk/data/fcode/354> a skos:Concept;
+	 rdfs:label "Wave/ Energy increments after input source term".
+
+<http://reference.metoffice.gov.uk/data/fcode/355> a skos:Concept;
+	 rdfs:label "Wave/ Energy increments after nonlinear transfer".
+
+<http://reference.metoffice.gov.uk/data/fcode/356> a skos:Concept;
+	 rdfs:label "Wave/ Energy increments after dissipation".
+
+<http://reference.metoffice.gov.uk/data/fcode/357> a skos:Concept;
+	 rdfs:label "Wave/ Energy increments after bottom friction".
+
+<http://reference.metoffice.gov.uk/data/fcode/358> a skos:Concept;
+	 rdfs:label "Wave/ Energy increments after assimilation".
+
+<http://reference.metoffice.gov.uk/data/fcode/359> a skos:Concept;
+	 rdfs:label "Wave/ Assimilation increments for wave height".
+
+<http://reference.metoffice.gov.uk/data/fcode/360> a skos:Concept;
+	 rdfs:label "Wave/ Assimilation increments for windspeed".
+
+<http://reference.metoffice.gov.uk/data/fcode/364> a skos:Concept;
+	 rdfs:label "Wave/ Wave induced surface stress x component".
+
+<http://reference.metoffice.gov.uk/data/fcode/365> a skos:Concept;
+	 rdfs:label "Wave/ Wave induced surface stress y component".
+
+<http://reference.metoffice.gov.uk/data/fcode/366> a skos:Concept;
+	 rdfs:label "Wave/ Induced stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/367> a skos:Concept;
+	 rdfs:label "Wave/ Dependent roughness length".
+
+<http://reference.metoffice.gov.uk/data/fcode/368> a skos:Concept;
+	 rdfs:label "Wave/ Total induced current speed".
+
+<http://reference.metoffice.gov.uk/data/fcode/369> a skos:Concept;
+	 rdfs:label "Wave/ Total induced current direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/370> a skos:Concept;
+	 rdfs:label "Wave/ Surge induced current speed".
+
+<http://reference.metoffice.gov.uk/data/fcode/371> a skos:Concept;
+	 rdfs:label "Wave/ Surge induced current direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/372> a skos:Concept;
+	 rdfs:label "Wave/ Tide induced water level".
+
+<http://reference.metoffice.gov.uk/data/fcode/373> a skos:Concept;
+	 rdfs:label "Wave/ Tide induced current speed".
+
+<http://reference.metoffice.gov.uk/data/fcode/374> a skos:Concept;
+	 rdfs:label "Wave/ Tide induced current direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/375> a skos:Concept;
+	 rdfs:label "Wave/ Mean wave height error".
+
+<http://reference.metoffice.gov.uk/data/fcode/376> a skos:Concept;
+	 rdfs:label "Wave/ Mean wave period error".
+
+<http://reference.metoffice.gov.uk/data/fcode/377> a skos:Concept;
+	 rdfs:label "Wave/ Mean wave speed error".
+
+<http://reference.metoffice.gov.uk/data/fcode/378> a skos:Concept;
+	 rdfs:label "Wave/ RMS wave height error".
+
+<http://reference.metoffice.gov.uk/data/fcode/379> a skos:Concept;
+	 rdfs:label "Wave/ RMS wave period error".
+
+<http://reference.metoffice.gov.uk/data/fcode/380> a skos:Concept;
+	 rdfs:label "Wave/ RMS wave speed error".
+
+<http://reference.metoffice.gov.uk/data/fcode/384> a skos:Concept;
+	 rdfs:label "Wave/ Water temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/385> a skos:Concept;
+	 rdfs:label "Wave/ Height of wind-driven waves".
+
+<http://reference.metoffice.gov.uk/data/fcode/386> a skos:Concept;
+	 rdfs:label "Wave/ Swell height".
+
+<http://reference.metoffice.gov.uk/data/fcode/387> a skos:Concept;
+	 rdfs:label "Wave/ Combined wave and swell height".
+
+<http://reference.metoffice.gov.uk/data/fcode/388> a skos:Concept;
+	 rdfs:label "Wave/ Windsea upcrossing period".
+
+<http://reference.metoffice.gov.uk/data/fcode/389> a skos:Concept;
+	 rdfs:label "Wave/ Windsea principal direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/390> a skos:Concept;
+	 rdfs:label "Wave/ Swell upcrossing period".
+
+<http://reference.metoffice.gov.uk/data/fcode/391> a skos:Concept;
+	 rdfs:label "Wave/ Swell principal direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/392> a skos:Concept;
+	 rdfs:label "Wave/ Total depth (wave+surge)".
+
+<http://reference.metoffice.gov.uk/data/fcode/393> a skos:Concept;
+	 rdfs:label "Wave/ Total wave upcrossing period".
+
+<http://reference.metoffice.gov.uk/data/fcode/394> a skos:Concept;
+	 rdfs:label "Wave/ Total wave principal direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/395> a skos:Concept;
+	 rdfs:label "Wave/ Grid point type (sea/land/coast)".
+
+<http://reference.metoffice.gov.uk/data/fcode/396> a skos:Concept;
+	 rdfs:label "Wave/ Surge induced water level".
+
+<http://reference.metoffice.gov.uk/data/fcode/397> a skos:Concept;
+	 rdfs:label "Wave/ Wave model land/sea indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/401> a skos:Concept;
+	 rdfs:label "MA/ d(ln p)/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/402> a skos:Concept;
+	 rdfs:label "MA/ d(theta)/dp".
+
+<http://reference.metoffice.gov.uk/data/fcode/403> a skos:Concept;
+	 rdfs:label "MA/ Log(Absolute ertel pot. vorticity)".
+
+<http://reference.metoffice.gov.uk/data/fcode/404> a skos:Concept;
+	 rdfs:label "MA/ Sign of dq/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/405> a skos:Concept;
+	 rdfs:label "MA/ d(theta)/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/406> a skos:Concept;
+	 rdfs:label "MA/ Shortwave heating rates".
+
+<http://reference.metoffice.gov.uk/data/fcode/407> a skos:Concept;
+	 rdfs:label "MA/ Longwave cooling rates".
+
+<http://reference.metoffice.gov.uk/data/fcode/408> a skos:Concept;
+	 rdfs:label "MA/ Total radiative heating".
+
+<http://reference.metoffice.gov.uk/data/fcode/409> a skos:Concept;
+	 rdfs:label "MA/ Friction term in circulation budget".
+
+<http://reference.metoffice.gov.uk/data/fcode/410> a skos:Concept;
+	 rdfs:label "MA/ dp/d(theta)".
+
+<http://reference.metoffice.gov.uk/data/fcode/411> a skos:Concept;
+	 rdfs:label "MA/ Geostrophic Ertel potential vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/412> a skos:Concept;
+	 rdfs:label "MA/ dq/dt advection term".
+
+<http://reference.metoffice.gov.uk/data/fcode/413> a skos:Concept;
+	 rdfs:label "MA/ dq/dt source term".
+
+<http://reference.metoffice.gov.uk/data/fcode/414> a skos:Concept;
+	 rdfs:label "MA/ Total dq/dt ie source + advection".
+
+<http://reference.metoffice.gov.uk/data/fcode/415> a skos:Concept;
+	 rdfs:label "MA/ d(theta)/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/416> a skos:Concept;
+	 rdfs:label "MA/ Absolute vorticity (interpolated)".
+
+<http://reference.metoffice.gov.uk/data/fcode/417> a skos:Concept;
+	 rdfs:label "MA/ Absolute vorticity*total dq/dt".
+
+<http://reference.metoffice.gov.uk/data/fcode/418> a skos:Concept;
+	 rdfs:label "MA/ dq/dt from Raleigh friction".
+
+<http://reference.metoffice.gov.uk/data/fcode/420> a skos:Concept;
+	 rdfs:label "EASTWARD FLUX - SPECTRAL PSEUDOMOM".
+
+<http://reference.metoffice.gov.uk/data/fcode/421> a skos:Concept;
+	 rdfs:label "SOUTHWARD FLUX - SPECTRAL PSEUDOMOM".
+
+<http://reference.metoffice.gov.uk/data/fcode/422> a skos:Concept;
+	 rdfs:label "WESTWARD FLUX - SPECTRAL PSEUDOMOM".
+
+<http://reference.metoffice.gov.uk/data/fcode/423> a skos:Concept;
+	 rdfs:label "NORTHWARD FLUX - SPECTRAL PSEUDOMOM".
+
+<http://reference.metoffice.gov.uk/data/fcode/424> a skos:Concept;
+	 rdfs:label "EASTWARD FORCE FROM SPECTRAL GW".
+
+<http://reference.metoffice.gov.uk/data/fcode/425> a skos:Concept;
+	 rdfs:label "NORTHWARD FORCE FROM SPECTRAL GW".
+
+<http://reference.metoffice.gov.uk/data/fcode/451> a skos:Concept;
+	 rdfs:label "MAtr/ Passive tracer".
+
+<http://reference.metoffice.gov.uk/data/fcode/452> a skos:Concept;
+	 rdfs:label "MAtr/ Nitrous oxide tracer".
+
+<http://reference.metoffice.gov.uk/data/fcode/453> a skos:Concept;
+	 rdfs:label "MAtr/ Ozone tracer".
+
+<http://reference.metoffice.gov.uk/data/fcode/501> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 1 (conventionally O3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/502> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 2 (conventionally H2O)".
+
+<http://reference.metoffice.gov.uk/data/fcode/503> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 3 (conventionally CO)".
+
+<http://reference.metoffice.gov.uk/data/fcode/504> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 4 (conventionally CH4)".
+
+<http://reference.metoffice.gov.uk/data/fcode/505> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 5 (conventionally N2O)".
+
+<http://reference.metoffice.gov.uk/data/fcode/506> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 6 (conventionally NO)".
+
+<http://reference.metoffice.gov.uk/data/fcode/507> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 7 (conventionally NO2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/508> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 8 (conventionally HNO3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/509> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 9 (conventionally N2O5)".
+
+<http://reference.metoffice.gov.uk/data/fcode/510> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 10 (conventionally ClONO2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/511> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 11 (conventionally ClO)".
+
+<http://reference.metoffice.gov.uk/data/fcode/512> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 12 (conventionally HCl)".
+
+<http://reference.metoffice.gov.uk/data/fcode/513> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 13 (conventionally CF2Cl2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/514> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 14 (conventionally CFCl3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/515> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 15 (conventionally HF)".
+
+<http://reference.metoffice.gov.uk/data/fcode/516> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 16".
+
+<http://reference.metoffice.gov.uk/data/fcode/517> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 17".
+
+<http://reference.metoffice.gov.uk/data/fcode/518> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 18".
+
+<http://reference.metoffice.gov.uk/data/fcode/519> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 19 (conventionally SO2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/520> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 20 (conventionally DMS)".
+
+<http://reference.metoffice.gov.uk/data/fcode/521> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 21 (conventionally H2S)".
+
+<http://reference.metoffice.gov.uk/data/fcode/522> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 22 (conventionally WATER-SOLUBLE)".
+
+<http://reference.metoffice.gov.uk/data/fcode/523> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 23 (conventionally DUST-LIKE)".
+
+<http://reference.metoffice.gov.uk/data/fcode/524> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 24 (conventionally OCEANIC)".
+
+<http://reference.metoffice.gov.uk/data/fcode/525> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 25 (conventionally SOOT)".
+
+<http://reference.metoffice.gov.uk/data/fcode/526> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 26 (conventionally VOLCANIC ASH)".
+
+<http://reference.metoffice.gov.uk/data/fcode/527> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 27 (conventionally SULPHURIC ACID)".
+
+<http://reference.metoffice.gov.uk/data/fcode/528> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 28 (conventionally AMMONIUM SULPHATE)".
+
+<http://reference.metoffice.gov.uk/data/fcode/529> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 29 (conventionally MINERAL)".
+
+<http://reference.metoffice.gov.uk/data/fcode/530> a skos:Concept;
+	 rdfs:label "MAUA/ Atmosphere tracer 30 (conventionally OCFF)".
+
+<http://reference.metoffice.gov.uk/data/fcode/568> a skos:Concept;
+	 rdfs:label "MAUA/".
+
+<http://reference.metoffice.gov.uk/data/fcode/569> a skos:Concept;
+	 rdfs:label "MAUA/ Sulphur Dioxide emissions.".
+
+<http://reference.metoffice.gov.uk/data/fcode/570> a skos:Concept;
+	 rdfs:label "MAUA/ Dimethyl Sulphide emissions.".
+
+<http://reference.metoffice.gov.uk/data/fcode/571> a skos:Concept;
+	 rdfs:label "MAUA/ Hydrogen Sulphide emissions.".
+
+<http://reference.metoffice.gov.uk/data/fcode/572> a skos:Concept;
+	 rdfs:label "MAUA/ NH3 gas emissions kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/573> a skos:Concept;
+	 rdfs:label "MAUA/ Soot emissions   kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/574> a skos:Concept;
+	 rdfs:label "MAUA/ Surface emissions of biomass smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/575> a skos:Concept;
+	 rdfs:label "MAUA/ Oraganic carbon from fossil fuels (OCFF)      ".
+
+<http://reference.metoffice.gov.uk/data/fcode/576> a skos:Concept;
+	 rdfs:label "DIMETHYL SULPHIDE EMISSIONS kg(S) m-2 s-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/580> a skos:Concept;
+	 rdfs:label "MAUA/ Hydroxyl radical concentration molecules cm**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/581> a skos:Concept;
+	 rdfs:label "MAUA/ Hydrogen Peroxide concentration".
+
+<http://reference.metoffice.gov.uk/data/fcode/600> a skos:Concept;
+	 rdfs:label "MAUA/ HO2 concentration".
+
+<http://reference.metoffice.gov.uk/data/fcode/601> a skos:Concept;
+	 rdfs:label "OCtr/ Temperature.".
+
+<http://reference.metoffice.gov.uk/data/fcode/602> a skos:Concept;
+	 rdfs:label "OCtr/ Salinity.".
+
+<http://reference.metoffice.gov.uk/data/fcode/603> a skos:Concept;
+	 rdfs:label "OCtr/ T*".
+
+<http://reference.metoffice.gov.uk/data/fcode/604> a skos:Concept;
+	 rdfs:label "OCtr/ Temperature at t-1.".
+
+<http://reference.metoffice.gov.uk/data/fcode/605> a skos:Concept;
+	 rdfs:label "OCtr/ Salinity at t-1.".
+
+<http://reference.metoffice.gov.uk/data/fcode/606> a skos:Concept;
+	 rdfs:label "OCtr/ No. deep convection points".
+
+<http://reference.metoffice.gov.uk/data/fcode/607> a skos:Concept;
+	 rdfs:label "OCtr/ Fractional expansion of sea water (dimensionless)".
+
+<http://reference.metoffice.gov.uk/data/fcode/608> a skos:Concept;
+	 rdfs:label "OCtr/ Sea surface elevation".
+
+<http://reference.metoffice.gov.uk/data/fcode/609> a skos:Concept;
+	 rdfs:label "OCtr/ Density of sea water/kg m**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/610> a skos:Concept;
+	 rdfs:label "OCtr/ Sea level rise/m".
+
+<http://reference.metoffice.gov.uk/data/fcode/611> a skos:Concept;
+	 rdfs:label "OCtr/ Stream function.".
+
+<http://reference.metoffice.gov.uk/data/fcode/612> a skos:Concept;
+	 rdfs:label "OCtr/ Stream function at t-1.".
+
+<http://reference.metoffice.gov.uk/data/fcode/613> a skos:Concept;
+	 rdfs:label "OCtr/ Change of stream function across a time step.".
+
+<http://reference.metoffice.gov.uk/data/fcode/614> a skos:Concept;
+	 rdfs:label "OCtr/ Change of stream function across previous timestep.".
+
+<http://reference.metoffice.gov.uk/data/fcode/615> a skos:Concept;
+	 rdfs:label "OCtr/ (Formerly reciprocal of total depth at U/V points, use 715 1".
+
+<http://reference.metoffice.gov.uk/data/fcode/616> a skos:Concept;
+	 rdfs:label "OCtr/ Number of vertical levels of ocean at T points.".
+
+<http://reference.metoffice.gov.uk/data/fcode/617> a skos:Concept;
+	 rdfs:label "Octr/ rigid-lid pressure/Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/618> a skos:Concept;
+	 rdfs:label "OCtr/ Change of vorticity across one timestep. Units s*-2 from Jun".
+
+<http://reference.metoffice.gov.uk/data/fcode/619> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical expansion/m of sea water.".
+
+<http://reference.metoffice.gov.uk/data/fcode/620> a skos:Concept;
+	 rdfs:label "OCtr/ Convergence heat WM-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/621> a skos:Concept;
+	 rdfs:label "OCtr/ Equivalent ice depth.".
+
+<http://reference.metoffice.gov.uk/data/fcode/622> a skos:Concept;
+	 rdfs:label "OCtr/ Snow depth.".
+
+<http://reference.metoffice.gov.uk/data/fcode/623> a skos:Concept;
+	 rdfs:label "OCtr/ Snowfall.".
+
+<http://reference.metoffice.gov.uk/data/fcode/624> a skos:Concept;
+	 rdfs:label "OCtr/ Sublimation.".
+
+<http://reference.metoffice.gov.uk/data/fcode/625> a skos:Concept;
+	 rdfs:label "OCtr/ Net solar heat flux.".
+
+<http://reference.metoffice.gov.uk/data/fcode/626> a skos:Concept;
+	 rdfs:label "OCtr/ Net surface heat flux ('HTN').".
+
+<http://reference.metoffice.gov.uk/data/fcode/627> a skos:Concept;
+	 rdfs:label "OCtr/ Wind mixing energy.".
+
+<http://reference.metoffice.gov.uk/data/fcode/628> a skos:Concept;
+	 rdfs:label "OCtr/ Diffusive heat flux.".
+
+<http://reference.metoffice.gov.uk/data/fcode/629> a skos:Concept;
+	 rdfs:label "OCtr/ Precipitation minus evaporation ('PLE')".
+
+<http://reference.metoffice.gov.uk/data/fcode/630> a skos:Concept;
+	 rdfs:label "OCtr/ Sum of net solar and net surface heating.".
+
+<http://reference.metoffice.gov.uk/data/fcode/631> a skos:Concept;
+	 rdfs:label "OCtr/ River outflow".
+
+<http://reference.metoffice.gov.uk/data/fcode/632> a skos:Concept;
+	 rdfs:label "OCtr/ Surface water flux * salinity / density  m s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/633> a skos:Concept;
+	 rdfs:label "OCtr/ 'x' component of sea-ice/ocean surface stress ('ISX')".
+
+<http://reference.metoffice.gov.uk/data/fcode/634> a skos:Concept;
+	 rdfs:label "OCtr/ 'y' component of sea-ice/ocean surface stress ('ISY')".
+
+<http://reference.metoffice.gov.uk/data/fcode/635> a skos:Concept;
+	 rdfs:label "OCtr/ Buoyancy/kg m**-2 s**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/636> a skos:Concept;
+	 rdfs:label "OCtr/ Buoyancy flux/kg m**-1 s**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/637> a skos:Concept;
+	 rdfs:label "OCtr/ In-situ temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/638> a skos:Concept;
+	 rdfs:label "OCtr/ sigma-T/kg m**-3 ( (rho(insitu_T,S,0)-1000 )".
+
+<http://reference.metoffice.gov.uk/data/fcode/639> a skos:Concept;
+	 rdfs:label "OCtr/ sigma-theta/kg m**-3 ( rho(theta,S,0)-1000 )".
+
+<http://reference.metoffice.gov.uk/data/fcode/640> a skos:Concept;
+	 rdfs:label "OCtr/ Zonal heat advection.".
+
+<http://reference.metoffice.gov.uk/data/fcode/641> a skos:Concept;
+	 rdfs:label "OCtr/ Meridional heat advection.".
+
+<http://reference.metoffice.gov.uk/data/fcode/642> a skos:Concept;
+	 rdfs:label "OCtr/ Heating rate due to advection  K s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/643> a skos:Concept;
+	 rdfs:label "OCtr/ Heating rate due to diffusion  K s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/644> a skos:Concept;
+	 rdfs:label "OCtr/ Heating rate due to surface fluxes  K s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/645> a skos:Concept;
+	 rdfs:label "OCtr/ Heating rate due to mixing  K s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/646> a skos:Concept;
+	 rdfs:label "OCtr/ Heating rate due to filtering  K s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/647> a skos:Concept;
+	 rdfs:label "OCtr/ Heating rate  K s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/648> a skos:Concept;
+	 rdfs:label "OCtr/ Rate of change of salinity/s**-1 (UM can't control LBPROC)".
+
+<http://reference.metoffice.gov.uk/data/fcode/649> a skos:Concept;
+	 rdfs:label "OCtr/ Climatological reference surface salinity".
+
+<http://reference.metoffice.gov.uk/data/fcode/650> a skos:Concept;
+	 rdfs:label "OCtr/ Climatological reference SST (sea surface temperature).".
+
+<http://reference.metoffice.gov.uk/data/fcode/651> a skos:Concept;
+	 rdfs:label "OCtr/ Anomalous heat flux from Haney term.".
+
+<http://reference.metoffice.gov.uk/data/fcode/652> a skos:Concept;
+	 rdfs:label "OCtr/ Anomalous latent heat flux from Haney term".
+
+<http://reference.metoffice.gov.uk/data/fcode/653> a skos:Concept;
+	 rdfs:label "OCtr/ Mixed layer depth,type 1.".
+
+<http://reference.metoffice.gov.uk/data/fcode/654> a skos:Concept;
+	 rdfs:label "OCtr/ Mixed layer depth,type 2.".
+
+<http://reference.metoffice.gov.uk/data/fcode/655> a skos:Concept;
+	 rdfs:label "OCtr/ Heat content /J".
+
+<http://reference.metoffice.gov.uk/data/fcode/656> a skos:Concept;
+	 rdfs:label "OCtr/ Latent heat content /J".
+
+<http://reference.metoffice.gov.uk/data/fcode/657> a skos:Concept;
+	 rdfs:label "OCtr/ Turbulent kinetic energy m**2 s**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/658> a skos:Concept;
+	 rdfs:label "OCtr/ Thickness diff coeff (ocean) cm2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/659> a skos:Concept;
+	 rdfs:label "OCtr/".
+
+<http://reference.metoffice.gov.uk/data/fcode/660> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical mean vorticity forcing: advection s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/661> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical mean vorticity forcing: hor diffn s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/662> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical mean vorticity forcing: vrt diffn s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/663> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical mean vorticity forcing: coriolis s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/664> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical mean vorticity forcing: pressure s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/665> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical integral vorticity forcing: advection cm s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/666> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical integral vorticity forcing: hor diffn cm s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/667> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical integral vorticity forcing: vrt diffn cm s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/668> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical integral vorticity forcing: coriolis cm s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/669> a skos:Concept;
+	 rdfs:label "OCtr/ Vertical integral vorticity forcing: bottom p cm s*-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/670> a skos:Concept;
+	 rdfs:label "OCtr/ Boundary profiles.".
+
+<http://reference.metoffice.gov.uk/data/fcode/671> a skos:Concept;
+	 rdfs:label "OCtr/ Anomalous heat flux.".
+
+<http://reference.metoffice.gov.uk/data/fcode/672> a skos:Concept;
+	 rdfs:label "OCtr/ Anomalous salt flux.".
+
+<http://reference.metoffice.gov.uk/data/fcode/673> a skos:Concept;
+	 rdfs:label "OCtr/ Virtual air-sea flux of co2".
+
+<http://reference.metoffice.gov.uk/data/fcode/674> a skos:Concept;
+	 rdfs:label "OCtr/ Virtual air-sea flux of alkalinity".
+
+<http://reference.metoffice.gov.uk/data/fcode/675> a skos:Concept;
+	 rdfs:label "OCtr/ Climatological Ice depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/676> a skos:Concept;
+	 rdfs:label "OCtr/ Mass of ocean below rigid lid/kg m**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/677> a skos:Concept;
+	 rdfs:label "OCtr/ Ocean bottom pressure/Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/678> a skos:Concept;
+	 rdfs:label "OCtr/ Anomolous sea-ice heat flux W,M2".
+
+<http://reference.metoffice.gov.uk/data/fcode/679> a skos:Concept;
+	 rdfs:label "OCtr/ Anomalous sea-ice P-E flux kg, M2, S".
+
+<http://reference.metoffice.gov.uk/data/fcode/680> a skos:Concept;
+	 rdfs:label "OCtr/ W (vertical velocity).".
+
+<http://reference.metoffice.gov.uk/data/fcode/681> a skos:Concept;
+	 rdfs:label "OCtr/ Topmelt.".
+
+<http://reference.metoffice.gov.uk/data/fcode/682> a skos:Concept;
+	 rdfs:label "OCtr/ Botmelt.".
+
+<http://reference.metoffice.gov.uk/data/fcode/683> a skos:Concept;
+	 rdfs:label "OCtr/ Fractional ice cover.".
+
+<http://reference.metoffice.gov.uk/data/fcode/684> a skos:Concept;
+	 rdfs:label "OCtr/ Ocean-ice heat flux.".
+
+<http://reference.metoffice.gov.uk/data/fcode/685> a skos:Concept;
+	 rdfs:label "OCtr/ Carry heat.".
+
+<http://reference.metoffice.gov.uk/data/fcode/686> a skos:Concept;
+	 rdfs:label "OCtr/ Carry salt.".
+
+<http://reference.metoffice.gov.uk/data/fcode/687> a skos:Concept;
+	 rdfs:label "OCtr/ Actual ice depth.".
+
+<http://reference.metoffice.gov.uk/data/fcode/688> a skos:Concept;
+	 rdfs:label "OCtr/ Snow depth over ice (m).".
+
+<http://reference.metoffice.gov.uk/data/fcode/689> a skos:Concept;
+	 rdfs:label "OCtr/ Sea-ice internal pressure (usually in N.m-2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/690> a skos:Concept;
+	 rdfs:label "OCtr/ Sea-ice strength     (usually in N.m-2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/692> a skos:Concept;
+	 rdfs:label "OCtr/ Average snow depth.".
+
+<http://reference.metoffice.gov.uk/data/fcode/693> a skos:Concept;
+	 rdfs:label "OCtr/ Average ice cover.".
+
+<http://reference.metoffice.gov.uk/data/fcode/694> a skos:Concept;
+	 rdfs:label "OCtr/ Average O/I heat flux.".
+
+<http://reference.metoffice.gov.uk/data/fcode/695> a skos:Concept;
+	 rdfs:label "OCtr/ KT Vertical tracer diffusion coeff".
+
+<http://reference.metoffice.gov.uk/data/fcode/696> a skos:Concept;
+	 rdfs:label "OCtr/ RiT Richardson no tracer".
+
+<http://reference.metoffice.gov.uk/data/fcode/697> a skos:Concept;
+	 rdfs:label "OCtr/ HT Max depth Large scheme tracer".
+
+<http://reference.metoffice.gov.uk/data/fcode/698> a skos:Concept;
+	 rdfs:label "OCtr/ Downwards solar radiation over ice".
+
+<http://reference.metoffice.gov.uk/data/fcode/699> a skos:Concept;
+	 rdfs:label "OCtr/ Depth/m of ocean at TS points".
+
+<http://reference.metoffice.gov.uk/data/fcode/700> a skos:Concept;
+	 rdfs:label "OCuv/ River run-off ocean entry point co-ordinates.".
+
+<http://reference.metoffice.gov.uk/data/fcode/701> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic component of zonal velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/702> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic component of meridional velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/703> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal velocity (total)".
+
+<http://reference.metoffice.gov.uk/data/fcode/704> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional velocity (total)".
+
+<http://reference.metoffice.gov.uk/data/fcode/711> a skos:Concept;
+	 rdfs:label "OCuv/ Barotropic component of zonal velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/712> a skos:Concept;
+	 rdfs:label "OCuv/ Barotropic component of meridional velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/713> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic x-acceleration cm s**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/714> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic y-acceleration cm s**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/715> a skos:Concept;
+	 rdfs:label "OCuv/ Reciprocal of total depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/717> a skos:Concept;
+	 rdfs:label "OCuv/ Number of vertical levels of ocean at U/V points.".
+
+<http://reference.metoffice.gov.uk/data/fcode/718> a skos:Concept;
+	 rdfs:label "OCuv/ Vertical integral of zonal velocity/m2 s-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/719> a skos:Concept;
+	 rdfs:label "OCuv/ Vertical integral of meridional velocity/m2 s-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/721> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal component of windstress ('TAUX')".
+
+<http://reference.metoffice.gov.uk/data/fcode/722> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional component of windstress ('TAUY')".
+
+<http://reference.metoffice.gov.uk/data/fcode/728> a skos:Concept;
+	 rdfs:label "OCuv/ 'x' component of sea-ice velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/729> a skos:Concept;
+	 rdfs:label "OCuv/ 'y' component of sea-ice velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/730> a skos:Concept;
+	 rdfs:label "OCuv/ Magnitude of sea-ice velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/731> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal component of sea-ice velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/732> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional component of sea-ice velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/733> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal component of ice-ocean stress/Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/734> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional component of ice-ocean stress/Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/735> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal component of Coriolis stress/Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/736> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional component of Coriolis stress/Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/737> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal component of internal ice stress /Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/738> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional component of internal ice stress /Pa".
+
+<http://reference.metoffice.gov.uk/data/fcode/740> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal mean tracer transport diagnostics".
+
+<http://reference.metoffice.gov.uk/data/fcode/741> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, meridional: Advection".
+
+<http://reference.metoffice.gov.uk/data/fcode/742> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, meridional: Hor Diffusion".
+
+<http://reference.metoffice.gov.uk/data/fcode/743> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, meridional: Vert Diffusion".
+
+<http://reference.metoffice.gov.uk/data/fcode/744> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, meridional: Coriolis".
+
+<http://reference.metoffice.gov.uk/data/fcode/745> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, meridional: Pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/746> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, zonal: Advection".
+
+<http://reference.metoffice.gov.uk/data/fcode/747> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, zonal: Hor Diffusion".
+
+<http://reference.metoffice.gov.uk/data/fcode/748> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, zonal: Vert Diffusion".
+
+<http://reference.metoffice.gov.uk/data/fcode/749> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, zonal: Coriolis".
+
+<http://reference.metoffice.gov.uk/data/fcode/750> a skos:Concept;
+	 rdfs:label "OCuv/ Baroclinic acceleration diag, zonal: Pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/751> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional net pressure gradient".
+
+<http://reference.metoffice.gov.uk/data/fcode/752> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal net pressure gradient".
+
+<http://reference.metoffice.gov.uk/data/fcode/753> a skos:Concept;
+	 rdfs:label "OCuv/ Meridional acceleration".
+
+<http://reference.metoffice.gov.uk/data/fcode/754> a skos:Concept;
+	 rdfs:label "OCuv/ Zonal acceleration".
+
+<http://reference.metoffice.gov.uk/data/fcode/795> a skos:Concept;
+	 rdfs:label "OCuv/ KM Vertical momentum diffusion coeff".
+
+<http://reference.metoffice.gov.uk/data/fcode/796> a skos:Concept;
+	 rdfs:label "OCuv/ RiM Richardson no momentum".
+
+<http://reference.metoffice.gov.uk/data/fcode/797> a skos:Concept;
+	 rdfs:label "OCuv/ HM Max depth Large scheme momentum".
+
+<http://reference.metoffice.gov.uk/data/fcode/801> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 1 (conventionally TCO2 )".
+
+<http://reference.metoffice.gov.uk/data/fcode/802> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 2 (conventionally alkalinity)".
+
+<http://reference.metoffice.gov.uk/data/fcode/803> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 3 (conventionally nutrient)".
+
+<http://reference.metoffice.gov.uk/data/fcode/804> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 4 (conventionally phytoplankton conc.)".
+
+<http://reference.metoffice.gov.uk/data/fcode/805> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 5 (conventionally zooplankton)".
+
+<http://reference.metoffice.gov.uk/data/fcode/806> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 6 (conventionally detritus)".
+
+<http://reference.metoffice.gov.uk/data/fcode/807> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 7 (conventionally tritium)".
+
+<http://reference.metoffice.gov.uk/data/fcode/808> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 8 (conventionally 3H+3He total mass)".
+
+<http://reference.metoffice.gov.uk/data/fcode/809> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 9 (conventionally CFC11)".
+
+<http://reference.metoffice.gov.uk/data/fcode/810> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 10 (conventionally CFC12)".
+
+<http://reference.metoffice.gov.uk/data/fcode/811> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 11 (conventionally CFC13)".
+
+<http://reference.metoffice.gov.uk/data/fcode/812> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 12 (conventionally carbon 14)".
+
+<http://reference.metoffice.gov.uk/data/fcode/813> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 13".
+
+<http://reference.metoffice.gov.uk/data/fcode/814> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 14".
+
+<http://reference.metoffice.gov.uk/data/fcode/815> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 15".
+
+<http://reference.metoffice.gov.uk/data/fcode/816> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 16".
+
+<http://reference.metoffice.gov.uk/data/fcode/817> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 17".
+
+<http://reference.metoffice.gov.uk/data/fcode/818> a skos:Concept;
+	 rdfs:label "OCE/ ocean extra tracer 18".
+
+<http://reference.metoffice.gov.uk/data/fcode/819> a skos:Concept;
+	 rdfs:label "OCE/".
+
+<http://reference.metoffice.gov.uk/data/fcode/820> a skos:Concept;
+	 rdfs:label "OCE/ Sonic layer depth (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/821> a skos:Concept;
+	 rdfs:label "OCE/ Sonic layer trap at 10Hz (0/1)".
+
+<http://reference.metoffice.gov.uk/data/fcode/822> a skos:Concept;
+	 rdfs:label "OCE/ Sonic layer trap at 50Hz (0/1)".
+
+<http://reference.metoffice.gov.uk/data/fcode/823> a skos:Concept;
+	 rdfs:label "OCE/ Sonic layer trap at 1kHz (0/1)".
+
+<http://reference.metoffice.gov.uk/data/fcode/824> a skos:Concept;
+	 rdfs:label "OCE/ Sonic layer trap at 10kHz (0/1)".
+
+<http://reference.metoffice.gov.uk/data/fcode/825> a skos:Concept;
+	 rdfs:label "OCE/ Sound channel strength at 10Hz (1-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/826> a skos:Concept;
+	 rdfs:label "OCE/ Sound channel strength at 50Hz (1-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/827> a skos:Concept;
+	 rdfs:label "OCE/ Sound channel strength at 1kHz (1-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/828> a skos:Concept;
+	 rdfs:label "OCE/ Sound channel strength at 10kHz (1-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/829> a skos:Concept;
+	 rdfs:label "OCE/ Range to the 1st CZ (km)".
+
+<http://reference.metoffice.gov.uk/data/fcode/830> a skos:Concept;
+	 rdfs:label "OCE/ Strength of 1st CZ (0-100)".
+
+<http://reference.metoffice.gov.uk/data/fcode/831> a skos:Concept;
+	 rdfs:label "OCE/ Gent and McWilliams scheme eddy u velocity (ocean)".
+
+<http://reference.metoffice.gov.uk/data/fcode/832> a skos:Concept;
+	 rdfs:label "OCE/ Gent and McWilliams scheme eddy v velocity (N face) (ocean)".
+
+<http://reference.metoffice.gov.uk/data/fcode/833> a skos:Concept;
+	 rdfs:label "OCE/ Gent and McWilliams scheme eddy w velocity (top face) (ocean".
+
+<http://reference.metoffice.gov.uk/data/fcode/834> a skos:Concept;
+	 rdfs:label "OCE/ d theta/dt from Gent and McWilliams scheme K/S".
+
+<http://reference.metoffice.gov.uk/data/fcode/835> a skos:Concept;
+	 rdfs:label "OCE/ Speed of sound in water m/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/836> a skos:Concept;
+	 rdfs:label "OCE/ Depth of sound speed minimum (sound channel) m".
+
+<http://reference.metoffice.gov.uk/data/fcode/837> a skos:Concept;
+	 rdfs:label "OCE/ Depth of max neg ssp grad (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/838> a skos:Concept;
+	 rdfs:label "OCE/ CO2 atmosphere level 1 conc ppmv".
+
+<http://reference.metoffice.gov.uk/data/fcode/840> a skos:Concept;
+	 rdfs:label "OCE/ Total temperature advection, zonal.".
+
+<http://reference.metoffice.gov.uk/data/fcode/841> a skos:Concept;
+	 rdfs:label "OCE/ Total temperature diffusion, zonal.".
+
+<http://reference.metoffice.gov.uk/data/fcode/842> a skos:Concept;
+	 rdfs:label "OCE/ Small sediment concentration (g m**-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/843> a skos:Concept;
+	 rdfs:label "OCE/ Large sediment concentration (g m**-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/844> a skos:Concept;
+	 rdfs:label "OCE/ Total sediment concentration (g m**-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/850> a skos:Concept;
+	 rdfs:label "OA/ Surface height analysis weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/851> a skos:Concept;
+	 rdfs:label "OA/ Mixed layer depth analysis weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/852> a skos:Concept;
+	 rdfs:label "OA/ Surface temperature analysis weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/853> a skos:Concept;
+	 rdfs:label "OA/ Potential temperature analysis weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/854> a skos:Concept;
+	 rdfs:label "OA/ Salinity analysis weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/855> a skos:Concept;
+	 rdfs:label "OA/ Velocity components analysis weights".
+
+<http://reference.metoffice.gov.uk/data/fcode/860> a skos:Concept;
+	 rdfs:label "OA/ Surface height analysis increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/861> a skos:Concept;
+	 rdfs:label "OA/ Mixed layer depth analysis increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/862> a skos:Concept;
+	 rdfs:label "OA/ Surface temperature analysis increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/863> a skos:Concept;
+	 rdfs:label "OA/ Potential temperature analysis increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/864> a skos:Concept;
+	 rdfs:label "OA/ Salinity analysis increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/865> a skos:Concept;
+	 rdfs:label "OA/ Zonal velocity analysis increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/870> a skos:Concept;
+	 rdfs:label "OA/ Meridional velocity analysis increments".
+
+<http://reference.metoffice.gov.uk/data/fcode/871> a skos:Concept;
+	 rdfs:label "OA/ Meridional velocity increments after surface height analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/872> a skos:Concept;
+	 rdfs:label "OA/ Meridional velocity increments after thermal analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/873> a skos:Concept;
+	 rdfs:label "OA/ Meridional velocity increments after saline analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/876> a skos:Concept;
+	 rdfs:label "OA/ Zonal velocity increments after surface height analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/877> a skos:Concept;
+	 rdfs:label "OA/ Zonal velocity increments after thermal analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/878> a skos:Concept;
+	 rdfs:label "OA/ Zonal velocity increments after saline analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/880> a skos:Concept;
+	 rdfs:label "OA/ Pressure increments after surface height analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/881> a skos:Concept;
+	 rdfs:label "OA/ Pressure increments after thermal analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/882> a skos:Concept;
+	 rdfs:label "OA/ Pressure increments after saline analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/885> a skos:Concept;
+	 rdfs:label "OA/ Potential temperature increments after surface height analys".
+
+<http://reference.metoffice.gov.uk/data/fcode/888> a skos:Concept;
+	 rdfs:label "OA/ Saline increments after surface height analysis".
+
+<http://reference.metoffice.gov.uk/data/fcode/891> a skos:Concept;
+	 rdfs:label "OCE/ PRIMARY PRODUCTION (GC/M2/DAY)".
+
+<http://reference.metoffice.gov.uk/data/fcode/892> a skos:Concept;
+	 rdfs:label "OCE/ ZOOPLTN PRODUCTION (GC/M2/DAY)".
+
+<http://reference.metoffice.gov.uk/data/fcode/893> a skos:Concept;
+	 rdfs:label "OCE/ PHYTO SPECIFIC GROWTH RATE (1/DAY)".
+
+<http://reference.metoffice.gov.uk/data/fcode/894> a skos:Concept;
+	 rdfs:label "OCE/ PHYTO SPECIFIC GRAZING RATE (1/DAY)".
+
+<http://reference.metoffice.gov.uk/data/fcode/895> a skos:Concept;
+	 rdfs:label "OCE/ PHYTO SPECIFIC MORTALITY (1/DAY)".
+
+<http://reference.metoffice.gov.uk/data/fcode/896> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE GAIN-EXCRETION (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/897> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE LOSS - GROWTH (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/898> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE GAIN-PHY MORT (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/899> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE GAIN-ZOO MORT (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/900> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE GAIN-PHY RESP (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/901> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE GAIN-REMIN    (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/902> a skos:Concept;
+	 rdfs:label "OCE/ NUTRIENT LIMITATION".
+
+<http://reference.metoffice.gov.uk/data/fcode/903> a skos:Concept;
+	 rdfs:label "OCE/ LIGHT LIMITATION".
+
+<http://reference.metoffice.gov.uk/data/fcode/904> a skos:Concept;
+	 rdfs:label "OCE/ TEMPERATURE LIMITATION".
+
+<http://reference.metoffice.gov.uk/data/fcode/905> a skos:Concept;
+	 rdfs:label "OCE/ DETRITUS FLUX  (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/906> a skos:Concept;
+	 rdfs:label "OCE/ VERTICAL NITRATE FLUX  (MMOL-N/M2/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/907> a skos:Concept;
+	 rdfs:label "OCE/ HORIZ NITRATE ADVECT RATE(MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/908> a skos:Concept;
+	 rdfs:label "OCE/ VERT NITRATE ADVECTN RATE(MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/909> a skos:Concept;
+	 rdfs:label "OCE/ HORIZ NITRATE DIFFUSION  (MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/910> a skos:Concept;
+	 rdfs:label "OCE/ VERT NITRATE DIFFUSION   (MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/911> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE MIXING DUE TO MLM(MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/912> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE CONVECTION       (MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/913> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE CHANGE - BIOLOGY (MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/914> a skos:Concept;
+	 rdfs:label "OCE/ NITRATE CHANGE-RESETTING (MMOL/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/915> a skos:Concept;
+	 rdfs:label "OCE/ HORIZ PHYTO ADVECT RATE(MMOL-N/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/916> a skos:Concept;
+	 rdfs:label "OCE/ HORIZ ZOO   ADVECT RATE(MMOL-N/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/917> a skos:Concept;
+	 rdfs:label "OCE/ HORIZ DETRI ADVECT RATE(MMOL-N/M3/D)".
+
+<http://reference.metoffice.gov.uk/data/fcode/918> a skos:Concept;
+	 rdfs:label "OCE/ Rate of change of sea-ice concentration /s-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/919> a skos:Concept;
+	 rdfs:label "OCE/ Rate of change of sea-ice depth /m s-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/940> a skos:Concept;
+	 rdfs:label "OCE/ Total temperature advection, meridional.".
+
+<http://reference.metoffice.gov.uk/data/fcode/941> a skos:Concept;
+	 rdfs:label "OCE/ Total temperature diffusion, meridional.".
+
+<http://reference.metoffice.gov.uk/data/fcode/942> a skos:Concept;
+	 rdfs:label "OCE/ Mmeridional overturning streamfunction/Sv".
+
+<http://reference.metoffice.gov.uk/data/fcode/943> a skos:Concept;
+	 rdfs:label "Total freshwater flux into ocean at t-1 (kg/m**3)(cm/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/944> a skos:Concept;
+	 rdfs:label "Unsmoothed surface pressure tendency (g/cm/s**2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/945> a skos:Concept;
+	 rdfs:label "Maximum current in water column (zonal component)".
+
+<http://reference.metoffice.gov.uk/data/fcode/946> a skos:Concept;
+	 rdfs:label "Maximum current in water column (meridional component)".
+
+<http://reference.metoffice.gov.uk/data/fcode/947> a skos:Concept;
+	 rdfs:label "Depth of maximum current in water column".
+
+<http://reference.metoffice.gov.uk/data/fcode/1001> a skos:Concept;
+	 rdfs:label "wqt flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/1002> a skos:Concept;
+	 rdfs:label "wql flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/1003> a skos:Concept;
+	 rdfs:label "wthetal flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/1004> a skos:Concept;
+	 rdfs:label "wthetav flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/1005> a skos:Concept;
+	 rdfs:label "sub cloud layer convective velocity scale".
+
+<http://reference.metoffice.gov.uk/data/fcode/1006> a skos:Concept;
+	 rdfs:label "cumulus layer convective velocity scale ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1007> a skos:Concept;
+	 rdfs:label "cloud base mass flux".
+
+<http://reference.metoffice.gov.uk/data/fcode/1008> a skos:Concept;
+	 rdfs:label "congestus indicator 1".
+
+<http://reference.metoffice.gov.uk/data/fcode/1009> a skos:Concept;
+	 rdfs:label "congestus indicator 2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1010> a skos:Concept;
+	 rdfs:label "termination model level for congestus".
+
+<http://reference.metoffice.gov.uk/data/fcode/1011> a skos:Concept;
+	 rdfs:label "height of top of shallow convection".
+
+<http://reference.metoffice.gov.uk/data/fcode/1012> a skos:Concept;
+	 rdfs:label "height of base of shallow convection".
+
+<http://reference.metoffice.gov.uk/data/fcode/1013> a skos:Concept;
+	 rdfs:label "height of top of congestus convection".
+
+<http://reference.metoffice.gov.uk/data/fcode/1014> a skos:Concept;
+	 rdfs:label "height of base of congestus convection".
+
+<http://reference.metoffice.gov.uk/data/fcode/1015> a skos:Concept;
+	 rdfs:label "CONVECTIVE BOUNDARY LAYER VELOCITY  SCALE".
+
+<http://reference.metoffice.gov.uk/data/fcode/1016> a skos:Concept;
+	 rdfs:label "SURFACE BUOYANCY FLUX".
+
+<http://reference.metoffice.gov.uk/data/fcode/1017> a skos:Concept;
+	 rdfs:label "GRADIENT RICHARDSON NUMBER".
+
+<http://reference.metoffice.gov.uk/data/fcode/1018> a skos:Concept;
+	 rdfs:label "VERTICAL BUOYANCY GRADIENT".
+
+<http://reference.metoffice.gov.uk/data/fcode/1019> a skos:Concept;
+	 rdfs:label "MODULUS OF WIND SHEAR".
+
+<http://reference.metoffice.gov.uk/data/fcode/1020> a skos:Concept;
+	 rdfs:label "BL MOMENTUM DIFFUSION".
+
+<http://reference.metoffice.gov.uk/data/fcode/1021> a skos:Concept;
+	 rdfs:label "BL HEAT DIFFUSION".
+
+<http://reference.metoffice.gov.uk/data/fcode/1022> a skos:Concept;
+	 rdfs:label "TURBULENT KINETIC ENERGY".
+
+<http://reference.metoffice.gov.uk/data/fcode/1023> a skos:Concept;
+	 rdfs:label "X-COMP OF DIST OROGRAPHIC STRESS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1024> a skos:Concept;
+	 rdfs:label "Y-COMP OF DIST OROGRAPHIC STRESS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1025> a skos:Concept;
+	 rdfs:label "X-COMP SURFACE BL STRESS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1026> a skos:Concept;
+	 rdfs:label "Y-COMP SURFACE BL STRESS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1027> a skos:Concept;
+	 rdfs:label "Direct UV Flux (on 38 levels)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1028> a skos:Concept;
+	 rdfs:label "Upward UV Flux (on 38 levels)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1029> a skos:Concept;
+	 rdfs:label "Net Downward UV FLUX (on 38 levels)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1030> a skos:Concept;
+	 rdfs:label "MEAN SOLAR BEARING OVER RAD TS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1031> a skos:Concept;
+	 rdfs:label "SLOPE ASPECT".
+
+<http://reference.metoffice.gov.uk/data/fcode/1032> a skos:Concept;
+	 rdfs:label "SLOPE ANGLE".
+
+<http://reference.metoffice.gov.uk/data/fcode/1033> a skos:Concept;
+	 rdfs:label "OROG CORR FACTOR TO DIRECT SURF SW".
+
+<http://reference.metoffice.gov.uk/data/fcode/1034> a skos:Concept;
+	 rdfs:label "EXTRA SW SURF FLUX AFTER OROG CORR".
+
+<http://reference.metoffice.gov.uk/data/fcode/1035> a skos:Concept;
+	 rdfs:label "Mass flux on half levels (i.e. rho levels).".
+
+<http://reference.metoffice.gov.uk/data/fcode/1036> a skos:Concept;
+	 rdfs:label "COMBINED BOUNDARY LAYER TYPE DIAGNOSTIC".
+
+<http://reference.metoffice.gov.uk/data/fcode/1037> a skos:Concept;
+	 rdfs:label "nitrate (mmol m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1038> a skos:Concept;
+	 rdfs:label "phosphate (mmol m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1039> a skos:Concept;
+	 rdfs:label "diatom biomass (mg-C m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1040> a skos:Concept;
+	 rdfs:label "flagellate biomass (mg-C m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1041> a skos:Concept;
+	 rdfs:label "picoplankton biomass (mg-C m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1042> a skos:Concept;
+	 rdfs:label "dinoflagellate biomass (mg-C m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1043> a skos:Concept;
+	 rdfs:label "dissolved oxygen concentration (mmol m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1044> a skos:Concept;
+	 rdfs:label "zooplankton biomass (mg-C m-3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1045> a skos:Concept;
+	 rdfs:label "underwater visibility (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1046> a skos:Concept;
+	 rdfs:label "daily averaged visibility (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1047> a skos:Concept;
+	 rdfs:label "0/351 Clim Biogenic Aerosol".
+
+<http://reference.metoffice.gov.uk/data/fcode/1048> a skos:Concept;
+	 rdfs:label "0/352 Clim Biomass-burning (fresh) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1049> a skos:Concept;
+	 rdfs:label "0/353 Clim Biomass-burning (aged)   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1050> a skos:Concept;
+	 rdfs:label "0/354 Clim Biomass-burning (in-cloud)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1051> a skos:Concept;
+	 rdfs:label "0/355 Clim Black Carbon (fresh)               ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1052> a skos:Concept;
+	 rdfs:label "0/356 Clim Black Carbon (aged)                   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1053> a skos:Concept;
+	 rdfs:label "0/357 Clim Sea-salt (film mode)                    ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1054> a skos:Concept;
+	 rdfs:label "0/358 Clim Sea-salt (jet mode)                    ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1055> a skos:Concept;
+	 rdfs:label "0/359 Clim Sulphate (accumulation mode)     ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1056> a skos:Concept;
+	 rdfs:label "0/360 Clim Sulphate (Aitken mode)          ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1057> a skos:Concept;
+	 rdfs:label "0/361 Clim Sulphate (dissolved)                  ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1058> a skos:Concept;
+	 rdfs:label "0/362 Clim Dust size division 1                  ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1059> a skos:Concept;
+	 rdfs:label "0/363 Clim Dust size division 2                  ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1060> a skos:Concept;
+	 rdfs:label "0/364 Clim Dust size division 3                   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1061> a skos:Concept;
+	 rdfs:label "0/365 Clim Dust size division 4                   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1062> a skos:Concept;
+	 rdfs:label "0/366 Clim Dust size division 5                      ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1063> a skos:Concept;
+	 rdfs:label "0/367 Clim Dust size division 6                  ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1064> a skos:Concept;
+	 rdfs:label "0/368 Reserved for other aerosol clims    ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1065> a skos:Concept;
+	 rdfs:label "0/369 Reserved for other aerosol clims     ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1066> a skos:Concept;
+	 rdfs:label "0/370 Reserved for other aerosol clims      ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1067> a skos:Concept;
+	 rdfs:label "0/371 Reserved for other aerosol clims   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1068> a skos:Concept;
+	 rdfs:label "0/372 Reserved for other aerosol clims   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1069> a skos:Concept;
+	 rdfs:label "0/373 Reserved for other aerosol clims   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1070> a skos:Concept;
+	 rdfs:label "0/374 Reserved for other aerosol clims     ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1071> a skos:Concept;
+	 rdfs:label "2/289 Biogenic aerosol optical depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/1072> a skos:Concept;
+	 rdfs:label "Reserved just in case".
+
+<http://reference.metoffice.gov.uk/data/fcode/1073> a skos:Concept;
+	 rdfs:label "Reserved just in case".
+
+<http://reference.metoffice.gov.uk/data/fcode/1074> a skos:Concept;
+	 rdfs:label "Grid-box mean roughness length for momentum without orographic enhancement (m).".
+
+<http://reference.metoffice.gov.uk/data/fcode/1075> a skos:Concept;
+	 rdfs:label "RESIDUAL MN MERID. CIRC. VSTARBAR".
+
+<http://reference.metoffice.gov.uk/data/fcode/1076> a skos:Concept;
+	 rdfs:label "RESIDUAL MN MERID. CIRC. WSTARBAR".
+
+<http://reference.metoffice.gov.uk/data/fcode/1077> a skos:Concept;
+	 rdfs:label "ELIASSEN-PALM FLUX (MERID. COMPNT)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1078> a skos:Concept;
+	 rdfs:label "ELIASSEN-PALM FLUX (VERT. COMPNT)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1079> a skos:Concept;
+	 rdfs:label "DIVERGENCE OF ELIASSEN-PALM FLUX".
+
+<http://reference.metoffice.gov.uk/data/fcode/1080> a skos:Concept;
+	 rdfs:label "Main ozone tracer:  prognostic ozone tracer".
+
+<http://reference.metoffice.gov.uk/data/fcode/1081> a skos:Concept;
+	 rdfs:label "Coeff 1:            car o3 prod-loss (P-L)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1082> a skos:Concept;
+	 rdfs:label "Coeff 2:            car o3 P-L wrt o3 mix ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1083> a skos:Concept;
+	 rdfs:label "Coeff 3:            car o3 vol mixing ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1084> a skos:Concept;
+	 rdfs:label "Coeff 4:            car o3 P-L wrt temp".
+
+<http://reference.metoffice.gov.uk/data/fcode/1085> a skos:Concept;
+	 rdfs:label "Coeff 5:            car o3 clim temp".
+
+<http://reference.metoffice.gov.uk/data/fcode/1086> a skos:Concept;
+	 rdfs:label "Coeff 6:            car o3 P-L wrt o3 above point".
+
+<http://reference.metoffice.gov.uk/data/fcode/1087> a skos:Concept;
+	 rdfs:label "Coeff 7:            car o3 column above point".
+
+<http://reference.metoffice.gov.uk/data/fcode/1088> a skos:Concept;
+	 rdfs:label "reserved for C Mathison".
+
+<http://reference.metoffice.gov.uk/data/fcode/1089> a skos:Concept;
+	 rdfs:label "reserved for C Mathison".
+
+<http://reference.metoffice.gov.uk/data/fcode/1090> a skos:Concept;
+	 rdfs:label "Very Low Cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1091> a skos:Concept;
+	 rdfs:label "Height of decoupled layer base (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1092> a skos:Concept;
+	 rdfs:label "Height of stratocumulus cloud base (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1093> a skos:Concept;
+	 rdfs:label "Parametrized entrainment rate for surface-based mixed layer (m/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1094> a skos:Concept;
+	 rdfs:label "Parametrized entrainment rate at the boundary layer top (m/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1095> a skos:Concept;
+	 rdfs:label "E. FLUX SPECTRAL PSEUDOMOM. P LEVS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1096> a skos:Concept;
+	 rdfs:label "W. FLUX SPECTRAL PSEUDOMOM. P LEVS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1097> a skos:Concept;
+	 rdfs:label "EAST. FORCE FROM SPECTRAL GW P LEVS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1098> a skos:Concept;
+	 rdfs:label "X COMPT OF GRAV. WAVE STRESS P LEVS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1099> a skos:Concept;
+	 rdfs:label "U-ACCEL FROM SATURATED STRESS P LEVS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1100> a skos:Concept;
+	 rdfs:label "CCRad : Lowest conv. cloud base layer".
+
+<http://reference.metoffice.gov.uk/data/fcode/1101> a skos:Concept;
+	 rdfs:label "CCRad : CCW passed to radiation".
+
+<http://reference.metoffice.gov.uk/data/fcode/1102> a skos:Concept;
+	 rdfs:label "Surface emissivity at 23.8 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1103> a skos:Concept;
+	 rdfs:label "Standard deviation of surface emissivity at 23.8 GHz (F.Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1104> a skos:Concept;
+	 rdfs:label "Surface emissivity at 31.4 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1105> a skos:Concept;
+	 rdfs:label "Standard deviation of surface emissivity at 31.4 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1106> a skos:Concept;
+	 rdfs:label "Surface emissivity at 50.0 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1107> a skos:Concept;
+	 rdfs:label "Standard deviation of surface emissivity at 50.0 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1108> a skos:Concept;
+	 rdfs:label "Surface emissivity at 89.0 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1109> a skos:Concept;
+	 rdfs:label "Standard deviation of surface emissivity at 89.0 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1110> a skos:Concept;
+	 rdfs:label "Surface emissivity at 150.0 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1111> a skos:Concept;
+	 rdfs:label "Standard deviation of surface emissivity at 150.0 GHz (F. Karbou)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1112> a skos:Concept;
+	 rdfs:label "Shear vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1113> a skos:Concept;
+	 rdfs:label "Curvature vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1114> a skos:Concept;
+	 rdfs:label "Zenith Total delay (ZTD)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1115> a skos:Concept;
+	 rdfs:label "Total wave directional spread".
+
+<http://reference.metoffice.gov.uk/data/fcode/1116> a skos:Concept;
+	 rdfs:label "Secondary swell field sig. height".
+
+<http://reference.metoffice.gov.uk/data/fcode/1117> a skos:Concept;
+	 rdfs:label "Tertiary swell field sig. height".
+
+<http://reference.metoffice.gov.uk/data/fcode/1118> a skos:Concept;
+	 rdfs:label "Secondary swell field period".
+
+<http://reference.metoffice.gov.uk/data/fcode/1119> a skos:Concept;
+	 rdfs:label "Tertiary swell field period".
+
+<http://reference.metoffice.gov.uk/data/fcode/1120> a skos:Concept;
+	 rdfs:label "Wind sea wavelength".
+
+<http://reference.metoffice.gov.uk/data/fcode/1121> a skos:Concept;
+	 rdfs:label "Primary swell field wavelength".
+
+<http://reference.metoffice.gov.uk/data/fcode/1122> a skos:Concept;
+	 rdfs:label "Secondary swell field wavelength".
+
+<http://reference.metoffice.gov.uk/data/fcode/1123> a skos:Concept;
+	 rdfs:label "Tertiary swell field wavelength".
+
+<http://reference.metoffice.gov.uk/data/fcode/1124> a skos:Concept;
+	 rdfs:label "Secondary swell field principle dir".
+
+<http://reference.metoffice.gov.uk/data/fcode/1125> a skos:Concept;
+	 rdfs:label "Tertiary swell field principle dir".
+
+<http://reference.metoffice.gov.uk/data/fcode/1126> a skos:Concept;
+	 rdfs:label "Wind sea directional spread".
+
+<http://reference.metoffice.gov.uk/data/fcode/1127> a skos:Concept;
+	 rdfs:label "Primary swell field dir. spread".
+
+<http://reference.metoffice.gov.uk/data/fcode/1128> a skos:Concept;
+	 rdfs:label "Secondary swell field dir. spread".
+
+<http://reference.metoffice.gov.uk/data/fcode/1129> a skos:Concept;
+	 rdfs:label "Tertiary swell field dir. spread".
+
+<http://reference.metoffice.gov.uk/data/fcode/1130> a skos:Concept;
+	 rdfs:label "Primary swell wind sea fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1131> a skos:Concept;
+	 rdfs:label "Secondary swell wind sea fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1132> a skos:Concept;
+	 rdfs:label "Teriary swell wind sea fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1133> a skos:Concept;
+	 rdfs:label "Total wind sea fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1134> a skos:Concept;
+	 rdfs:label "CAPE timescale,deep (secs).".
+
+<http://reference.metoffice.gov.uk/data/fcode/1135> a skos:Concept;
+	 rdfs:label "Indicator of reduced CAPE timescale.".
+
+<http://reference.metoffice.gov.uk/data/fcode/1136> a skos:Concept;
+	 rdfs:label "Distance from Coast (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1137> a skos:Concept;
+	 rdfs:label "Radiative Screen Temp on Tiles (K)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1138> a skos:Concept;
+	 rdfs:label "Radiative Screen Temp on Sea Ice (K)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1139> a skos:Concept;
+	 rdfs:label "Time since Transition (s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1140> a skos:Concept;
+	 rdfs:label "- 1148  ......  Free for General use  ......".
+
+<http://reference.metoffice.gov.uk/data/fcode/1149> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 30 (conventionally OCFF) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1150> a skos:Concept;
+	 rdfs:label "Mass mixing ratio fresh OCFF".
+
+<http://reference.metoffice.gov.uk/data/fcode/1151> a skos:Concept;
+	 rdfs:label "Mass mixing ratio aged OCFF".
+
+<http://reference.metoffice.gov.uk/data/fcode/1152> a skos:Concept;
+	 rdfs:label "Mass mixing ratio cloud OCFF".
+
+<http://reference.metoffice.gov.uk/data/fcode/1153> a skos:Concept;
+	 rdfs:label "Fresh OCFF surface dry deposition flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1154> a skos:Concept;
+	 rdfs:label "Aged OCFF surface dry deposition flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1155> a skos:Concept;
+	 rdfs:label "OCFF in cloud occult deposition flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1156> a skos:Concept;
+	 rdfs:label "Large scale rainout of OCFF".
+
+<http://reference.metoffice.gov.uk/data/fcode/1157> a skos:Concept;
+	 rdfs:label "Large scale washout of OCFF".
+
+<http://reference.metoffice.gov.uk/data/fcode/1158> a skos:Concept;
+	 rdfs:label "Convective scavenging of OCFF".
+
+<http://reference.metoffice.gov.uk/data/fcode/1301> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  1 (conventionally O3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1302> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  2 (conventionally H2O)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1303> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  3 (conventionally CO)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1304> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  4 (conventionally CH4)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1305> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  5 (conventionally N2O)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1306> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  6 (conventionally NO)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1307> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  7 (conventionally NO2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1308> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  8 (conventionally HNO3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1309> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer  9 (conventionally N2O5)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1310> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 10 (conventionally ClONO2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1311> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 11 (conventionally ClO)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1312> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 12 (conventionally HCl)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1313> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 13 (conventionally CF2Cl2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1314> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 14 (conventionally CFCl3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1315> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 15 (conventionally HF)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1316> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 16".
+
+<http://reference.metoffice.gov.uk/data/fcode/1317> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 17".
+
+<http://reference.metoffice.gov.uk/data/fcode/1318> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 18".
+
+<http://reference.metoffice.gov.uk/data/fcode/1319> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 19 (conventionally SO2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1320> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 20 (conventionally DMS)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1321> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 20 (conventionally DMS)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1322> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 21 (conventionally H2S)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1323> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 22 (conventionally WATER-SOLUBLE)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1324> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 23 (conventionally DUST-LIKE)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1325> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 24 (conventionally OCEANIC)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1326> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 25 (conventionally SOOT)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1327> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 26 (conventionally VOLCANIC ASH)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1328> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 27 (conventionally SULPHURIC ACID)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1329> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 28 (conventionally AMMONIUM SULPHAT".
+
+<http://reference.metoffice.gov.uk/data/fcode/1330> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric tracer 29 (conventionally MINERAL)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1331> a skos:Concept;
+	 rdfs:label "BL flux of atmospheric total aerosol".
+
+<http://reference.metoffice.gov.uk/data/fcode/1332> a skos:Concept;
+	 rdfs:label "Ice Possible (0- -20 Celcius, RH =>70%) 1.0=possible;0.0 not".
+
+<http://reference.metoffice.gov.uk/data/fcode/1333> a skos:Concept;
+	 rdfs:label "Liquid water in any region averaged during all-sky conditions".
+
+<http://reference.metoffice.gov.uk/data/fcode/1334> a skos:Concept;
+	 rdfs:label "q*w  (specific humidity * vertical velocity)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1335> a skos:Concept;
+	 rdfs:label "Fraction of time pressure level is above model surface".
+
+<http://reference.metoffice.gov.uk/data/fcode/1336> a skos:Concept;
+	 rdfs:label "U * geopotential height".
+
+<http://reference.metoffice.gov.uk/data/fcode/1337> a skos:Concept;
+	 rdfs:label "V * geopotential height".
+
+<http://reference.metoffice.gov.uk/data/fcode/1338> a skos:Concept;
+	 rdfs:label "Virtual temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/1339> a skos:Concept;
+	 rdfs:label "Saturation mixing ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1340> a skos:Concept;
+	 rdfs:label "Reserved for VAR project : B.Ingleby.".
+
+<http://reference.metoffice.gov.uk/data/fcode/1369> a skos:Concept;
+	 rdfs:label "Reserved for VAR project : B.Ingleby.".
+
+<http://reference.metoffice.gov.uk/data/fcode/1370> a skos:Concept;
+	 rdfs:label "SO4 aerosol: Aitken mode. Units: mass mixing ratio (kg/kg)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1371> a skos:Concept;
+	 rdfs:label "SO4 aerosol: accumulation mode. Units: mass mixing ratio (kg/kg)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1372> a skos:Concept;
+	 rdfs:label "SO4 aerosol: dissolved mode. Units: mass mixing ratio (kg/kg)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1373> a skos:Concept;
+	 rdfs:label "SO4 aerosol: DMS mass mixing ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1374> a skos:Concept;
+	 rdfs:label "SO4 aerosol: SO2 mass mixing ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1375> a skos:Concept;
+	 rdfs:label "SO4 Methyl Sulphonic Acid mass mixing ratio kg/kg".
+
+<http://reference.metoffice.gov.uk/data/fcode/1376> a skos:Concept;
+	 rdfs:label "SO4 aerosol: column mass loading (kg/m2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1377> a skos:Concept;
+	 rdfs:label "SO4 aerosol: SW radiative forcing (W/m2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1379> a skos:Concept;
+	 rdfs:label "NH3 gas mass mass mix ratio kg/kg".
+
+<http://reference.metoffice.gov.uk/data/fcode/1380> a skos:Concept;
+	 rdfs:label "Van-Genuchten "B" parameter".
+
+<http://reference.metoffice.gov.uk/data/fcode/1381> a skos:Concept;
+	 rdfs:label "Clapp-Hornberger "B" exponent".
+
+<http://reference.metoffice.gov.uk/data/fcode/1382> a skos:Concept;
+	 rdfs:label "Leaf area index of vegetated fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1383> a skos:Concept;
+	 rdfs:label "Canopy height of vegetated fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1384> a skos:Concept;
+	 rdfs:label "Canopy conductance".
+
+<http://reference.metoffice.gov.uk/data/fcode/1385> a skos:Concept;
+	 rdfs:label "Unfrozen soil moisture fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1386> a skos:Concept;
+	 rdfs:label "Frozen soil moisture fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1387> a skos:Concept;
+	 rdfs:label "Transpiration".
+
+<http://reference.metoffice.gov.uk/data/fcode/1388> a skos:Concept;
+	 rdfs:label "Gross Primary Productivity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1389> a skos:Concept;
+	 rdfs:label "Net Primary Productivity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1390> a skos:Concept;
+	 rdfs:label "Plant Respiration".
+
+<http://reference.metoffice.gov.uk/data/fcode/1391> a skos:Concept;
+	 rdfs:label "Fractional covering of functional types".
+
+<http://reference.metoffice.gov.uk/data/fcode/1392> a skos:Concept;
+	 rdfs:label "LAI of veg functional types".
+
+<http://reference.metoffice.gov.uk/data/fcode/1393> a skos:Concept;
+	 rdfs:label "Canopy height of vegetation functional types".
+
+<http://reference.metoffice.gov.uk/data/fcode/1394> a skos:Concept;
+	 rdfs:label "Disturbed fraction of vegetation".
+
+<http://reference.metoffice.gov.uk/data/fcode/1395> a skos:Concept;
+	 rdfs:label "Soil albedo".
+
+<http://reference.metoffice.gov.uk/data/fcode/1396> a skos:Concept;
+	 rdfs:label "Snow soot".
+
+<http://reference.metoffice.gov.uk/data/fcode/1397> a skos:Concept;
+	 rdfs:label "Soil carbon content".
+
+<http://reference.metoffice.gov.uk/data/fcode/1398> a skos:Concept;
+	 rdfs:label "Accumulated net primary productivity on tiles (kg C/m2/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1399> a skos:Concept;
+	 rdfs:label "Mountain torque per unit area".
+
+<http://reference.metoffice.gov.uk/data/fcode/1400> a skos:Concept;
+	 rdfs:label "Surface dry deposition flux of SO2 kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1401> a skos:Concept;
+	 rdfs:label "Surface dry deposition flux of SO4 Aitken mode kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1402> a skos:Concept;
+	 rdfs:label "Surface dry deposition flux of SO4 ACCUMULATION mode kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1403> a skos:Concept;
+	 rdfs:label "Surface dry deposition flux of SO4 DISSOLVED mode kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1404> a skos:Concept;
+	 rdfs:label "RESIST_B for SO2 (Note: 1400-1416 are Sulphur Cycle BL diagnostic".
+
+<http://reference.metoffice.gov.uk/data/fcode/1405> a skos:Concept;
+	 rdfs:label "RESIST_B for SO2 Aitken mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1406> a skos:Concept;
+	 rdfs:label "RESIST_B for SO2 ACCUMULATION  mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1407> a skos:Concept;
+	 rdfs:label "RESIST_B for SO2 DISSOLVED mode kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1408> a skos:Concept;
+	 rdfs:label "RESIST_S for SO2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1409> a skos:Concept;
+	 rdfs:label "RESIST_S for SO2 Aitken mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1410> a skos:Concept;
+	 rdfs:label "RESIST_S for SO2 ACCUMULATION mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1411> a skos:Concept;
+	 rdfs:label "RESIST_S for SO2 DISSOLVED  mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1412> a skos:Concept;
+	 rdfs:label "Dry deposition velocity for SO2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1413> a skos:Concept;
+	 rdfs:label "Dry deposition velocity for SO4 Aitken mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1414> a skos:Concept;
+	 rdfs:label "Dry deposition velocity for SO4 ACCUMULATION mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1415> a skos:Concept;
+	 rdfs:label "Dry deposition velocity for SO4 DISSOLVED mode".
+
+<http://reference.metoffice.gov.uk/data/fcode/1416> a skos:Concept;
+	 rdfs:label "Aerodynamic resistance 1/CDSTD after TSTEP".
+
+<http://reference.metoffice.gov.uk/data/fcode/1417> a skos:Concept;
+	 rdfs:label "SO2 scavenged by convective precipitation kg(S)/m2/tstep".
+
+<http://reference.metoffice.gov.uk/data/fcode/1418> a skos:Concept;
+	 rdfs:label "SO4 Aitken scavenged by convective precipitation kg(S)/m2/tstep".
+
+<http://reference.metoffice.gov.uk/data/fcode/1419> a skos:Concept;
+	 rdfs:label "SO4 accumulation scavenged by convective precipitation kg(S)/m2/t".
+
+<http://reference.metoffice.gov.uk/data/fcode/1420> a skos:Concept;
+	 rdfs:label "SO4 dissolved scavenged by convective precipitation kg(S)/m2/tste".
+
+<http://reference.metoffice.gov.uk/data/fcode/1421> a skos:Concept;
+	 rdfs:label "SO2 scavenged by large scale precipitation kg(S)/m2/tstep".
+
+<http://reference.metoffice.gov.uk/data/fcode/1422> a skos:Concept;
+	 rdfs:label "SO4 Aitken scavenged by large scale precipitation kg(S)/m2/tstep".
+
+<http://reference.metoffice.gov.uk/data/fcode/1423> a skos:Concept;
+	 rdfs:label "SO4 accumulation scavenged by large scale precipitation kg(S)/m2/".
+
+<http://reference.metoffice.gov.uk/data/fcode/1424> a skos:Concept;
+	 rdfs:label "SO4 dissolved scavenged by large scale precipitation kg(S)/m2/tst".
+
+<http://reference.metoffice.gov.uk/data/fcode/1425> a skos:Concept;
+	 rdfs:label "Layer liquid cloud amount in layers".
+
+<http://reference.metoffice.gov.uk/data/fcode/1426> a skos:Concept;
+	 rdfs:label "Layer frozen cloud amount in layers".
+
+<http://reference.metoffice.gov.uk/data/fcode/1427> a skos:Concept;
+	 rdfs:label "Layer cloud frequency in each layer".
+
+<http://reference.metoffice.gov.uk/data/fcode/1428> a skos:Concept;
+	 rdfs:label "Net energy change this period J/m**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1429> a skos:Concept;
+	 rdfs:label "Thickness (alternative code for other packages eg without BRLEV s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1430> a skos:Concept;
+	 rdfs:label "Thickness tendency (as above)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1431> a skos:Concept;
+	 rdfs:label "du/dp".
+
+<http://reference.metoffice.gov.uk/data/fcode/1432> a skos:Concept;
+	 rdfs:label "dv/dp".
+
+<http://reference.metoffice.gov.uk/data/fcode/1433> a skos:Concept;
+	 rdfs:label "dtheta/dp".
+
+<http://reference.metoffice.gov.uk/data/fcode/1434> a skos:Concept;
+	 rdfs:label "dtheta_e/dp".
+
+<http://reference.metoffice.gov.uk/data/fcode/1435> a skos:Concept;
+	 rdfs:label "Moist PV".
+
+<http://reference.metoffice.gov.uk/data/fcode/1436> a skos:Concept;
+	 rdfs:label "Magnitude Geostrophic Deformation".
+
+<http://reference.metoffice.gov.uk/data/fcode/1437> a skos:Concept;
+	 rdfs:label "EW cpt, Geostrophic deformation axis".
+
+<http://reference.metoffice.gov.uk/data/fcode/1438> a skos:Concept;
+	 rdfs:label "NS cpt, Geostrophic deformation axis".
+
+<http://reference.metoffice.gov.uk/data/fcode/1439> a skos:Concept;
+	 rdfs:label "Magnitude Grad(ThetaW)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1440> a skos:Concept;
+	 rdfs:label "EW cpt Grad(ThetaW)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1441> a skos:Concept;
+	 rdfs:label "NS cpt Grad(ThetaW)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1442> a skos:Concept;
+	 rdfs:label "Geostrophic Deformation wrt ThetaW".
+
+<http://reference.metoffice.gov.uk/data/fcode/1443> a skos:Concept;
+	 rdfs:label "Geostrophic Relative Vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1444> a skos:Concept;
+	 rdfs:label "Magnitude Grad(Theta)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1445> a skos:Concept;
+	 rdfs:label "EW cpt Grad(Theta)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1446> a skos:Concept;
+	 rdfs:label "NS cpt Grad(Theta)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1447> a skos:Concept;
+	 rdfs:label "Omega eqn. inversion with diabatic forcing".
+
+<http://reference.metoffice.gov.uk/data/fcode/1448> a skos:Concept;
+	 rdfs:label "Omega eqn. inversion with divQ & diabatic forcing".
+
+<http://reference.metoffice.gov.uk/data/fcode/1449> a skos:Concept;
+	 rdfs:label "Omega eqn. inversion with divQ only".
+
+<http://reference.metoffice.gov.uk/data/fcode/1450> a skos:Concept;
+	 rdfs:label "Omega eqn. inversion with divQ 800-600mb".
+
+<http://reference.metoffice.gov.uk/data/fcode/1451> a skos:Concept;
+	 rdfs:label "Omega eqn. inversion with divQ 600-100mb".
+
+<http://reference.metoffice.gov.uk/data/fcode/1452> a skos:Concept;
+	 rdfs:label "Omega eqn. inversion with divQ 1000-800mb".
+
+<http://reference.metoffice.gov.uk/data/fcode/1453> a skos:Concept;
+	 rdfs:label "DelSqd(ThetaW)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1454> a skos:Concept;
+	 rdfs:label "Local value of magnitude of grad(ThetaW)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1455> a skos:Concept;
+	 rdfs:label "Theta Frontal Speed - advection of magnitude (theta_w)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1456> a skos:Concept;
+	 rdfs:label "Advection of theta_w".
+
+<http://reference.metoffice.gov.uk/data/fcode/1457> a skos:Concept;
+	 rdfs:label "Geostrophic advection of theta_w".
+
+<http://reference.metoffice.gov.uk/data/fcode/1458> a skos:Concept;
+	 rdfs:label "DelSqd(Theta)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1459> a skos:Concept;
+	 rdfs:label "Local value of magnitude of grad(Theta)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1460> a skos:Concept;
+	 rdfs:label "Theta Frontal Speed - advection of magnitude (theta)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1461> a skos:Concept;
+	 rdfs:label "Advection of theta".
+
+<http://reference.metoffice.gov.uk/data/fcode/1462> a skos:Concept;
+	 rdfs:label "Geostrophic advection of theta".
+
+<http://reference.metoffice.gov.uk/data/fcode/1463> a skos:Concept;
+	 rdfs:label "Ambient noise".
+
+<http://reference.metoffice.gov.uk/data/fcode/1464> a skos:Concept;
+	 rdfs:label "Droplet number conc * cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1465> a skos:Concept;
+	 rdfs:label "Layer cloud lwc * cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1466> a skos:Concept;
+	 rdfs:label "SO4 ccn mass conc * cond samp weight".
+
+<http://reference.metoffice.gov.uk/data/fcode/1467> a skos:Concept;
+	 rdfs:label "Conditional sampling weight".
+
+<http://reference.metoffice.gov.uk/data/fcode/1468> a skos:Concept;
+	 rdfs:label "2-D effective radius * 2-D re weight".
+
+<http://reference.metoffice.gov.uk/data/fcode/1469> a skos:Concept;
+	 rdfs:label "Weight for 2-D effective radius".
+
+<http://reference.metoffice.gov.uk/data/fcode/1470> a skos:Concept;
+	 rdfs:label "Advection of mixing ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1471> a skos:Concept;
+	 rdfs:label "Advection of dew point temperature".
+
+<http://reference.metoffice.gov.uk/data/fcode/1472> a skos:Concept;
+	 rdfs:label "Advection of relative humidity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1473> a skos:Concept;
+	 rdfs:label "Advection of relative vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1474> a skos:Concept;
+	 rdfs:label "Advection of absolute vorticity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1475> a skos:Concept;
+	 rdfs:label "'X' Component of Isallobaric Wind (corrected from u July 1998)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1476> a skos:Concept;
+	 rdfs:label "'Y' Component of Isallobaric Wind (corrected from v July 1998)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1477> a skos:Concept;
+	 rdfs:label "Scalar Divergence".
+
+<http://reference.metoffice.gov.uk/data/fcode/1478> a skos:Concept;
+	 rdfs:label "Showalter index (an instability index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1479> a skos:Concept;
+	 rdfs:label "Total total index (an instability index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1480> a skos:Concept;
+	 rdfs:label "Sweat index (an instability index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1481> a skos:Concept;
+	 rdfs:label "Lifted index (an instability index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1482> a skos:Concept;
+	 rdfs:label "Cape (convective available potential energy)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1483> a skos:Concept;
+	 rdfs:label "k index (an instability index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1484> a skos:Concept;
+	 rdfs:label "Saturation vapour pressure".
+
+<http://reference.metoffice.gov.uk/data/fcode/1485> a skos:Concept;
+	 rdfs:label "Modified refractivity index, M (M units)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1486> a skos:Concept;
+	 rdfs:label "Vertical gradient of modified refractivity, dM/dz (M/km)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1487> a skos:Concept;
+	 rdfs:label "Minimum of dM/dz with height (M/km)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1488> a skos:Concept;
+	 rdfs:label "Maximum of dM/dz with height (M/km)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1489> a skos:Concept;
+	 rdfs:label "Radar duct intensity (max wavelength trapped) (cm)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1490> a skos:Concept;
+	 rdfs:label "Refractivity index, N (N units)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1491> a skos:Concept;
+	 rdfs:label "Fresh soot mass mix ratio kg/kg".
+
+<http://reference.metoffice.gov.uk/data/fcode/1492> a skos:Concept;
+	 rdfs:label "Aged soot mass mix ratio kg/kg".
+
+<http://reference.metoffice.gov.uk/data/fcode/1493> a skos:Concept;
+	 rdfs:label "Soot in cloud mix ratio kg/kg".
+
+<http://reference.metoffice.gov.uk/data/fcode/1494> a skos:Concept;
+	 rdfs:label "SO4 Aitken surface settlement flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1495> a skos:Concept;
+	 rdfs:label "SO4 Accumulation surface settlement flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1496> a skos:Concept;
+	 rdfs:label "MSA (methyl sulphonic acid) mass mixing ratio flux kg/kg/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1497> a skos:Concept;
+	 rdfs:label "NH3 (ammonia) depletion after tstep kg/kg".
+
+<http://reference.metoffice.gov.uk/data/fcode/1498> a skos:Concept;
+	 rdfs:label "Ship noise (from passing ships)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1499> a skos:Concept;
+	 rdfs:label "Leaf turnover rate of plant functional types (/360days)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1500> a skos:Concept;
+	 rdfs:label "Accumulated leaf turnover rate on PFTs (1/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1501> a skos:Concept;
+	 rdfs:label "Accumulated phenological leaf turnover rate on PFTs (sec-1)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1502> a skos:Concept;
+	 rdfs:label "Accumulated wood respiration on PFTs (kg C/m2/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1503> a skos:Concept;
+	 rdfs:label "Accumulated soil respiration (kg C/m2/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1504> a skos:Concept;
+	 rdfs:label "Canopy & surface water content on tiles (kg/m2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1505> a skos:Concept;
+	 rdfs:label "Canopy & surface capacity on tiles (kg/m2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1506> a skos:Concept;
+	 rdfs:label "Infiltration enhancement factor on tiles".
+
+<http://reference.metoffice.gov.uk/data/fcode/1507> a skos:Concept;
+	 rdfs:label "Snow grain size (microns)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1508> a skos:Concept;
+	 rdfs:label "Snow temperature (K)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1509> a skos:Concept;
+	 rdfs:label "Radiative surface temperature (K)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1510> a skos:Concept;
+	 rdfs:label "Surface temperature on tiles (K)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1511> a skos:Concept;
+	 rdfs:label "Roughness length on tiles (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1512> a skos:Concept;
+	 rdfs:label "Vegetation carbon on Plant Functional Types (PFTs) (kg C / m2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1513> a skos:Concept;
+	 rdfs:label "Gridbox mean vegetation carbon  (kg C / m2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1514> a skos:Concept;
+	 rdfs:label "Phenological leaf turnover rate on PFTs (1/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1515> a skos:Concept;
+	 rdfs:label "Litter carbon on Plant Functional Types (PFTs) (kg C / m2 / year)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1516> a skos:Concept;
+	 rdfs:label "Gridbox mean litter carbon (kg C / m2 / year)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1517> a skos:Concept;
+	 rdfs:label "Canopy evaporation on tiles (kg / m2 /sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1518> a skos:Concept;
+	 rdfs:label "Evapotranspiration from the soil (kg / m2 /sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1519> a skos:Concept;
+	 rdfs:label "Gross primary productivity on plant functional types (kg C/m2/sec".
+
+<http://reference.metoffice.gov.uk/data/fcode/1520> a skos:Concept;
+	 rdfs:label "Sensible heat flux on tiles (W/m2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1521> a skos:Concept;
+	 rdfs:label "Net primary productivity on plant functional types (kg C/m2/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1522> a skos:Concept;
+	 rdfs:label "Plant respiration on plant functional types (kg C/m2/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1523> a skos:Concept;
+	 rdfs:label "Soil respiration (kg C/m2/sec)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1524> a skos:Concept;
+	 rdfs:label "Bulk Richardson number on tiles".
+
+<http://reference.metoffice.gov.uk/data/fcode/1525> a skos:Concept;
+	 rdfs:label "Fractional snow cover".
+
+<http://reference.metoffice.gov.uk/data/fcode/1526> a skos:Concept;
+	 rdfs:label "Rate of evaporation from soil surface  kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1527> a skos:Concept;
+	 rdfs:label "Rate of evaporation from canopy  kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1528> a skos:Concept;
+	 rdfs:label "Rate of sublimation from surface (gridbox mean) kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1529> a skos:Concept;
+	 rdfs:label "Rate of transpiration  kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1530> a skos:Concept;
+	 rdfs:label "Rate of snow melt on land kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1531> a skos:Concept;
+	 rdfs:label "Rate of canopy throughfall kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1532> a skos:Concept;
+	 rdfs:label "Rate of surface runoff kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1533> a skos:Concept;
+	 rdfs:label "Rate of sub-surface runoff kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1534> a skos:Concept;
+	 rdfs:label "Turbulent mixing ht after Boundary Layer m".
+
+<http://reference.metoffice.gov.uk/data/fcode/1535> a skos:Concept;
+	 rdfs:label "Stable BL indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1536> a skos:Concept;
+	 rdfs:label "Stratocumulus over stable BL indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1537> a skos:Concept;
+	 rdfs:label "Well_mixed BL indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1538> a skos:Concept;
+	 rdfs:label "Decoupled SC not over CU indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1539> a skos:Concept;
+	 rdfs:label "Decoupled SC over CU indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1540> a skos:Concept;
+	 rdfs:label "Cumulus-capped BL indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1541> a skos:Concept;
+	 rdfs:label "NH3 Surface dry deposition flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1542> a skos:Concept;
+	 rdfs:label "Fresh soot surface dry deposition flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1543> a skos:Concept;
+	 rdfs:label "Aged soot surface dry deposition flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1544> a skos:Concept;
+	 rdfs:label "Soot in cloud occult deposition flux kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1545> a skos:Concept;
+	 rdfs:label "NH3 scavenged by large scale precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1546> a skos:Concept;
+	 rdfs:label "Soot scavenged by large scale precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1547> a skos:Concept;
+	 rdfs:label "SO2 scavenged by large scale precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1548> a skos:Concept;
+	 rdfs:label "SO4 Aitken scavenged by large scale precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1549> a skos:Concept;
+	 rdfs:label "SO4 accumulation scavenged by large scale precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1550> a skos:Concept;
+	 rdfs:label "SO4 dissolved scavenged by large scale precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1551> a skos:Concept;
+	 rdfs:label "NH3 scavenged by convective precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1552> a skos:Concept;
+	 rdfs:label "Soot scavenged by convective precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1553> a skos:Concept;
+	 rdfs:label "SO2 scavenged by convective precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1554> a skos:Concept;
+	 rdfs:label "SO4 Aitken scavenged by convective precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1555> a skos:Concept;
+	 rdfs:label "SO4 accumulation scavenged by convective precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1556> a skos:Concept;
+	 rdfs:label "SO4 dissolved scavenged by convective precipitation kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1557> a skos:Concept;
+	 rdfs:label "Potential evaporation amount kg/m2/tstep".
+
+<http://reference.metoffice.gov.uk/data/fcode/1558> a skos:Concept;
+	 rdfs:label "Potential evaporation rate kg/m2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1559> a skos:Concept;
+	 rdfs:label "Soil moisture availability factor".
+
+<http://reference.metoffice.gov.uk/data/fcode/1560> a skos:Concept;
+	 rdfs:label "CO2 ocean flux kg/m**2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1561> a skos:Concept;
+	 rdfs:label "CO2 surface emissions kg/m**2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1562> a skos:Concept;
+	 rdfs:label "CO2 land surface flux kg/m**2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1563> a skos:Concept;
+	 rdfs:label "CO2 total flux to atmosphere kg/m**2/s".
+
+<http://reference.metoffice.gov.uk/data/fcode/1564> a skos:Concept;
+	 rdfs:label "Precipitation rate codes for symbol plotting".
+
+<http://reference.metoffice.gov.uk/data/fcode/1565> a skos:Concept;
+	 rdfs:label "Present Weather codes (ww-code)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1566> a skos:Concept;
+	 rdfs:label "T before dynamics".
+
+<http://reference.metoffice.gov.uk/data/fcode/1567> a skos:Concept;
+	 rdfs:label "T after dynamics".
+
+<http://reference.metoffice.gov.uk/data/fcode/1568> a skos:Concept;
+	 rdfs:label "q before dynamics".
+
+<http://reference.metoffice.gov.uk/data/fcode/1569> a skos:Concept;
+	 rdfs:label "q after dynamics".
+
+<http://reference.metoffice.gov.uk/data/fcode/1570> a skos:Concept;
+	 rdfs:label "x component of E vector = (v'**2 - u'**2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1571> a skos:Concept;
+	 rdfs:label "y component of E vector = -u'v'".
+
+<http://reference.metoffice.gov.uk/data/fcode/1572> a skos:Concept;
+	 rdfs:label "z component of E vector - proportional to v'T'".
+
+<http://reference.metoffice.gov.uk/data/fcode/1573> a skos:Concept;
+	 rdfs:label "Supercooled liquid water content".
+
+<http://reference.metoffice.gov.uk/data/fcode/1574> a skos:Concept;
+	 rdfs:label "Supercooled rain".
+
+<http://reference.metoffice.gov.uk/data/fcode/1575> a skos:Concept;
+	 rdfs:label "Rain fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1576> a skos:Concept;
+	 rdfs:label "Cloud composite".
+
+<http://reference.metoffice.gov.uk/data/fcode/1577> a skos:Concept;
+	 rdfs:label "Accumulated precipitation for 6 hours (for fieldsfiles, 1998)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1578> a skos:Concept;
+	 rdfs:label "Modified maximum gravity wave stress magnitude. Units N/m**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1579> a skos:Concept;
+	 rdfs:label "U in the GWD surface layer".
+
+<http://reference.metoffice.gov.uk/data/fcode/1580> a skos:Concept;
+	 rdfs:label "V in the GWD surface layer".
+
+<http://reference.metoffice.gov.uk/data/fcode/1581> a skos:Concept;
+	 rdfs:label "N in the GWD surface layer".
+
+<http://reference.metoffice.gov.uk/data/fcode/1582> a skos:Concept;
+	 rdfs:label "GWD surface Froude number".
+
+<http://reference.metoffice.gov.uk/data/fcode/1583> a skos:Concept;
+	 rdfs:label "GWD Blocked Layer Depth".
+
+<http://reference.metoffice.gov.uk/data/fcode/1584> a skos:Concept;
+	 rdfs:label "Percent of hydro GWD that is linear".
+
+<http://reference.metoffice.gov.uk/data/fcode/1585> a skos:Concept;
+	 rdfs:label "Percent of time with Hydr. Jumps".
+
+<http://reference.metoffice.gov.uk/data/fcode/1586> a skos:Concept;
+	 rdfs:label "Percent of time with Lee Waves".
+
+<http://reference.metoffice.gov.uk/data/fcode/1587> a skos:Concept;
+	 rdfs:label "Percent of time with blocked flow".
+
+<http://reference.metoffice.gov.uk/data/fcode/1588> a skos:Concept;
+	 rdfs:label "x component of GW saturation stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1589> a skos:Concept;
+	 rdfs:label "y component of GW saturation stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1590> a skos:Concept;
+	 rdfs:label "x component of GW jump stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1591> a skos:Concept;
+	 rdfs:label "y component of GW jump stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1592> a skos:Concept;
+	 rdfs:label "x component of GW wake stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1593> a skos:Concept;
+	 rdfs:label "y component of GW wake stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1594> a skos:Concept;
+	 rdfs:label "x component of GW lee stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1595> a skos:Concept;
+	 rdfs:label "y component of GW lee stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1596> a skos:Concept;
+	 rdfs:label "u-accel from GWD blocked flow".
+
+<http://reference.metoffice.gov.uk/data/fcode/1597> a skos:Concept;
+	 rdfs:label "v-accel from GWD blocked flow".
+
+<http://reference.metoffice.gov.uk/data/fcode/1598> a skos:Concept;
+	 rdfs:label "Shallow convection indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1599> a skos:Concept;
+	 rdfs:label "Cumulus over orography indicator".
+
+<http://reference.metoffice.gov.uk/data/fcode/1600> a skos:Concept;
+	 rdfs:label "Net surface water flux/kg m**-2 s**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/1601> a skos:Concept;
+	 rdfs:label "Pressure tendency (for Thailand, 1997, system has no LBPROC)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1602> a skos:Concept;
+	 rdfs:label "'X' Component of Thermal Wind (corrected from u July 1998)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1603> a skos:Concept;
+	 rdfs:label "'Y' Component of Thermal Wind (corrected from v July 1998)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1604> a skos:Concept;
+	 rdfs:label "Saturated specific humidity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1605> a skos:Concept;
+	 rdfs:label "Isallobaric direction ( true )".
+
+<http://reference.metoffice.gov.uk/data/fcode/1606> a skos:Concept;
+	 rdfs:label "Isallobaric wind speed".
+
+<http://reference.metoffice.gov.uk/data/fcode/1607> a skos:Concept;
+	 rdfs:label "Geostrophic wind direction ( true )".
+
+<http://reference.metoffice.gov.uk/data/fcode/1608> a skos:Concept;
+	 rdfs:label "Geostrophic wind speed".
+
+<http://reference.metoffice.gov.uk/data/fcode/1609> a skos:Concept;
+	 rdfs:label "Thermal wind direction ( true )".
+
+<http://reference.metoffice.gov.uk/data/fcode/1610> a skos:Concept;
+	 rdfs:label "ISCCP C2 high thin cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1611> a skos:Concept;
+	 rdfs:label "ISCCP C2 high medium cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1612> a skos:Concept;
+	 rdfs:label "ISCCP C2 high thick cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1613> a skos:Concept;
+	 rdfs:label "ISCCP C2 mid-level thin cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1614> a skos:Concept;
+	 rdfs:label "ISCCP C2 mid-level thick cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1615> a skos:Concept;
+	 rdfs:label "ISCCP C2 low thin cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1616> a skos:Concept;
+	 rdfs:label "ISCCP C2 low thick cloud amount".
+
+<http://reference.metoffice.gov.uk/data/fcode/1617> a skos:Concept;
+	 rdfs:label "Sea Surface Temperature (SST) minus Dew point (for forecasting se".
+
+<http://reference.metoffice.gov.uk/data/fcode/1618> a skos:Concept;
+	 rdfs:label "500-850 Potential Instability Index (measure of thunder risk)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1619> a skos:Concept;
+	 rdfs:label "Boyden Index".
+
+<http://reference.metoffice.gov.uk/data/fcode/1620> a skos:Concept;
+	 rdfs:label "Height of 2 deg C isotherm in feet (Navy requirement)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1621> a skos:Concept;
+	 rdfs:label "Casswell maximum vertical velocity (for NMC)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1622> a skos:Concept;
+	 rdfs:label "Casswell height of maximum vertical velocity (for NMC)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1623> a skos:Concept;
+	 rdfs:label "Pseudo WV image from Horace - estimated radiance received".
+
+<http://reference.metoffice.gov.uk/data/fcode/1624> a skos:Concept;
+	 rdfs:label "Pseudo IR image from Horace - estimated radiance received".
+
+<http://reference.metoffice.gov.uk/data/fcode/1625> a skos:Concept;
+	 rdfs:label "Frequency unit type: 1=Hz (eg for noise fields)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1626> a skos:Concept;
+	 rdfs:label "Areal fraction of intensive grassland".
+
+<http://reference.metoffice.gov.uk/data/fcode/1627> a skos:Concept;
+	 rdfs:label "Areal fraction of extensive grassland".
+
+<http://reference.metoffice.gov.uk/data/fcode/1628> a skos:Concept;
+	 rdfs:label "SHEAR-DOMINATED UNSTABLE BL INDICATOR".
+
+<http://reference.metoffice.gov.uk/data/fcode/1629> a skos:Concept;
+	 rdfs:label "CIN Convective INhibition (units J/kg)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1630> a skos:Concept;
+	 rdfs:label "Soil clay fraction (ancil)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1631> a skos:Concept;
+	 rdfs:label "Soil silt fraction (ancil)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1632> a skos:Concept;
+	 rdfs:label "Soil sand fraction (ancil)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1633> a skos:Concept;
+	 rdfs:label "Soil mass fraction, dust divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1634> a skos:Concept;
+	 rdfs:label "Mineral dust mixing ratio divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1635> a skos:Concept;
+	 rdfs:label "Dust emission flux (kg m-2 s-1), divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1636> a skos:Concept;
+	 rdfs:label "Threshold friction vel. dust divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1637> a skos:Concept;
+	 rdfs:label "Dry threshold friction vel. dust divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1638> a skos:Concept;
+	 rdfs:label "Friction velocity for dust".
+
+<http://reference.metoffice.gov.uk/data/fcode/1639> a skos:Concept;
+	 rdfs:label "Dust dry dep flux from 1st lev, divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1640> a skos:Concept;
+	 rdfs:label "Dust dry dep flux from 2nd lev, divisions 1->6 ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1641> a skos:Concept;
+	 rdfs:label "Dust wet dep flux from LSP, divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1642> a skos:Concept;
+	 rdfs:label "Dust wet dep flux from CONV, divisions 1->6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1643> a skos:Concept;
+	 rdfs:label "Surface dust concentration.".
+
+<http://reference.metoffice.gov.uk/data/fcode/1644> a skos:Concept;
+	 rdfs:label "Dust concentration between 2000-5000ft.".
+
+<http://reference.metoffice.gov.uk/data/fcode/1645> a skos:Concept;
+	 rdfs:label "TOTAL DUST CONC (microg/m3)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1646> a skos:Concept;
+	 rdfs:label "Dust emission fraction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1647> a skos:Concept;
+	 rdfs:label "Mineral Dust Optical Code.".
+
+<http://reference.metoffice.gov.uk/data/fcode/1648> a skos:Concept;
+	 rdfs:label "RESERVED FOR DAVID WALTERS 8.1".
+
+<http://reference.metoffice.gov.uk/data/fcode/1649> a skos:Concept;
+	 rdfs:label "VIS AT 1.5M  (incl ppn and dust)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1650> a skos:Concept;
+	 rdfs:label "VIS IN DUST ONLY AT 1.5M".
+
+<http://reference.metoffice.gov.uk/data/fcode/1651> a skos:Concept;
+	 rdfs:label "MW surface emissivity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1652> a skos:Concept;
+	 rdfs:label "MW surface emissivity (stdev)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1681> a skos:Concept;
+	 rdfs:label "Rain water [kg/kg]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1682> a skos:Concept;
+	 rdfs:label "Cape inhibition".
+
+<http://reference.metoffice.gov.uk/data/fcode/1683> a skos:Concept;
+	 rdfs:label "Mass mixing ratio fresh smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1684> a skos:Concept;
+	 rdfs:label "Mass mixing ratio aged smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1685> a skos:Concept;
+	 rdfs:label "Mass mixing ratio cloud smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1686> a skos:Concept;
+	 rdfs:label "Dry deposition fresh smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1687> a skos:Concept;
+	 rdfs:label "Dry deposition aged smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1688> a skos:Concept;
+	 rdfs:label "Occult deposition cloud smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1689> a skos:Concept;
+	 rdfs:label "Frozen cloud water (pristine crystals) [kg/kg]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1690> a skos:Concept;
+	 rdfs:label "C.A.T. probability derived from fieldsfiles, not model".
+
+<http://reference.metoffice.gov.uk/data/fcode/1691> a skos:Concept;
+	 rdfs:label "LS rainout of biomass smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1692> a skos:Concept;
+	 rdfs:label "LS washout of biomass smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1693> a skos:Concept;
+	 rdfs:label "Convective scavenging of smoke".
+
+<http://reference.metoffice.gov.uk/data/fcode/1694> a skos:Concept;
+	 rdfs:label "Maximum wind gust at 10m".
+
+<http://reference.metoffice.gov.uk/data/fcode/1695> a skos:Concept;
+	 rdfs:label "Obukhov length".
+
+<http://reference.metoffice.gov.uk/data/fcode/1696> a skos:Concept;
+	 rdfs:label "Frictional velocity".
+
+<http://reference.metoffice.gov.uk/data/fcode/1697> a skos:Concept;
+	 rdfs:label "Nominal 3D convective rainfall rate (kg/m2/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1698> a skos:Concept;
+	 rdfs:label "Nominal 3D convective snowfall rate (kg/m2/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1701> a skos:Concept;
+	 rdfs:label "OD".
+
+<http://reference.metoffice.gov.uk/data/fcode/1702> a skos:Concept;
+	 rdfs:label "OP           "STOCHEM" TROP. CHEMISTRY MODEL:".
+
+<http://reference.metoffice.gov.uk/data/fcode/1703> a skos:Concept;
+	 rdfs:label "OH       A fuller list of descriptions is expected from".
+
+<http://reference.metoffice.gov.uk/data/fcode/1704> a skos:Concept;
+	 rdfs:label "NO     cejohnson@meto.gov.uk".
+
+<http://reference.metoffice.gov.uk/data/fcode/1705> a skos:Concept;
+	 rdfs:label "NO2      12/8/99".
+
+<http://reference.metoffice.gov.uk/data/fcode/1706> a skos:Concept;
+	 rdfs:label "NO3".
+
+<http://reference.metoffice.gov.uk/data/fcode/1707> a skos:Concept;
+	 rdfs:label "N2O5".
+
+<http://reference.metoffice.gov.uk/data/fcode/1708> a skos:Concept;
+	 rdfs:label "CO".
+
+<http://reference.metoffice.gov.uk/data/fcode/1709> a skos:Concept;
+	 rdfs:label "CH4".
+
+<http://reference.metoffice.gov.uk/data/fcode/1710> a skos:Concept;
+	 rdfs:label "HCHO".
+
+<http://reference.metoffice.gov.uk/data/fcode/1711> a skos:Concept;
+	 rdfs:label "O3".
+
+<http://reference.metoffice.gov.uk/data/fcode/1712> a skos:Concept;
+	 rdfs:label "H2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1713> a skos:Concept;
+	 rdfs:label "HNO3".
+
+<http://reference.metoffice.gov.uk/data/fcode/1714> a skos:Concept;
+	 rdfs:label "H2O2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1715> a skos:Concept;
+	 rdfs:label "CH3O2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1716> a skos:Concept;
+	 rdfs:label "HO2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1717> a skos:Concept;
+	 rdfs:label "C2H6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1718> a skos:Concept;
+	 rdfs:label "C2H5O2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1719> a skos:Concept;
+	 rdfs:label "CH3CHO".
+
+<http://reference.metoffice.gov.uk/data/fcode/1720> a skos:Concept;
+	 rdfs:label "CH3COO2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1721> a skos:Concept;
+	 rdfs:label "PAN".
+
+<http://reference.metoffice.gov.uk/data/fcode/1722> a skos:Concept;
+	 rdfs:label "CH3OOH".
+
+<http://reference.metoffice.gov.uk/data/fcode/1723> a skos:Concept;
+	 rdfs:label "NC4H10".
+
+<http://reference.metoffice.gov.uk/data/fcode/1724> a skos:Concept;
+	 rdfs:label "SC4H9O2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1725> a skos:Concept;
+	 rdfs:label "CH3COE".
+
+<http://reference.metoffice.gov.uk/data/fcode/1726> a skos:Concept;
+	 rdfs:label "C2H4".
+
+<http://reference.metoffice.gov.uk/data/fcode/1727> a skos:Concept;
+	 rdfs:label "C3H6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1728> a skos:Concept;
+	 rdfs:label "C3H8".
+
+<http://reference.metoffice.gov.uk/data/fcode/1729> a skos:Concept;
+	 rdfs:label "C3H7O2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1730> a skos:Concept;
+	 rdfs:label "C3H7OOH".
+
+<http://reference.metoffice.gov.uk/data/fcode/1731> a skos:Concept;
+	 rdfs:label "C2H5OOH".
+
+<http://reference.metoffice.gov.uk/data/fcode/1732> a skos:Concept;
+	 rdfs:label "C4H9OOH".
+
+<http://reference.metoffice.gov.uk/data/fcode/1733> a skos:Concept;
+	 rdfs:label "CH3OH".
+
+<http://reference.metoffice.gov.uk/data/fcode/1734> a skos:Concept;
+	 rdfs:label "ACETONE".
+
+<http://reference.metoffice.gov.uk/data/fcode/1735> a skos:Concept;
+	 rdfs:label "ACETO2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1736> a skos:Concept;
+	 rdfs:label "CH3COX".
+
+<http://reference.metoffice.gov.uk/data/fcode/1737> a skos:Concept;
+	 rdfs:label "CH2O2C".
+
+<http://reference.metoffice.gov.uk/data/fcode/1738> a skos:Concept;
+	 rdfs:label "MGLYOX".
+
+<http://reference.metoffice.gov.uk/data/fcode/1739> a skos:Concept;
+	 rdfs:label "CH3CHX".
+
+<http://reference.metoffice.gov.uk/data/fcode/1740> a skos:Concept;
+	 rdfs:label "C5H8".
+
+<http://reference.metoffice.gov.uk/data/fcode/1741> a skos:Concept;
+	 rdfs:label "RO2IP1".
+
+<http://reference.metoffice.gov.uk/data/fcode/1742> a skos:Concept;
+	 rdfs:label "MVK".
+
+<http://reference.metoffice.gov.uk/data/fcode/1743> a skos:Concept;
+	 rdfs:label "RO2IP2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1744> a skos:Concept;
+	 rdfs:label "ISOPOOH".
+
+<http://reference.metoffice.gov.uk/data/fcode/1745> a skos:Concept;
+	 rdfs:label "MVKOOH".
+
+<http://reference.metoffice.gov.uk/data/fcode/1746> a skos:Concept;
+	 rdfs:label "RNC2H4".
+
+<http://reference.metoffice.gov.uk/data/fcode/1747> a skos:Concept;
+	 rdfs:label "RNC3H6".
+
+<http://reference.metoffice.gov.uk/data/fcode/1748> a skos:Concept;
+	 rdfs:label "RNC5H8".
+
+<http://reference.metoffice.gov.uk/data/fcode/1749> a skos:Concept;
+	 rdfs:label "NAER".
+
+<http://reference.metoffice.gov.uk/data/fcode/1750> a skos:Concept;
+	 rdfs:label "HO2NO2".
+
+<http://reference.metoffice.gov.uk/data/fcode/1751> a skos:Concept;
+	 rdfs:label "H2O".
+
+<http://reference.metoffice.gov.uk/data/fcode/1752> a skos:Concept;
+	 rdfs:label "EXTRA".
+
+<http://reference.metoffice.gov.uk/data/fcode/1860> a skos:Concept;
+	 rdfs:label "Volumetric Mixing Ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1861> a skos:Concept;
+	 rdfs:label "Mass Mixing Ratio".
+
+<http://reference.metoffice.gov.uk/data/fcode/1862> a skos:Concept;
+	 rdfs:label "Particle Number Density [Particles per molecule of air]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1863> a skos:Concept;
+	 rdfs:label "Particle Number Density [Number per cm^3]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1864> a skos:Concept;
+	 rdfs:label "Particle Area Density [m^2 per m^3]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1865> a skos:Concept;
+	 rdfs:label "Molar Density [mol per m^3]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1866> a skos:Concept;
+	 rdfs:label "Molecular Density [molecules per cm^3]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1867> a skos:Concept;
+	 rdfs:label "Mass Density [kg per m^3]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1868> a skos:Concept;
+	 rdfs:label "Molarity [mol per litre]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1869> a skos:Concept;
+	 rdfs:label "Molality [mol per kg]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1870> a skos:Concept;
+	 rdfs:label "Molecular flux density [molecules per (s.cm^3)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1871> a skos:Concept;
+	 rdfs:label "Molar flux density [mol per (s.m^3)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1872> a skos:Concept;
+	 rdfs:label "Mass flux density [kg per (s.m^3)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1873> a skos:Concept;
+	 rdfs:label "Particle flux density [Number per (s.m^3)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1874> a skos:Concept;
+	 rdfs:label "Molecular surface flux [molecules per (s.cm^2)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1875> a skos:Concept;
+	 rdfs:label "Molar surface flux [mol per (s.m^2)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1876> a skos:Concept;
+	 rdfs:label "Mass surface flux [kg per (s.m^2)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1877> a skos:Concept;
+	 rdfs:label "Particle surface flux [Number per (s.m^2)]".
+
+<http://reference.metoffice.gov.uk/data/fcode/1890> a skos:Concept;
+	 rdfs:label "Additional radiation information between timesteps".
+
+<http://reference.metoffice.gov.uk/data/fcode/1891> a skos:Concept;
+	 rdfs:label "Total downward PAR flux at the surface".
+
+<http://reference.metoffice.gov.uk/data/fcode/1892> a skos:Concept;
+	 rdfs:label "Direct component of PAR flux at surface".
+
+<http://reference.metoffice.gov.uk/data/fcode/1893> a skos:Concept;
+	 rdfs:label "Surface Tile Fractions".
+
+<http://reference.metoffice.gov.uk/data/fcode/1894> a skos:Concept;
+	 rdfs:label "Leaf Area Indices on PFTS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1895> a skos:Concept;
+	 rdfs:label "Canopy Heights on PFTS".
+
+<http://reference.metoffice.gov.uk/data/fcode/1896> a skos:Concept;
+	 rdfs:label "Stomatal Conductance on PFTS (m/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1900> a skos:Concept;
+	 rdfs:label "Magnitude of wind stress".
+
+<http://reference.metoffice.gov.uk/data/fcode/1901> a skos:Concept;
+	 rdfs:label "River outflow (Kg/m2/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1902> a skos:Concept;
+	 rdfs:label "River water storage (Kg)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1903> a skos:Concept;
+	 rdfs:label "Total gridbox river inflow (Kg/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1904> a skos:Concept;
+	 rdfs:label "Total gridbox river outflow (Kg/s)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1905> a skos:Concept;
+	 rdfs:label "- 1920 Reserved River Routing for Cyndy Bunton. W Roseblade ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1906> a skos:Concept;
+	 rdfs:label "- INLAND BASIN OUTFLOW ON TRIP RIVER ROUTING GRID    KG/M2/S".
+
+<http://reference.metoffice.gov.uk/data/fcode/1907> a skos:Concept;
+	 rdfs:label "- INLAND BASIN OUTFLOW ON ATMOSPHERE GRID    KG/M2/S".
+
+<http://reference.metoffice.gov.uk/data/fcode/1921> a skos:Concept;
+	 rdfs:label "Graupel (kg/kg)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1922> a skos:Concept;
+	 rdfs:label "- 1928 General Atmos Codes".
+
+<http://reference.metoffice.gov.uk/data/fcode/1929> a skos:Concept;
+	 rdfs:label "TOTAL SPECIFIC HUMIDITY DA INCREMENT".
+
+<http://reference.metoffice.gov.uk/data/fcode/1930> a skos:Concept;
+	 rdfs:label "Ozone Tropopause Level".
+
+<http://reference.metoffice.gov.uk/data/fcode/1931> a skos:Concept;
+	 rdfs:label "Ozone Tropopause Height".
+
+<http://reference.metoffice.gov.uk/data/fcode/1932> a skos:Concept;
+	 rdfs:label "Thermal Tropopause Level".
+
+<http://reference.metoffice.gov.uk/data/fcode/1933> a skos:Concept;
+	 rdfs:label "Thermal Tropopause Height ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1934> a skos:Concept;
+	 rdfs:label "- 1950 General Atmos Codes".
+
+<http://reference.metoffice.gov.uk/data/fcode/1950> a skos:Concept;
+	 rdfs:label "Lumb Snow".
+
+<http://reference.metoffice.gov.uk/data/fcode/1951> a skos:Concept;
+	 rdfs:label "Topmelt for individual ice categories (W m-2) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1952> a skos:Concept;
+	 rdfs:label "Botmelt for individual ice categories  (W m-2) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1953> a skos:Concept;
+	 rdfs:label "Fractional ice cover for individual ice categories ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1954> a skos:Concept;
+	 rdfs:label "Grid box mean ice depth for individual ice categories (m) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1955> a skos:Concept;
+	 rdfs:label "Local snow depth over ice for individual ice categories (m) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1956> a skos:Concept;
+	 rdfs:label "Rate of change of sea-ice concentration for individual ice categories (s-1) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1957> a skos:Concept;
+	 rdfs:label "Rate of change of sea-ice depth for individual ice categories (m s-1) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1958> a skos:Concept;
+	 rdfs:label "Rate of change of snowdepth on sea-ice for individual ice categories (m s-1) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1959> a skos:Concept;
+	 rdfs:label "Grid box mean snowdepth for individual ice categories (m) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1960> a skos:Concept;
+	 rdfs:label "Wave/ Swell peak period".
+
+<http://reference.metoffice.gov.uk/data/fcode/1961> a skos:Concept;
+	 rdfs:label "Wave/ Wavetrain wave height".
+
+<http://reference.metoffice.gov.uk/data/fcode/1962> a skos:Concept;
+	 rdfs:label "Wave/ Wavetrain upcrossing period".
+
+<http://reference.metoffice.gov.uk/data/fcode/1963> a skos:Concept;
+	 rdfs:label "Wave/ Wavetrain mean direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1964> a skos:Concept;
+	 rdfs:label "Wave/ Mean energy at a given frequency".
+
+<http://reference.metoffice.gov.uk/data/fcode/1965> a skos:Concept;
+	 rdfs:label "Wave/ Mean direction at a given frequency".
+
+<http://reference.metoffice.gov.uk/data/fcode/1966> a skos:Concept;
+	 rdfs:label "Wave/ Total mean direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1967> a skos:Concept;
+	 rdfs:label "Wave/ Total mean period".
+
+<http://reference.metoffice.gov.uk/data/fcode/1968> a skos:Concept;
+	 rdfs:label "Wave/ Windsea mean directon".
+
+<http://reference.metoffice.gov.uk/data/fcode/1969> a skos:Concept;
+	 rdfs:label "Wave/ Windsea mean period".
+
+<http://reference.metoffice.gov.uk/data/fcode/1970> a skos:Concept;
+	 rdfs:label "Wave/ Swell mean direction".
+
+<http://reference.metoffice.gov.uk/data/fcode/1971> a skos:Concept;
+	 rdfs:label "Wave/ Swell mean period".
+
+<http://reference.metoffice.gov.uk/data/fcode/1972> a skos:Concept;
+	 rdfs:label "Wave/ Energy in each frequency (1d spectrum)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1973> a skos:Concept;
+	 rdfs:label "Wave/ Principal direction of 1d spectrum".
+
+<http://reference.metoffice.gov.uk/data/fcode/1974> a skos:Concept;
+	 rdfs:label "Wave/ Mean direction of 1d spectrum".
+
+<http://reference.metoffice.gov.uk/data/fcode/1975> a skos:Concept;
+	 rdfs:label "Wave/ 2d energy spectrum".
+
+<http://reference.metoffice.gov.uk/data/fcode/1976> a skos:Concept;
+	 rdfs:label "- 1980 reserved for any further Wave ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1981> a skos:Concept;
+	 rdfs:label "WAFC Mean Icing Potential (Index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1982> a skos:Concept;
+	 rdfs:label "WAFC Max. Icing Potential (Index) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1983> a skos:Concept;
+	 rdfs:label "WAFC Mean In-Cloud Turbulence Potential (Index) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1984> a skos:Concept;
+	 rdfs:label "WAFC Max. In-Cloud Turbulence Potential (Index) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1985> a skos:Concept;
+	 rdfs:label "WAFC Mean CAT Potential (Index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1986> a skos:Concept;
+	 rdfs:label "WAFC Max. CAT Potential (Index)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1987> a skos:Concept;
+	 rdfs:label "WAFC CB Horizontal Extent (Index) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1988> a skos:Concept;
+	 rdfs:label "WAFC Pressure at CB Base (Pa)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1989> a skos:Concept;
+	 rdfs:label "WAFC Pressure at CB Top (Pa) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1990> a skos:Concept;
+	 rdfs:label "WAFC Pressure at Embedded CB Base (Pa) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1991> a skos:Concept;
+	 rdfs:label "WAFC Pressure at Embedded CB Top (Pa)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1992> a skos:Concept;
+	 rdfs:label "WAFC ICAO Height at CB Base (kft)".
+
+<http://reference.metoffice.gov.uk/data/fcode/1993> a skos:Concept;
+	 rdfs:label "WAFC ICAO Height at CB Top (kft) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1994> a skos:Concept;
+	 rdfs:label "WAFC ICAO Height at Embedded CB Base (kft) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/1995> a skos:Concept;
+	 rdfs:label "WAFC ICAO Height at Embedded CB Top (kft)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2001> a skos:Concept;
+	 rdfs:label "-70 deg.C level".
+
+<http://reference.metoffice.gov.uk/data/fcode/2011> a skos:Concept;
+	 rdfs:label "Soil Bulk Density (kg/m^3 ).. reserved for D Walters.".
+
+<http://reference.metoffice.gov.uk/data/fcode/2020> a skos:Concept;
+	 rdfs:label "PM10 mass concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2021> a skos:Concept;
+	 rdfs:label "PM2.5 mass concentration (microgrammes per cubic metre) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/2022> a skos:Concept;
+	 rdfs:label "Sulphate contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2023> a skos:Concept;
+	 rdfs:label "Sulphate contribution to PM2.5 concentration (microgrammes per cubic metre)   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/2024> a skos:Concept;
+	 rdfs:label "Black carbon contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2025> a skos:Concept;
+	 rdfs:label "Black carbon contribution to PM2.5 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2026> a skos:Concept;
+	 rdfs:label "Biomass burning contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2027> a skos:Concept;
+	 rdfs:label "Biomass burning contribution to PM2.5 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2028> a skos:Concept;
+	 rdfs:label "OCFF contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2029> a skos:Concept;
+	 rdfs:label "OCFF contribution to PM2.5 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2030> a skos:Concept;
+	 rdfs:label "SOA contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2031> a skos:Concept;
+	 rdfs:label "SOA contribution to PM2.5 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2032> a skos:Concept;
+	 rdfs:label "Sea salt contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2033> a skos:Concept;
+	 rdfs:label "Sea salt contribution to PM2.5 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2034> a skos:Concept;
+	 rdfs:label "Dust contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2035> a skos:Concept;
+	 rdfs:label "Dust contribution to PM2.5 concentration (microgrammes per cubic metre)   ".
+
+<http://reference.metoffice.gov.uk/data/fcode/2036> a skos:Concept;
+	 rdfs:label "Nitrate contribution to PM10 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2037> a skos:Concept;
+	 rdfs:label "Nitrate contribution to PM2.5 concentration (microgrammes per cubic metre)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2038> a skos:Concept;
+	 rdfs:label "TURBULENT KINETIC ENERGY, m**2 s**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/2039> a skos:Concept;
+	 rdfs:label "SELF COVARIANCE OF THETAL', K**2".
+
+<http://reference.metoffice.gov.uk/data/fcode/2040> a skos:Concept;
+	 rdfs:label "SELF COVARIANCE OF QW', kg**2 kg**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/2041> a skos:Concept;
+	 rdfs:label "CORRELATION OF THETAL' AND QW', K kg kg**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/2042> a skos:Concept;
+	 rdfs:label "COUNTER GRADIENT TERM OF TAUX, kg m**-1 s**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/2043> a skos:Concept;
+	 rdfs:label "COUNTER GRADIENT TERM OF TAUY, kg m**-1 s**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/2044> a skos:Concept;
+	 rdfs:label "COUNTER GRADIENT TERM OF FTL, W m**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/2045> a skos:Concept;
+	 rdfs:label "COUNTER GRADIENT TERM OF FQW, W m**-2".
+
+<http://reference.metoffice.gov.uk/data/fcode/2046> a skos:Concept;
+	 rdfs:label "MIXING LENGTH, m ".
+
+<http://reference.metoffice.gov.uk/data/fcode/2047> a skos:Concept;
+	 rdfs:label "PRODUCTION RATE OF TKE BY SHEAR, m**2 s**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/2048> a skos:Concept;
+	 rdfs:label "PRODUCTION RATE OF TKE BY BUOYANCY, m**2 s**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/2049> a skos:Concept;
+	 rdfs:label "DISSIPATION RATE OF TKE, m**2 s**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/2050> a skos:Concept;
+	 rdfs:label "NON-DIM DIFFUSION COEFS FOR UV (SM) , (no dimension) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/2051> a skos:Concept;
+	 rdfs:label "NON-DIM DIFFUSION COEFS FOR TQ (SH) , (no dimension)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2052> a skos:Concept;
+	 rdfs:label "NON-GRADIENT BUOYANCY FLUX, m**2 s**-3".
+
+<http://reference.metoffice.gov.uk/data/fcode/2053> a skos:Concept;
+	 rdfs:label "CLOUD FRACTION IN THE TKE SCHEMES, (no dimension)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2054> a skos:Concept;
+	 rdfs:label "CONDENSED WATER IN THE TKE SCHEMES, kg kg**-1".
+
+<http://reference.metoffice.gov.uk/data/fcode/2055> a skos:Concept;
+	 rdfs:label "STD. DEV. OF GAUSSIAN, kg kg**-1 ".
+
+<http://reference.metoffice.gov.uk/data/fcode/2056> a skos:Concept;
+	 rdfs:label "Height of mixed layer to evaluate the non-gradient buoyancy flux (m)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2057> a skos:Concept;
+	 rdfs:label "Mean shear Clear Air Turbulence (% probability of occurrence)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2058> a skos:Concept;
+	 rdfs:label "Max shear Clear Air Turbulence  (% probability of occurrence)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2059> a skos:Concept;
+	 rdfs:label "Mean Mountain/gravity wave stress on certain pressure levels (n/m**2) ".
+
+<http://reference.metoffice.gov.uk/data/fcode/2060> a skos:Concept;
+	 rdfs:label "Max Mountain/gravity wave stress on certain pressure levels  (n/m**2)".
+
+<http://reference.metoffice.gov.uk/data/fcode/2061> a skos:Concept;
+	 rdfs:label "SFERICS (lightning 'count' per area per time) (See Note d above).".
+
+<http://reference.metoffice.gov.uk/data/fcode/2062> a skos:Concept;
+	 rdfs:label "Helicopter-Triggered Lightning Risk Index (0 - 30). (See Note e above).".
+
+<http://reference.metoffice.gov.uk/data/fcode/2063> a skos:Concept;
+	 rdfs:label "Lightning Index (0, 1, 10)". (See Note f above).".
+
+<http://reference.metoffice.gov.uk/data/fcode/2064> a skos:Concept;
+	 rdfs:label "Lightning Risk (within 50km) Index (5 - 1)".(See Note f above).".
+
+<http://reference.metoffice.gov.uk/data/fcode/2100> a skos:Concept;
+	 rdfs:label "- 3099        Reserved for UKCA Tracers for Nick Savage.".
+
+<http://reference.metoffice.gov.uk/data/fcode/3100> a skos:Concept;
+	 rdfs:label "- 3599        Reserved for other UKCA prognostic variables for Nick Savage.".
+
+<http://reference.metoffice.gov.uk/data/fcode/3600> a skos:Concept;
+	 rdfs:label "- 5600        Reserved for UKCA diagnostics for Nick Savage.".
+

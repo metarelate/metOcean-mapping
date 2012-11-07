@@ -43,6 +43,7 @@ clean:
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	echo 'ErrorDocument 404 "/error/404.html"' > $(BUILDDIR)/html/.htaccess
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 

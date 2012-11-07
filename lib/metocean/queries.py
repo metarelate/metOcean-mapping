@@ -75,7 +75,6 @@ def clear_cache(graph, debug=False):
     '''
     qstr = '''
     DELETE
-    FROM <%s>
     {  GRAPH <%s>
         {
         ?s mr:saveCache "True" .
@@ -92,8 +91,27 @@ def clear_cache(graph, debug=False):
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
+def query_cache(graph, debug=False):
+    '''
+    return all triples cached for saving but not saved
+    '''
+    qstr = '''
+    SELECT ?s ?p ?o
+    WHERE
+    {  GRAPH <%s>
+        {
+    ?s ?p ?o ;
+        mr:saveCache "True" .
+        }
+    } 
+    ''' % (graph)
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+
 def current_mappings(debug=False):
     '''
+    return all triples currently valid in the mappings graph
     '''
     
     qstr = '''
@@ -121,18 +139,18 @@ def current_mappings(debug=False):
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
-def mapping_by_link(dataformat,linklist=False,debug=False):
+def mapping_by_link(paramlist=False,debug=False):
     '''
     return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
     or all mappings if linklist is left as False 
     '''
     linkpattern = ''
-    if linklist:
+    if paramlist:
         linkpattern = '''          ?link '''
-        for link in linklist:
+        for param in paramlist:
             linkpattern += '''
                     mr:%slink <%s> ;
-            ''' % (dataformat.upper(),link)
+            ''' % (param[0].upper(),param[1])
         linkpattern.rstrip(';')
         linkpattern += ' .'
     qstr = '''
@@ -253,7 +271,6 @@ def select_graph(graph, debug=False):
     '''
     selects a particular graph from the TDB
     '''
-    #used in 'list' query deprecate
     qstr = '''
         SELECT DISTINCT ?g
         WHERE {
@@ -353,7 +370,7 @@ def get_cflink_by_id(cflink, debug=False):
     {
     ?s mrcf:type ?type .
     OPTIONAL
-    { ?s mrcf:standard_name?standard_name .}
+    { ?s mrcf:standard_name ?standard_name .}
     OPTIONAL
     { ?s mrcf:units ?units . }
     OPTIONAL
@@ -365,9 +382,17 @@ def get_cflink_by_id(cflink, debug=False):
 
     return results
 
-def get_cflinks(debug=False):
+def get_cflinks(pred_obj=None, debug=False):
     '''
+    return cflink records matching the predicate object dictionary items
     '''
+    filterstr = ''
+    if pred_obj:
+        for key in pred_obj.keys():
+#        if pred_obj.has_key('standard_name'):
+            filterstr += '''FILTER (bound(?%s))
+            FILTER (regex(str(?%s), str(%s), "i"))
+            ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
     FROM <http://mappings/>
@@ -375,17 +400,18 @@ def get_cflinks(debug=False):
     {
     ?s mrcf:type ?type .
     OPTIONAL
-    { ?s mrcf:standard_name?standard_name .}
+    { ?s mrcf:standard_name ?standard_name .}
     OPTIONAL
     { ?s mrcf:units ?units . }
     OPTIONAL
     { ?s mrcf:long_name ?long_name . }
+    %s
     }
-    ''' 
+    ''' % filterstr 
     results = query.run_query(qstr, debug=debug)
 
     return results
-        
+
 
 def get_by_attrs(po_dict, debug=False):
     '''
@@ -395,10 +421,14 @@ def get_by_attrs(po_dict, debug=False):
     '''
     pred_obj = ''
     for pred, obj in po_dict.iteritems():
-        for ob in obj:
-            pattern_string = ''';
-            %s %s ''' % (pred, obj)
-            pred_obj += pattern_string
+        #for ob in obj:
+        # if po_dict[pred].split('//')[0] == 'http:':
+        #     po_dict[pred] = '<%s>'% po_dict[pred]
+        # else:
+        #     po_dict[pred] = '"%s"'% po_dict[pred]
+        pattern_string = ''';
+        %s %s ''' % (pred, po_dict[pred])
+        pred_obj += pattern_string
 
     qstr = '''
     SELECT ?s ?p ?o
@@ -424,21 +454,25 @@ def create_link(po_dict, subj_pref, debug=False):
     mmd5 = hashlib.md5()
     
     for pred in po_dict.keys():
-        for obj in po_dict[pred]:
-            mmd5.update(pred)
-            mmd5.update(obj)
+#        for obj in po_dict[pred]:
+        mmd5.update(pred)
+        mmd5.update(po_dict[pred])
 
     md5 = str(mmd5.hexdigest())
     #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
     #current_cflink = get_cflink_by_id(md5)
-    current_cflink = get_by_attrs(po_dict)
-    if len(current_cflink) == 0:
+    current_link = get_by_attrs(po_dict)
+    if len(current_link) == 0:
         pred_obj = ''
         for pred in po_dict.keys():
-            for obj in po_dict[pred]:
-                pattern_string = ''' %s %s ;
-                ''' % (pred, obj)
-                pred_obj += pattern_string
+#            for obj in po_dict[pred]:
+            # if po_dict[pred].split('//')[0] == 'http:':
+            #     po_dict[pred] = '<%s>'% po_dict[pred]
+            # else:
+            #     po_dict[pred] = '"%s"'% po_dict[pred]
+            pattern_string = ''' %s %s ;
+            ''' % (pred, po_dict[pred])
+            pred_obj += pattern_string
         qstr = '''
         INSERT DATA
         { GRAPH <http://mappings/>
@@ -448,11 +482,13 @@ def create_link(po_dict, subj_pref, debug=False):
         }
         ''' % (subj_pref, md5, pred_obj)
         results = query.run_query(qstr, update=True, debug=debug)
-    elif len(current_cflink) ==1:
-        md5 = md5
-    else:
-        md5 = None
-    return md5
+        current_link = get_by_attrs(po_dict)
+    return current_link
+    # elif len(current_cflink) ==1:
+    #     md5 = md5
+    # else:
+    #     md5 = None
+    # return md5
 
 
 # def get_linkage(linkID, debug=False):
@@ -551,6 +587,42 @@ def create_mapping(po_dict, debug=False):
         results = query.run_query(qstr, update=True, debug=debug)
     return results
 
+
+def get_contacts(register, debug=False):
+    '''
+    return a list of contacts from the tdb which are part of the named register 
+    '''
+    qstr = '''
+    SELECT ?s
+    WHERE
+    {GRAPH <http://contacts/>{
+        ?s iso19135:definedInRegister ?register .
+           OPTIONAL{
+               ?s mr:retired ?retired}
+               }
+    FILTER (!bound(?retired))
+    FILTER (regex(str(?register),"%s", "i"))
+    }
+    ''' % register
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+def create_contact(register, contact, creation, debug=False):
+    '''
+    create a new contact
+    '''
+    qstr = '''
+    INSERT DATA
+    {
+    %s a mr:contact ;
+    iso19135:definedInRegister %s ;
+    mr:creation "%s"^^xsd:dateTime .
+    }
+    ''' % (contact, register, creation)
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+    
         
     
 # def (, debug=False):

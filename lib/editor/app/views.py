@@ -15,22 +15,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
-
-import sys
-import os
-import re
-import urllib
-import itertools 
+import collections
 import datetime
 import hashlib
-
-import forms
-import fusekiQuery as query
-
-import metocean.prefixes as prefixes
-import metocean.queries as moq
-
-from settings import READ_ONLY
+import itertools
+import os
+import re
+import sys
+import urllib
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -39,6 +31,14 @@ from django.template import RequestContext
 from django.utils.safestring import mark_safe
 from django.forms.formsets import formset_factory
 from django.forms.models import inlineformset_factory
+
+
+import forms
+import fusekiQuery as query
+import metocean.prefixes as prefixes
+import metocean.queries as moq
+from settings import READ_ONLY
+
 
 
 
@@ -236,20 +236,20 @@ def process_formset(formset,request):
     globalDateTime = datetime.datetime.now().isoformat()
     for form in formset:
         form_data=form.cleaned_data
-        mapping_p_o = {}
+        mapping_p_o = collections.defaultdict(list)
         #take the new values from the form and add all of the initial values not included in the 'remove' field
         for label in ['owner','watcher']:
-            mapping_p_o[label] = []
-            if form.cleaned_data['add_%ss' % label] != '':
+            if form.cleaned_data['add_()s'.format(label)] != '':
+            #if form.cleaned_data['add_%ss' % label] != '':
                 for val in form.cleaned_data['add_%ss' % label].split(','):
-                    mapping_p_o['%s' % label].append('"%s"' % val)
+                    mapping_p_o[label].append('"%s"' % val)
             if form.cleaned_data['%ss' % label] != 'None':
                 for val in form.cleaned_data['%ss' % label].split(','):
                     if val not in form.cleaned_data['remove_%ss' % label].split(',') and\
                         val not in mapping_p_o['%s' % label].split(','):
-                        mapping_p_o['%s' % label].append('"%s"' % val)
-            if len(mapping_p_o['%s' % label]) == 0:
-                mapping_p_o['%s' % label] = ['"None"']
+                        mapping_p_o[label].append('"%s"' % val)
+            if len(mapping_p_o[label]) == 0:
+                mapping_p_o[label] = ['"None"']
                 
         mapping_p_o['creator'] = ['"%s"' % form.cleaned_data['editor']]
         if mapping_p_o['creator'] == ['""']:

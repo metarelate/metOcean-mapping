@@ -52,21 +52,12 @@ def filehash(file):
     return md5.hexdigest()
 
 
-def check_port(address='localhost', port=FUSEKIPORT):
-    s = socket.socket() 
-    #print "Attempting to connect to %s on port %s." %(address, port)
-    try: 
-        s.connect((address, port)) 
-        #print "Connected to server %s on port %s." %(address, port) 
-        return True 
-    except socket.error, e: 
-        #print "Connecting to %s on port %s failed with the following error: %s" %(address, port, e) 
-        return False 
 
 class FusekiServer(object):
 
-    def __init__(self):
+    def __init__(self, port=FUSEKIPORT):
         self._process = None
+        self._port = port
         
     def __enter__(self):
         self.start()
@@ -75,22 +66,22 @@ class FusekiServer(object):
     def __exit__(self,*args):
         self.stop(save=False)
         
-    def start(self, port=FUSEKIPORT):
+    def start(self):
         '''
         initialise the fuseki process, on the defined port,
         using the created TDB in root_path/metocean.
         returns a popen instance, the running fuseki server process
         '''
-        if not check_port(port=port):
+        if not self._check_port():
             self._process = subprocess.Popen(['nohup',
                                        FUSEKIROOT +
                                        '/fuseki-server',
                                        '--loc=%s'%TDB,
                                        '--update',
-                                       '--port=%i' % port,
+                                       '--port=%i' % self._port,
                                        '/metocean'])
             i = 0
-            while not check_port(port=port):
+            while not self._check_port():
                 i+=1
                 time.sleep(0.1)
                 if i > 1000:
@@ -106,6 +97,22 @@ class FusekiServer(object):
             self.save_cache()
         if self._process:
             self._process.terminate()
+
+    def status(self):
+        return self._check_port()
+
+    def _check_port(self):
+        address='localhost'
+        s = socket.socket() 
+        #print "Attempting to connect to %s on port %s." %(address, port)
+        try: 
+            s.connect((address, self._port)) 
+            #print "Connected to server %s on port %s." %(address, port) 
+            return True 
+        except socket.error, e: 
+            #print "Connecting to %s on port %s failed with the following error: %s" %(address, port, e) 
+            return False 
+
 
 
 

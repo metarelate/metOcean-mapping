@@ -461,8 +461,8 @@ def create_link(po_dict, subj_pref, debug=False):
     md5 = str(mmd5.hexdigest())
     #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
     #current_cflink = get_cflink_by_id(md5)
-    current_cflink = get_by_attrs(po_dict)
-    if len(current_cflink) == 0:
+    current_link = get_by_attrs(po_dict)
+    if len(current_link) == 0:
         pred_obj = ''
         for pred in po_dict.keys():
 #            for obj in po_dict[pred]:
@@ -482,11 +482,13 @@ def create_link(po_dict, subj_pref, debug=False):
         }
         ''' % (subj_pref, md5, pred_obj)
         results = query.run_query(qstr, update=True, debug=debug)
-    elif len(current_cflink) ==1:
-        md5 = md5
-    else:
-        md5 = None
-    return md5
+        current_link = get_by_attrs(po_dict)
+    return current_link
+    # elif len(current_cflink) ==1:
+    #     md5 = md5
+    # else:
+    #     md5 = None
+    # return md5
 
 
 # def get_linkage(linkID, debug=False):

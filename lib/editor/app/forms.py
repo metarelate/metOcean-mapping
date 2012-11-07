@@ -94,17 +94,21 @@ class CFParam(forms.Form):
             pred_obj['mrcf:long_name'] = '"%s"' % cleaned_data.get('long_name')
         if cleaned_data.get('units') != '':
             pred_obj['mrcf:units'] = '"%s"' % cleaned_data.get('units')
-        #print pred_obj
-        cflink = ''
+        print repr(pred_obj)
         cfres = moq.get_cflinks(pred_obj)
-        if len(cfres) == 0:
+        print cfres
+        if not cfres:
             #if there is no result returned from the query, then create the record and rerun the query
-            moq.create_link(pred_obj,'http://www.metarelate.net/metocean/cf',True)
-            cfres = moq.get_cflinks(pred_obj)
+            cfres = moq.create_link(pred_obj, 'http://www.metarelate.net/metocean/cf', True)
+            #cfres = moq.get_cflinks(pred_obj)
+            
         if len(cfres) == 1:
             # assign the single result to be returned by the function
             cflink = cfres[0]['s']
+        else:
+            cflink = ''
         cleaned_data['parameter'] = 'cf;'+cflink
+        print cflink
         return cleaned_data
         
 

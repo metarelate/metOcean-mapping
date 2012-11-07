@@ -67,11 +67,11 @@ class UMParam(forms.Form):
 class CFParam(forms.Form):
     '''
     '''
-    parameter = forms.CharField(max_length=100,required=False)
-    cf_type = forms.ChoiceField(choices=[('Field','Field')],required=False)
+    parameter = forms.CharField(max_length=100, required=False)
+    cf_type = forms.ChoiceField(choices=[('Field','Field')], required=False)
     standard_name = forms.ChoiceField(required=False)
-    long_name = forms.CharField(max_length=50,required=False)
-    units = forms.CharField(max_length=16,required=False)
+    long_name = forms.CharField(max_length=50, required=False)
+    units = forms.CharField(max_length=16, required=False)
     
     def __init__(self,  *args, **kwargs):
         super(CFParam, self).__init__(*args, **kwargs)

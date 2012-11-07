@@ -18,14 +18,13 @@
 
 import datetime
 from django import forms
-from django.utils.safestring import mark_safe
-from django.utils import formats
 from django.core.urlresolvers import reverse
+from django.utils import formats
+from django.utils.safestring import mark_safe
 from string import Template
 import sys
 import time
 
-#from .widgets import SelectWithPopUp
 import metocean.prefixes as prefixes
 import metocean.queries as moq
 from settings import READ_ONLY
@@ -37,7 +36,12 @@ class SearchParam(forms.Form):
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
         super(SearchParam, self).__init__(*args, **kwargs)
-        choices = (('',''),('http://i.am.a/avocet', 'avocet'),('http://i.am.a/beaver', 'beaver'),('http://i.am.a/cheetah','cheetah'),('http://i.am.a/dugong','dugong'),('http://i.am.a/emu','emu'))
+        choices = (('', ''),
+                   ('http://i.am.a/avocet', 'avocet'),
+                   ('http://i.am.a/beaver', 'beaver'),
+                   ('http://i.am.a/cheetah', 'cheetah'),
+                   ('http://i.am.a/dugong', 'dugong'),
+                   ('http://i.am.a/emu', 'emu'))
         #define choices
         #if dataFormat == 'um' and qualifier:
         #print self.fields
@@ -54,7 +58,7 @@ class UMParam(forms.Form):
         version = '8.2'
         stashRes = moq.subject_by_graph('http://um/stash.vn%s.ttl' % version)
         #define choices
-        choices = [('um;'+stash['subject'],stash['subject'].split('/')[-2]) for stash in stashRes]
+        choices = [('um;' + stash['subject'], stash['subject'].split('/')[-2]) for stash in stashRes]
         
 
         self.fields['parameter'].choices = choices
@@ -68,6 +72,7 @@ class CFParam(forms.Form):
     standard_name = forms.ChoiceField(required=False)
     long_name = forms.CharField(max_length=50,required=False)
     units = forms.CharField(max_length=16,required=False)
+    
     def __init__(self,  *args, **kwargs):
         super(CFParam, self).__init__(*args, **kwargs)
         snRes = moq.subject_by_graph('http://CF/')
@@ -76,6 +81,7 @@ class CFParam(forms.Form):
 
         self.fields['standard_name'].choices = choices
         self.fields['parameter'].widget = forms.HiddenInput()
+        
     def clean(self):
         cleaned_data = super(CFParam, self).clean()
         pred_obj = {}
@@ -89,12 +95,12 @@ class CFParam(forms.Form):
         #print pred_obj
         cflink = ''
         cfres = moq.get_cflinks(pred_obj)
-        #if none, make one
         if len(cfres) == 0:
+            #if there is no result returned from the query, then create the record and rerun the query
             moq.create_link(pred_obj,'http://www.metarelate.net/metocean/cf',True)
             cfres = moq.get_cflinks(pred_obj)
         if len(cfres) == 1:
-            #print 'found'
+            # assign the single result to be returned by the function
             cflink = cfres[0]['s']
         cleaned_data['parameter'] = 'cf;'+cflink
         return cleaned_data
@@ -156,6 +162,8 @@ class ContactForm(forms.Form):
             return self.cleaned_data
 
 
+
+
 class MappingEditForm(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
@@ -204,30 +212,33 @@ class MappingEditForm(forms.Form):
         self.fields['umlinks'].widget = forms.HiddenInput()
         self.fields['griblinks'].widget = forms.HiddenInput()
         if kwargs.has_key('initial'):
-            cflinks = None
-            if kwargs['initial'].has_key('cflinks'):
-                cflinks = kwargs['initial']['cflinks']
-            if cflinks:
-                for i, cflink in enumerate(cflinks.split('&')):
-                    for k,v in moq.get_cflink_by_id(cflink)[0].iteritems():
-                        self.fields['cflink%i_%s' % (i,k)] = forms.URLField(initial=v)
-                        self.fields['cflink%i_%s' % (i,k)].widget.attrs['readonly'] = True
-                        self.fields['cflink%i_%s' % (i,k)].widget.attrs['size'] = 50
-            umlinks = None
-            if kwargs['initial'].has_key('umlinks'):
-                umlinks = kwargs['initial']['umlinks']
-            if umlinks:
-                for i, umlink in enumerate(umlinks.split('&')):
-                    self.fields['umlink%i' % i] = forms.URLField(initial=umlink)
-                    self.fields['umlink%i' % i].widget.attrs['readonly'] = True
-                    self.fields['umlink%i' % i].widget.attrs['size'] = 50
-            griblinks = None
-            if kwargs['initial'].has_key('cflinks'):
-                griblinks = kwargs['initial']['griblinks']
-            if griblinks:
-                for i, griblink in enumerate(griblinks.split('&')):
-                    self.fields['griblink%i' % i] = forms.URLField(initial=griblink)
-                    self.fields['griblink%i' % i].widget.attrs['readonly'] = True
+            self.expand_links(kwargs, 'cflinks')
+            self.expand_links(kwargs, 'umlinks')
+            self.expand_links(kwargs, 'griblinks')
+            # cflinks = None
+            # if kwargs['initial'].has_key('cflinks'):
+            #     cflinks = kwargs['initial']['cflinks']
+            # if cflinks:
+            #     for i, cflink in enumerate(cflinks.split('&')):
+            #         for k,v in moq.get_cflink_by_id(cflink)[0].iteritems():
+            #             self.fields['cflink%i_%s' % (i,k)] = forms.URLField(initial=v)
+            #             self.fields['cflink%i_%s' % (i,k)].widget.attrs['readonly'] = True
+            #             self.fields['cflink%i_%s' % (i,k)].widget.attrs['size'] = 50
+            # umlinks = None
+            # if kwargs['initial'].has_key('umlinks'):
+            #     umlinks = kwargs['initial']['umlinks']
+            # if umlinks:
+            #     for i, umlink in enumerate(umlinks.split('&')):
+            #         self.fields['umlink%i' % i] = forms.URLField(initial=umlink)
+            #         self.fields['umlink%i' % i].widget.attrs['readonly'] = True
+            #         self.fields['umlink%i' % i].widget.attrs['size'] = 50
+            # griblinks = None
+            # if kwargs['initial'].has_key('cflinks'):
+            #     griblinks = kwargs['initial']['griblinks']
+            # if griblinks:
+            #     for i, griblink in enumerate(griblinks.split('&')):
+            #         self.fields['griblink%i' % i] = forms.URLField(initial=griblink)
+            #         self.fields['griblink%i' % i].widget.attrs['readonly'] = True
 
 
     def clean(self):
@@ -238,12 +249,34 @@ class MappingEditForm(forms.Form):
 
     def clean_last_edit(self):
         data = self.cleaned_data.get('last_edit')
-        for format in self.isoformat:
-            try:
-                return str(datetime.datetime(*time.strptime(str(data), format)[:6]))
-            except ValueError:
-                continue
-        raise forms.ValidationError("Invalid ISO DateTime format")
+        try:
+            return str(datetime.datetime(*time.strptime(str(data), isoformat)[:6]))
+        except ValueError:
+            raise forms.ValidationError("Invalid ISO DateTime format")
+        # for isoformat in self.isoformat:
+        #     try:
+        #         return str(datetime.datetime(*time.strptime(str(data), isoformat)[:6]))
+        #     except ValueError:
+        #         continue
+        # raise forms.ValidationError("Invalid ISO DateTime format")
+
+    def expand_links(self, kwargs, name):
+        links = None
+        if kwargs['initial'].has_key(name):
+            links = kwargs['initial'][name]
+        name = name.rstrip('s')
+        if links:
+            for i, link in enumerate(links.split('&')):
+                if name == 'cflink':
+                    for k,v in moq.get_cflink_by_id(link)[0].iteritems():
+                        self.fields['%s%i_%s' % (name, i, k)] = forms.URLField(initial=v)
+                        self.fields['%s%i_%s' % (name, i, k)].widget.attrs['readonly'] = True
+                        self.fields['%s%i_%s' % (name, i, k)].widget.attrs['size'] = 50
+                else:
+                    self.fields['%s%i' % (name, i)] = forms.URLField(initial=link)
+                    self.fields['%s%i' % (name, i)].widget.attrs['readonly'] = True
+                    self.fields['%s%i' % (name, i)].widget.attrs['size'] = 50
+
 
 
 class MappingNewForm(MappingEditForm):

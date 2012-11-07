@@ -119,10 +119,8 @@ Definition: A contact accounts; a person or an organisation.
 Label:  contact
 
 
-
 retired
 ---------
-
 
 URI:  http://www.metarelate.net/predicates/index.html#retired
 

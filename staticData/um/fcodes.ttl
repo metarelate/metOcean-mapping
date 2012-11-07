@@ -97,7 +97,7 @@
 	 rdfs:label "Visibility".
 
 <http://reference.metoffice.gov.uk/data/fcode/26> a skos:Concept;
-	 rdfs:label "Brunt-Vaisala Frequency "N"".
+	 rdfs:label "Brunt-Vaisala Frequency 'N'".
 
 <http://reference.metoffice.gov.uk/data/fcode/27> a skos:Concept;
 	 rdfs:label "(Atmospheric) density".
@@ -1027,7 +1027,7 @@
 	 rdfs:label "Heat conductivity".
 
 <http://reference.metoffice.gov.uk/data/fcode/337> a skos:Concept;
-	 rdfs:label "SOILB (Soil hydrology parameter "BS")".
+	 rdfs:label "SOILB (Soil hydrology parameter 'BS')".
 
 <http://reference.metoffice.gov.uk/data/fcode/338> a skos:Concept;
 	 rdfs:label "Field capacity-root depth".
@@ -2737,10 +2737,10 @@
 	 rdfs:label "NH3 gas mass mass mix ratio kg/kg".
 
 <http://reference.metoffice.gov.uk/data/fcode/1380> a skos:Concept;
-	 rdfs:label "Van-Genuchten "B" parameter".
+	 rdfs:label "Van-Genuchten 'B' parameter".
 
 <http://reference.metoffice.gov.uk/data/fcode/1381> a skos:Concept;
-	 rdfs:label "Clapp-Hornberger "B" exponent".
+	 rdfs:label "Clapp-Hornberger 'B' exponent".
 
 <http://reference.metoffice.gov.uk/data/fcode/1382> a skos:Concept;
 	 rdfs:label "Leaf area index of vegetated fraction".
@@ -3613,7 +3613,7 @@
 	 rdfs:label "OD".
 
 <http://reference.metoffice.gov.uk/data/fcode/1702> a skos:Concept;
-	 rdfs:label "OP           "STOCHEM" TROP. CHEMISTRY MODEL:".
+	 rdfs:label "OP           'STOCHEM' TROP. CHEMISTRY MODEL:".
 
 <http://reference.metoffice.gov.uk/data/fcode/1703> a skos:Concept;
 	 rdfs:label "OH       A fuller list of descriptions is expected from".
@@ -4150,10 +4150,10 @@
 	 rdfs:label "Helicopter-Triggered Lightning Risk Index (0 - 30). (See Note e above).".
 
 <http://reference.metoffice.gov.uk/data/fcode/2063> a skos:Concept;
-	 rdfs:label "Lightning Index (0, 1, 10)". (See Note f above).".
+	 rdfs:label "Lightning Index (0, 1, 10)'. (See Note f above).".
 
 <http://reference.metoffice.gov.uk/data/fcode/2064> a skos:Concept;
-	 rdfs:label "Lightning Risk (within 50km) Index (5 - 1)".(See Note f above).".
+	 rdfs:label "Lightning Risk (within 50km) Index (5 - 1)'.(See Note f above).".
 
 <http://reference.metoffice.gov.uk/data/fcode/2100> a skos:Concept;
 	 rdfs:label "- 3099        Reserved for UKCA Tracers for Nick Savage.".

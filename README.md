@@ -14,6 +14,5 @@ Dependencies
 * Python - http://python.org/
     1. install Python >= 2.7
 * Django - https://www.djangoproject.com/
-    1. download Django >= 1.3
-    2. install Django
+    1. install Django >= 1.3
 

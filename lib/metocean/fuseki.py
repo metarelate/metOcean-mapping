@@ -22,6 +22,7 @@ import os
 import socket
 import subprocess
 import sys
+import time
 
 import metocean.prefixes as prefixes
 import metocean.queries as queries
@@ -32,14 +33,14 @@ CONFIG_PATH = os.path.join(ROOT_PATH, 'etc')
 parser = ConfigParser.SafeConfigParser()
 parser.read(os.path.join(CONFIG_PATH,'metocean.config'))
 
-staticData = parser.get('metocean','staticData')
-tdb = parser.get('metocean','tdb')
-jenaroot = parser.get('metocean','jenaroot')
-fusekiroot = parser.get('metocean','fusekiroot')
-fport = parser.get('metocean','port')
+STATICDATA = parser.get('metocean','staticData')
+TDB = parser.get('metocean','TDB')
+JENAROOT = parser.get('metocean','jenaroot')
+FUSEKIROOT = parser.get('metocean','fusekiroot')
+FUSEKIPORT = int(parser.get('metocean','port'))
 
-os.environ['JENAROOT'] = jenaroot
-os.environ['FUSEKI_HOME'] = fusekiroot
+os.environ['JENAROOT'] = JENAROOT
+os.environ['FUSEKI_HOME'] = FUSEKIROOT
 
 
 def filehash(file):
@@ -51,7 +52,7 @@ def filehash(file):
     return md5.hexdigest()
 
 
-def check_port(address='localhost',port=int(fport)):
+def check_port(address='localhost', port=FUSEKIPORT):
     s = socket.socket() 
     #print "Attempting to connect to %s on port %s." %(address, port)
     try: 
@@ -63,33 +64,38 @@ def check_port(address='localhost',port=int(fport)):
         return False 
 
 class FusekiServer(object):
-    def __enter__(self):
-        print 'enter called'
-        self.start()
-    def __exit__(self,*args):
-        print 'exit called'
-        self.stop(save=False)
-    def load(self):
-        load()
 
-    def start(self):
+    def __init__(self):
+        self._process = None
+        
+    def __enter__(self):
+        self.start()
+        return self
+        
+    def __exit__(self,*args):
+        self.stop(save=False)
+        
+    def start(self, port=FUSEKIPORT):
         '''
-        initialise the fuseki process, using the created tdb in root_path/metocean
+        initialise the fuseki process, on the defined port,
+        using the created TDB in root_path/metocean.
         returns a popen instance, the running fuseki server process
         '''
-        self.server = subprocess.Popen(['nohup',
-                                   fusekiroot +
-                                   '/fuseki-server',
-                                   '--loc=%s'%tdb,
-                                   '--update',
-                                   '--port=%s' % fport,
-                                   '/metocean'])
-        i = 0
-        while not check_port():
-            i+=1
-            if i > 100000:
-                raise RuntimeError('Fuseki server not started up correctly')
-        
+        if not check_port(port=port):
+            self._process = subprocess.Popen(['nohup',
+                                       FUSEKIROOT +
+                                       '/fuseki-server',
+                                       '--loc=%s'%TDB,
+                                       '--update',
+                                       '--port=%i' % port,
+                                       '/metocean'])
+            i = 0
+            while not check_port(port=port):
+                i+=1
+                time.sleep(0.1)
+                if i > 1000:
+                    raise RuntimeError('Fuseki server not started up correctly')
+
 
 
     def stop(self, save=False):
@@ -98,8 +104,8 @@ class FusekiServer(object):
         '''
         if save:
             self.save_cache()
-        if self.server:
-            self.server.terminate()
+        if self._process:
+            self._process.terminate()
 
 
 
@@ -107,10 +113,10 @@ class FusekiServer(object):
         '''
         remove all of the files supporting the tbd instance
         '''
-        if self.fuseki_server:
+        if self._process:
             self.stop()
-        for tdbfile in glob.glob("%s*"% tdb):
-            os.remove(tdbfile)
+        for TDBfile in glob.glob("%s*"% TDB):
+            os.remove(TDBfile)
 
 
     def save_cache(self):
@@ -118,11 +124,11 @@ class FusekiServer(object):
         write out all saveCache flagged changes to new ttl files
         remove saveCache flags after saving
         '''
-        for ingraph in glob.glob('%s*' % staticData):
+        for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             graph = ingraph.split('/')[-1]
             save_string = queries.save_cache(graph)
             clear_result = queries.clear_cache(graph)
-            tfile = '%s/save_tmp.ttl' % ingraph
+            tfile = tempfile.mkstemp()#'%s/save_tmp.ttl' % ingraph
             with open(tfile, 'w') as temp:
                 temp.write(save_string)
             md5 = str(filehash(tfile))
@@ -131,9 +137,9 @@ class FusekiServer(object):
 
     def revert_cache(self):
         '''
-        identify all cached changes in the system and remove them, reverting the tdb to the same state as the saved ttl files
+        identify all cached changes in the system and remove them, reverting the TDB to the same state as the saved ttl files
         '''
-        for ingraph in glob.glob('%s*' % staticData):
+        for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             graph = ingraph.split('/')[-1]
             revert_string = queries.revert_cache(graph)
 
@@ -143,18 +149,19 @@ class FusekiServer(object):
 
     def load(self):
         '''
-        load data from all the ttl files in the staticData folder into a new tdb
+        load data from all the ttl files in the STATICDATA folder into a new TDB
         '''
-        clean()
-        for ingraph in glob.glob(staticData + '*'):
+        self.clean()
+        for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             #print ingraph
             graph = ingraph.split('/')[-1] + '/'
-            for infile in glob.glob(ingraph + '/*.ttl'):
+            for infile in glob.glob(os.path.join(ingraph, '*.ttl')):
                 subgraph = ''
                 if graph == 'um/':
                     subgraph = infile.split('/')[-1]#.rstrip('.ttl')
                 space = ' '
-                loadCall = [jenaroot + '/bin/tdbloader', '--graph=http://%s%s' % (graph,subgraph), '--loc=%s'% tdb, infile]
+                loadCall = [JENAROOT + '/bin/tdbloader',
+                            '--graph=http://%s%s' % (graph,subgraph), '--loc=%s'% TDB, infile]
                 print space.join(loadCall)
                 subprocess.check_call(loadCall)
 

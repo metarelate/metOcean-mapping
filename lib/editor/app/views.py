@@ -84,8 +84,10 @@ def format_param(request, format):
     param_list = request_search_path.split('|')
     if format == 'um':
         Searchform = forms.UMParam
-    if format == 'cf':
+    elif format == 'cf':
         Searchform = forms.CFParam
+    else:
+        raise NameError("there is no form available for this format type")
     if request.method == 'POST': # If the form has been submitted...
         form = Searchform(request.POST) # A form bound to the POST data
         if form.is_valid():
@@ -237,7 +239,7 @@ def process_formset(formset,request):
         mapping_p_o = {}
         #take the new values from the form and add all of the initial values not included in the 'remove' field
         for label in ['owner','watcher']:
-            mapping_p_o['%s' % label] = []
+            mapping_p_o[label] = []
             if form.cleaned_data['add_%ss' % label] != '':
                 for val in form.cleaned_data['add_%ss' % label].split(','):
                     mapping_p_o['%s' % label].append('"%s"' % val)

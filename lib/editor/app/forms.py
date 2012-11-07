@@ -17,13 +17,15 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+from string import Template
+import sys
+import time
+
 from django import forms
 from django.core.urlresolvers import reverse
 from django.utils import formats
 from django.utils.safestring import mark_safe
-from string import Template
-import sys
-import time
+
 
 import metocean.prefixes as prefixes
 import metocean.queries as moq

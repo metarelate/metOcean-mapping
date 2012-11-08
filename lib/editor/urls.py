@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     # url(r'^showsearchparams/$', 'editor.app.views.showsearchparams', name='showsearchparams'),
     url(r'^mapping/$', 'editor.app.views.mapping', name='mapping'),
     url(r'^search/$', 'editor.app.views.search', name='search'),
+    url(r'^newmap/$', 'editor.app.views.new_mapping', name='new_mapping'),
     # url(r'^editor/', include('editor.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

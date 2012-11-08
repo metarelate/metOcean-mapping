@@ -134,7 +134,6 @@ class FusekiServer(object):
         for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             graph = ingraph.split('/')[-1]
             save_string = queries.save_cache(graph)
-            clear_result = queries.clear_cache(graph)
             tfile = tempfile.mkstemp()#'%s/save_tmp.ttl' % ingraph
             with open(tfile, 'w') as temp:
                 temp.write(save_string)

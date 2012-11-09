@@ -192,10 +192,10 @@ def mapping_by_link(paramlist=False,debug=False):
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
-       }
+       
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^mr:previous+ ?map}
-    } } }
+    } } } }
     GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
@@ -251,10 +251,10 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
-       }
+       
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^mr:previous+ ?map}
-    }
+    }}
     GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
@@ -493,7 +493,7 @@ def get_linkage(fso_dict, debug=False):
         a dictionary of format strings and lists of objects.
     if one does not exist, create it
     '''
-    subj_pref = 'http://www.metarelate.net/metOcean/linkage/'
+    subj_pref = 'http://www.metarelate.net/metOcean/linkage'
     search_string = ''
     for fstring in fso_dict.keys():
         for obj in fso_dict[fstring]:
@@ -551,41 +551,6 @@ def get_linkage(fso_dict, debug=False):
 
     return results
 
-
-# def create_linkage(po_dict, debug=False):
-#     '''
-#     create a new linkage, using the provided predicates:objects dictionary, if one does not already exists.
-#     if one already exists, use this in preference
-#     '''
-#     qstr = '''
-#     '''
-#     results = query.run_query(qstr, update=True, debug=debug)
-#     return linkID
-
-# def get_mapping(pred_obj, debug=False):
-#     '''
-#     return a mapping record, if one exists, using the relevant predicate:objectList dictionary
-#     '''
-#     pred_obj = ''
-#     for pred in po_dict.keys():
-#         for obj in po_dict[pred]:
-#             pattern_string = ''' ;
-#             %s %s ''' % (pred, obj)
-#             pred_obj += pattern_string
-
-#     qstr = '''
-#     SELECT ?s ?p ?o
-#     FROM <http://mappings/>
-#     WHERE
-#     {
-#     ?s ?p ?o %s
-#     .
-#     FILTER (?s = <%s>)
-#     }
-#     ''' % (pred_obj, 'http://www.metarelate.net/metOcean/mapping/')
-
-#     results = query.run_query(qstr, debug=debug)
-#     return results
 
 
 def create_mapping(po_dict, debug=False):

@@ -237,12 +237,12 @@ def mapping(request):
         else:
             print formset.errors
     else:
-        #print 'search_path'
-        #print search_path
+        print 'search_path'
+        print search_path
         urecordm = moq.mapping_by_link(search_path)
         create = False
-        #print 'urecordm'
-        #print urecordm
+        print 'urecordm'
+        print urecordm
         if len(urecordm) > 1:
             warning_msg = (
                 'Warning: '
@@ -271,7 +271,8 @@ def mapping(request):
                 last_reason = item.get('reason'),
                 owners = item.get('owners'),
                 watchers = item.get('watchers'),
-                previous = mark_safe("%s" % previouslabel),
+                #previous = mark_safe("%s" % previouslabel),
+                previous = previousurl,
                 cflinks = item.get('cflinks'),
                 umlinks = item.get('umlinks'),
                 griblinks = item.get('griblinks')

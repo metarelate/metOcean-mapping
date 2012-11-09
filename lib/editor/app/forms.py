@@ -210,7 +210,7 @@ class MappingEditForm(forms.Form):
         self.fields['last_editor'].widget.attrs['readonly'] = True
         self.fields['last_comment'].widget.attrs['readonly'] = True
         self.fields['last_reason'].widget.attrs['readonly'] = True
-        self.fields['previous'].widget = URLwidget()
+        #self.fields['previous'].widget = URLwidget()
         self.fields['mapping'].widget.attrs['readonly'] = True
         self.fields['linkage'].widget = forms.HiddenInput()
         self.fields['cflinks'].widget = forms.HiddenInput()

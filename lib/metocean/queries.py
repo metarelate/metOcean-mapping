@@ -18,12 +18,12 @@
 
 import hashlib
 
-import metocean.prefixes
+import metocean.prefixes as prefixes
 import fusekiQuery as query
 
 
 
-def revert_cache(graph, debug=False):
+def revert_cache(graph='http://mappings/', debug=False):
     '''
     update a graph in the triple database removing all shards flagged with the saveCache predicate
     '''
@@ -50,6 +50,8 @@ def save_cache(graph, debug=False):
     '''
     export new records from a graph in the triple store to an external location,
     as flagged by the manager application
+    clear the 'not saved' flags on records, updating a graph in the triple store
+    with the fact that changes have been persisted to ttl
     '''
     qstr = '''
     CONSTRUCT
@@ -66,13 +68,6 @@ def save_cache(graph, debug=False):
     } 
     ''' % graph
     results = query.run_query(qstr, output="text", debug=debug)
-    return results
-
-def clear_cache(graph, debug=False):
-    '''
-    clear the 'not saved' flags on records, updating a graph in the triple store
-    with the fact that changes have been persisted to ttl 
-    '''
     qstr = '''
     DELETE
     {  GRAPH <%s>
@@ -91,7 +86,8 @@ def clear_cache(graph, debug=False):
     results = query.run_query(qstr, update=True, debug=debug)
     return results
 
-def query_cache(graph, debug=False):
+
+def query_cache(graph='http://mappings/', debug=False):
     '''
     return all triples cached for saving but not saved
     '''
@@ -164,7 +160,7 @@ def mapping_by_link(paramlist=False,debug=False):
        ?comment
        ?reason
        ?link
-       (GROUP_CONCAT(?cfitem; SEPARATOR = "&") AS ?cfelems) 
+       (GROUP_CONCAT(DISTINCT(?cfitem); SEPARATOR = "&") AS ?cfelems) 
        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
@@ -196,10 +192,10 @@ def mapping_by_link(paramlist=False,debug=False):
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
-       }
+       
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^mr:previous+ ?map}
-    } } }
+    } } } }
     GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
@@ -255,10 +251,10 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
-       }
+       
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^mr:previous+ ?map}
-    }
+    }}
     GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
@@ -444,7 +440,7 @@ def get_by_attrs(po_dict, debug=False):
     return results
 
 
-def create_link(po_dict, subj_pref, debug=False):
+def create_cflink(po_dict, subj_pref, debug=False):
     '''
     create a new link, using the provided predicates:objectsList dictionary, if one does not already exists.
     if one already exists, use this in preference
@@ -482,7 +478,7 @@ def create_link(po_dict, subj_pref, debug=False):
         }
         ''' % (subj_pref, md5, pred_obj)
         results = query.run_query(qstr, update=True, debug=debug)
-        current_link = get_by_attrs(po_dict)
+        current_link = get_cflinks(po_dict)
     return current_link
     # elif len(current_cflink) ==1:
     #     md5 = md5
@@ -491,58 +487,70 @@ def create_link(po_dict, subj_pref, debug=False):
     # return md5
 
 
-# def get_linkage(linkID, debug=False):
-#     '''
-#     return a linkage if one exists, using the MD5 ID
-#     '''
-#     qstr = '''
-#     SELECT ?s ?p ?o
-#     FROM <http://mappings/>
-#     WHERE
-#     {
-#     ?s ?p ?o.
-#     FILTER (?s = <%s%s>)
-#     }
-#     ''' % ('http://www.metarelate.net/metOcean/linkage/' ,linkID)
+def get_linkage(fso_dict, debug=False):
+    '''
+    return a linkage if one exists, using the full record:
+        a dictionary of format strings and lists of objects.
+    if one does not exist, create it
+    '''
+    subj_pref = 'http://www.metarelate.net/metOcean/linkage'
+    search_string = ''
+    for fstring in fso_dict.keys():
+        for obj in fso_dict[fstring]:
+            search_string += '''
+            mr:%slink %s ;''' % (fstring.upper(), obj)
+    if search_string != '':
+        search_string += '.'
+        qstr = '''
+        SELECT ?linkage
+            (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+            (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+            (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
 
-#     results = query.run_query(qstr, debug=debug)
-#     return results
+        WHERE
+        { GRAPH <http://mappings/>{
+            ?linkage %s
+       OPTIONAL
+           {?linkage mr:CFlink ?cflink . }
+       OPTIONAL
+           {?linkage mr:UMlink ?umlink . }
+       OPTIONAL
+           {?linkage mr:GRIBlink ?griblink .}
+            FILTER (regex(str(?linkage),"%s", "i"))
+            }
+        }
+        GROUP BY ?linkage
+        ''' % (search_string, subj_pref)
 
+        results = query.run_query(qstr, debug=debug)
+        if len(results) == 1 and results[0] == {}:
+            pre = prefixes.Prefixes()
+            mmd5 = hashlib.md5()
+            pred_obj = ''
+            for format,objects in fso_dict.iteritems():
+                for obj in objects:
+                    (pre['mr'], format, obj)
+                    mmd5.update('%s%slink' % (pre['mr'], format))
+                    mmd5.update(obj)
 
-# def create_linkage(po_dict, debug=False):
-#     '''
-#     create a new linkage, using the provided predicates:objects dictionary, if one does not already exists.
-#     if one already exists, use this in preference
-#     '''
-#     qstr = '''
-#     '''
-#     results = query.run_query(qstr, update=True, debug=debug)
-#     return linkID
+            md5 = str(mmd5.hexdigest())
 
-# def get_mapping(pred_obj, debug=False):
-#     '''
-#     return a mapping record, if one exists, using the relevant predicate:objectList dictionary
-#     '''
-#     pred_obj = ''
-#     for pred in po_dict.keys():
-#         for obj in po_dict[pred]:
-#             pattern_string = ''' ;
-#             %s %s ''' % (pred, obj)
-#             pred_obj += pattern_string
+            inststr = '''
+            INSERT DATA
+            { GRAPH <http://mappings/>
+            { <%s/%s> %s
+            mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, md5, search_string.rstrip('.'))
+            #print qstr
+            insert_results = query.run_query(inststr, update=True, debug=debug)
+            results = query.run_query(qstr, debug=debug)
+    else:
+        results = []
 
-#     qstr = '''
-#     SELECT ?s ?p ?o
-#     FROM <http://mappings/>
-#     WHERE
-#     {
-#     ?s ?p ?o %s
-#     .
-#     FILTER (?s = <%s>)
-#     }
-#     ''' % (pred_obj, 'http://www.metarelate.net/metOcean/mapping/')
+    return results
 
-#     results = query.run_query(qstr, debug=debug)
-#     return results
 
 
 def create_mapping(po_dict, debug=False):
@@ -551,6 +559,7 @@ def create_mapping(po_dict, debug=False):
     '''
     subj_pref = 'http://www.metarelate.net/metocean/mapping'
     results = None
+    pre = prefixes.Prefixes()
 
     if po_dict.has_key('owner') and \
         po_dict.has_key('watcher') and \
@@ -571,20 +580,24 @@ def create_mapping(po_dict, debug=False):
                 pattern_string = ''' mr:%s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
-                mmd5.update(pred)
-                mmd5.update(obj)
+                if pred != 'creation':
+                    mmd5.update('%s%s' % (pre['mr'], pred))
+                    mmd5.update(obj)
 
         md5 = str(mmd5.hexdigest())
-
-        qstr = '''
-        INSERT DATA
-        { GRAPH <http://mappings/>
-        { <%s/%s> %s
-        mr:saveCache "True" .
-        }
-        }
-        ''' % (subj_pref, md5, pred_obj)
-        results = query.run_query(qstr, update=True, debug=debug)
+        # check if we already have one:
+        result = subject_graph_pattern('http://mappings/',
+                'http://www.metarelate.net/metocean/mapping/%s' % md5)
+        if len(result) == 0:
+            qstr = '''
+            INSERT DATA
+            { GRAPH <http://mappings/>
+            { <%s/%s> %s
+            mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, md5, pred_obj)
+            results = query.run_query(qstr, update=True, debug=debug)
     return results
 
 

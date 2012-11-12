@@ -94,21 +94,22 @@ class CFParam(forms.Form):
             pred_obj['mrcf:long_name'] = '"%s"' % cleaned_data.get('long_name')
         if cleaned_data.get('units') != '':
             pred_obj['mrcf:units'] = '"%s"' % cleaned_data.get('units')
-        print repr(pred_obj)
+        # print repr(pred_obj)
         cfres = moq.get_cflinks(pred_obj)
-        print cfres
+        # print 'cfres: ', cfres
         if not cfres:
             #if there is no result returned from the query, then create the record and rerun the query
-            cfres = moq.create_link(pred_obj, 'http://www.metarelate.net/metocean/cf', True)
+            cfres = moq.create_cflink(pred_obj, 'http://www.metarelate.net/metocean/cf')
             #cfres = moq.get_cflinks(pred_obj)
-            
+        # print len(cfres)
+        # print 'cfres: ', cfres
         if len(cfres) == 1:
             # assign the single result to be returned by the function
             cflink = cfres[0]['s']
         else:
             cflink = ''
         cleaned_data['parameter'] = 'cf;'+cflink
-        print cflink
+        # print 'cflink: ',cflink
         return cleaned_data
         
 
@@ -173,10 +174,10 @@ class ContactForm(forms.Form):
 class MappingEditForm(forms.Form):
     required_css_class = 'required'
     error_css_class = 'error'
-    isoformat = ("%Y-%m-%dT%H:%M:%S.%f",)
-    mapping = forms.URLField()
-    linkage = forms.URLField()
-    last_edit = forms.CharField(max_length=50)
+    isoformat = "%Y-%m-%dT%H:%M:%S.%f"
+    mapping = forms.CharField(max_length=200)
+    linkage = forms.CharField(max_length=200)
+    last_edit = forms.CharField(max_length=50, required=False)
     last_editor = forms.CharField(max_length=50)
     #editor = forms.CharField(max_length=50, required=False)
     editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r
@@ -192,7 +193,7 @@ class MappingEditForm(forms.Form):
     watchers = forms.CharField(max_length=200)
     add_watchers = forms.CharField(max_length=200, required=False)
     remove_watchers = forms.CharField(max_length=200, required=False)
-    previous = forms.CharField(max_length=32)
+    previous = forms.CharField(max_length=128, required=False)
     current_status = forms.CharField(max_length=15)
     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()])
     cflinks = forms.CharField(max_length=1000, required=False)
@@ -209,9 +210,7 @@ class MappingEditForm(forms.Form):
         self.fields['last_editor'].widget.attrs['readonly'] = True
         self.fields['last_comment'].widget.attrs['readonly'] = True
         self.fields['last_reason'].widget.attrs['readonly'] = True
-        self.fields['last_edit'].required = False
-        self.fields['previous'].widget = URLwidget()
-        self.fields['previous'].required = False
+        #self.fields['previous'].widget = URLwidget()
         self.fields['mapping'].widget.attrs['readonly'] = True
         self.fields['linkage'].widget = forms.HiddenInput()
         self.fields['cflinks'].widget = forms.HiddenInput()
@@ -253,12 +252,12 @@ class MappingEditForm(forms.Form):
         else:
             return self.cleaned_data
 
-    def clean_last_edit(self):
-        data = self.cleaned_data.get('last_edit')
-        try:
-            return str(datetime.datetime(*time.strptime(str(data), isoformat)[:6]))
-        except ValueError:
-            raise forms.ValidationError("Invalid ISO DateTime format")
+    # def clean_last_edit(self):
+    #     data = self.cleaned_data.get('last_edit')
+    #     try:
+    #         return str(datetime.datetime(*time.strptime(str(data), self.isoformat)[:6]))
+    #     except ValueError:
+    #         raise forms.ValidationError("Invalid ISO DateTime format")
         # for isoformat in self.isoformat:
         #     try:
         #         return str(datetime.datetime(*time.strptime(str(data), isoformat)[:6]))
@@ -291,16 +290,29 @@ class MappingNewForm(MappingEditForm):
 
     def __init__(self, *args, **kwargs):
         super(MappingNewForm, self).__init__(*args, **kwargs)
+        self.fields['mapping'].required = False
+        self.fields['mapping'].widget = forms.HiddenInput()
         self.fields['last_edit'].widget = forms.HiddenInput()
+        self.fields['last_edit'].required = False
         self.fields['last_editor'].widget = forms.HiddenInput()
+        self.fields['last_editor'].required = False
         self.fields['last_comment'].widget = forms.HiddenInput()
+        self.fields['last_comment'].required = False
         self.fields['last_reason'].widget = forms.HiddenInput()
+        self.fields['last_reason'].required = False
         self.fields['owners'].widget = forms.HiddenInput()
+        self.fields['owners'].required = False
         self.fields['remove_owners'].widget = forms.HiddenInput()
         self.fields['watchers'].widget = forms.HiddenInput()
+        self.fields['watchers'].required = False
         self.fields['remove_watchers'].widget = forms.HiddenInput()
         self.fields['current_status'].widget = forms.HiddenInput()
+        self.fields['current_status'].required = False
         self.fields['reason'].widget.attrs['readonly'] = True
         self.fields['next_status'].widget.attrs['readonly'] = True
+        if kwargs.has_key('initial'):
+            self.expand_links(kwargs, 'cflinks')
+            self.expand_links(kwargs, 'umlinks')
+            self.expand_links(kwargs, 'griblinks')
         
         

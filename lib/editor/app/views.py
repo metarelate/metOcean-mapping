@@ -45,7 +45,9 @@ from settings import READ_ONLY
 
 
 def home(request):
-    context = RequestContext(request, {'search':reverse('search')})
+    searchurl = url_with_querystring(reverse('mapping'),ref='')
+    search = {'url':searchurl, 'label':'search for a mapping'}
+    context = RequestContext(request, {'search':search})
     return render_to_response('main.html', context)
 
 

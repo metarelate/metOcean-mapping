@@ -632,3 +632,63 @@ def create_contact(register, contact, creation, debug=False):
 #     '''
 #     results = query.run_query(qstr, debug=debug)
 #     return results
+
+def export_linkages(debug=False):
+    '''
+    '''
+    qstr = '''SELECT ?linkage ?UMlink ?CFlink ?GRIBlink
+    WHERE
+    { GRAPH <http://mappings/> {
+    ?linkage mr:UMlink <http://reference.metoffice.gov.uk/data/stash/m01s00i003/vn8.2> .
+     OPTIONAL{
+     ?linkage mr:UMlink ?UMlink . }
+     OPTIONAL{
+     ?linkage mr:CFlink ?CFlink . }
+     OPTIONAL{
+     ?linkage mr:GRIBlink ?GRIBlink . }
+        }
+    } 
+    '''
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+
+def export_mappings(debug=False):
+    '''
+    '''
+    qstr = '''SELECT ?map ?status ?comment ?reason ?owner ?watcher ?creator ?created ?replaces ?linkage 
+    WHERE
+    { GRAPH <http://mappings/> {
+     ?map mr:linkage ?link ; 
+           mr:owner ?owner ;
+           mr:watcher ?watcher ;
+           mr:creation ?created ;
+           mr:status ?status ;
+           mr:reason ?reason ;
+           mr:comment ?comment ;
+           mr:previous ?replaces ;
+           mr:linkage ?linkage .
+     ?linkage mr:UMlink <http://reference.metoffice.gov.uk/data/stash/m01s00i003/vn8.2> .
+    BIND(<https://github.com/marqh> as ?creator)
+        }
+
+    }
+    '''
+
+    # qstr = '''SELECT ?map ?linkage 
+    # WHERE
+    # { GRAPH <http://mappings/> {
+    #  ?map  mr:linkage ?linkage .
+    #  ?linkage mr:UMlink <http://reference.metoffice.gov.uk/data/stash/m01s00i003/vn8.2> .
+    #     }
+
+    # }
+    # '''
+    results = query.run_query(qstr, debug=debug)
+    return results
+
+def print_records(res):
+    for r in res:
+        for k,v in r.iteritems():
+            print k, '  ', v
+

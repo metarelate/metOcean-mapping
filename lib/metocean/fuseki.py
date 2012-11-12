@@ -140,6 +140,33 @@ class FusekiServer(object):
             md5 = str(filehash(tfile))
             os.rename(tfile, '%s/%s.ttl' % (ingraph,md5))
 
+    def new_save_cache(self):
+        '''
+        write out all saveCache flagged changes to new ttl files
+        remove saveCache flags after saving
+        '''
+        for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
+            for subgraph in glob.glob(os.path.join(ingraph, '*.ttl')):
+                graph = 'http://%s/%s' % (ingraph, subgraph)
+                save_string = queries.save_cache(graph)
+                with open(subgraph, 'a') as sg:
+                    for line in save_string:
+                        if not line.startswith('@prefix'):
+                            sg.write(line)
+                            sg.write('\n')
+
+
+
+    def export_data(self):
+        map_file = os.path.join(STATICDATA,'mappings','mappings.ttl')
+        link_file = os.path.join(STATICDATA,'mappings','linkages.ttl')
+        cflink_file = os.path.join(STATICDATA,'mappings','cflinks.ttl')
+        with open(map_file,'w') as mf:
+            mf.write(queries.export_mappings())
+        with open(link_file,'w') as lf:
+            lf.write(queries.export_linkages())
+        with open(cflink_file,'w') as cflf:
+            cflf.write(queries.export_cflinks())
 
     def revert_cache(self):
         '''
@@ -162,9 +189,10 @@ class FusekiServer(object):
             #print ingraph
             graph = ingraph.split('/')[-1] + '/'
             for infile in glob.glob(os.path.join(ingraph, '*.ttl')):
-                subgraph = ''
-                if graph == 'um/':
-                    subgraph = infile.split('/')[-1]#.rstrip('.ttl')
+                # subgraph = ''
+                # if graph == 'um/':
+                #     subgraph = infile.split('/')[-1]#.rstrip('.ttl')
+                subgraph = infile.split('/')[-1]#.rstrip('.ttl')
                 space = ' '
                 loadCall = [JENAROOT + '/bin/tdbloader',
                             '--graph=http://%s%s' % (graph,subgraph), '--loc=%s'% TDB, infile]

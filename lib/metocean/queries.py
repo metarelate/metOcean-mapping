@@ -233,17 +233,21 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
 
     WHERE
       
- { GRAPH <http://mappings/> {
+ { GRAPH <http://mappings/mappings.ttl> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:previous ?previous ;
+                mr:replaces ?previous ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
 %s
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^mr:previous+ ?map}
+           }
+GRAPH <http://mappings/linkages.ttl> {
        OPTIONAL
            {?link mr:CFlink ?cflink .         
            }
@@ -252,8 +256,7 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
        
-       FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:previous+ ?map}
+
     }}
     GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
     ''' % (linkpattern)
@@ -649,27 +652,53 @@ def create_contact(register, contact, creation, debug=False):
 def export_linkages(debug=False):
     '''
     '''
-    qstr = '''SELECT ?linkage ?UMlink ?CFlink ?GRIBlink
+    qstr = '''CONSTRUCT { 
+    ?linkage mr:UMlink ?UMlink ; 
+    mr:CFlink ?CFlink  . }
     WHERE
     { GRAPH <http://mappings/> {
-    ?linkage mr:UMlink <http://reference.metoffice.gov.uk/data/stash/m01s00i003/vn8.2> .
-     OPTIONAL{
-     ?linkage mr:UMlink ?UMlink . }
-     OPTIONAL{
-     ?linkage mr:CFlink ?CFlink . }
-     OPTIONAL{
-     ?linkage mr:GRIBlink ?GRIBlink . }
+     ?linkage mr:UMlink ?UMlink ;
+     mr:CFlink ?CFlink .
         }
     } 
     '''
-    results = query.run_query(qstr, debug=debug)
+    results = query.run_query(qstr, output="text", debug=debug)
+    return results
+
+def export_cflinks(debug=False):
+    '''
+    '''
+    qstr = '''CONSTRUCT { 
+    ?cflink mrcf:type ?type ; 
+    mrcf:standard_name ?standard_name ;
+    mrcf:units ?units  . }
+    WHERE
+    { GRAPH <http://mappings/> {
+    ?cflink mrcf:type ?type ; 
+    mrcf:standard_name ?standard_name ;
+    mrcf:units ?units  .
+        }
+    } 
+    '''
+    results = query.run_query(qstr, output="text", debug=debug)
     return results
 
 
 def export_mappings(debug=False):
     '''
     '''
-    qstr = '''SELECT ?map ?status ?comment ?reason ?owner ?watcher ?creator ?created ?replaces ?linkage 
+    qstr = '''CONSTRUCT { 
+     ?map mr:linkage ?link ; 
+           mr:owner ?owner ;
+           mr:watcher ?watcher ;
+           mr:creator ?creator ;
+           mr:creation ?created ;
+           mr:status ?status ;
+           mr:reason ?reason ;
+           mr:comment ?comment ;
+           mr:replaces ?replaces ;
+           mr:linkage ?linkage .
+}
     WHERE
     { GRAPH <http://mappings/> {
      ?map mr:linkage ?link ; 
@@ -681,7 +710,6 @@ def export_mappings(debug=False):
            mr:comment ?comment ;
            mr:previous ?replaces ;
            mr:linkage ?linkage .
-     ?linkage mr:UMlink <http://reference.metoffice.gov.uk/data/stash/m01s00i003/vn8.2> .
     BIND(<https://github.com/marqh> as ?creator)
         }
 
@@ -697,7 +725,7 @@ def export_mappings(debug=False):
 
     # }
     # '''
-    results = query.run_query(qstr, debug=debug)
+    results = query.run_query(qstr, output="text", debug=debug)
     return results
 
 def print_records(res):

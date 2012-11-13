@@ -147,7 +147,7 @@ class URLwidget(forms.TextInput):
             tpl = value
         else:
             tpl = u'<a href="%s">%s</a>' % (reverse('mapdisplay', 
-                kwargs={'hashval' : value}), "go to previous")
+                kwargs={'hashval' : value}), "go to replaces")
         return mark_safe(tpl)
 
     def clean(self):
@@ -180,8 +180,7 @@ class MappingEditForm(forms.Form):
     last_edit = forms.CharField(max_length=50, required=False)
     last_editor = forms.CharField(max_length=50)
     #editor = forms.CharField(max_length=50, required=False)
-    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r
-    in moq.get_contacts('people')])
+    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')])
 #    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')], widget=SelectWithPopUp)
     last_comment = forms.CharField(max_length=200)
     comment = forms.CharField(max_length=200,required=False)
@@ -193,7 +192,7 @@ class MappingEditForm(forms.Form):
     watchers = forms.CharField(max_length=200)
     add_watchers = forms.CharField(max_length=200, required=False)
     remove_watchers = forms.CharField(max_length=200, required=False)
-    previous = forms.CharField(max_length=128, required=False)
+    replaces = forms.CharField(max_length=128, required=False)
     current_status = forms.CharField(max_length=15)
     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()])
     cflinks = forms.CharField(max_length=1000, required=False)
@@ -210,7 +209,7 @@ class MappingEditForm(forms.Form):
         self.fields['last_editor'].widget.attrs['readonly'] = True
         self.fields['last_comment'].widget.attrs['readonly'] = True
         self.fields['last_reason'].widget.attrs['readonly'] = True
-        #self.fields['previous'].widget = URLwidget()
+        #self.fields['replaces'].widget = URLwidget()
         self.fields['mapping'].widget.attrs['readonly'] = True
         self.fields['linkage'].widget = forms.HiddenInput()
         self.fields['cflinks'].widget = forms.HiddenInput()

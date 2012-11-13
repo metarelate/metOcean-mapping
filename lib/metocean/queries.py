@@ -23,7 +23,7 @@ import fusekiQuery as query
 
 
 
-def revert_cache(graph='http://mappings/', debug=False):
+def revert_cache(graph, debug=False):
     '''
     update a graph in the triple database removing all shards flagged with the saveCache predicate
     '''
@@ -87,7 +87,7 @@ def save_cache(graph, debug=False):
     return results
 
 
-def query_cache(graph='http://mappings/', debug=False):
+def query_cache(graph, debug=False):
     '''
     return all triples cached for saving but not saved
     '''
@@ -109,25 +109,20 @@ def current_mappings(debug=False):
     '''
     return all triples currently valid in the mappings graph
     '''
-    
     qstr = '''
     SELECT ?s ?p ?o
-    FROM <http://mappings/>
     WHERE
-    {
+    { GRAPH <http://metocean/mappings.ttl> {
     ?s ?p ?o ;
         mr:status ?status.
-
         FILTER (?status NOT IN ("Deprecated", "Broken")) .
-
         {
-          SELECT ?map ?previous
+          SELECT ?map ?replaces
           WHERE
           {
+           ?map mr:replaces ?replaces .
 
-           ?map mr:previous ?previous .
-
-           MINUS {?map ^mr:previous+ ?map}
+           MINUS {?map ^mr:replaces+ ?map}
            }
         }
     }
@@ -156,7 +151,7 @@ def mapping_by_link(paramlist=False,debug=False):
        ?creator 
        ?creation 
        ?status 
-       ?previous
+       ?replaces
        ?comment
        ?reason
        ?link
@@ -164,39 +159,39 @@ def mapping_by_link(paramlist=False,debug=False):
        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-
-
-    WHERE
-      {
-              GRAPH <http://mappings/> {
+       WHERE
+       {
+              GRAPH <http://metocean/cflinks.ttl> {
               ?cflink ?cfp ?cfo .
               BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?cfitem)
               }
-      { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?previous ?comment ?reason ?link ?cflink ?umlink ?griblink
+       { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cflink ?umlink ?griblink
 
-        WHERE { GRAPH <http://mappings/> {
+       WHERE { GRAPH <http://metocean/mappings.ttl> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:previous ?previous ;
+                mr:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
+
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^mr:replaces+ ?map}
+       } GRAPH <http://metocean/linkages.ttl> {
 %s
        OPTIONAL
-           {?link mr:CFlink ?cflink .         
-           }
+           {?link mr:CFlink ?cflink . }
        OPTIONAL
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
        
-       FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:previous+ ?map}
+
     } } } }
-    GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
     return results
@@ -222,7 +217,7 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
        ?creator 
        ?creation 
        ?status 
-       ?previous
+       ?replaces
        ?comment
        ?reason
        ?link
@@ -239,13 +234,13 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:replaces ?previous ;
+                mr:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
 %s
        FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:previous+ ?map}
+       MINUS {?map ^mr:replaces+ ?map}
            }
 GRAPH <http://mappings/linkages.ttl> {
        OPTIONAL
@@ -258,7 +253,7 @@ GRAPH <http://mappings/linkages.ttl> {
        
 
     }}
-    GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
     return results
@@ -314,7 +309,7 @@ def count_by_graph(debug=False):
         }
         GROUP by ?g
         ORDER by ?g
-    ''' 
+    '''
     results = query.run_query(qstr)
     return results
 
@@ -351,11 +346,9 @@ def subject_graph_pattern(graph,pattern,debug=False):
         ORDER BY ?subject
 
     ''' % (graph,pattern)
-    
+
     results = query.run_query(qstr, debug=debug)
     return results
-    
-
 
 
 def get_cflink_by_id(cflink, debug=False):
@@ -364,9 +357,8 @@ def get_cflink_by_id(cflink, debug=False):
     '''
     qstr = '''
     SELECT ?type ?standard_name ?units ?long_name
-    FROM <http://mappings/>
     WHERE
-    {
+    { GRAPH <http://metocean/cflinks.ttl> {
     ?s mrcf:type ?type .
     OPTIONAL
     { ?s mrcf:standard_name ?standard_name .}
@@ -375,6 +367,7 @@ def get_cflink_by_id(cflink, debug=False):
     OPTIONAL
     { ?s mrcf:long_name ?long_name . }
     FILTER (?s = <%s>)
+    }
     }
     ''' % cflink
     results = query.run_query(qstr, debug=debug)
@@ -394,9 +387,8 @@ def get_cflinks(pred_obj=None, debug=False):
             ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
-    FROM <http://mappings/>
     WHERE
-    {
+    { GRAPH <http://metocean/cflinks.ttl> {
     ?s mrcf:type ?type .
     OPTIONAL
     { ?s mrcf:standard_name ?standard_name .}
@@ -405,42 +397,42 @@ def get_cflinks(pred_obj=None, debug=False):
     OPTIONAL
     { ?s mrcf:long_name ?long_name . }
     %s
-    }
+    } }
     ''' % filterstr 
     results = query.run_query(qstr, debug=debug)
 
     return results
 
 
-def get_by_attrs(po_dict, debug=False):
-    '''
-    return records, if they exists, using the dictionary of predicates and lists of objects
-    a list of triple dictionaries is returned.  The list is ordered by subject, but no grouping is explicit in the list.
+# def get_by_attrs(po_dict, debug=False):
+#     '''
+#     return records, if they exists, using the dictionary of predicates and lists of objects
+#     a list of triple dictionaries is returned.  The list is ordered by subject, but no grouping is explicit in the list.
 
-    '''
-    pred_obj = ''
-    for pred, obj in po_dict.iteritems():
-        #for ob in obj:
-        # if po_dict[pred].split('//')[0] == 'http:':
-        #     po_dict[pred] = '<%s>'% po_dict[pred]
-        # else:
-        #     po_dict[pred] = '"%s"'% po_dict[pred]
-        pattern_string = ''';
-        %s %s ''' % (pred, po_dict[pred])
-        pred_obj += pattern_string
+#     '''
+#     pred_obj = ''
+#     for pred, obj in po_dict.iteritems():
+#         #for ob in obj:
+#         # if po_dict[pred].split('//')[0] == 'http:':
+#         #     po_dict[pred] = '<%s>'% po_dict[pred]
+#         # else:
+#         #     po_dict[pred] = '"%s"'% po_dict[pred]
+#         pattern_string = ''';
+#         %s %s ''' % (pred, po_dict[pred])
+#         pred_obj += pattern_string
 
-    qstr = '''
-    SELECT ?s ?p ?o
-    FROM <http://mappings/>
-    WHERE
-    {
-    ?s ?p ?o
-    %s
-    .
-    }
-    ''' % pred_obj
-    results = query.run_query(qstr, debug=debug)
-    return results
+#     qstr = '''
+#     SELECT ?s ?p ?o
+#     FROM <http://mappings/>
+#     WHERE
+#     {
+#     ?s ?p ?o
+#     %s
+#     .
+#     }
+#     ''' % pred_obj
+#     results = query.run_query(qstr, debug=debug)
+#     return results
 
 
 def create_cflink(po_dict, subj_pref, debug=False):
@@ -474,7 +466,7 @@ def create_cflink(po_dict, subj_pref, debug=False):
             pred_obj += pattern_string
         qstr = '''
         INSERT DATA
-        { GRAPH <http://mappings/>
+        { GRAPH <http://metocean/cflinks.ttl>
         { <%s/%s> %s
         mr:saveCache "True" .
         }
@@ -511,7 +503,7 @@ def get_linkage(fso_dict, debug=False):
             (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
 
         WHERE
-        { GRAPH <http://mappings/>{
+        { GRAPH <http://metocean/linkages.ttl>{
             ?linkage %s
        OPTIONAL
            {?linkage mr:CFlink ?cflink . }
@@ -540,7 +532,7 @@ def get_linkage(fso_dict, debug=False):
 
             inststr = '''
             INSERT DATA
-            { GRAPH <http://mappings/>
+            { GRAPH <http://metocean/linkages.ttl>
             { <%s/%s> %s
             mr:saveCache "True" .
             }
@@ -568,7 +560,7 @@ def create_mapping(po_dict, debug=False):
         po_dict.has_key('watcher') and \
         po_dict.has_key('creator') and len(po_dict['creator'])==1 and \
         po_dict.has_key('status') and len(po_dict['status'])==1 and \
-        po_dict.has_key('previous') and len(po_dict['previous'])==1 and \
+        po_dict.has_key('replaces') and len(po_dict['replaces'])==1 and \
         po_dict.has_key('comment') and len(po_dict['comment'])==1 and \
         po_dict.has_key('reason') and len(po_dict['reason'])==1 and \
         po_dict.has_key('linkage') and len(po_dict['linkage'])==1:
@@ -594,7 +586,7 @@ def create_mapping(po_dict, debug=False):
         if len(result) == 0:
             qstr = '''
             INSERT DATA
-            { GRAPH <http://mappings/>
+            { GRAPH <http://metocena/mappings.ttl>
             { <%s/%s> %s
             mr:saveCache "True" .
             }
@@ -611,7 +603,7 @@ def get_contacts(register, debug=False):
     qstr = '''
     SELECT ?s
     WHERE
-    {GRAPH <http://contacts/>{
+    { GRAPH <http://contacts/contacts.ttl> {
         ?s iso19135:definedInRegister ?register .
            OPTIONAL{
                ?s mr:retired ?retired}
@@ -629,11 +621,11 @@ def create_contact(register, contact, creation, debug=False):
     '''
     qstr = '''
     INSERT DATA
-    {
+    { GRAPH <http://contacts/contacts.ttl> {
     %s a mr:contact ;
     iso19135:definedInRegister %s ;
     mr:creation "%s"^^xsd:dateTime .
-    }
+    } }
     ''' % (contact, register, creation)
     results = query.run_query(qstr, debug=debug)
     return results
@@ -649,72 +641,72 @@ def create_contact(register, contact, creation, debug=False):
 #     results = query.run_query(qstr, debug=debug)
 #     return results
 
-def export_linkages(debug=False):
-    '''
-    '''
-    qstr = '''CONSTRUCT { 
-    ?linkage mr:UMlink ?UMlink ; 
-    mr:CFlink ?CFlink  . }
-    WHERE
-    { GRAPH <http://mappings/> {
-     ?linkage mr:UMlink ?UMlink ;
-     mr:CFlink ?CFlink .
-        }
-    } 
-    '''
-    results = query.run_query(qstr, output="text", debug=debug)
-    return results
+# def export_linkages(debug=False):
+#     '''
+#     '''
+#     qstr = '''CONSTRUCT { 
+#     ?linkage mr:UMlink ?UMlink ; 
+#     mr:CFlink ?CFlink  . }
+#     WHERE
+#     { GRAPH <http://mappings/> {
+#      ?linkage mr:UMlink ?UMlink ;
+#      mr:CFlink ?CFlink .
+#         }
+#     } 
+#     '''
+#     results = query.run_query(qstr, output="text", debug=debug)
+#     return results
 
-def export_cflinks(debug=False):
-    '''
-    '''
-    qstr = '''CONSTRUCT { 
-    ?cflink mrcf:type ?type ; 
-    mrcf:standard_name ?standard_name ;
-    mrcf:units ?units  . }
-    WHERE
-    { GRAPH <http://mappings/> {
-    ?cflink mrcf:type ?type ; 
-    mrcf:standard_name ?standard_name ;
-    mrcf:units ?units  .
-        }
-    } 
-    '''
-    results = query.run_query(qstr, output="text", debug=debug)
-    return results
+# def export_cflinks(debug=False):
+#     '''
+#     '''
+#     qstr = '''CONSTRUCT { 
+#     ?cflink mrcf:type ?type ; 
+#     mrcf:standard_name ?standard_name ;
+#     mrcf:units ?units  . }
+#     WHERE
+#     { GRAPH <http://mappings/> {
+#     ?cflink mrcf:type ?type ; 
+#     mrcf:standard_name ?standard_name ;
+#     mrcf:units ?units  .
+#         }
+#     } 
+#     '''
+#     results = query.run_query(qstr, output="text", debug=debug)
+#     return results
 
 
-def export_mappings(debug=False):
-    '''
-    '''
-    qstr = '''CONSTRUCT { 
-     ?map mr:linkage ?link ; 
-           mr:owner ?owner ;
-           mr:watcher ?watcher ;
-           mr:creator ?creator ;
-           mr:creation ?created ;
-           mr:status ?status ;
-           mr:reason ?reason ;
-           mr:comment ?comment ;
-           mr:replaces ?replaces ;
-           mr:linkage ?linkage .
-}
-    WHERE
-    { GRAPH <http://mappings/> {
-     ?map mr:linkage ?link ; 
-           mr:owner ?owner ;
-           mr:watcher ?watcher ;
-           mr:creation ?created ;
-           mr:status ?status ;
-           mr:reason ?reason ;
-           mr:comment ?comment ;
-           mr:previous ?replaces ;
-           mr:linkage ?linkage .
-    BIND(<https://github.com/marqh> as ?creator)
-        }
+# def export_mappings(debug=False):
+#     '''
+#     '''
+#     qstr = '''CONSTRUCT { 
+#      ?map mr:linkage ?link ; 
+#            mr:owner ?owner ;
+#            mr:watcher ?watcher ;
+#            mr:creator ?creator ;
+#            mr:creation ?created ;
+#            mr:status ?status ;
+#            mr:reason ?reason ;
+#            mr:comment ?comment ;
+#            mr:replaces ?replaces ;
+#            mr:linkage ?linkage .
+# }
+#     WHERE
+#     { GRAPH <http://mappings/> {
+#      ?map mr:linkage ?link ; 
+#            mr:owner ?owner ;
+#            mr:watcher ?watcher ;
+#            mr:creation ?created ;
+#            mr:status ?status ;
+#            mr:reason ?reason ;
+#            mr:comment ?comment ;
+#            mr:replaces ?replaces ;
+#            mr:linkage ?linkage .
+#     BIND(<https://github.com/marqh> as ?creator)
+#         }
 
-    }
-    '''
+#     }
+#     '''
 
     # qstr = '''SELECT ?map ?linkage 
     # WHERE

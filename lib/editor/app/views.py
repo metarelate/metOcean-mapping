@@ -258,11 +258,11 @@ def mapping(request):
         for item in urecordm:
             data_set = {}
             mapurl = item.get('map')
-            previousurl = item.get('previous')
-            if previousurl:
-                previouslabel = previousurl.split('/')[-1]
+            replacesurl = item.get('replaces')
+            if replacesurl:
+                replaceslabel = replacesurl.split('/')[-1]
             else:
-                previouslabel = ''
+                replaceslabel = ''
             data_set = dict(
                 mapping = item.get('map'),
                 linkage = item.get('link'),
@@ -273,8 +273,8 @@ def mapping(request):
                 last_reason = item.get('reason'),
                 owners = item.get('owners'),
                 watchers = item.get('watchers'),
-                #previous = mark_safe("%s" % previouslabel),
-                previous = previousurl,
+                #replaces = mark_safe("%s" % replaceslabel),
+                replaces = replacesurl,
                 cflinks = item.get('cflinks'),
                 umlinks = item.get('umlinks'),
                 griblinks = item.get('griblinks')
@@ -322,9 +322,9 @@ def process_form(form, request):
     mapping_p_o['creation'] = ['"%s"^^xsd:dateTime' % globalDateTime]
     mapping_p_o['status'] = ['"%s"' % form.cleaned_data['next_status']]
     if form.cleaned_data['mapping'] == "None":
-        mapping_p_o['previous'] = ['"%s"' % form.cleaned_data['mapping']]
+        mapping_p_o['replaces'] = ['"%s"' % form.cleaned_data['mapping']]
     else:
-        mapping_p_o['previous'] = ['<%s>' % form.cleaned_data['mapping']]
+        mapping_p_o['replaces'] = ['<%s>' % form.cleaned_data['mapping']]
     mapping_p_o['comment'] = ['"%s"' % form.cleaned_data.get('comment')]
     if mapping_p_o['comment'] == ['""']:
         mapping_p_o['comment'] = ['"None"']

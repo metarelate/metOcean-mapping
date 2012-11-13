@@ -46,14 +46,14 @@ Definition:
 Label:  status
 
 
-previous
---------------
+replaces
+----------
 
-URI:  http://www.metarelate.net/predicates/index.html#previous
+URI:  http://www.metarelate.net/predicates/index.html#replaces
 
 Definition:
 
-Label:  previous
+Label:  replaces
 
 creation
 -----------

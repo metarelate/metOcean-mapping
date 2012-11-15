@@ -23,7 +23,7 @@ digraph records {
 	];
 
 	mapping [
-	label = "<title> Mapping |ID: md5 |previous |date |editor |owner + |watcher + |<plink>linkage |status |comment |reason "
+	label = "<title> Mapping |ID: md5 |replaces |creation |creator |owner + |watcher + |<plink>linkage |status |comment |reason "
 	];
 
 	release [

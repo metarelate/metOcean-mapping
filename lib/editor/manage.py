@@ -10,5 +10,8 @@ except ImportError:
 
 import settings
 
+import metocean.fuseki as fu
+
 if __name__ == "__main__":
-    execute_manager(settings)
+    with fu.FusekiServer() as myfu:
+        execute_manager(settings)

@@ -18,7 +18,7 @@
 
 import hashlib
 
-import metocean.prefixes
+import metocean.prefixes as prefixes
 import fusekiQuery as query
 
 
@@ -50,6 +50,8 @@ def save_cache(graph, debug=False):
     '''
     export new records from a graph in the triple store to an external location,
     as flagged by the manager application
+    clear the 'not saved' flags on records, updating a graph in the triple store
+    with the fact that changes have been persisted to ttl
     '''
     qstr = '''
     CONSTRUCT
@@ -66,13 +68,6 @@ def save_cache(graph, debug=False):
     } 
     ''' % graph
     results = query.run_query(qstr, output="text", debug=debug)
-    return results
-
-def clear_cache(graph, debug=False):
-    '''
-    clear the 'not saved' flags on records, updating a graph in the triple store
-    with the fact that changes have been persisted to ttl 
-    '''
     qstr = '''
     DELETE
     {  GRAPH <%s>
@@ -90,6 +85,7 @@ def clear_cache(graph, debug=False):
     ''' % (graph,graph)
     results = query.run_query(qstr, update=True, debug=debug)
     return results
+
 
 def query_cache(graph, debug=False):
     '''
@@ -113,25 +109,20 @@ def current_mappings(debug=False):
     '''
     return all triples currently valid in the mappings graph
     '''
-    
     qstr = '''
     SELECT ?s ?p ?o
-    FROM <http://mappings/>
     WHERE
-    {
+    { GRAPH <http://metocean/mappings.ttl> {
     ?s ?p ?o ;
         mr:status ?status.
-
         FILTER (?status NOT IN ("Deprecated", "Broken")) .
-
         {
-          SELECT ?map ?previous
+          SELECT ?map ?replaces
           WHERE
           {
+           ?map mr:replaces ?replaces .
 
-           ?map mr:previous ?previous .
-
-           MINUS {?map ^mr:previous+ ?map}
+           MINUS {?map ^mr:replaces+ ?map}
            }
         }
     }
@@ -160,47 +151,47 @@ def mapping_by_link(paramlist=False,debug=False):
        ?creator 
        ?creation 
        ?status 
-       ?previous
+       ?replaces
        ?comment
        ?reason
        ?link
-       (GROUP_CONCAT(?cfitem; SEPARATOR = "&") AS ?cfelems) 
+       (GROUP_CONCAT(DISTINCT(?cfitem); SEPARATOR = "&") AS ?cfelems) 
        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-
-
-    WHERE
-      {
-              GRAPH <http://mappings/> {
+       WHERE
+       {
+              GRAPH <http://metocean/cflinks.ttl> {
               ?cflink ?cfp ?cfo .
               BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?cfitem)
               }
-      { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?previous ?comment ?reason ?link ?cflink ?umlink ?griblink
+       { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cflink ?umlink ?griblink
 
-        WHERE { GRAPH <http://mappings/> {
+       WHERE { GRAPH <http://metocean/mappings.ttl> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:previous ?previous ;
+                mr:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
+
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^mr:replaces+ ?map}
+       } GRAPH <http://metocean/linkages.ttl> {
 %s
        OPTIONAL
-           {?link mr:CFlink ?cflink .         
-           }
+           {?link mr:CFlink ?cflink . }
        OPTIONAL
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
-       }
-       FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:previous+ ?map}
-    } } }
-    GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
+       
+
+    } } } }
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
     return results
@@ -226,7 +217,7 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
        ?creator 
        ?creation 
        ?status 
-       ?previous
+       ?replaces
        ?comment
        ?reason
        ?link
@@ -237,17 +228,21 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
 
     WHERE
       
- { GRAPH <http://mappings/> {
+ { GRAPH <http://mappings/mappings.ttl> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:previous ?previous ;
+                mr:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
 %s
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^mr:replaces+ ?map}
+           }
+GRAPH <http://mappings/linkages.ttl> {
        OPTIONAL
            {?link mr:CFlink ?cflink .         
            }
@@ -255,11 +250,10 @@ def fast_mapping_by_link(dataformat,linklist=False,debug=False):
            {?link mr:UMlink ?umlink . }
        OPTIONAL
            {?link mr:GRIBlink ?griblink .}
-       }
-       FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:previous+ ?map}
-    }
-    GROUP BY ?map ?creator ?creation ?status ?previous ?comment ?reason ?link
+       
+
+    }}
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
     ''' % (linkpattern)
     results = query.run_query(qstr, debug=debug)
     return results
@@ -315,7 +309,7 @@ def count_by_graph(debug=False):
         }
         GROUP by ?g
         ORDER by ?g
-    ''' 
+    '''
     results = query.run_query(qstr)
     return results
 
@@ -352,11 +346,9 @@ def subject_graph_pattern(graph,pattern,debug=False):
         ORDER BY ?subject
 
     ''' % (graph,pattern)
-    
+
     results = query.run_query(qstr, debug=debug)
     return results
-    
-
 
 
 def get_cflink_by_id(cflink, debug=False):
@@ -365,9 +357,8 @@ def get_cflink_by_id(cflink, debug=False):
     '''
     qstr = '''
     SELECT ?type ?standard_name ?units ?long_name
-    FROM <http://mappings/>
     WHERE
-    {
+    { GRAPH <http://metocean/cflinks.ttl> {
     ?s mrcf:type ?type .
     OPTIONAL
     { ?s mrcf:standard_name ?standard_name .}
@@ -376,6 +367,7 @@ def get_cflink_by_id(cflink, debug=False):
     OPTIONAL
     { ?s mrcf:long_name ?long_name . }
     FILTER (?s = <%s>)
+    }
     }
     ''' % cflink
     results = query.run_query(qstr, debug=debug)
@@ -395,9 +387,8 @@ def get_cflinks(pred_obj=None, debug=False):
             ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
-    FROM <http://mappings/>
     WHERE
-    {
+    { GRAPH <http://metocean/cflinks.ttl> {
     ?s mrcf:type ?type .
     OPTIONAL
     { ?s mrcf:standard_name ?standard_name .}
@@ -406,45 +397,45 @@ def get_cflinks(pred_obj=None, debug=False):
     OPTIONAL
     { ?s mrcf:long_name ?long_name . }
     %s
-    }
+    } }
     ''' % filterstr 
     results = query.run_query(qstr, debug=debug)
 
     return results
 
 
-def get_by_attrs(po_dict, debug=False):
-    '''
-    return records, if they exists, using the dictionary of predicates and lists of objects
-    a list of triple dictionaries is returned.  The list is ordered by subject, but no grouping is explicit in the list.
+# def get_by_attrs(po_dict, debug=False):
+#     '''
+#     return records, if they exists, using the dictionary of predicates and lists of objects
+#     a list of triple dictionaries is returned.  The list is ordered by subject, but no grouping is explicit in the list.
 
-    '''
-    pred_obj = ''
-    for pred, obj in po_dict.iteritems():
-        #for ob in obj:
-        # if po_dict[pred].split('//')[0] == 'http:':
-        #     po_dict[pred] = '<%s>'% po_dict[pred]
-        # else:
-        #     po_dict[pred] = '"%s"'% po_dict[pred]
-        pattern_string = ''';
-        %s %s ''' % (pred, po_dict[pred])
-        pred_obj += pattern_string
+#     '''
+#     pred_obj = ''
+#     for pred, obj in po_dict.iteritems():
+#         #for ob in obj:
+#         # if po_dict[pred].split('//')[0] == 'http:':
+#         #     po_dict[pred] = '<%s>'% po_dict[pred]
+#         # else:
+#         #     po_dict[pred] = '"%s"'% po_dict[pred]
+#         pattern_string = ''';
+#         %s %s ''' % (pred, po_dict[pred])
+#         pred_obj += pattern_string
 
-    qstr = '''
-    SELECT ?s ?p ?o
-    FROM <http://mappings/>
-    WHERE
-    {
-    ?s ?p ?o
-    %s
-    .
-    }
-    ''' % pred_obj
-    results = query.run_query(qstr, debug=debug)
-    return results
+#     qstr = '''
+#     SELECT ?s ?p ?o
+#     FROM <http://mappings/>
+#     WHERE
+#     {
+#     ?s ?p ?o
+#     %s
+#     .
+#     }
+#     ''' % pred_obj
+#     results = query.run_query(qstr, debug=debug)
+#     return results
 
 
-def create_link(po_dict, subj_pref, debug=False):
+def create_cflink(po_dict, subj_pref, debug=False):
     '''
     create a new link, using the provided predicates:objectsList dictionary, if one does not already exists.
     if one already exists, use this in preference
@@ -475,14 +466,14 @@ def create_link(po_dict, subj_pref, debug=False):
             pred_obj += pattern_string
         qstr = '''
         INSERT DATA
-        { GRAPH <http://mappings/>
+        { GRAPH <http://metocean/cflinks.ttl>
         { <%s/%s> %s
         mr:saveCache "True" .
         }
         }
         ''' % (subj_pref, md5, pred_obj)
         results = query.run_query(qstr, update=True, debug=debug)
-        current_link = get_by_attrs(po_dict)
+        current_link = get_cflinks(po_dict)
     return current_link
     # elif len(current_cflink) ==1:
     #     md5 = md5
@@ -491,58 +482,70 @@ def create_link(po_dict, subj_pref, debug=False):
     # return md5
 
 
-# def get_linkage(linkID, debug=False):
-#     '''
-#     return a linkage if one exists, using the MD5 ID
-#     '''
-#     qstr = '''
-#     SELECT ?s ?p ?o
-#     FROM <http://mappings/>
-#     WHERE
-#     {
-#     ?s ?p ?o.
-#     FILTER (?s = <%s%s>)
-#     }
-#     ''' % ('http://www.metarelate.net/metOcean/linkage/' ,linkID)
+def get_linkage(fso_dict, debug=False):
+    '''
+    return a linkage if one exists, using the full record:
+        a dictionary of format strings and lists of objects.
+    if one does not exist, create it
+    '''
+    subj_pref = 'http://www.metarelate.net/metOcean/linkage'
+    search_string = ''
+    for fstring in fso_dict.keys():
+        for obj in fso_dict[fstring]:
+            search_string += '''
+            mr:%slink %s ;''' % (fstring.upper(), obj)
+    if search_string != '':
+        search_string += '.'
+        qstr = '''
+        SELECT ?linkage
+            (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+            (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+            (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
 
-#     results = query.run_query(qstr, debug=debug)
-#     return results
+        WHERE
+        { GRAPH <http://metocean/linkages.ttl>{
+            ?linkage %s
+       OPTIONAL
+           {?linkage mr:CFlink ?cflink . }
+       OPTIONAL
+           {?linkage mr:UMlink ?umlink . }
+       OPTIONAL
+           {?linkage mr:GRIBlink ?griblink .}
+            FILTER (regex(str(?linkage),"%s", "i"))
+            }
+        }
+        GROUP BY ?linkage
+        ''' % (search_string, subj_pref)
 
+        results = query.run_query(qstr, debug=debug)
+        if len(results) == 1 and results[0] == {}:
+            pre = prefixes.Prefixes()
+            mmd5 = hashlib.md5()
+            pred_obj = ''
+            for format,objects in fso_dict.iteritems():
+                for obj in objects:
+                    (pre['mr'], format, obj)
+                    mmd5.update('%s%slink' % (pre['mr'], format))
+                    mmd5.update(obj)
 
-# def create_linkage(po_dict, debug=False):
-#     '''
-#     create a new linkage, using the provided predicates:objects dictionary, if one does not already exists.
-#     if one already exists, use this in preference
-#     '''
-#     qstr = '''
-#     '''
-#     results = query.run_query(qstr, update=True, debug=debug)
-#     return linkID
+            md5 = str(mmd5.hexdigest())
 
-# def get_mapping(pred_obj, debug=False):
-#     '''
-#     return a mapping record, if one exists, using the relevant predicate:objectList dictionary
-#     '''
-#     pred_obj = ''
-#     for pred in po_dict.keys():
-#         for obj in po_dict[pred]:
-#             pattern_string = ''' ;
-#             %s %s ''' % (pred, obj)
-#             pred_obj += pattern_string
+            inststr = '''
+            INSERT DATA
+            { GRAPH <http://metocean/linkages.ttl>
+            { <%s/%s> %s
+            mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, md5, search_string.rstrip('.'))
+            #print qstr
+            insert_results = query.run_query(inststr, update=True, debug=debug)
+            results = query.run_query(qstr, debug=debug)
+    else:
+        results = []
 
-#     qstr = '''
-#     SELECT ?s ?p ?o
-#     FROM <http://mappings/>
-#     WHERE
-#     {
-#     ?s ?p ?o %s
-#     .
-#     FILTER (?s = <%s>)
-#     }
-#     ''' % (pred_obj, 'http://www.metarelate.net/metOcean/mapping/')
+    return results
 
-#     results = query.run_query(qstr, debug=debug)
-#     return results
 
 
 def create_mapping(po_dict, debug=False):
@@ -551,12 +554,13 @@ def create_mapping(po_dict, debug=False):
     '''
     subj_pref = 'http://www.metarelate.net/metocean/mapping'
     results = None
+    pre = prefixes.Prefixes()
 
     if po_dict.has_key('owner') and \
         po_dict.has_key('watcher') and \
         po_dict.has_key('creator') and len(po_dict['creator'])==1 and \
         po_dict.has_key('status') and len(po_dict['status'])==1 and \
-        po_dict.has_key('previous') and len(po_dict['previous'])==1 and \
+        po_dict.has_key('replaces') and len(po_dict['replaces'])==1 and \
         po_dict.has_key('comment') and len(po_dict['comment'])==1 and \
         po_dict.has_key('reason') and len(po_dict['reason'])==1 and \
         po_dict.has_key('linkage') and len(po_dict['linkage'])==1:
@@ -571,20 +575,24 @@ def create_mapping(po_dict, debug=False):
                 pattern_string = ''' mr:%s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
-                mmd5.update(pred)
-                mmd5.update(obj)
+                if pred != 'creation':
+                    mmd5.update('%s%s' % (pre['mr'], pred))
+                    mmd5.update(obj)
 
         md5 = str(mmd5.hexdigest())
-
-        qstr = '''
-        INSERT DATA
-        { GRAPH <http://mappings/>
-        { <%s/%s> %s
-        mr:saveCache "True" .
-        }
-        }
-        ''' % (subj_pref, md5, pred_obj)
-        results = query.run_query(qstr, update=True, debug=debug)
+        # check if we already have one:
+        result = subject_graph_pattern('http://mappings/',
+                'http://www.metarelate.net/metocean/mapping/%s' % md5)
+        if len(result) == 0:
+            qstr = '''
+            INSERT DATA
+            { GRAPH <http://metocena/mappings.ttl>
+            { <%s/%s> %s
+            mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, md5, pred_obj)
+            results = query.run_query(qstr, update=True, debug=debug)
     return results
 
 
@@ -595,7 +603,7 @@ def get_contacts(register, debug=False):
     qstr = '''
     SELECT ?s
     WHERE
-    {GRAPH <http://contacts/>{
+    { GRAPH <http://contacts/contacts.ttl> {
         ?s iso19135:definedInRegister ?register .
            OPTIONAL{
                ?s mr:retired ?retired}
@@ -613,11 +621,11 @@ def create_contact(register, contact, creation, debug=False):
     '''
     qstr = '''
     INSERT DATA
-    {
+    { GRAPH <http://contacts/contacts.ttl> {
     %s a mr:contact ;
     iso19135:definedInRegister %s ;
     mr:creation "%s"^^xsd:dateTime .
-    }
+    } }
     ''' % (contact, register, creation)
     results = query.run_query(qstr, debug=debug)
     return results
@@ -632,3 +640,88 @@ def create_contact(register, contact, creation, debug=False):
 #     '''
 #     results = query.run_query(qstr, debug=debug)
 #     return results
+
+# def export_linkages(debug=False):
+#     '''
+#     '''
+#     qstr = '''CONSTRUCT { 
+#     ?linkage mr:UMlink ?UMlink ; 
+#     mr:CFlink ?CFlink  . }
+#     WHERE
+#     { GRAPH <http://mappings/> {
+#      ?linkage mr:UMlink ?UMlink ;
+#      mr:CFlink ?CFlink .
+#         }
+#     } 
+#     '''
+#     results = query.run_query(qstr, output="text", debug=debug)
+#     return results
+
+# def export_cflinks(debug=False):
+#     '''
+#     '''
+#     qstr = '''CONSTRUCT { 
+#     ?cflink mrcf:type ?type ; 
+#     mrcf:standard_name ?standard_name ;
+#     mrcf:units ?units  . }
+#     WHERE
+#     { GRAPH <http://mappings/> {
+#     ?cflink mrcf:type ?type ; 
+#     mrcf:standard_name ?standard_name ;
+#     mrcf:units ?units  .
+#         }
+#     } 
+#     '''
+#     results = query.run_query(qstr, output="text", debug=debug)
+#     return results
+
+
+# def export_mappings(debug=False):
+#     '''
+#     '''
+#     qstr = '''CONSTRUCT { 
+#      ?map mr:linkage ?link ; 
+#            mr:owner ?owner ;
+#            mr:watcher ?watcher ;
+#            mr:creator ?creator ;
+#            mr:creation ?created ;
+#            mr:status ?status ;
+#            mr:reason ?reason ;
+#            mr:comment ?comment ;
+#            mr:replaces ?replaces ;
+#            mr:linkage ?linkage .
+# }
+#     WHERE
+#     { GRAPH <http://mappings/> {
+#      ?map mr:linkage ?link ; 
+#            mr:owner ?owner ;
+#            mr:watcher ?watcher ;
+#            mr:creation ?created ;
+#            mr:status ?status ;
+#            mr:reason ?reason ;
+#            mr:comment ?comment ;
+#            mr:replaces ?replaces ;
+#            mr:linkage ?linkage .
+#     BIND(<https://github.com/marqh> as ?creator)
+#         }
+
+#     }
+#     '''
+
+    # qstr = '''SELECT ?map ?linkage 
+    # WHERE
+    # { GRAPH <http://mappings/> {
+    #  ?map  mr:linkage ?linkage .
+    #  ?linkage mr:UMlink <http://reference.metoffice.gov.uk/data/stash/m01s00i003/vn8.2> .
+    #     }
+
+    # }
+    # '''
+    results = query.run_query(qstr, output="text", debug=debug)
+    return results
+
+def print_records(res):
+    for r in res:
+        for k,v in r.iteritems():
+            print k, '  ', v
+

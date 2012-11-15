@@ -43,13 +43,13 @@ os.environ['JENAROOT'] = JENAROOT
 os.environ['FUSEKI_HOME'] = FUSEKIROOT
 
 
-def filehash(file):
-    '''large file md5 hash generation'''
-    md5 = hashlib.md5()
-    with open(file,'rb') as f: 
-        for chunk in iter(lambda: f.read(8192), b''): 
-             md5.update(chunk)
-    return md5.hexdigest()
+# def filehash(file):
+#     '''large file md5 hash generation'''
+#     md5 = hashlib.md5()
+#     with open(file,'rb') as f: 
+#         for chunk in iter(lambda: f.read(8192), b''): 
+#              md5.update(chunk)
+#     return md5.hexdigest()
 
 
 
@@ -126,30 +126,67 @@ class FusekiServer(object):
             os.remove(TDBfile)
 
 
+    # def save_cache(self):
+    #     '''
+    #     write out all saveCache flagged changes to new ttl files
+    #     remove saveCache flags after saving
+    #     '''
+    #     for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
+    #         graph = ingraph.split('/')[-1]
+    #         save_string = queries.save_cache(graph)
+    #         tfile = tempfile.mkstemp()#'%s/save_tmp.ttl' % ingraph
+    #         with open(tfile, 'w') as temp:
+    #             temp.write(save_string)
+    #         md5 = str(filehash(tfile))
+    #         os.rename(tfile, '%s/%s.ttl' % (ingraph,md5))
+
     def save_cache(self):
         '''
-        write out all saveCache flagged changes to new ttl files
+        write out all saveCache flagged changes in the metocean graph,
+        appending to the relevant ttl files
         remove saveCache flags after saving
         '''
-        for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
-            graph = ingraph.split('/')[-1]
+        # for ingraph in glob.glob(os.path.join(STATICDATA, '*')):'''
+        maingraph = 'metocean'
+        for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
+            graph = 'http://%s/%s' % (maingraph, subgraph)
             save_string = queries.save_cache(graph)
-            clear_result = queries.clear_cache(graph)
-            tfile = tempfile.mkstemp()#'%s/save_tmp.ttl' % ingraph
-            with open(tfile, 'w') as temp:
-                temp.write(save_string)
-            md5 = str(filehash(tfile))
-            os.rename(tfile, '%s/%s.ttl' % (ingraph,md5))
+            with open(subgraph, 'a') as sg:
+                for line in save_string:
+                    if not line.startswith('@prefix'):
+                        sg.write(line)
+                        sg.write('\n')
+
+
+
+    # def export_data(self):
+    #     map_file = os.path.join(STATICDATA,'mappings','mappings.ttl')
+    #     link_file = os.path.join(STATICDATA,'mappings','linkages.ttl')
+    #     cflink_file = os.path.join(STATICDATA,'mappings','cflinks.ttl')
+    #     with open(map_file,'w') as mf:
+    #         mf.write(queries.export_mappings())
+    #     with open(link_file,'w') as lf:
+    #         lf.write(queries.export_linkages())
+    #     with open(cflink_file,'w') as cflf:
+    #         cflf.write(queries.export_cflinks())
+
+    # def revert_cache(self):
+    #     '''
+    #     identify all cached changes in the system and remove them, reverting the TDB to the same state as the saved ttl files
+    #     '''
+    #     for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
+    #         graph = ingraph.split('/')[-1]
+    #         revert_string = queries.revert_cache(graph)
 
 
     def revert_cache(self):
         '''
-        identify all cached changes in the system and remove them, reverting the TDB to the same state as the saved ttl files
+        identify all cached changes in the metocean graph and remove them, reverting the TDB to the same state as the saved ttl files
         '''
-        for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
-            graph = ingraph.split('/')[-1]
+        maingraph = 'metocean'
+        for ingraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
+            graph = 'http://%s/%s' % (maingraph, subgraph)
             revert_string = queries.revert_cache(graph)
-
 
 
 
@@ -163,9 +200,10 @@ class FusekiServer(object):
             #print ingraph
             graph = ingraph.split('/')[-1] + '/'
             for infile in glob.glob(os.path.join(ingraph, '*.ttl')):
-                subgraph = ''
-                if graph == 'um/':
-                    subgraph = infile.split('/')[-1]#.rstrip('.ttl')
+                # subgraph = ''
+                # if graph == 'um/':
+                #     subgraph = infile.split('/')[-1]#.rstrip('.ttl')
+                subgraph = infile.split('/')[-1]#.rstrip('.ttl')
                 space = ' '
                 loadCall = [JENAROOT + '/bin/tdbloader',
                             '--graph=http://%s%s' % (graph,subgraph), '--loc=%s'% TDB, infile]

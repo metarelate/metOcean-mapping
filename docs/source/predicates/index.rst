@@ -46,14 +46,14 @@ Definition:
 Label:  status
 
 
-previous
---------------
+replaces
+----------
 
-URI:  http://www.metarelate.net/predicates/index.html#previous
+URI:  http://www.metarelate.net/predicates/index.html#replaces
 
 Definition:
 
-Label:  previous
+Label:  replaces
 
 creation
 -----------
@@ -150,6 +150,23 @@ Label:  CFlink
 
    CF
 
+CFexport
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#CFexport
+
+Definition: A flag to indicate if this relationship is recommended for export to CF
+
+Label:  CFexport
+
+CFimport
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#CFimport
+
+Definition: A flag to indicate if this relationship is recommended for import to CF
+
+Label:  CFimport
 
 
 UMlink
@@ -161,6 +178,24 @@ Definition:
 
 Label:  UMlink
 
+UMexport
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#UMexport
+
+Definition: A flag to indicate if this relationship is recommended for export to UM
+
+Label:  UMexport
+
+UMimport
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#UMimport
+
+Definition: A flag to indicate if this relationship is recommended for import to UM
+
+Label:  UMimport
+
 
 GRIBlink
 -----------
@@ -170,3 +205,21 @@ URI:  http://www.metarelate.net/predicates/index.html#GRIBlink
 Definition:
 
 Label:  GRIBlink
+
+GRIBexport
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#GRIBexport
+
+Definition: A flag to indicate if this relationship is recommended for export to GRIB
+
+Label:  GRIBexport
+
+GRIBimport
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#GRIBimport
+
+Definition: A flag to indicate if this relationship is recommended for import to GRIB
+
+Label:  GRIBimport

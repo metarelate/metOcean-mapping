@@ -67,7 +67,11 @@
 </tr>
 </table>
 
-<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Search"/>
+{% if create %}
+<li><a href="{{ create.url }}"> Create this mapping </a>  </li>
+{% else %}
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Update"/>
+{% endif %}
 
 </form>
 

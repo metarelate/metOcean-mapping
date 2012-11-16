@@ -18,11 +18,15 @@
 
 import ConfigParser
 import glob
+import json
 import os
 import socket
 import subprocess
 import sys
 import time
+from urllib import urlencode
+from urllib2 import urlopen, Request, ProxyHandler, build_opener, install_opener, URLError
+
 
 import metocean.prefixes as prefixes
 import metocean.queries as queries
@@ -50,6 +54,24 @@ os.environ['FUSEKI_HOME'] = FUSEKIROOT
 #         for chunk in iter(lambda: f.read(8192), b''): 
 #              md5.update(chunk)
 #     return md5.hexdigest()
+
+def process_data(jsondata):
+    resultslist = []
+    try:
+        jdata = json.loads(jsondata)
+    except (ValueError, TypeError):
+        return resultslist
+    vars = jdata['head']['vars']
+    data = jdata['results']['bindings']
+    for item in data:
+        tmplist = {}
+        for var in vars:
+            tmpvar = item.get(var)
+            if tmpvar:
+                tmplist[var] = tmpvar.get('value')
+        resultslist.append(tmplist)
+    return resultslist
+
 
 
 
@@ -140,7 +162,7 @@ class FusekiServer(object):
     #         md5 = str(filehash(tfile))
     #         os.rename(tfile, '%s/%s.ttl' % (ingraph,md5))
 
-    def save_cache(self):
+    def save(self):
         '''
         write out all saveCache flagged changes in the metocean graph,
         appending to the relevant ttl files
@@ -150,7 +172,7 @@ class FusekiServer(object):
         maingraph = 'metocean'
         for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
             graph = 'http://%s/%s' % (maingraph, subgraph)
-            save_string = queries.save_cache(graph)
+            save_string = queries.save_cache(self, graph)
             with open(subgraph, 'a') as sg:
                 for line in save_string:
                     if not line.startswith('@prefix'):
@@ -179,14 +201,14 @@ class FusekiServer(object):
     #         revert_string = queries.revert_cache(graph)
 
 
-    def revert_cache(self):
+    def revert(self):
         '''
         identify all cached changes in the metocean graph and remove them, reverting the TDB to the same state as the saved ttl files
         '''
         maingraph = 'metocean'
         for ingraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
             graph = 'http://%s/%s' % (maingraph, subgraph)
-            revert_string = queries.revert_cache(graph)
+            revert_string = queries.revert_cache(self, graph)
 
 
 
@@ -210,5 +232,41 @@ class FusekiServer(object):
                 print space.join(loadCall)
                 subprocess.check_call(loadCall)
 
+
+
+    def run_query(self, query_string, output='json', update=False, debug=False):
+        if not self.status():
+            self.start()
+        # use null ProxyHandler to ignore proxy for localhost access
+        proxy_support = ProxyHandler({})
+        opener = build_opener(proxy_support)
+        install_opener(opener)
+        pre = prefixes.Prefixes()
+        if debug == True:
+            print pre.sparql
+            print query_string
+        if update:
+            action = 'update'
+            qstr = urlencode([
+                (action, "%s %s" % (pre.sparql, query_string))])
+        else:
+            action = 'query'
+            qstr = urlencode([
+                (action, "%s %s" % (pre.sparql, query_string)),
+                ("output", output),
+                ("stylesheet","/static/xml-to-html-links.xsl")])
+
+        BASEURL="http://127.0.0.1:3131/metocean/%s?" % action
+        data = ''
+        try:
+            data = opener.open(Request(BASEURL), qstr).read()
+        except URLError as err:
+            raise Exception("Error connection to Fuseki server on %s. server returned" % BASEURL)
+        if output == "json":
+            return process_data(data)
+        elif output == "text":
+            return data
+        else:
+            return data
 
 

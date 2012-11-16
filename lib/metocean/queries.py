@@ -19,8 +19,6 @@
 import hashlib
 
 import metocean.prefixes as prefixes
-#import fusekiQuery as query
-
 
 
 def revert_cache(fuseki_process, graph, debug=False):
@@ -278,7 +276,6 @@ def select_graph(fuseki_process, graph, debug=False):
 
 
 def counts_by_graph(fuseki_process, graph, debug=False):
-    #deprecated
     '''This query relies on a feature of Jena that is not yet in the official
     SPARQL v1.1 standard insofar as 'GRAPH ?g' has undetermined behaviour
     under the standard but Jena interprets and treats the '?g' 
@@ -319,7 +316,6 @@ def subject_by_graph(fuseki_process, graph, debug=False):
     '''
     selects distinct subject from a particular graph
     '''
-    #used in listtype
     qstr = '''
         SELECT DISTINCT ?subject
         WHERE {
@@ -336,7 +332,6 @@ def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
     '''
     selects distinct subject from a particular graph matching a pattern
     '''
-    #used in listtype
     qstr = '''
         SELECT DISTINCT ?subject
         WHERE {
@@ -381,7 +376,6 @@ def get_cflinks(fuseki_process, pred_obj=None, debug=False):
     filterstr = ''
     if pred_obj:
         for key in pred_obj.keys():
-#        if pred_obj.has_key('standard_name'):
             filterstr += '''FILTER (bound(?%s))
             FILTER (regex(str(?%s), str(%s), "i"))
             ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
@@ -404,35 +398,6 @@ def get_cflinks(fuseki_process, pred_obj=None, debug=False):
     return results
 
 
-# def get_by_attrs(po_dict, debug=False):
-#     '''
-#     return records, if they exists, using the dictionary of predicates and lists of objects
-#     a list of triple dictionaries is returned.  The list is ordered by subject, but no grouping is explicit in the list.
-
-#     '''
-#     pred_obj = ''
-#     for pred, obj in po_dict.iteritems():
-#         #for ob in obj:
-#         # if po_dict[pred].split('//')[0] == 'http:':
-#         #     po_dict[pred] = '<%s>'% po_dict[pred]
-#         # else:
-#         #     po_dict[pred] = '"%s"'% po_dict[pred]
-#         pattern_string = ''';
-#         %s %s ''' % (pred, po_dict[pred])
-#         pred_obj += pattern_string
-
-#     qstr = '''
-#     SELECT ?s ?p ?o
-#     FROM <http://mappings/>
-#     WHERE
-#     {
-#     ?s ?p ?o
-#     %s
-#     .
-#     }
-#     ''' % pred_obj
-#     results = fuseki_process.run_query(qstr, debug=debug)
-#     return results
 
 
 def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
@@ -445,22 +410,15 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
     mmd5 = hashlib.md5()
     
     for pred in po_dict.keys():
-#        for obj in po_dict[pred]:
         mmd5.update(pred)
         mmd5.update(po_dict[pred])
 
     md5 = str(mmd5.hexdigest())
     #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
-    #current_cflink = get_cflink_by_id(md5)
     current_link = get_by_attrs(po_dict)
     if len(current_link) == 0:
         pred_obj = ''
         for pred in po_dict.keys():
-#            for obj in po_dict[pred]:
-            # if po_dict[pred].split('//')[0] == 'http:':
-            #     po_dict[pred] = '<%s>'% po_dict[pred]
-            # else:
-            #     po_dict[pred] = '"%s"'% po_dict[pred]
             pattern_string = ''' %s %s ;
             ''' % (pred, po_dict[pred])
             pred_obj += pattern_string
@@ -475,11 +433,6 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
         results = fuseki_process.run_query(qstr, update=True, debug=debug)
         current_link = get_cflinks(po_dict)
     return current_link
-    # elif len(current_cflink) ==1:
-    #     md5 = md5
-    # else:
-    #     md5 = None
-    # return md5
 
 
 def get_linkage(fuseki_process, fso_dict, debug=False):
@@ -538,7 +491,6 @@ def get_linkage(fuseki_process, fso_dict, debug=False):
             }
             }
             ''' % (subj_pref, md5, search_string.rstrip('.'))
-            #print qstr
             insert_results = fuseki_process.run_query(inststr, update=True, debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
     else:
@@ -570,8 +522,6 @@ def create_mapping(fuseki_process, po_dict, debug=False):
         pred_obj = ''
         for pred,objects in po_dict.iteritems():
             for obj in objects:
-#        for pred in po_dict.keys():
-#            for obj in po_dict[pred]:
                 pattern_string = ''' mr:%s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
@@ -633,94 +583,9 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
     
         
     
-# def (, debug=False):
-#     '''
-#     '''
-#     qstr = '''
-#     '''
-#     results = fuseki_process.run_query(qstr, debug=debug)
-#     return results
-
-# def export_linkages(debug=False):
-#     '''
-#     '''
-#     qstr = '''CONSTRUCT { 
-#     ?linkage mr:UMlink ?UMlink ; 
-#     mr:CFlink ?CFlink  . }
-#     WHERE
-#     { GRAPH <http://mappings/> {
-#      ?linkage mr:UMlink ?UMlink ;
-#      mr:CFlink ?CFlink .
-#         }
-#     } 
-#     '''
-#     results = fuseki_process.run_query(qstr, output="text", debug=debug)
-#     return results
-
-# def export_cflinks(debug=False):
-#     '''
-#     '''
-#     qstr = '''CONSTRUCT { 
-#     ?cflink mrcf:type ?type ; 
-#     mrcf:standard_name ?standard_name ;
-#     mrcf:units ?units  . }
-#     WHERE
-#     { GRAPH <http://mappings/> {
-#     ?cflink mrcf:type ?type ; 
-#     mrcf:standard_name ?standard_name ;
-#     mrcf:units ?units  .
-#         }
-#     } 
-#     '''
-#     results = fuseki_process.run_query(qstr, output="text", debug=debug)
-#     return results
-
-
-# def export_mappings(debug=False):
-#     '''
-#     '''
-#     qstr = '''CONSTRUCT { 
-#      ?map mr:linkage ?link ; 
-#            mr:owner ?owner ;
-#            mr:watcher ?watcher ;
-#            mr:creator ?creator ;
-#            mr:creation ?created ;
-#            mr:status ?status ;
-#            mr:reason ?reason ;
-#            mr:comment ?comment ;
-#            mr:replaces ?replaces ;
-#            mr:linkage ?linkage .
-# }
-#     WHERE
-#     { GRAPH <http://mappings/> {
-#      ?map mr:linkage ?link ; 
-#            mr:owner ?owner ;
-#            mr:watcher ?watcher ;
-#            mr:creation ?created ;
-#            mr:status ?status ;
-#            mr:reason ?reason ;
-#            mr:comment ?comment ;
-#            mr:replaces ?replaces ;
-#            mr:linkage ?linkage .
-#     BIND(<https://github.com/marqh> as ?creator)
-#         }
-
-#     }
-#     '''
-
-    # qstr = '''SELECT ?map ?linkage 
-    # WHERE
-    # { GRAPH <http://mappings/> {
-    #  ?map  mr:linkage ?linkage .
-    #  ?linkage mr:UMlink <http://reference.metoffice.gov.uk/data/stash/m01s00i003/vn8.2> .
-    #     }
-
-    # }
-    # '''
-    # results = fuseki_process.run_query(qstr, output="text", debug=debug)
-    # return results
 
 def print_records(res):
+    ''' helper for command line query interpretation'''
     for r in res:
         for k,v in r.iteritems():
             print k, '  ', v

@@ -79,7 +79,7 @@ class CFParam(forms.Form):
     
     def __init__(self,  *args, **kwargs):
         super(CFParam, self).__init__(*args, **kwargs)
-        snRes = moq.subject_by_graph(fuseki_process, 'http://CF/')
+        snRes = moq.subject_by_graph(fuseki_process, 'http://CF/cf-standard-name-table.ttl')
         #define choices
         choices = [(name['subject'],name['subject'].split('/')[-1]) for name in snRes]
 

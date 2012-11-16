@@ -34,15 +34,12 @@ from django.forms.models import inlineformset_factory
 
 
 import forms
-import fusekiQuery as query
 import metocean.prefixes as prefixes
 import metocean.queries as moq
+import models
 from settings import READ_ONLY
 
-
-
-
-
+fuseki_process = models.fuseki_process
 
 def home(request):
     searchurl = url_with_querystring(reverse('mapping'),ref='')
@@ -187,7 +184,7 @@ def new_mapping(request):
         search_path = [(param.split(';')[0],param.split(';')[1]) for param in request_search]
         for elem in search_path:
             fso_dict[elem[0]].append('<%s>' % elem[1])
-        linkage = moq.get_linkage(fso_dict)
+        linkage = moq.get_linkage(fuseki_process, fso_dict)
         print 'linkage: ', linkage
         #should only have 1 res > imposed by queries
         dataset = linkage[0]
@@ -241,7 +238,7 @@ def mapping(request):
     else:
         print 'search_path'
         print search_path
-        urecordm = moq.mapping_by_link(search_path)
+        urecordm = moq.mapping_by_link(fuseki_process, search_path)
         create = False
         print 'urecordm'
         print urecordm
@@ -345,5 +342,5 @@ def process_form(form, request):
 
 
     if changed:
-        res = moq.create_mapping(mapping_p_o, True)
+        res = moq.create_mapping(fuseki_process, mapping_p_o, True)
 

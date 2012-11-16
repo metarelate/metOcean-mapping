@@ -13,5 +13,4 @@ import settings
 import metocean.fuseki as fu
 
 if __name__ == "__main__":
-    with fu.FusekiServer() as myfu:
-        execute_manager(settings)
+    execute_manager(settings)

@@ -29,8 +29,10 @@ from django.utils.safestring import mark_safe
 
 import metocean.prefixes as prefixes
 import metocean.queries as moq
+import models
 from settings import READ_ONLY
 
+fuseki_process = models.fuseki_process
 
 class SearchParam(forms.Form):
     '''
@@ -58,7 +60,7 @@ class UMParam(forms.Form):
     def __init__(self,  *args, **kwargs):
         super(UMParam, self).__init__(*args, **kwargs)
         version = '8.2'
-        stashRes = moq.subject_by_graph('http://um/stash.vn%s.ttl' % version)
+        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stash.vn%s.ttl' % version)
         #define choices
         choices = [('um;' + stash['subject'], stash['subject'].split('/')[-2]) for stash in stashRes]
         
@@ -77,7 +79,7 @@ class CFParam(forms.Form):
     
     def __init__(self,  *args, **kwargs):
         super(CFParam, self).__init__(*args, **kwargs)
-        snRes = moq.subject_by_graph('http://CF/')
+        snRes = moq.subject_by_graph(fuseki_process, 'http://CF/cf-standard-name-table.ttl')
         #define choices
         choices = [(name['subject'],name['subject'].split('/')[-1]) for name in snRes]
 
@@ -95,12 +97,12 @@ class CFParam(forms.Form):
         if cleaned_data.get('units') != '':
             pred_obj['mrcf:units'] = '"%s"' % cleaned_data.get('units')
         # print repr(pred_obj)
-        cfres = moq.get_cflinks(pred_obj)
+        cfres = moq.get_cflinks(fuseki_process, pred_obj)
         # print 'cfres: ', cfres
         if not cfres:
             #if there is no result returned from the query, then create the record and rerun the query
-            cfres = moq.create_cflink(pred_obj, 'http://www.metarelate.net/metocean/cf')
-            #cfres = moq.get_cflinks(pred_obj)
+            cfres = moq.create_cflink(fuseki_process, pred_obj, 'http://www.metarelate.net/metocean/cf')
+            #cfres = moq.get_cflinks(fuseki_process, pred_obj)
         # print len(cfres)
         # print 'cfres: ', cfres
         if len(cfres) == 1:
@@ -180,7 +182,7 @@ class MappingEditForm(forms.Form):
     last_edit = forms.CharField(max_length=50, required=False)
     last_editor = forms.CharField(max_length=50)
     #editor = forms.CharField(max_length=50, required=False)
-    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')])
+    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts(fuseki_process, 'people')])
 #    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')], widget=SelectWithPopUp)
     last_comment = forms.CharField(max_length=200)
     comment = forms.CharField(max_length=200,required=False)
@@ -272,7 +274,7 @@ class MappingEditForm(forms.Form):
         if links:
             for i, link in enumerate(links.split('&')):
                 if name == 'cflink':
-                    for k,v in moq.get_cflink_by_id(link)[0].iteritems():
+                    for k,v in moq.get_cflink_by_id(fuseki_process, link)[0].iteritems():
                         self.fields['%s%i_%s' % (name, i, k)] = forms.URLField(initial=v)
                         self.fields['%s%i_%s' % (name, i, k)].widget.attrs['readonly'] = True
                         self.fields['%s%i_%s' % (name, i, k)].widget.attrs['size'] = 50

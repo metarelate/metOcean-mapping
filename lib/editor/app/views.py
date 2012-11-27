@@ -39,7 +39,7 @@ import metocean.queries as moq
 import models
 from settings import READ_ONLY
 
-fuseki_process = models.fuseki_process
+from settings import fuseki_process
 
 def home(request):
     searchurl = url_with_querystring(reverse('mapping'),ref='')

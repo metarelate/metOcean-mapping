@@ -32,7 +32,7 @@ import metocean.queries as moq
 import models
 from settings import READ_ONLY
 
-fuseki_process = models.fuseki_process
+from settings import fuseki_process
 
 class SearchParam(forms.Form):
     '''

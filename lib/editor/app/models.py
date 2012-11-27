@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
-import metocean.fuseki as fu
 
-from settings import FUSEKI_PORT
-
-fuseki_process = fu.FusekiServer(port=FUSEKI_PORT)
-
+#fuseki_process is instantiated as an instance of metocean.fuseki.FusekiServer by manage.py when the application is run
+fuseki_process = None 

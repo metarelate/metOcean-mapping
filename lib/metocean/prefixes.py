@@ -17,7 +17,6 @@ class Prefixes(dict):
         'iso19135' : 'http://reference.metoffice.gov.uk/data/wmo/def/iso19135/',
         'metExtra' : 'http://reference.metoffice.gov.uk/data/wmo/def/met/',
         'mos'      : 'http://reference.metoffice.gov.uk/data/stash/',
-        'mof'      : 'http://reference.metoffice.gov.uk/data/fieldcode/',
         'mon'      : 'http://reference.metoffice.gov.uk/data/none/',
         'map'      : 'http://www.metarelate.net/metOcean/mapping/',
         'link'     : 'http://www.metarelate.net/metOcean/linkage/',
@@ -26,7 +25,15 @@ class Prefixes(dict):
         'mr'       : 'http://www.metarelate.net/predicates/index.html#',
         'mrcf'     : 'http://www.metarelate.net/predicates/CF.html#',
         'github'   : 'https://github.com/' ,
-        'metoc'    : 'http://www.metarelate.net/metOcean/' , 
+        'metoc'    : 'http://www.metarelate.net/metOcean/' ,
+        'moStCon'  : 'http://reference.metoffice.gov.uk/def/um/stash/concept/' ,
+        'moStND'   : 'http://reference.metoffice.gov.uk/def/um/stash/new_dynamics/' ,
+        'moStEG'   : 'http://reference.metoffice.gov.uk/def/um/stash/endgame/' ,
+        'mof'      : 'http://reference.metoffice.gov.uk/def/um/fieldcode/',
+        'moumdpC4' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/',
+        'moumdpC4Pseud' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/',
+        'momet08'  : 'http://reference.metoffice.gov.uk/def/um/met08/',
+        'nercCF'   : 'http://vocab.nerc.ac.uk/collection/P07/current/' ,
         }
         self.update(prefixd)
 

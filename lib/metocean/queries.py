@@ -415,7 +415,8 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
 
     md5 = str(mmd5.hexdigest())
     #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
-    current_link = get_by_attrs(po_dict)
+    #current_link = get_by_attrs(po_dict)
+    current_link = get_cflinks(fuseki_process, po_dict)
     if len(current_link) == 0:
         pred_obj = ''
         for pred in po_dict.keys():

@@ -209,7 +209,7 @@ class FusekiServer(object):
                 ("output", output),
                 ("stylesheet","/static/xml-to-html-links.xsl")])
 
-        BASEURL="http://127.0.0.1:3131/metocean/%s?" % action
+        BASEURL="http://127.0.0.1:%i/metocean/%s?" % (self._port, action)
         data = ''
         try:
             data = opener.open(Request(BASEURL), qstr).read()

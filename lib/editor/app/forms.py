@@ -29,9 +29,7 @@ from django.utils.safestring import mark_safe
 
 import metocean.prefixes as prefixes
 import metocean.queries as moq
-import models
 from settings import READ_ONLY
-
 from settings import fuseki_process
 
 class SearchParam(forms.Form):
@@ -63,6 +61,19 @@ class UMParam(forms.Form):
         stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stash.vn%s.ttl' % version)
         #define choices
         choices = [('um;' + stash['subject'], stash['subject'].split('/')[-2]) for stash in stashRes]
+        
+
+        self.fields['parameter'].choices = choices
+
+class GRIBParam(forms.Form):
+    '''
+    '''
+    parameter = forms.ChoiceField()
+    def __init__(self,  *args, **kwargs):
+        super(GRIBParam, self).__init__(*args, **kwargs)
+        gribRes = moq.subject_by_graph(fuseki_process, 'http://grib/codesflags.ttl')
+        #define choices
+        choices = [('grib;' + grib['subject'], grib['subject']) for grib in gribRes]
         
 
         self.fields['parameter'].choices = choices

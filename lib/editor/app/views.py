@@ -36,9 +36,7 @@ from django.forms.models import inlineformset_factory
 import forms
 import metocean.prefixes as prefixes
 import metocean.queries as moq
-import models
 from settings import READ_ONLY
-
 from settings import fuseki_process
 
 def home(request):
@@ -85,6 +83,8 @@ def format_param(request, format):
         Searchform = forms.UMParam
     elif format == 'cf':
         Searchform = forms.CFParam
+    elif format == 'grib':
+        Searchform = forms.GRIBParam
     else:
         raise NameError("there is no form available for this format type")
     if request.method == 'POST': # If the form has been submitted...

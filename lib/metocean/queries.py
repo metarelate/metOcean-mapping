@@ -147,9 +147,9 @@ def current_mappings(fuseki_process, debug=False):
           SELECT ?map ?replaces
           WHERE
           {
-           ?map mr:replaces ?replaces .
+           ?map dc:replaces ?replaces .
 
-           MINUS {?map ^mr:replaces+ ?map}
+           MINUS {?map ^dc:replaces+ ?map}
            }
         }
     }
@@ -200,13 +200,13 @@ def mapping_by_link(fuseki_process, paramlist=False,debug=False):
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:replaces ?replaces ;
+                dc:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
 
        FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:replaces+ ?map}
+       MINUS {?map ^dc:replaces+ ?map}
        } GRAPH <http://metocean/linkages.ttl> {
 %s
        OPTIONAL
@@ -261,13 +261,13 @@ def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:replaces ?replaces ;
+                dc:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
 %s
        FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:replaces+ ?map}
+       MINUS {?map ^dc:replaces+ ?map}
            }
 GRAPH <http://mappings/linkages.ttl> {
        OPTIONAL
@@ -348,7 +348,7 @@ def subject_by_graph(fuseki_process, graph, debug=False):
     qstr = '''
         SELECT DISTINCT ?subject
         WHERE {
-            GRAPH <http://%s> { ?subject ?p ?o } .
+            GRAPH <%s> { ?subject ?p ?o } .
         }
         ORDER BY ?subject
 
@@ -559,7 +559,7 @@ def create_mapping(fuseki_process, po_dict, debug=False):
         pred_obj = ''
         for pred,objects in po_dict.iteritems():
             for obj in objects:
-                pattern_string = ''' mr:%s %s ;
+                pattern_string = ''' %s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
                 #if pred != 'creation':
@@ -591,7 +591,7 @@ def get_contacts(fuseki_process, register, debug=False):
     SELECT ?s
     WHERE
     { GRAPH <http://contacts/contacts.ttl> {
-        ?s iso19135:definedInRegister ?register .
+        ?s skos:member ?register .
            OPTIONAL{
                ?s mr:retired ?retired}
                }

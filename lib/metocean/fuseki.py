@@ -150,11 +150,14 @@ class FusekiServer(object):
         '''
         maingraph = 'metocean'
         for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
-            graph = 'http://%s/%s' % (maingraph, subgraph)
+            graph = 'http://%s/%s' % (maingraph, subgraph.split('/')[-1])
             save_string = queries.save_cache(self, graph)
+            #print save_string
+            #print subgraph
             with open(subgraph, 'a') as sg:
-                for line in save_string:
+                for line in save_string.split('\n'):
                     if not line.startswith('@prefix'):
+                        #print 'writing', line
                         sg.write(line)
                         sg.write('\n')
 

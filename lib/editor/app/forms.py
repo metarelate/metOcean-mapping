@@ -57,10 +57,9 @@ class UMParam(forms.Form):
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
         super(UMParam, self).__init__(*args, **kwargs)
-        version = '8.2'
-        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stash.vn%s.ttl' % version)
+        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stashconcepts.ttl')
         #define choices
-        choices = [('um;' + stash['subject'], stash['subject'].split('/')[-2]) for stash in stashRes]
+        choices = [('um;' + stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
         
 
         self.fields['parameter'].choices = choices

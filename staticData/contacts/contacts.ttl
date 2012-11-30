@@ -4,7 +4,6 @@
 @prefix mr:      <http://www.metarelate.net/predicates/index.html#> .
 @prefix link:    <http://www.metarelate.net/metOcean/linkage/> .
 @prefix mon:     <http://reference.metoffice.gov.uk/data/none/> .
-@prefix iso19135:  <http://reference.metoffice.gov.uk/data/wmo/def/iso19135/> .
 @prefix mrcf:    <http://www.metarelate.net/predicates/CF.html#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix mos:     <http://reference.metoffice.gov.uk/data/stash/> .
@@ -27,19 +26,19 @@ rdfs:label "Registered MetaRelate Managing Organisation"@en .
 
 
 github:marqh a mr:contact ;
-iso19135:definedInRegister metoc:people ;
+skos:member metoc:people ;
 mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
 github:esc24 a mr:contact ;
-iso19135:definedInRegister metoc:people ;
+skos:member metoc:people ;
 mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
 github:scitools a mr:contact ;
-iso19135:definedInRegister metoc:organisations ;
+skos:member metoc:organisations ;
 mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
 github:wizardstoy a mr:contact ;
-iso19135:definedInRegister metoc:people ;
+skos:member metoc:people ;
 mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime ;
 mr:retired "2012-10-18T08:30:13.498404"^^xsd:dateTime .
 

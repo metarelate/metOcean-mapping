@@ -313,7 +313,7 @@ def process_form(form, request):
         if len(mapping_p_o['mr:%s' % label]) == 0:
             mapping_p_o['mr:%s' % label] = ['"None"']
 
-    mapping_p_o['mr:creator'] = ['"%s"' % form.cleaned_data['editor']]
+    mapping_p_o['mr:creator'] = ['<%s>' % form.cleaned_data['editor']]
     if mapping_p_o['mr:creator'] == ['""']:
         mapping_p_o['mr:creator'] = ['"None"']
     mapping_p_o['mr:creation'] = ['"%s"^^xsd:dateTime' % globalDateTime]

@@ -69,7 +69,7 @@ def process_data(jsondata):
 
 class FusekiServer(object):
 
-    def __init__(self, host='localhost', port):
+    def __init__(self, port, host='localhost'):
         self._process = None
         self._port = port
         self._host = host

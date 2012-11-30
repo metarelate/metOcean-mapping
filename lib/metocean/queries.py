@@ -33,19 +33,19 @@ def make_hash(pred_obj, omitted=[]):
         if pred not in omitted:
             pred_elems = pred.split(':')
             if len(pred_elems) == 2:
-                if pre.prefixd.has_key(pred_elems[0]):
-                    predicate = '%s%s' % (pre.prefixd[pred_elems[0]], pred_elems[1])
-                else raise ValueError('predicate not in prefixes.py')
+                if pre.has_key(pred_elems[0]):
+                    predicate = '%s%s' % (pre[pred_elems[0]], pred_elems[1])
+                else:
+                    raise ValueError('predicate not in prefixes.py')
             else:
                 raise ValueError('make hash passed a predicate which is not of the form <prefix>:<item>')
-                                      
-            if pred_obj[pred] is list:
+            if isinstance(pred_obj[pred], list):
                 for obj in pred_obj[pred]:
-                    mmd5.update(pred)
+                    mmd5.update(predicate)
                     mmd5.update(obj)
             else:
-                mmd5.update(pred)
-                mmd5.update(po_dict[pred])
+                mmd5.update(predicate)
+                mmd5.update(pred_obj[pred])
     md5 = str(mmd5.hexdigest())
     return md5
     
@@ -94,7 +94,7 @@ def save_cache(fuseki_process, graph, debug=False):
     }
     } 
     ''' % graph
-    results = run_query(qstr, output="text", debug=debug)
+    results = fuseki_process.run_query(qstr, output="text", debug=debug)
     qstr = '''
     DELETE
     {  GRAPH <%s>
@@ -110,7 +110,7 @@ def save_cache(fuseki_process, graph, debug=False):
         }
     } 
     ''' % (graph,graph)
-    not_results = run_query(qstr, update=True, debug=debug)
+    not_results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
 
 
@@ -128,7 +128,7 @@ def query_cache(fuseki_process, graph, debug=False):
         }
     } 
     ''' % (graph)
-    results = run_query(qstr, debug=debug)
+    results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
 
@@ -348,7 +348,7 @@ def subject_by_graph(fuseki_process, graph, debug=False):
     qstr = '''
         SELECT DISTINCT ?subject
         WHERE {
-            GRAPH <%s> { ?subject ?p ?o } .
+            GRAPH <http://%s> { ?subject ?p ?o } .
         }
         ORDER BY ?subject
 
@@ -364,7 +364,7 @@ def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
     qstr = '''
         SELECT DISTINCT ?subject
         WHERE {
-            GRAPH <%s> { ?subject ?p ?o } .
+            GRAPH <http://%s> { ?subject ?p ?o } .
             FILTER( REGEX(str(?subject), '%s') ) .            
         }
         ORDER BY ?subject
@@ -462,7 +462,7 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
         }
         ''' % (subj_pref, md5, pred_obj)
         results = fuseki_process.run_query(qstr, update=True, debug=debug)
-        current_link = get_cflinks(po_dict)
+        current_link = get_cflinks(fuseki_process, po_dict)
     return current_link
 
 
@@ -475,9 +475,13 @@ def get_linkage(fuseki_process, fso_dict, debug=False):
     subj_pref = 'http://www.metarelate.net/metOcean/linkage'
     search_string = ''
     for fstring in fso_dict.keys():
-        for obj in fso_dict[fstring]:
+        if isinstance(fso_dict[fstring], list):
+            for obj in fso_dict[fstring]:
+                search_string += '''
+                %s %s ;''' % (fstring, obj)
+        else:
             search_string += '''
-            %s %s ;''' % (fstring, obj)
+            %s %s ;''' % (fstring, fso_dict[fstring])
     if search_string != '':
         search_string += '.'
         qstr = '''
@@ -542,14 +546,14 @@ def create_mapping(fuseki_process, po_dict, debug=False):
 
     if po_dict.has_key('mr:owner') and \
         po_dict.has_key('mr:watcher') and \
-        po_dict.has_key('mr:creator') and len(po_dict['creator'])==1 and \
-        po_dict.has_key('mr:status') and len(po_dict['status'])==1 and \
-        po_dict.has_key('dc:replaces') and len(po_dict['replaces'])==1 and \
-        po_dict.has_key('mr:comment') and len(po_dict['comment'])==1 and \
-        po_dict.has_key('mr:reason') and len(po_dict['reason'])==1 and \
-        po_dict.has_key('mr:linkage') and len(po_dict['linkage'])==1:
+        po_dict.has_key('mr:creator') and len(po_dict['mr:creator'])==1 and \
+        po_dict.has_key('mr:status') and len(po_dict['mr:status'])==1 and \
+        po_dict.has_key('dc:replaces') and len(po_dict['dc:replaces'])==1 and \
+        po_dict.has_key('mr:comment') and len(po_dict['mr:comment'])==1 and \
+        po_dict.has_key('mr:reason') and len(po_dict['mr:reason'])==1 and \
+        po_dict.has_key('mr:linkage') and len(po_dict['mr:linkage'])==1:
 
-        md5 = make_hash(po_dict, 'mr:creation')
+        md5 = make_hash(po_dict, ['mr:creation'])
         #mmd5 = hashlib.md5()
 
         pred_obj = ''
@@ -564,12 +568,12 @@ def create_mapping(fuseki_process, po_dict, debug=False):
 
         #md5 = str(mmd5.hexdigest())
         # check if we already have one:
-        result = subject_graph_pattern('http://mappings/',
+        result = subject_graph_pattern(fuseki_process, 'http://metocean/mappings.ttl',
                 'http://www.metarelate.net/metocean/mapping/%s' % md5)
         if len(result) == 0:
             qstr = '''
             INSERT DATA
-            { GRAPH <http://metocena/mappings.ttl>
+            { GRAPH <http://metocean/mappings.ttl>
             { <%s/%s> %s
             mr:saveCache "True" .
             }

@@ -4723,9 +4723,9 @@ cfsn:tendency_of_sea_water_salinity_due_to_sea_ice_thermodynamics
       skos:PrefLabel  "tendency_of_sea_water_salinity_due_to_sea_ice_thermodynamics"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CFV8N124/> .
 
-<http://def.cfconventions.org/standard_names/mole_fraction_of_chlorine dioxide_in_air>
+<http://def.cfconventions.org/standard_names/mole_fraction_of_chlorine_dioxide_in_air>
       rdf:type      skos:Concept ;
-      skos:PrefLabel  "mole_fraction_of_chlorine dioxide_in_air"@en ;
+      skos:PrefLabel  "mole_fraction_of_chlorine_dioxide_in_air"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CFV8N23/> .
 
 cfsn:mass_fraction_of_ethyne_in_air
@@ -5983,9 +5983,9 @@ cfsn:surface_net_upward_shortwave_flux
       skos:PrefLabel  "surface_net_upward_shortwave_flux"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CFSN0241/> .
 
-<http://def.cfconventions.org/standard_names/mole_fraction_of_hypochlorous acid_in_air>
+<http://def.cfconventions.org/standard_names/mole_fraction_of_hypochlorous_acid_in_air>
       rdf:type      skos:Concept ;
-      skos:PrefLabel  "mole_fraction_of_hypochlorous acid_in_air"@en ;
+      skos:PrefLabel  "mole_fraction_of_hypochlorous_acid_in_air"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CFV8N38/> .
 
 cfsn:mole_concentration_of_silicate_in_sea_water
@@ -6938,9 +6938,9 @@ cfsn:atmosphere_moles_of_nitrate_radical
       skos:PrefLabel  "atmosphere_moles_of_nitrate_radical"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CF12N162/> .
 
-<http://def.cfconventions.org/standard_names/mole_fraction_of_chlorine monoxide_in_air>
+<http://def.cfconventions.org/standard_names/mole_fraction_of_chlorine_monoxide_in_air>
       rdf:type      skos:Concept ;
-      skos:PrefLabel  "mole_fraction_of_chlorine monoxide_in_air"@en ;
+      skos:PrefLabel  "mole_fraction_of_chlorine_monoxide_in_air"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CFV8N24/> .
 
 cfsn:mass_fraction_of_propane_in_air
@@ -13118,9 +13118,9 @@ cfsn:mass_fraction_of_nitrous_acid_in_air
       skos:PrefLabel  "mass_fraction_of_nitrous_acid_in_air"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CF12N403/> .
 
-<http://def.cfconventions.org/standard_names/mole_fraction_of_dichlorine peroxide_in_air>
+<http://def.cfconventions.org/standard_names/mole_fraction_of_dichlorine_peroxide_in_air>
       rdf:type      skos:Concept ;
-      skos:PrefLabel  "mole_fraction_of_dichlorine peroxide_in_air"@en ;
+      skos:PrefLabel  "mole_fraction_of_dichlorine_peroxide_in_air"@en ;
       owl:sameAS    <http://vocab.nerc.ac.uk/collection/P07/current/CFV8N26/> .
 
 cfsn:mass_concentration_of_dimethyl_sulfide_in_air

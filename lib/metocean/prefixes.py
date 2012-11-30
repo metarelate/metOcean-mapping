@@ -14,14 +14,9 @@ class Prefixes(dict):
         'rdf'      : 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         'skos'     : 'http://www.w3.org/2004/02/skos/core#',
         'xsd'      : 'http://www.w3.org/2001/XMLSchema#',
-        'iso19135' : 'http://reference.metoffice.gov.uk/data/wmo/def/iso19135/',
-        'metExtra' : 'http://reference.metoffice.gov.uk/data/wmo/def/met/',
-        'mos'      : 'http://reference.metoffice.gov.uk/data/stash/',
-        'mon'      : 'http://reference.metoffice.gov.uk/data/none/',
+        'dc'       : 'http://purl.org/dc/terms/',
         'map'      : 'http://www.metarelate.net/metOcean/mapping/',
         'link'     : 'http://www.metarelate.net/metOcean/linkage/',
-        'fcode'    : 'http://www-hc/~umdoc/pp_package_ibm_docs/fcodes/',
-        'cf'       : 'http://cf-pcmdi.llnl.gov/documents/',
         'mr'       : 'http://www.metarelate.net/predicates/index.html#',
         'mrcf'     : 'http://www.metarelate.net/predicates/CF.html#',
         'github'   : 'https://github.com/' ,
@@ -33,7 +28,7 @@ class Prefixes(dict):
         'moumdpC4' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/',
         'moumdpC4Pseud' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/',
         'momet08'  : 'http://reference.metoffice.gov.uk/def/um/met08/',
-        'nercCF'   : 'http://vocab.nerc.ac.uk/collection/P07/current/' ,
+        'cfsn'     : 'http://def.cfconventions.org/standard_names/' ,
         }
         self.update(prefixd)
 

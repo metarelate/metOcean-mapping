@@ -69,9 +69,10 @@ def process_data(jsondata):
 
 class FusekiServer(object):
 
-    def __init__(self, port):
+    def __init__(self, host='localhost', port):
         self._process = None
         self._port = port
+        self._host = host
         
     def __enter__(self):
         self.start()
@@ -116,7 +117,8 @@ class FusekiServer(object):
         return self._check_port()
 
     def _check_port(self):
-        address='localhost'
+        #address='localhost'
+        address = self._host
         s = socket.socket() 
         #print "Attempting to connect to %s on port %s." %(address, port)
         try: 
@@ -208,8 +210,10 @@ class FusekiServer(object):
                 (action, "%s %s" % (pre.sparql, query_string)),
                 ("output", output),
                 ("stylesheet","/static/xml-to-html-links.xsl")])
-
-        BASEURL="http://127.0.0.1:%i/metocean/%s?" % (self._port, action)
+        if self._host == 'localhost':
+            BASEURL = "http://127.0.0.1:%i/metocean/%s?" % (self._port, action)
+        else:
+            BASEURL = "http://%s/%s?" % (self._host, action)
         data = ''
         try:
             data = opener.open(Request(BASEURL), qstr).read()

@@ -21,6 +21,24 @@ import hashlib
 import metocean.prefixes as prefixes
 
 
+def make_hash(pred_obj, omitted):
+    ''' create an md5 hash from the pred_obj (object list) dictionary
+    skip any 'ommited' (list) predicates and objects'''
+    mmd5 = hashlib.md5()
+    
+    for pred in pred_obj.keys():
+        if pred not in omitted:
+            if pred_obj[pred] is list:
+                for obj in pred_obj[pred]:
+                    mmd5.update(pred)
+                    mmd5.update(obj)
+            else:
+                mmd5.update(pred)
+                mmd5.update(po_dict[pred])
+    md5 = str(mmd5.hexdigest())
+    return md5
+    
+
 def revert_cache(fuseki_process, graph, debug=False):
     '''
     update a graph in the triple database removing all shards flagged with the saveCache predicate

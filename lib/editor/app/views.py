@@ -183,7 +183,7 @@ def new_mapping(request):
         print 'searching'
         search_path = [(param.split(';')[0],param.split(';')[1]) for param in request_search]
         for elem in search_path:
-            fso_dict[elem[0]].append('<%s>' % elem[1])
+            fso_dict['mr:%slink' % (elem[0].upper())].append('<%s>' % elem[1])
         linkage = moq.get_linkage(fuseki_process, fso_dict)
         print 'linkage: ', linkage
         #should only have 1 res > imposed by queries
@@ -304,38 +304,38 @@ def process_form(form, request):
         #if form.cleaned_data['add_()s'.format(label)] != '':
         if form.cleaned_data['add_%ss' % label] != '':
             for val in form.cleaned_data['add_%ss' % label].split(','):
-                mapping_p_o[label].append('"%s"' % val)
+                mapping_p_o['mr:%s' % label].append('"%s"' % val)
         if form.cleaned_data['%ss' % label] != 'None':
             for val in form.cleaned_data['%ss' % label].split(','):
                 if val not in form.cleaned_data['remove_%ss' % label].split(',') and\
-                    val not in mapping_p_o['%s' % label].split(','):
-                    mapping_p_o[label].append('"%s"' % val)
-        if len(mapping_p_o[label]) == 0:
-            mapping_p_o[label] = ['"None"']
+                    val not in mapping_p_o['mr:%s' % label].split(','):
+                    mapping_p_o['mr:%s' % label].append('"%s"' % val)
+        if len(mapping_p_o['mr:%s' % label]) == 0:
+            mapping_p_o['mr:%s' % label] = ['"None"']
 
-    mapping_p_o['creator'] = ['"%s"' % form.cleaned_data['editor']]
-    if mapping_p_o['creator'] == ['""']:
-        mapping_p_o['creator'] = ['"None"']
-    mapping_p_o['creation'] = ['"%s"^^xsd:dateTime' % globalDateTime]
-    mapping_p_o['status'] = ['"%s"' % form.cleaned_data['next_status']]
+    mapping_p_o['mr:creator'] = ['"%s"' % form.cleaned_data['editor']]
+    if mapping_p_o['mr:creator'] == ['""']:
+        mapping_p_o['mr:creator'] = ['"None"']
+    mapping_p_o['mr:creation'] = ['"%s"^^xsd:dateTime' % globalDateTime]
+    mapping_p_o['mr:status'] = ['"%s"' % form.cleaned_data['next_status']]
     if form.cleaned_data['mapping'] == "None":
-        mapping_p_o['replaces'] = ['"%s"' % form.cleaned_data['mapping']]
+        mapping_p_o['dc:replaces'] = ['"%s"' % form.cleaned_data['mapping']]
     else:
-        mapping_p_o['replaces'] = ['<%s>' % form.cleaned_data['mapping']]
-    mapping_p_o['comment'] = ['"%s"' % form.cleaned_data.get('comment')]
-    if mapping_p_o['comment'] == ['""']:
-        mapping_p_o['comment'] = ['"None"']
-    mapping_p_o['reason'] = ['"%s"' % form.cleaned_data['reason']]
-    mapping_p_o['linkage'] = ['<%s>' % form.cleaned_data['linkage']]
+        mapping_p_o['dc:replaces'] = ['<%s>' % form.cleaned_data['mapping']]
+    mapping_p_o['mr:comment'] = ['"%s"' % form.cleaned_data.get('comment')]
+    if mapping_p_o['mr:comment'] == ['""']:
+        mapping_p_o['mr:comment'] = ['"None"']
+    mapping_p_o['mr:reason'] = ['"%s"' % form.cleaned_data['reason']]
+    mapping_p_o['mr:linkage'] = ['<%s>' % form.cleaned_data['linkage']]
 
     #check to see if the updated mapping record is simply the last one
-    if mapping_p_o['owner'] == ['"%s"' % form.cleaned_data['owners']] and \
-    mapping_p_o['watcher'] == ['"%s"' % form.cleaned_data['watchers']] and \
-    mapping_p_o['creator'] == ['"%s"' % form.cleaned_data['last_editor']] and \
-    mapping_p_o['status'] == ['"%s"' % form.cleaned_data['current_status']] and \
-    mapping_p_o['comment'] == ['"%s"' % form.cleaned_data.get('last_comment')] and \
-    mapping_p_o['reason'] == ['"%s"' % form.cleaned_data['reason']] and \
-    mapping_p_o['linkage'] == ['<%s>' % form.cleaned_data['linkage']]:
+    if mapping_p_o['mr:owner'] == ['"%s"' % form.cleaned_data['owners']] and \
+    mapping_p_o['mr:watcher'] == ['"%s"' % form.cleaned_data['watchers']] and \
+    mapping_p_o['mr:creator'] == ['"%s"' % form.cleaned_data['last_editor']] and \
+    mapping_p_o['mr:status'] == ['"%s"' % form.cleaned_data['current_status']] and \
+    mapping_p_o['mr:comment'] == ['"%s"' % form.cleaned_data.get('last_comment')] and \
+    mapping_p_o['mr:reason'] == ['"%s"' % form.cleaned_data['reason']] and \
+    mapping_p_o['mr:linkage'] == ['<%s>' % form.cleaned_data['linkage']]:
         changed = False
     else:
         changed = True

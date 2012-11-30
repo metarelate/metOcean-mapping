@@ -21,13 +21,24 @@ import hashlib
 import metocean.prefixes as prefixes
 
 
-def make_hash(pred_obj, omitted):
+def make_hash(pred_obj, omitted=[]):
     ''' create an md5 hash from the pred_obj (object list) dictionary
     skip any 'ommited' (list) predicates and objects'''
+    pre = prefixes.Prefixes()
+
+    
     mmd5 = hashlib.md5()
     
     for pred in pred_obj.keys():
         if pred not in omitted:
+            pred_elems = pred.split(':')
+            if len(pred_elems) == 2:
+                if pre.prefixd.has_key(pred_elems[0]):
+                    predicate = '%s%s' % (pre.prefixd[pred_elems[0]], pred_elems[1])
+                else raise ValueError('predicate not in prefixes.py')
+            else:
+                raise ValueError('make hash passed a predicate which is not of the form <prefix>:<item>')
+                                      
             if pred_obj[pred] is list:
                 for obj in pred_obj[pred]:
                     mmd5.update(pred)
@@ -424,14 +435,15 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
     if one already exists, use this in preference
     subj_pref is the prefix for the subject, e.g. http://www.metarelate.net/metocean/cf, http://www.metarelate.net/metocean/linkage
     '''
+    md5 = make_hash(po_dict)
 
-    mmd5 = hashlib.md5()
+    # mmd5 = hashlib.md5()
     
-    for pred in po_dict.keys():
-        mmd5.update(pred)
-        mmd5.update(po_dict[pred])
+    # for pred in po_dict.keys():
+    #     mmd5.update(pred)
+    #     mmd5.update(po_dict[pred])
 
-    md5 = str(mmd5.hexdigest())
+    # md5 = str(mmd5.hexdigest())
     #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
     #current_link = get_by_attrs(po_dict)
     current_link = get_cflinks(fuseki_process, po_dict)
@@ -465,7 +477,7 @@ def get_linkage(fuseki_process, fso_dict, debug=False):
     for fstring in fso_dict.keys():
         for obj in fso_dict[fstring]:
             search_string += '''
-            mr:%slink %s ;''' % (fstring.upper(), obj)
+            %s %s ;''' % (fstring, obj)
     if search_string != '':
         search_string += '.'
         qstr = '''
@@ -492,15 +504,16 @@ def get_linkage(fuseki_process, fso_dict, debug=False):
         results = fuseki_process.run_query(qstr, debug=debug)
         if len(results) == 1 and results[0] == {}:
             pre = prefixes.Prefixes()
-            mmd5 = hashlib.md5()
-            pred_obj = ''
-            for format,objects in fso_dict.iteritems():
-                for obj in objects:
-                    (pre['mr'], format, obj)
-                    mmd5.update('%s%slink' % (pre['mr'], format))
-                    mmd5.update(obj)
+            md5 = make_hash(fso_dict)
+            # mmd5 = hashlib.md5()
+            # pred_obj = ''
+            # for format,objects in fso_dict.iteritems():
+            #     for obj in objects:
+            #         (pre['mr'], format, obj)
+            #         mmd5.update('%s%slink' % (pre['mr'], format))
+            #         mmd5.update(obj)
 
-            md5 = str(mmd5.hexdigest())
+            # md5 = str(mmd5.hexdigest())
 
             inststr = '''
             INSERT DATA
@@ -527,16 +540,17 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     results = None
     pre = prefixes.Prefixes()
 
-    if po_dict.has_key('owner') and \
-        po_dict.has_key('watcher') and \
-        po_dict.has_key('creator') and len(po_dict['creator'])==1 and \
-        po_dict.has_key('status') and len(po_dict['status'])==1 and \
-        po_dict.has_key('replaces') and len(po_dict['replaces'])==1 and \
-        po_dict.has_key('comment') and len(po_dict['comment'])==1 and \
-        po_dict.has_key('reason') and len(po_dict['reason'])==1 and \
-        po_dict.has_key('linkage') and len(po_dict['linkage'])==1:
-        
-        mmd5 = hashlib.md5()
+    if po_dict.has_key('mr:owner') and \
+        po_dict.has_key('mr:watcher') and \
+        po_dict.has_key('mr:creator') and len(po_dict['creator'])==1 and \
+        po_dict.has_key('mr:status') and len(po_dict['status'])==1 and \
+        po_dict.has_key('dc:replaces') and len(po_dict['replaces'])==1 and \
+        po_dict.has_key('mr:comment') and len(po_dict['comment'])==1 and \
+        po_dict.has_key('mr:reason') and len(po_dict['reason'])==1 and \
+        po_dict.has_key('mr:linkage') and len(po_dict['linkage'])==1:
+
+        md5 = make_hash(po_dict, 'mr:creation')
+        #mmd5 = hashlib.md5()
 
         pred_obj = ''
         for pred,objects in po_dict.iteritems():
@@ -544,11 +558,11 @@ def create_mapping(fuseki_process, po_dict, debug=False):
                 pattern_string = ''' mr:%s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
-                if pred != 'creation':
-                    mmd5.update('%s%s' % (pre['mr'], pred))
-                    mmd5.update(obj)
+                #if pred != 'creation':
+                #    mmd5.update('%s%s' % (pre['mr'], pred))
+                #    mmd5.update(obj)
 
-        md5 = str(mmd5.hexdigest())
+        #md5 = str(mmd5.hexdigest())
         # check if we already have one:
         result = subject_graph_pattern('http://mappings/',
                 'http://www.metarelate.net/metocean/mapping/%s' % md5)

@@ -12,12 +12,8 @@ import settings
 
 import metocean.fuseki as fu
 
-#import app.models
-
 if __name__ == "__main__":
-    print 'running main'
     with fu.FusekiServer(port=settings.FUSEKI_PORT) as server:
         settings.fuseki_process = server
-        print 'manage.py: ', settings.fuseki_process
         execute_manager(settings)
 

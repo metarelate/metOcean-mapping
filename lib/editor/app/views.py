@@ -40,7 +40,7 @@ from settings import READ_ONLY
 from settings import fuseki_process
 
 def home(request):
-    searchurl = url_with_querystring(reverse('mapping'),ref='')
+    searchurl = url_with_querystring(reverse('search'),ref='')
     search = {'url':searchurl, 'label':'search for a mapping'}
     context = RequestContext(request, {'search':search})
     return render_to_response('main.html', context)

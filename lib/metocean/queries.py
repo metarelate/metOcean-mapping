@@ -406,8 +406,9 @@ def get_cflinks(fuseki_process, pred_obj=None, debug=False):
     if pred_obj:
         for key in pred_obj.keys():
             filterstr += '''FILTER (bound(?%s))
-            FILTER (regex(str(?%s), str(%s), "i"))
-            ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
+            FILTER (STRSTARTS(str(?%s), str(%s)))
+            FILTER (STRENDS(str(?%s), str(%s)))
+            ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key],key.split(':')[1],pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
     WHERE

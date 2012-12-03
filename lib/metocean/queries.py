@@ -438,15 +438,6 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
     '''
     md5 = make_hash(po_dict)
 
-    # mmd5 = hashlib.md5()
-    
-    # for pred in po_dict.keys():
-    #     mmd5.update(pred)
-    #     mmd5.update(po_dict[pred])
-
-    # md5 = str(mmd5.hexdigest())
-    #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
-    #current_link = get_by_attrs(po_dict)
     current_link = get_cflinks(fuseki_process, po_dict)
     if len(current_link) == 0:
         pred_obj = ''
@@ -510,15 +501,6 @@ def get_linkage(fuseki_process, fso_dict, debug=False):
         if len(results) == 1 and results[0] == {}:
             pre = prefixes.Prefixes()
             md5 = make_hash(fso_dict)
-            # mmd5 = hashlib.md5()
-            # pred_obj = ''
-            # for format,objects in fso_dict.iteritems():
-            #     for obj in objects:
-            #         (pre['mr'], format, obj)
-            #         mmd5.update('%s%slink' % (pre['mr'], format))
-            #         mmd5.update(obj)
-
-            # md5 = str(mmd5.hexdigest())
 
             inststr = '''
             INSERT DATA
@@ -555,7 +537,6 @@ def create_mapping(fuseki_process, po_dict, debug=False):
         po_dict.has_key('mr:linkage') and len(po_dict['mr:linkage'])==1:
 
         md5 = make_hash(po_dict, ['mr:creation'])
-        #mmd5 = hashlib.md5()
 
         pred_obj = ''
         for pred,objects in po_dict.iteritems():
@@ -563,11 +544,6 @@ def create_mapping(fuseki_process, po_dict, debug=False):
                 pattern_string = ''' %s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
-                #if pred != 'creation':
-                #    mmd5.update('%s%s' % (pre['mr'], pred))
-                #    mmd5.update(obj)
-
-        #md5 = str(mmd5.hexdigest())
         # check if we already have one:
         result = subject_graph_pattern(fuseki_process, 'http://metocean/mappings.ttl',
                 'http://www.metarelate.net/metocean/mapping/%s' % md5)

@@ -144,33 +144,6 @@ def search(request):
         })
     return render_to_response('main.html', context)
 
-# def search(request):
-#     '''
-#     '''
-#     request_search_path = request.GET.get('ref', '')
-#     request_search_path = urllib.unquote(request_search_path).decode('utf8')
-#     param_list = request_search_path.split('|')
-#     SearchFormset = formset_factory(forms.SearchParam, extra=0)
-#     if request.method == 'POST':
-#         print request.POST
-#         formset = SearchFormset(request.POST)
-#         if formset.is_valid():
-#             parameters = []
-#             for form in formset:
-#                 parameters.append(form.cleaned_data['parameter'])
-#                 param_string = '|'.join(parameters)
-#             url = url_with_querystring(reverse('showsearchparams'),ref=param_string)
-#             return HttpResponseRedirect(url)
-#     else:
-#         initial_dataset = []
-#         for param in param_list:
-#             dataset = {'parameter':param}
-#             initial_dataset.append(dataset)
-#         formset = SearchFormset(initial=initial_dataset)
-#     context = RequestContext(request, {
-#         'formset':formset,
-#         })
-#     return render_to_response('form.html', context)
 
 def new_mapping(request):
     '''form view to create a new mapping record'''

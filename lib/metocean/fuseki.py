@@ -48,6 +48,7 @@ os.environ['FUSEKI_HOME'] = FUSEKIROOT
 
 
 def process_data(jsondata):
+    '''helper method to take JSON output from a query and return the results'''
     resultslist = []
     try:
         jdata = json.loads(jsondata)
@@ -68,7 +69,8 @@ def process_data(jsondata):
 
 
 class FusekiServer(object):
-
+    '''A class to represent an instance of a process managing a triple database and a Fuseki Server
+    '''
     def __init__(self, port, host='localhost'):
         self._process = None
         self._port = port
@@ -193,6 +195,8 @@ class FusekiServer(object):
 
 
     def run_query(self, query_string, output='json', update=False, debug=False):
+        '''All queries should be run through a FusekiServer instance's run_query method
+        '''
         if not self.status():
             self.start()
         # use null ProxyHandler to ignore proxy for localhost access

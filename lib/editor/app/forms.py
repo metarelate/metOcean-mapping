@@ -231,30 +231,6 @@ class MappingEditForm(forms.Form):
             self.expand_links(kwargs, 'cflinks')
             self.expand_links(kwargs, 'umlinks')
             self.expand_links(kwargs, 'griblinks')
-            # cflinks = None
-            # if kwargs['initial'].has_key('cflinks'):
-            #     cflinks = kwargs['initial']['cflinks']
-            # if cflinks:
-            #     for i, cflink in enumerate(cflinks.split('&')):
-            #         for k,v in moq.get_cflink_by_id(cflink)[0].iteritems():
-            #             self.fields['cflink%i_%s' % (i,k)] = forms.URLField(initial=v)
-            #             self.fields['cflink%i_%s' % (i,k)].widget.attrs['readonly'] = True
-            #             self.fields['cflink%i_%s' % (i,k)].widget.attrs['size'] = 50
-            # umlinks = None
-            # if kwargs['initial'].has_key('umlinks'):
-            #     umlinks = kwargs['initial']['umlinks']
-            # if umlinks:
-            #     for i, umlink in enumerate(umlinks.split('&')):
-            #         self.fields['umlink%i' % i] = forms.URLField(initial=umlink)
-            #         self.fields['umlink%i' % i].widget.attrs['readonly'] = True
-            #         self.fields['umlink%i' % i].widget.attrs['size'] = 50
-            # griblinks = None
-            # if kwargs['initial'].has_key('cflinks'):
-            #     griblinks = kwargs['initial']['griblinks']
-            # if griblinks:
-            #     for i, griblink in enumerate(griblinks.split('&')):
-            #         self.fields['griblink%i' % i] = forms.URLField(initial=griblink)
-            #         self.fields['griblink%i' % i].widget.attrs['readonly'] = True
 
 
     def clean(self):
@@ -263,18 +239,6 @@ class MappingEditForm(forms.Form):
         else:
             return self.cleaned_data
 
-    # def clean_last_edit(self):
-    #     data = self.cleaned_data.get('last_edit')
-    #     try:
-    #         return str(datetime.datetime(*time.strptime(str(data), self.isoformat)[:6]))
-    #     except ValueError:
-    #         raise forms.ValidationError("Invalid ISO DateTime format")
-        # for isoformat in self.isoformat:
-        #     try:
-        #         return str(datetime.datetime(*time.strptime(str(data), isoformat)[:6]))
-        #     except ValueError:
-        #         continue
-        # raise forms.ValidationError("Invalid ISO DateTime format")
 
     def expand_links(self, kwargs, name):
         links = None

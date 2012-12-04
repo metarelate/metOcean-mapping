@@ -17,6 +17,7 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 import hashlib
+import re
 
 import metocean.prefixes as prefixes
 
@@ -110,8 +111,15 @@ def save_cache(fuseki_process, graph, debug=False):
         }
     } 
     ''' % (graph,graph)
-    not_results = fuseki_process.run_query(qstr, update=True, debug=debug)
-    return results
+    delete_results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    pattern = re.compile('saveCache')
+    save_string = ''
+    for line in results.split('\n'):
+        if not pattern.search(line):
+            #print 'writing', line
+            save_string += line
+            save_string += '\n'
+    return save_string
 
 
 def query_cache(fuseki_process, graph, debug=False):
@@ -183,9 +191,12 @@ def mapping_by_link(fuseki_process, paramlist=False,debug=False):
        ?reason
        ?link
        (GROUP_CONCAT(DISTINCT(?cfitem); SEPARATOR = "&") AS ?cfelems) 
-       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
+       ?cfim ?cfex 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+       ?umim ?umex 
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
+       ?gribim ?gribex
        WHERE
        {
               GRAPH <http://metocean/cflinks.ttl> {
@@ -210,15 +221,21 @@ def mapping_by_link(fuseki_process, paramlist=False,debug=False):
        } GRAPH <http://metocean/linkages.ttl> {
 %s
        OPTIONAL
-           {?link mr:CFlink ?cflink . }
+           {?link mr:CFlink ?cflink ;
+                  mr:CFimport ?cfim ;
+                  mr:CFexport ?cfex . }
        OPTIONAL
-           {?link mr:UMlink ?umlink . }
+           {?link mr:UMlink ?umlink ;
+                  mr:UMimport ?umim ;
+                  mr:UMexport ?umex . }
        OPTIONAL
-           {?link mr:GRIBlink ?griblink .}
-       
+           {?link mr:GRIBlink ?griblink ;
+                  mr:GRIBimport ?gribim ;
+                  mr:GRIBexport ?gribex .}
+              
 
     } } } }
-    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
     ''' % (linkpattern)
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
@@ -248,14 +265,16 @@ def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
        ?comment
        ?reason
        ?link
-       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
+       ?cfim ?cfex 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+       ?umim ?umex
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-
+       ?gribim ?gribex
 
     WHERE
       
- { GRAPH <http://mappings/mappings.ttl> {
+ { GRAPH <http://metocean/mappings.ttl> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
@@ -269,18 +288,23 @@ def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^dc:replaces+ ?map}
            }
-GRAPH <http://mappings/linkages.ttl> {
+GRAPH <http://metocean/linkages.ttl> {
        OPTIONAL
-           {?link mr:CFlink ?cflink .         
-           }
+           {?link mr:CFlink ?cflink ;
+                  mr:CFimport ?cfim ;
+                  mr:CFexport ?cfex . }
        OPTIONAL
-           {?link mr:UMlink ?umlink . }
+           {?link mr:UMlink ?umlink ;
+                  mr:UMimport ?umim ;
+                  mr:UMexport ?umex . }
        OPTIONAL
-           {?link mr:GRIBlink ?griblink .}
+           {?link mr:GRIBlink ?griblink ;
+                  mr:GRIBimport ?gribim ;
+                  mr:GRIBexport ?gribex .}
        
 
     }}
-    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
     ''' % (linkpattern)
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
@@ -405,10 +429,11 @@ def get_cflinks(fuseki_process, pred_obj=None, debug=False):
     filterstr = ''
     if pred_obj:
         for key in pred_obj.keys():
-            filterstr += '''FILTER (bound(?%s))
-            FILTER (STRSTARTS(str(?%s), str(%s)))
-            FILTER (STRENDS(str(?%s), str(%s)))
-            ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key],key.split(':')[1],pred_obj[key])
+            filterstr += '''FILTER (bound(?{key}))
+            FILTER (STRSTARTS(str(?{key}), str({val})))
+            FILTER (STRENDS(str(?{key}), str({val})))
+            FILTER (STRLEN(str(?{key})) = STRLEN(str({val})))
+            '''.format(key=key.split(':')[1], val=pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
     WHERE

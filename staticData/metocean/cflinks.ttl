@@ -1,4 +1,10 @@
-#(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping. metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/." 
+#(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping.
+#metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the
+#GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License,
+#or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#See the GNU Lesser General Public License for more details. You should have received a copy of the
+#GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/." 
 
 @prefix cfsn: <http://def.cfconventions.org/standard_names/> .
 @prefix dc: <http://purl.org/dc/terms/> .
@@ -21,2421 +27,2035 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
+
 <http://www.metarelate.net/metocean/cf/d52a7b8b9c0eb9ac3208fb112018c27f>
       mrcf:standard_name  "surface_downward_eastward_stress" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/78921e06ec50c2cc47f32404a339e954>
       mrcf:standard_name  cfsn:mole_fraction_of_nitrous_oxide_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4218a2be3853fb771862e7f3c0d5ef2b>
       mrcf:standard_name  "tendency_of_northward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f68eb722efca1401120f321b9d246880>
       mrcf:standard_name  cfsn:soil_suction_at_saturation ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1b6e903e162e60a9b856221fab310cc8>
       mrcf:standard_name  "stratiform_rainfall_rate" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/cbb6a64e632247c11d0654e1e703e70d>
       mrcf:standard_name  "mole_fraction_of_atomic_nitrogen_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/bbcb3b9e54b5782c6fd6c9a6851c0ed9>
       mrcf:standard_name  "sea_ice_area_fraction" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/660dd0da11247af9c85336357b9a19d4>
       mrcf:standard_name  cfsn:surface_net_downward_shortwave_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e0048ac34d4cec98a7eeaf41ab0730c4>
       mrcf:standard_name  "upward_eastward_momentum_flux_in_air_due_to_orographic_gravity_waves" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0c0fce3f75857ce3804133b83d780270>
       mrcf:standard_name  cfsn:dimensionless_exner_function ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fa6f9c64900a94cf9d0b3f2941b18fd2>
       mrcf:standard_name  "surface_net_downward_longwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a31d59892a43caada72a21273a376973>
       mrcf:standard_name  cfsn:toa_incoming_shortwave_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9808d483068869f093f5db6d59b84e75>
       mrcf:standard_name  "snowfall_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/25f55caf8dba84c51795f97c73dffb3e>
       mrcf:standard_name  cfsn:sea_ice_area_fraction ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/05df25bfe7c6a79fbe2e01be2d9acf0c>
       mrcf:standard_name  cfsn:mass_fraction_of_frozen_water_in_soil_moisture ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/73ab6783b4f44dfd04d16fddbc2b1dba>
       mrcf:standard_name  "tendency_of_specific_humidity_due_to_diffusion" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8ba05330459864920292aac968779d80>
       mrcf:standard_name  "mole_fraction_of_dichlorine_peroxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/af15d83d9977bf84cddcc64f063b410d>
       mrcf:standard_name  cfsn:soil_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a05c7a4df191711c1be7a494ec5372b1>
       mrcf:standard_name  "surface_snow_area_fraction_where_land" ;
       mrcf:type     "Field" ;
       mrcf:units    "%" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e56868ba91e13be39150f2ebd9053385>
       mrcf:standard_name  cfsn:surface_downward_eastward_stress ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metocean/cf/3cc5e05291b37f76b7f51a13fe5e5484>
+      mrcf:standard_name  "geopotential_height" ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
 
 <http://www.metarelate.net/metocean/cf/0f2b06183ae2ca483d6386685d2f4fc4>
       mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_diffusion ;
       mrcf:type     "Field" ;
       mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b684c1c0398e2c1c114d6da0a6d92c2e>
       mrcf:standard_name  "atmosphere_northward_stress_due_to_gravity_wave_drag" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b6c4661861f65ed4ee86b019f00932e5>
       mrcf:standard_name  "northward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/505f2f1017a9b2aac72679f45054b545>
       mrcf:standard_name  "mole_fraction_of_hypochlorous_acid_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b9b7bf0a0732e295603260a6b5aa1b8e>
       mrcf:standard_name  cfsn:soil_moisture_content_at_field_capacity ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/87580475d8246a3c711e137a4e7ecb23>
       mrcf:standard_name  "cloud_area_fraction_in_atmosphere_layer" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/444867b4e5d214ec1b7ffe3d4e58cc09>
       mrcf:standard_name  "upward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/50a561cd71e8492ff6339b921adf2845>
       mrcf:standard_name  "soil_moisture_content" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b5270e149852cdefa11a8dae61d86806>
       mrcf:standard_name  cfsn:surface_runoff_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/96f52b3a314b0ac3d574ff57a93ce12a>
       mrcf:standard_name  "wind_speed" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/36628ba81f8fd89132bcbae2e4db743d>
       mrcf:standard_name  "product_of_northward_wind_and_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1d89b153e185217ba9177c2583eb859d>
       mrcf:standard_name  "product_of_northward_wind_and_geopotential_height" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3cb984125ab082edac7c0a92210989a8>
       mrcf:standard_name  cfsn:water_potential_evaporation_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d2d83dc1f1d942bc678ed4d847cbcfe1>
       mrcf:standard_name  cfsn:subsurface_runoff_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ab95bf4e24ccccf2ff745b9a64dd6301>
       mrcf:standard_name  "ocean_mixed_layer_thickness" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c7354e64dce9e523d283bd22db2403f3>
       mrcf:standard_name  "surface_upward_water_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f4bb3a85c2f5fb3b6ff7afcbc4ea260d>
       mrcf:standard_name  "rainfall_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8d9fb3af555ba02b684858f3cd1948a1>
       mrcf:standard_name  "mole_fraction_of_peroxynitric_acid_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "mole mole-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/73128322710342e3f1790e374c34bfc8>
       mrcf:standard_name  "product_of_air_temperature_and_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e0e874a9a721d1283aa62445c5e24cbf>
       mrcf:standard_name  cfsn:sea_ice_thickness ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b3d56fe8fecf336174d45b8a339e2896>
       mrcf:standard_name  "atmosphere_boundary_layer_thickness" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a3aa8912a1f272dd9c5770ca8dab6447>
       mrcf:standard_name  "surface_albedo_assuming_deep_snow" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/82f593582e679d6a64726a622344a6f2>
       mrcf:standard_name  cfsn:tendency_of_mass_fraction_of_cloud_ice_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/18fb20cd50c01817d7f483f9621f5243>
       mrcf:standard_name  "mole_fraction_of_chlorine_monoxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/378a668a01a45ac81eb03c3f0988dd53>
       mrcf:standard_name  "surface_roughness_length" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/73db9c618bb36b9e97ff4d2e3ba6b0e1>
       mrcf:standard_name  "subsurface_runoff_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1e6e78c85c6a263de74d84321bbaa664>
       mrcf:standard_name  "soil_porosity" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/bf900742949b3544937702b509f02886>
       mrcf:standard_name  cfsn:root_depth ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2a71f66c0adb1fbe5f7fa979d09d2e4f>
       mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_longwave_heating ;
       mrcf:type     "Field" ;
       mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d0a82bf16ba8b8b759aa391f711316ce>
       mrcf:standard_name  "soil_albedo" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b8f5cca94f5dd74ecffdbcb3f5bad434>
       mrcf:standard_name  "land_area_fraction" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fda89ce023c96650ca77c93dc467b7c2>
       mrcf:standard_name  "product_of_eastward_wind_and_omega" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/abcfa345d2a96129d47da96afcd2c0d9>
       mrcf:standard_name  "mass_fraction_of_dimethyl_sulfide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ea0f3216957c12176d3296dd4a84dc4d>
       mrcf:standard_name  "mole_fraction_of_chlorine_nitrate_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "mole mole-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/633729251634c3c7531c7f0646a63ce5>
       mrcf:standard_name  "prescribed_heat_flux_into_slab_ocean" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/42e99903e05e857d681c9557cefa9a33>
       mrcf:standard_name  "surface_runoff_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/27a527cc61ee3c7e9d22466f23b563fc>
       mrcf:standard_name  "mole_fraction_of_ozone_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "mole mole-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fd818697b83e6a7652c94d51324142bc>
       mrcf:standard_name  "upward_eastward_momentum_flux_in_air_due_to_nonorographic_eastward_gravity_waves" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7f1950a08c981afbf7a77a10039f9907>
       mrcf:standard_name  cfsn:mole_fraction_of_dichlorine_peroxide_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8a4cb23ad24b31d7aba37aa86a64c7d5>
       mrcf:standard_name  "product_of_upward_air_velocity_and_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fc1fb3e4483d2a03fdf6796e523ac34e>
       mrcf:standard_name  "toa_outgoing_shortwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/680e7c2b84d573e170d3f8a845d971a0>
       mrcf:standard_name  "product_of_air_temperature_and_omega" ;
       mrcf:type     "Field" ;
       mrcf:units    "K Pa s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/319d0db39a756457d09392952c379914>
       mrcf:standard_name  "square_of_upward_air_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1f796736dd4d0d3cbb27fb6bc8223643>
       mrcf:standard_name  "sea_ice_thickness" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fd4767dee0a3fd3feef1b8e4eeb90e65>
       mrcf:standard_name  "mole_fraction_of_chlorine_nitrate_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/58fd2df5d7301ffa82b6b284f02b6aae>
       mrcf:standard_name  cfsn:geopotential_height_anomaly ;
       mrcf:type     "Field" ;
       mrcf:units    "gpm" ;
-      mr:saveCache  "True" .
-
-<http://www.metarelate.net/metocean/cf/3fb70e490fcd97f0ccec96cffdfe1ae7>
-      mrcf:standard_name  cfsn:tendency_of_air_temperature ;
-      mrcf:type     "Field" ;
-      mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/816db6b95515c4b0b83c5b149fad4d47>
       mrcf:standard_name  "air_pressure_at_freezing_level" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metocean/cf/3fb70e490fcd97f0ccec96cffdfe1ae7>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K s-1" ;
 
 <http://www.metarelate.net/metocean/cf/026552df8802cec07953449f51d1967e>
       mrcf:standard_name  "tendency_of_northward_wind_due_to_gravity_wave_drag" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ce261ae5c8a10b778a9fbc555e1c4006>
       mrcf:standard_name  cfsn:mass_fraction_of_cloud_liquid_water_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a823cbc0d2a2b0581d291e8043ac24dc>
       mrcf:standard_name  "surface_net_downward_shortwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0d49f16ff38204682c0dc1f9032c0dce>
       mrcf:standard_name  cfsn:virtual_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ecfda69a701d0930dece750f02ef8bba>
       mrcf:standard_name  "northward_eliassen_palm_flux_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/44ffe402894f663a91f927342db4e63a>
       mrcf:standard_name  cfsn:cloud_water ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a27c11980904de39c0a42e818f51ca0b>
       mrcf:standard_name  "tendency_of_air_temperature_due_to_longwave_heating" ;
       mrcf:type     "Field" ;
       mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9ea806689a3e4474cc35c30290195daa>
       mrcf:standard_name  "product_of_northward_wind_and_upward_air_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8abc30435aa9c2a75c4972a66851c2b2>
       mrcf:standard_name  "gross_primary_productivity_of_carbon" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/49d85d0c54397e4b4d8251ca61e65b6d>
       mrcf:standard_name  "square_of_northward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3ceaec4b2d6865e7a1fa0b20d7e2aa16>
       mrcf:standard_name  "tendency_of_upward_air_velocity_due_to_advection" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9ad190c371168ea785808bedb71f77e6>
       mrcf:standard_name  "tendency_of_specific_humidity_due_to_advection" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1644de802749f2f113100b40cfa1f0e8>
       mrcf:standard_name  "square_of_eastward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4758113711ed530db1713dc4195e8ce1>
       mrcf:standard_name  cfsn:tropopause_air_pressure ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/33eff0480ea3b66b6fc1b10aa5c62939>
       mrcf:standard_name  "precipitation_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/298c21061c3df869e1c3d0993656a810>
       mrcf:standard_name  cfsn:specific_humidity ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8c667ab385c693c9c6a51733ee8135c3>
       mrcf:standard_name  "tendency_of_air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/58706d411ff9e581842e4c7d7883fcac>
       mrcf:standard_name  cfsn:relative_humidity ;
       mrcf:type     "Field" ;
       mrcf:units    "%" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d262c11646137801b5abb9c962c56831>
       mrcf:standard_name  "tropopause_upwelling_shortwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c1ad1cb767db0f7a4d46db0b47a8f930>
       mrcf:standard_name  "northward_ocean_heat_transport" ;
       mrcf:type     "Field" ;
       mrcf:units    "PW" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/63d6ff13fee24061196f92023cf83a50>
       mrcf:standard_name  "root_depth" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/420b5c9e8170248af3a76db62f2f099e>
       mrcf:standard_name  cfsn:sea_ice_albedo ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/da709aa9af17a75f4311d7659594eb5d>
       mrcf:standard_name  "tendency_of_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3ca4b74084c378e1a7e57d40d5ffe6ed>
       mrcf:standard_name  cfsn:cloud_mixing_ratio ;
       mrcf:type     "Field" ;
       mrcf:units    "kg kg-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/60b34a717239a89e84b5a1d1caa066b8>
       mrcf:standard_name  cfsn:mass_fraction_of_carbon_dioxide_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/16477698a65a6a1fd1acdfb71d70acf1>
       mrcf:standard_name  "tendency_of_air_temperature_due_to_shortwave_heating" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7dfb261931a4d95420728759e3515f29>
       mrcf:standard_name  cfsn:mole_fraction_of_chlorine_nitrate_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0eae007bb851ce2e11f19b9fdfb2fb38>
       mrcf:standard_name  "water_sublimation_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a937333dc3bd347237839dbbb5f2b65f>
       mrcf:standard_name  cfsn:stratiform_snowfall_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e1d3b59c29d9707c95f434135b1f5289>
       mrcf:standard_name  "sea_water_potential_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "degC" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/06a3fade85c6b1873e74f59deac9b17f>
       mrcf:standard_name  "tropopause_altitude" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4aa4b91c9da7f964ad31170191f7b6b1>
       mrcf:standard_name  "product_of_northward_wind_and_omega" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/caf1d66e659d6cf646445ffc7e0c7138>
       mrcf:standard_name  cfsn:potential_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fe79348e1f1b515c515c7d6004dc28da>
       mrcf:standard_name  "atmosphere_cloud_liquid_water_content" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c671bb91c85c0fabd200b72d5e41e609>
       mrcf:standard_name  "square_of_lagrangian_tendency_of_air_pressure" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f26e4403beb980409232148a945ee24c>
       mrcf:standard_name  "volume_fraction_of_condensed_water_in_soil_at_critical_point" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0935734902b4583e3a6c50c94c5c52cf>
       mrcf:standard_name  "tendency_of_eastward_wind_due_to_convection" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/87f460daa27a20c4814904da5c88ac1a>
       mrcf:standard_name  "mole_fraction_of_methane_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "mole mole-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3a3dd108ae46101e5e22fd7a296793e0>
       mrcf:standard_name  cfsn:surface_northward_sea_water_velocity ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/20788385da1a7e39742920464e451229>
       mrcf:standard_name  "tendency_of_upward_air_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/33c5d6d1e53f939a779aba6fcdaf73dc>
       mrcf:standard_name  cfsn:land_binary_mask ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/146020f99a9995a3ed10777592434517>
       mrcf:standard_name  cfsn:air_pressure_at_sea_level ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/dfc11e3f160081c2e7b0cfb663a90116>
       mrcf:standard_name  cfsn:mass_fraction_of_sulfur_dioxide_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5989f06ecf990e239bf0b35cee17df02>
       mrcf:standard_name  cfsn:specific_humidity ;
       mrcf:type     "Field" ;
       mrcf:units    "kg kg-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/889a15bd575e14309ec052bacbaaad6b>
       mrcf:standard_name  "product_of_omega_and_air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5ebc4e8e9a4fb65ef87d76abf6640c54>
       mrcf:standard_name  cfsn:volume_fraction_of_condensed_water_in_soil_at_wilting_point ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/44e4a942927b2fed830adf3a4650d33b>
       mrcf:standard_name  "downward_heat_flux_in_soil" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6243f4422176bf2b93f890eff513ab62>
       mrcf:standard_name  "tendency_of_air_temperature_due_to_longwave_heating_assuming_clear_sky" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/110364279aa5a68f5d6d4c7547cf65aa>
       mrcf:standard_name  "baroclinic_northward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ec39e955afbb53dddbd50a7645875ac9>
       mrcf:standard_name  "air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/abc6dc4274d8f321d5711872c6a99135>
       mrcf:standard_name  cfsn:surface_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a6012482aa8c03cbc487e4edd8c6839b>
       mrcf:standard_name  cfsn:surface_downwelling_shortwave_flux_in_air_assuming_clear_sky ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1548c88edf07a1353ffd0b6c153d1096>
       mrcf:standard_name  "mole_fraction_of_atomic_chlorine_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/997c48120d52883315008c436477bd4b>
       mrcf:standard_name  "relative_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "%" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/85abc6718f25aee634ccdcbe5fa70462>
       mrcf:standard_name  cfsn:atmosphere_relative_vorticity ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fa8d585fad698f944dfe3949ee38ffd6>
       mrcf:standard_name  cfsn:subsurface_runoff_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/70d68f0b7056819eccba890f5301dcc7>
       mrcf:standard_name  "tendency_of_air_temperature_due_to_diffusion" ;
       mrcf:type     "Field" ;
       mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e0f7e4d3d2f97eac789f7603fddc7545>
       mrcf:standard_name  "surface_upward_sensible_heat_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ac7fbb4ba45d33a22aaa14e84748fbad>
       mrcf:standard_name  cfsn:downward_heat_flux_in_soil ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/21ba33b3a0547948c18b44bbb19b1d8a>
       mrcf:standard_name  "surface_snow_melt_flux_where_land" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/993e73d0092293552b8bfc6610397e40>
       mrcf:standard_name  "mass_fraction_of_carbon_dioxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e5d1a63369a5c4f3bd3d5a02002f0a49>
       mrcf:standard_name  "tendency_of_eastward_wind_due_to_gravity_wave_drag" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2875e599007fd170cd6312e8dde2e2ef>
       mrcf:standard_name  "eastward_sea_ice_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b8fe096c979f966341e3869083d4ef2b>
       mrcf:standard_name  cfsn:y_wind ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5c9bc1d5bd95693ad0e86e9898ba6023>
       mrcf:standard_name  cfsn:tendency_of_eastward_wind_due_to_diffusion ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9a817df5fa56fb8b576f7a139124f850>
       mrcf:standard_name  "tendency_of_sea_ice_area_fraction_due_to_thermodynamics" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/66d7205fe2c52c997093a65da740a7ae>
       mrcf:standard_name  "toa_incoming_shortwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4167309857b28d214c1849cead6acd37>
       mrcf:standard_name  cfsn:surface_upward_sensible_heat_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e89aa9ebc012fd113a2faad094e3b68b>
       mrcf:standard_name  cfsn:water_equivalent_of_accumulated_snow_depth ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f2309724289d3e9ed30940a67945400f>
       mrcf:standard_name  "tendency_of_mass_fraction_of_cloud_liquid_water_in_air_due_to_advection" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0d58fd39bd30187dc548d13c244bbacd>
       mrcf:standard_name  "tendency_of_sea_ice_area_fraction_due_to_dynamics" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f83a008c95089bfad2f6cd790ee68767>
       mrcf:standard_name  "product_of_northward_wind_and_geopotential_height" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/49d8df6d2b0bf4fa2e060f5227f0994f>
       mrcf:standard_name  "heat_flux_correction" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/62550c3b0611fe3990fcd617b406b1f7>
       mrcf:standard_name  "tendency_of_mass_fraction_of_cloud_liquid_water_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/99131d4d5c0b8a8963a149330afa1e4c>
       mrcf:standard_name  cfsn:tendency_of_specific_humidity_due_to_diffusion ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9199c0b08c06c6c58a2720c472b97735>
       mrcf:standard_name  "ocean_barotropic_streamfunction" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm3 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a28991bcc8a4456550168a9e03c3ec4b>
       mrcf:standard_name  "atmosphere_eastward_stress_due_to_gravity_wave_drag" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/04881188ab9da9b968231f3cd04d6740>
       mrcf:standard_name  "moisture_content_of_soil_layer" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5419037fb3593d3648405b8c5a2b7bfd>
       mrcf:standard_name  cfsn:air_density ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-3" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b934f490504a21735194cfc124265f90>
       mrcf:standard_name  "dimensionless_exner_function" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/70f9ed298b98d8947262d4825c99cca3>
       mrcf:standard_name  "virtual_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e81c749150b788cb6826e45fc1bf193a>
       mrcf:standard_name  cfsn:geopotential_height ;
       mrcf:type     "Field" ;
       mrcf:units    "gpm" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/37a05ba878b573c3fd189e9579b72904>
       mrcf:standard_name  "canopy_water_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/742642f6507f832dada9425fd39a2334>
       mrcf:standard_name  "upward_air_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5de33080eeb66578804a844aa0be2202>
       mrcf:standard_name  cfsn:soil_carbon_content ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fe118a15820dd74fd17ebe8afa79ce54>
       mrcf:standard_name  cfsn:soil_albedo ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a83e98bea3a27e0d67e465248a996ae5>
       mrcf:standard_name  "snowfall_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7278c33bf228e2c3dabbb9ca90e29778>
       mrcf:standard_name  cfsn:volume_fraction_of_condensed_water_in_soil_at_critical_point ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ec31e8c203b3336f03b43e29c6931312>
       mrcf:standard_name  "stratiform_snowfall_rate" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5ca09bae37ab46b267bb3d7f4f7ca3e3>
       mrcf:standard_name  cfsn:tendency_of_northward_wind ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6f41d8f882f5143d622f49af48af6b39>
       mrcf:standard_name  "convective_rainfall_rate" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d7a22dd84bf9c366ba8d2601eac4ad35>
       mrcf:standard_name  "potential_vorticity_of_atmosphere_layer" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa-1 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c29d071f7b67b92f10df793c30b1bdef>
       mrcf:standard_name  "tendency_of_eastward_wind_due_to_diffusion" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e0d7290a423b2a9b903a863807865a2d>
       mrcf:standard_name  cfsn:divergence_of_wind ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c4cb70bc02318628983e5f22be64abb8>
       mrcf:standard_name  "downward_heat_flux_in_soil" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/39d2be64a6ce8e3093f01c3bb25e7846>
       mrcf:standard_name  cfsn:tendency_of_upward_air_velocity ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ed47de64c296f6f3ffd91b95afa40dc0>
       mrcf:standard_name  "tropopause_air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d15032715a85c58d73bf46363d95a7a3>
       mrcf:standard_name  "sea_surface_salinity" ;
       mrcf:type     "Field" ;
       mrcf:units    "1e3 psu @0.035" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/60e4e5242e9ce767b3547b98b94418a8>
       mrcf:standard_name  "surface_runoff_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a9ac8324f86bc8f7fe3efe50c8668922>
       mrcf:standard_name  "tropopause_net_downward_longwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/da1de1e31aa210b87c6e38a203538f6c>
       mrcf:standard_name  cfsn:mass_fraction_of_dimethyl_sulfide_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2d4a77bdf6036b43c40109e78f6f6379>
       mrcf:standard_name  "northward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0ffc65fb7263bbc7cffc260f5668c6a5>
       mrcf:standard_name  "tropopause_downwelling_longwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/21800be4b14ee06ccfbb692806a4e145>
       mrcf:standard_name  "product_of_geopotential_height_and_omega" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1c34ff274ecf57179310a7a75c8e529b>
       mrcf:standard_name  "product_of_eastward_wind_and_geopotential_height" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a8de4be085aa8f278e926d15955c173f>
       mrcf:standard_name  "upward_eastward_momentum_flux_in_air_due_to_nonorographic_westward_gravity_waves" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7458b4ee928d310694dbebe5384198bd>
       mrcf:standard_name  "surface_eastward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3b524d44bf7e2eebc1f20fac4dc8b812>
       mrcf:standard_name  "product_of_eastward_wind_and_air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ca408e85cb676c65abf8dbf0d548ca7a>
       mrcf:standard_name  cfsn:mass_fraction_of_unfrozen_water_in_soil_moisture ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8db68ac9b8bac3c6e4d0994421b44efb>
       mrcf:standard_name  cfsn:snowfall_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/46ce2f4bf9ba8b9962d541626f2e23ea>
       mrcf:standard_name  cfsn:x_wind ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/58bc9bdf92f794a0b91a11897c05bc38>
       mrcf:standard_name  "product_of_eastward_wind_and_omega" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/db2c36801d8db7493afe496d854ee268>
       mrcf:standard_name  cfsn:soil_hydraulic_conductivity_at_saturation ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/bbcb2d1db85003a2aacd5e1ebc132f58>
       mrcf:standard_name  cfsn:surface_eastward_sea_water_velocity ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/59397be5ab04ddf833ab553e0c04ecfe>
       mrcf:standard_name  "soil_hydraulic_conductivity_at_saturation" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/741cb7fe40461cff347d0eec05291880>
       mrcf:standard_name  "tendency_of_specific_humidity_due_to_convection" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/948e2da38750f6c06fc4b83a8a85912e>
       mrcf:standard_name  cfsn:mass_fraction_of_cloud_ice_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/673faa73f9072ec75139387da26d8c0b>
       mrcf:standard_name  "product_of_upward_air_velocity_and_air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a5ca9dae18571775d059496668677be3>
       mrcf:standard_name  cfsn:land_cover ;
       mrcf:type     "Field" ;
       mrcf:units    "proportion" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c28abe618cb2df16367821a51e3cd1d9>
       mrcf:standard_name  "surface_downwelling_longwave_flux_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ddfa69e11f361e6bd840ca508e9e9d93>
       mrcf:standard_name  cfsn:surface_runoff_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a1517151712c4e6bac23cd1f71ac2d39>
       mrcf:standard_name  cfsn:air_potential_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/14f905230403c3499116ae9a8533e535>
       mrcf:standard_name  "specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e860ea30ee031eb0b33b341a4428e61e>
       mrcf:standard_name  cfsn:rainfall_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a9016fc51b0ccad41372d231b3db3913>
       mrcf:standard_name  cfsn:leaf_area_index ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5d017e6a0afcc09e45a2d8c8c30c3678>
       mrcf:standard_name  "convective_cloud_area_fraction" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fa590ba92edf3ac998e3e151edb4275b>
       mrcf:standard_name  cfsn:wind_speed ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/bec66e4023f17c1d43b9d99ad3575522>
       mrcf:standard_name  "x_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/950ffa7fc257a9da00b47049221d735f>
       mrcf:standard_name  "mass_fraction_of_frozen_water_in_soil_moisture" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e54fd99b2c29051d582256ff0a88cbde>
       mrcf:standard_name  cfsn:mole_fraction_of_atomic_nitrogen_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f8ef05521c0cd8c3186017e5115bab28>
       mrcf:standard_name  "large_scale_cloud_liquid_water_content_of_atmosphere_layer" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/fe16187a94a119e877f2cf568f550488>
       mrcf:standard_name  "mole_fraction_of_cfc12_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2d0878c2ca2fcef2b686037d3825382b>
       mrcf:standard_name  "downward_eastward_stress_at_sea_ice_base" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c3c7084b30afed66dc37eb87bfba83a5>
       mrcf:standard_name  cfsn:storm_relative_helicity ;
       mrcf:type     "Field" ;
       mrcf:units    "J kg-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e214b2584ad3c9052a62fb35f90da607>
       mrcf:standard_name  cfsn:mole_fraction_of_bromine_nitrate_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3a6ff8ae75a775240bf5cd65838e8a92>
       mrcf:standard_name  cfsn:mole_fraction_of_cfc11_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3fcc34c71c9619d677eb99196d910a4e>
       mrcf:standard_name  cfsn:mass_fraction_of_ozone_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/501e9b1500d765fc822c8145d8e183c4>
       mrcf:standard_name  "water_flux_correction" ;
       mrcf:type     "Field" ;
       mrcf:units    "Kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/49588c68e6ba1930adc40adf85d88d5f>
       mrcf:standard_name  cfsn:snowfall_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/57df699661c5dd244c003c76484512d0>
       mrcf:standard_name  "tendency_of_northward_wind_due_to_convection" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a327131953fd07b12573350773eda4e4>
       mrcf:standard_name  "mole_fraction_of_cfc11_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/68eb6a2863d3c35e61af2b4f3ca253e8>
       mrcf:standard_name  "soil_suction_at_saturation" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3925d994f1339d25895b178d62628d8f>
       mrcf:standard_name  cfsn:surface_upwelling_shortwave_flux_in_air_assuming_clear_sky ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2f28cfd1f66f987ddd695ba4afb76a77>
       mrcf:standard_name  cfsn:mole_fraction_of_hypochlorous_acid_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3771273da997b238e023edaa3b213483>
       mrcf:standard_name  "mass_fraction_of_convective_cloud_liquid_water_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d26f0c2b0e21b57451965a89d2744854>
       mrcf:standard_name  cfsn:pressure_reduced_to_msl ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a3a36b50ae4f8ef3d6ed542e6bd975f7>
       mrcf:standard_name  "mass_fraction_of_cloud_liquid_water_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/cc1eb04954c1605245f4a128cca45d42>
       mrcf:standard_name  "toa_outgoing_longwave_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7a999f7087be01e127c687bda7a555c6>
       mrcf:standard_name  cfsn:canopy_height ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/67f4ae1039e8293d39fe7b010e51fe93>
       mrcf:standard_name  "tendency_of_sea_ice_thickness_due_to_thermodynamics" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a8aaca69e4d97cc57042137e13c0fc39>
       mrcf:standard_name  "soil_moisture_content_at_field_capacity" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b205205469e5f7143cabf01720b86f2c>
       mrcf:standard_name  "northward_ocean_salt_transport" ;
       mrcf:type     "Field" ;
       mrcf:units    "1e7kg s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e53bdcabf37e1c49eff12c4694d840d7>
       mrcf:standard_name  "subsurface_runoff_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/255fffafa55f0b1ea74d584838c719e7>
       mrcf:standard_name  "sea_surface_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/66b014add1dd59d6043a6a0b5385780e>
       mrcf:standard_name  "surface_upwelling_shortwave_flux_in_air_assuming_clear_sky" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/76d96544cfe83b0d1651ca36a6587953>
       mrcf:standard_name  "square_of_northward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8c61db0b26d43de02020a113f11b29f2>
       mrcf:standard_name  cfsn:surface_albedo_assuming_no_snow ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d4958972b199fbcbc59d9be5aeba0d5f>
       mrcf:standard_name  "atmosphere_relative_vorticity" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/20bc4d81d5fcd774245eda4ecb5092af>
       mrcf:standard_name  cfsn:toa_outgoing_shortwave_flux_assuming_clear_sky ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/29ed2555420c1ee90bdfa31a7c4352c6>
       mrcf:standard_name  "baroclinic_eastward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/93014faf245a15bbdbbb166c416a8eef>
       mrcf:standard_name  cfsn:pressure ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6870152798482468b1d96b890b667bc8>
       mrcf:standard_name  "specific_kinetic_energy_of_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c21880428aa2db15e8b26207ddc18d31>
       mrcf:standard_name  cfsn:icao_standard_atmosphere_reference_height ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6ed26456d9b2fdb20ee1d7930e73d309>
       mrcf:standard_name  "volume_fraction_of_condensed_water_in_soil_at_wilting_point" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
-
-<http://www.metarelate.net/metocean/cf/177ea2225170ee1553b17cb418491d43>
-      mrcf:standard_name  "cloud_area_fraction" ;
-      mrcf:type     "Field" ;
-      mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/37dd071974a53fd85a882278deb2941a>
       mrcf:standard_name  "eastward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm s-1" ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metocean/cf/177ea2225170ee1553b17cb418491d43>
+      mrcf:standard_name  "cloud_area_fraction" ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
 
 <http://www.metarelate.net/metocean/cf/0e3aa2797004d74b3e54a5ccac3bd9ad>
       mrcf:standard_name  "product_of_specific_humidity_and_omega" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa s-1" ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metocean/cf/8d5050d5825e62e2132622358036f00a>
+      mrcf:standard_name  "square_of_air_temperature" ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
 
 <http://www.metarelate.net/metocean/cf/39f322fa8157c3cbd89d83bf78803e54>
       mrcf:standard_name  "snow_grain_size" ;
       mrcf:type     "Field" ;
       mrcf:units    "1e-6 m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/cca7c9546d65a957d5a08e03d45882a9>
       mrcf:standard_name  cfsn:ertel_potential_vorticity ;
       mrcf:type     "Field" ;
       mrcf:units    "K m2 kg-1 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1440ad20ec9f5ad698c1627d120f34af>
       mrcf:standard_name  cfsn:soil_thermal_capacity ;
       mrcf:type     "Field" ;
       mrcf:units    "J kg-1 K-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/be36ac3ea22f260763a5443cec02873b>
       mrcf:standard_name  cfsn:atmosphere_kinetic_energy_content ;
       mrcf:type     "Field" ;
       mrcf:units    "J m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f466059fb5c95c027e447943ffe5841c>
       mrcf:standard_name  "ertel_potential_vorticity" ;
       mrcf:type     "Field" ;
       mrcf:units    "K m2 kg-1 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/516d38aa1e9d192b97d6366f7eaa92fa>
       mrcf:standard_name  cfsn:surface_snow_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2e344329eae6afdadae9b23c803479c5>
       mrcf:standard_name  "mole_fraction_of_nitrous_oxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6d153f403db0c902e13c70937703494f>
       mrcf:standard_name  "sea_ice_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/53f9a9335cb0f5b471c166f7e75695d6>
       mrcf:standard_name  "tendency_of_air_density" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-3 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3de0844c529b95b7fe534a30a9955d03>
       mrcf:standard_name  cfsn:stratiform_rainfall_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/89db6cb6faf04cf2cb973132a2231b3c>
       mrcf:standard_name  cfsn:mole_fraction_of_chlorine_monoxide_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6b5aa2cdd56fa18f31a21426a3dbc120>
       mrcf:standard_name  cfsn:convective_inhibition ;
       mrcf:type     "Field" ;
       mrcf:units    "J kg-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/aab7a648bebedc97a19277ac552f9b78>
       mrcf:standard_name  "downward_heat_flux_in_sea_ice" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/55cac37026ec9b122ab901ec3cf15386>
       mrcf:standard_name  "barotropic_northward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/56aafcf167d2c3abd19e5300bdff59ff>
       mrcf:standard_name  "air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6d910b59167c7da21cfef0b87037b94e>
       mrcf:standard_name  "surface_downwelling_shortwave_flux_in_air_assuming_clear_sky" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/577914ecaf9d970e53bcc978969f3ceb>
       mrcf:standard_name  "soil_thermal_capacity" ;
       mrcf:type     "Field" ;
       mrcf:units    "J kg-1 K-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/accaf9011903b75d53b83ec2b33e1429>
       mrcf:standard_name  cfsn:age_of_stratospheric_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f5a3e2c69a30a23fe6785134dad30a7a>
       mrcf:standard_name  "age_of_stratospheric_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/024f4061931f9f150c9f8d768f5e0ec7>
       mrcf:standard_name  cfsn:vegetation_area_fraction ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/26caf938834739a5ea08de418731000d>
       mrcf:standard_name  cfsn:surface_downward_northward_stress ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9d148b02131547d3fb473d6299f8e813>
       mrcf:standard_name  "atmosphere_cloud_ice_content" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5af08035f5b4d96f70f023747eb13ed0>
       mrcf:standard_name  "square_of_eastward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3414345eeceddd36dd312a6f0e12cbb9>
       mrcf:standard_name  "mole_fraction_of_nitrogen_trioxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "mole mole-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f7e7acaac6701ab7dcb7bb139521a05a>
       mrcf:standard_name  "downward_northward_stress_at_sea_ice_base" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ef7a6fb6a6f65603fcaf9ea51edbcd3a>
       mrcf:standard_name  "surface_upward_latent_heat_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/059486b6a368519d8ea28fbb1d6ff17b>
       mrcf:standard_name  cfsn:precipitable_water ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/cc44dfb3bf4a5120304847561b77e82e>
       mrcf:standard_name  cfsn:lagrangian_tendency_of_air_pressure ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa s-1" ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metocean/cf/f996bdbd4b609227c79c81c54c93f444>
+      mrcf:standard_name  "product_of_eastward_wind_and_geopotential_height" ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
 
 <http://www.metarelate.net/metocean/cf/c3550626e7d7e571ae8a7292c0b23cf6>
       mrcf:standard_name  "product_of_eastward_wind_and_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0056be039cf1d9b25305db834c4fa519>
       mrcf:standard_name  "sea_water_salinity" ;
       mrcf:type     "Field" ;
       mrcf:units    "1e3 psu @0.035" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/cfe411684faff09e239985521ad46abd>
       mrcf:standard_name  "square_of_geopotential_height" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e5267db8ffb7ef330050bb186cfc857a>
       mrcf:standard_name  "atmosphere_kinetic_energy_content" ;
       mrcf:type     "Field" ;
       mrcf:units    "J m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/23e322091e7b45c1f37788d0f08e26a0>
       mrcf:standard_name  "toa_outgoing_shortwave_flux_assuming_clear_sky" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c000a8f3bc478ab63a15324b8ca21cd2>
       mrcf:standard_name  "tendency_of_mass_fraction_of_cloud_ice_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0dc9240722c746771e3fcb034d01da6a>
       mrcf:standard_name  "northward_sea_ice_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/92dc320fafa5209836850c308578b267>
       mrcf:standard_name  "convective_rainfall_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3f8fe41c375f3ba419b2e3d21ff9bddc>
       mrcf:standard_name  cfsn:mole_fraction_of_bromine_chloride_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f80d545db79e2c05d5960cf0f01811dc>
       mrcf:standard_name  cfsn:surface_altitude ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2a9d0246f41f52d51d1a6076e68e78f2>
       mrcf:standard_name  cfsn:stratiform_cloud_area_fraction_in_atmosphere_layer ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ce23dd4ef6a25f880ec3b4279fc0ad33>
       mrcf:standard_name  cfsn:air_pressure_at_freezing_level ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1e16e3e92ebd93f79d618ba43d793711>
       mrcf:standard_name  cfsn:surface_albedo_assuming_deep_snow ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0ae1a7894d133d76ce14195ecb22c114>
       mrcf:standard_name  "upward_sea_ice_basal_heat_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/dfd08d4a266b97ea5c57a8deeeb2a7b5>
       mrcf:standard_name  cfsn:total_ozone ;
       mrcf:type     "Field" ;
       mrcf:units    "Dobson" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/14969a7336cdac27d234bf73e4f68a04>
       mrcf:standard_name  "wind_mixing_energy_flux_into_sea_water" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/692753f6ba480b06132fd6311c1e8e7e>
       mrcf:standard_name  "air_density" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-3" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c6b854a78280d9c9d4aa29c818d4da84>
       mrcf:standard_name  cfsn:stratiform_snowfall_rate ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/dc0077425513f84de93a96b63998553b>
       mrcf:standard_name  "net_downward_shortwave_flux_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/dff454bf661721c8240773f174c1e336>
       mrcf:standard_name  cfsn:specific_kinetic_energy_of_air ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6e4139fa34c5f42888e0e6e9a08f8316>
       mrcf:standard_name  cfsn:tendency_of_specific_humidity ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b2a3d343e1a78b5645fb95b8a6810336>
       mrcf:standard_name  cfsn:convective_available_potential_energy ;
       mrcf:type     "Field" ;
       mrcf:units    "J kg-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2e747dd525aa4300e86ba0da15c875ef>
       mrcf:standard_name  "tendency_of_eastward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/bee0bc2a1c95fbc4d33ed82bce014c77>
       mrcf:standard_name  "square_of_air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5f5f47f4b1402485bfeae84715b807f6>
       mrcf:standard_name  "surface_albedo_assuming_no_snow" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c97c910895583dc4d7e06b514a06c8e3>
       mrcf:standard_name  "surface_air_pressure" ;
       mrcf:type     "Field" ;
       mrcf:units    "g cm-1 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9c91b4b4cb03d2c86a8aef4d152432d3>
       mrcf:standard_name  "convective_cloud_area_fraction_of_atmosphere_layer" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/222275dbef54097651ecdecae36ac9e0>
       mrcf:standard_name  "y_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/15402a4f352cbeb14cba648f25be90fd>
       mrcf:standard_name  cfsn:upward_air_velocity ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5045047174d2219d77d67a61b90e1d0e>
       mrcf:standard_name  cfsn:surface_upward_water_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1f24ce792cecd746d60df94d22acfa76>
       mrcf:standard_name  cfsn:sea_ice_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/39cf1038a45cc022992361a87866f8ad>
       mrcf:standard_name  "divergence_of_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4838ae34d331ba6f034e44e1815d2241>
       mrcf:standard_name  "stratiform_cloud_area_fraction_in_atmosphere_layer" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/549eeef4ce811bfec1d01cb882486c2f>
       mrcf:standard_name  "mass_fraction_of_unfrozen_water_in_soil_moisture" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4b1df86fb3327222e425752b3db636c6>
       mrcf:standard_name  "product_of_eastward_wind_and_northward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/bb3f05fbba446d19309421d2eccbb5d6>
       mrcf:standard_name  cfsn:mole_fraction_of_chlorine_dioxide_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/db7cda5792d3bea83231f0ac44caf0d1>
       mrcf:standard_name  "product_of_eastward_wind_and_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f1e5937db8867aca0b56df119666ff6b>
       mrcf:standard_name  "eastward_wind" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8ebf3cbd74244d8ec8da35efe8d8da58>
       mrcf:standard_name  cfsn:surface_roughness_length ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3e2d884ea5e896670e2d8b446805b808>
       mrcf:standard_name  <http://def.cfconventions.org/standard_names/vertical_velocity_(pressure)> ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/07ae38d33fe684d2f2094fb841884972>
       mrcf:standard_name  "surface_downwelling_shortwave_flux_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0945adb7bba3fe7d6522947634631ae5>
       mrcf:standard_name  "net_primary_productivity_of_carbon" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6b36c553d3bb9247a6f70c0ba1c0ff88>
       mrcf:standard_name  "sea_ice_albedo" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d83efa56864ac78570bf312a6e3f1b27>
       mrcf:standard_name  "mass_fraction_of_sulfur_dioxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/03b6b22f1b602b74b2eb0241828185d8>
       mrcf:standard_name  "water_flux_into_sea_water_from_rivers" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ac7e8518a0b6c9194eacabed71b5c9bb>
       mrcf:standard_name  cfsn:toa_outgoing_longwave_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/83ad139392ccd96902801e1de6ba946c>
       mrcf:standard_name  cfsn:stratiform_rainfall_rate ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9056ef2ad92d2cd7ff26cf98ef4a0f28>
       mrcf:standard_name  "stratiform_snowfall_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0dab6f2fc98bd4552693c65ef457eee7>
       mrcf:standard_name  "lagrangian_tendency_of_air_pressure" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d3e4d9de65b568ded1283ae294bb724c>
       mrcf:standard_name  "air_pressure" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/038964772d9b89ea106a1e393b247b1d>
       mrcf:standard_name  "mass_fraction_of_cloud_ice_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0189efa6429cc55fc8afa002d7120978>
       mrcf:standard_name  "toa_outgoing_longwave_flux_assuming_clear_sky" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/af26509c699840e7b54f52f7c12534d3>
       mrcf:standard_name  "mole_fraction_of_bromine_nitrate_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/cebe3b413687e073b80977ca411bf788>
       mrcf:standard_name  "tendency_of_mass_fraction_of_cloud_ice_in_air_due_to_advection" ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/736fa7cf0428a9a794ce02fb921a4041>
       mrcf:standard_name  "upward_eliassen_palm_flux_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/901ff4a3e413b6478b798a6f6ddc6bb4>
       mrcf:standard_name  cfsn:air_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7f4ff4e134adaa40f740c6d2a7b73ab5>
       mrcf:standard_name  cfsn:mole_fraction_of_atomic_chlorine_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6aef76f47109b73d5a25f988c0da34f1>
       mrcf:standard_name  cfsn:surface_downwelling_shortwave_flux_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f9f7918a8222ea4721b699ddc95173d2>
       mrcf:standard_name  "soil_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a51b4775a32cdfa6a96f0e34f5430930>
       mrcf:standard_name  cfsn:tendency_of_eastward_wind ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b2ffbfcfb1d22069d9b14836bfece815>
       mrcf:standard_name  "product_of_northward_wind_and_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/21fb702723f1e0ffa59cf69db1fd6975>
       mrcf:standard_name  "surface_snow_and_ice_melt_heat_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/dc558e101f1945065565114c2a6a1029>
       mrcf:standard_name  "product_of_omega_and_specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2354729c1ced645ffc3396baff518c7e>
       mrcf:standard_name  cfsn:snow_grain_size ;
       mrcf:type     "Field" ;
       mrcf:units    "1e-6 m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/bdf48278be31e8895da403f227f24903>
       mrcf:standard_name  "tendency_of_eastward_wind_due_to_advection" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/cdf480fe4fd60d0933ca5daeb755a981>
       mrcf:standard_name  "leaf_area_index" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5b6aa037e2dcf61709b2ca7da4542232>
       mrcf:standard_name  cfsn:tendency_of_northward_wind_due_to_diffusion ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0358276eefd9db74a191f27724d01967>
       mrcf:standard_name  "surface_snow_melt_heat_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/c62105da86f2b50eb6aac67d533f788a>
       mrcf:standard_name  cfsn:tendency_of_air_density ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-3 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/432be2a20c3661e9df6d9c19a332608f>
       mrcf:standard_name  cfsn:atmosphere_northward_stress_due_to_gravity_wave_drag ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9051a1edf389fba9bb5062cc9a9bf774>
       mrcf:standard_name  "vegetation_area_fraction" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8bc92204058c0ac2be21781c41394f1e>
       mrcf:standard_name  "surface_air_pressure" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f8e9b430de710a433120c799fa3ef088>
       mrcf:standard_name  "convective_snowfall_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/dbf1ff455c8b0028529aa2106f363657>
       mrcf:standard_name  "air_potential_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6c56b49b7d8f439ea3b666bc0b4312fd>
       mrcf:standard_name  "mass_fraction_of_frozen_water_in_soil_moisture" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/739bf2f1fab2631f13154d91d5450bac>
       mrcf:standard_name  cfsn:soil_porosity ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/15b8706d588007bb85aee6176173a7bf>
       mrcf:standard_name  "mole_fraction_of_dinitrogen_pentoxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "mole mole-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/70b9c27f45941fe5dc6f588a5149e870>
       mrcf:standard_name  "square_of_height" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4449eb0b983e6c50727228d17ccdbeb2>
       mrcf:standard_name  "tendency_of_eastward_wind_due_to_eliassen_palm_flux_divergence" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3e4a440f03d0597d068d94c7fc029e28>
       mrcf:standard_name  "convective_snowfall_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/a55a802ae9110b3fd4f45a2ad4d50cda>
       mrcf:standard_name  "stratiform_rainfall_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f02ab2313f3e7f2628e3ef7558e6944b>
       mrcf:standard_name  cfsn:land_area_fraction ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/514c02c082a2ba19a174679917dcf322>
       mrcf:standard_name  "geopotential_height" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/280a26860e6d93a107eaf3a353465348>
       mrcf:standard_name  "specific_humidity" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/eb522860eadd3031c053ab8e48a0ed75>
       mrcf:standard_name  "mole_fraction_of_chlorine_dioxide_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ac5d7d81f9699ffb24dcf55778dd4bf3>
       mrcf:standard_name  cfsn:tendency_of_mass_fraction_of_cloud_liquid_water_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f2937456b539cd20a9d48ee8c7f95e6d>
       mrcf:standard_name  cfsn:surface_net_downward_longwave_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/de7b42ba5b7c0f415ec0d5858ac831d3>
       mrcf:standard_name  "tendency_of_northward_wind_due_to_advection" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/8c567496e0193f3f0f0a115392a71926>
       mrcf:standard_name  "surface_altitude" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6f5392d0053268fd5f26b6093b21c7e9>
       mrcf:standard_name  "tropopause_air_pressure" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/da95ff525594429a08ee57c92417952a>
       mrcf:standard_name  "surface_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4addff2213e25796a08ab79c5a269cfc>
       mrcf:standard_name  "surface_snow_amount" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/29e4648bbb63b2a942aa2a38ac375f42>
       mrcf:standard_name  "age_of_stratospheric_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "Years" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/19745a129168151d774b64a205012ef1>
       mrcf:standard_name  "surface_downwelling_longwave_flux_in_air_assuming_clear_sky" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ccee7c6bf9a8ac6c01add3042bfab780>
       mrcf:standard_name  cfsn:tropopause_air_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "K" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/561267771fc21ae14333305b3ecf41d0>
       mrcf:standard_name  cfsn:air_pressure ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e285e9f3c9eba90b3f6d352509599560>
       mrcf:standard_name  "tendency_of_sea_ice_thickness_due_to_dynamics" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/331167840c4165a4304545877d10a3ad>
       mrcf:standard_name  cfsn:moisture_content_of_soil_layer ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/6152066c18911ad334a529ff74c4bad6>
       mrcf:standard_name  "tendency_of_ocean_barotropic_streamfunction" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm3 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7e1fc56d8b62468050653115fdb43175>
       mrcf:standard_name  "water_potential_evaporation_flux" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7a2445d9a9a973f5ca8e5b2602ac3d8b>
       mrcf:standard_name  cfsn:cloud_area_fraction ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b800fc28a74f198d5bb2e525638bc948>
       mrcf:standard_name  cfsn:toa_outgoing_longwave_flux_assuming_clear_sky ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/36e42b3941ff13232d6091a40c8b2ce0>
       mrcf:standard_name  "tendency_of_air_temperature_due_to_convection" ;
       mrcf:type     "Field" ;
       mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/06f295ea486a3f6dc0a81565801b1d63>
       mrcf:standard_name  "tendency_of_air_temperature_due_to_advection" ;
       mrcf:type     "Field" ;
       mrcf:units    "K s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/331e240cd4bc28588f44ee8a90f30db3>
       mrcf:standard_name  cfsn:convective_cloud_area_fraction ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ff6c551fbfc1fa0d1ddd5788ec3f2a6f>
       mrcf:standard_name  "canopy_height" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/958d135f93fe71625dcc022161b994c3>
       mrcf:standard_name  cfsn:convective_snowfall_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/201d089c69f61653efb89b6b60329e2c>
       mrcf:standard_name  "barotropic_eastward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "cm s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4c0e5cce94c1a29bcabd3914485e38a5>
       mrcf:standard_name  "soil_thermal_conductivity" ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-1 K-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f4e2fc1b345ba2d9f762d2fbca627534>
       mrcf:standard_name  cfsn:wind_mixing_energy_flux_into_sea_water ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/59d630f09c84269f152f3637f1ef0847>
       mrcf:standard_name  cfsn:total_cloud_cover ;
       mrcf:type     "Field" ;
       mrcf:units    "%" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4b4ec784dc42fb7b614ef030dbd0cab8>
       mrcf:standard_name  "product_of_northward_wind_and_air_temperature" ;
       mrcf:type     "Field" ;
       mrcf:units    "K m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/670a6f5bf1914fc880c0c2d83d73fa91>
       mrcf:standard_name  cfsn:air_temperature ;
       mrcf:type     "Field" ;
       mrcf:units    "kelvin" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/9232c89d3fc3a8995d30045fca01e49c>
       mrcf:standard_name  "mass_fraction_of_ozone_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/2f2a66a80bf4f7530765c1af73ac0c57>
       mrcf:standard_name  "tendency_of_air_temperature_due_to_shortwave_heating_assuming_clear_sky" ;
       mrcf:type     "Field" ;
       mrcf:units    "" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/4610949b92b6f8a028ff973ff50bf744>
       mrcf:standard_name  cfsn:cloud_area_fraction_in_atmosphere_layer ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7c383489df8c58dbe30571ec79d7bb82>
       mrcf:standard_name  "product_of_northward_wind_and_omega" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f8c9b8daa34e226da21b412f6f87137b>
       mrcf:standard_name  "tendency_of_eastward_wind_due_to_orographic_gravity_wave_drag" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7c01d7e6279bc9c225c4c285d5e4f95e>
       mrcf:standard_name  "surface_downward_northward_stress" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/53a375991ea920a947b51fc8154bf577>
       mrcf:standard_name  cfsn:atmosphere_eastward_stress_due_to_gravity_wave_drag ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5843c14366fbf7facbdd9ef3c3bd0f46>
       mrcf:standard_name  "land_binary_mask" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7bfa6059433858c4a26242dd4493d8c7>
       mrcf:standard_name  "surface_northward_sea_water_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/b4939fe6044a1c38c2bdfd656287fe3a>
       mrcf:standard_name  "soil_carbon_content" ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/db351df79f07ee8192d787a742788347>
       mrcf:standard_name  cfsn:convective_rainfall_amount ;
       mrcf:type     "Field" ;
       mrcf:units    "kg m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/f1cf13bd7970d52d837c49908fa11f5a>
       mrcf:standard_name  cfsn:mole_fraction_of_cfc12_in_air ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/82a34b0bb13aca6a2a6c0d15881fb89f>
       mrcf:standard_name  "mole_fraction_of_bromine_chloride_in_air" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d657734bd4fc6aed6a7cb9444b1a1c5a>
       mrcf:standard_name  cfsn:atmosphere_boundary_layer_thickness ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/1b8d505f2d1c32bb823411e9b1b3750d>
       mrcf:standard_name  "air_pressure_at_sea_level" ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/00eed144bb96b9743a11495215d40183>
       mrcf:standard_name  "product_of_eastward_wind_and_upward_air_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "m2 s-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/32b0ab84764fb65318136daa6415e190>
       mrcf:standard_name  cfsn:toa_outgoing_shortwave_flux ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/dcc3234a941294ca4d816e60ca3b8fb0>
       mrcf:standard_name  cfsn:potential_vorticity_of_atmosphere_layer ;
       mrcf:type     "Field" ;
       mrcf:units    "Pa-1 s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/0b6e252eed9a52d87c3ed95df4534307>
       mrcf:standard_name  cfsn:soil_thermal_conductivity ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-1 K-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7f72e6118e7df7f1938a4b6783f30bca>
       mrcf:standard_name  "mass_fraction_of_unfrozen_water_in_soil_moisture" ;
       mrcf:type     "Field" ;
       mrcf:units    "1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/5237d0feaee3f2e009e9c2af582fc584>
       mrcf:standard_name  cfsn:absolute_vorticity ;
       mrcf:type     "Field" ;
       mrcf:units    "s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/12bf1d2fa56cdb48241e6d0b357254c5>
       mrcf:standard_name  "northward_transformed_eulerian_mean_air_velocity" ;
       mrcf:type     "Field" ;
       mrcf:units    "MKS" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/d7e11aa74bae07c13a0ea910ed6ab330>
       mrcf:standard_name  cfsn:tropopause_altitude ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/7dc25b3eeb62f06db65f5b41400fdcf8>
       mrcf:standard_name  cfsn:geopotential_height ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/e3d02372ac1a5fa29bcd8fb5eb96ef0c>
       mrcf:standard_name  "tendency_of_northward_wind_due_to_diffusion" ;
       mrcf:type     "Field" ;
       mrcf:units    "m s-1" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/3f3050e7758d8a0fd3d11ccb547f12b5>
       mrcf:standard_name  "surface_snow_thickness" ;
       mrcf:type     "Field" ;
       mrcf:units    "m" ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metocean/cf/ffd7267a9afeec7a5e8e797f1cf2ff62>
       mrcf:standard_name  cfsn:downward_heat_flux_in_sea_ice ;
       mrcf:type     "Field" ;
       mrcf:units    "W m-2" ;
-      mr:saveCache  "True" .
+
 

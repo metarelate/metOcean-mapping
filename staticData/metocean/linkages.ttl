@@ -1,4 +1,10 @@
-#(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping. metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You should have received a copy of the GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/." 
+#(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping.
+#metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the
+#GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License,
+#or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#See the GNU Lesser General Public License for more details. You should have received a copy of the
+#GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/." 
 
 @prefix cfsn: <http://def.cfconventions.org/standard_names/> .
 @prefix dc: <http://purl.org/dc/terms/> .
@@ -29,7 +35,6 @@
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m03s00i392 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/91e567b117e6ea2a8905c49d20fce8bb>
       mr:CFexport   "True" ;
@@ -38,7 +43,6 @@
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i055 ;
-      mr:saveCache  "True" .
 
 link:cc1ef94c54def822a485896b09f42c8b
       mr:CFexport   "True" ;
@@ -47,7 +51,6 @@ link:cc1ef94c54def822a485896b09f42c8b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s06i202 ;
-      mr:saveCache  "True" .
 
 link:d11721ca972b4e3f1909d1cb9b71f624
       mr:CFexport   "True" ;
@@ -56,7 +59,6 @@ link:d11721ca972b4e3f1909d1cb9b71f624
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0e1291b61f4b799d620e9bca2bb7367b>
       mr:CFexport   "True" ;
@@ -65,7 +67,6 @@ link:d11721ca972b4e3f1909d1cb9b71f624
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i183 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/941016c34cfd8bf0e4cab269ad78f3a7>
       mr:CFexport   "True" ;
@@ -74,7 +75,6 @@ link:d11721ca972b4e3f1909d1cb9b71f624
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/333> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1fbc8f2cffb4a8d4992b83c8711f61be>
       mr:CFexport   "True" ;
@@ -83,7 +83,6 @@ link:d11721ca972b4e3f1909d1cb9b71f624
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 link:c44dc897fd41206ae2771877dcdd0b30
       mr:CFexport   "True" ;
@@ -92,7 +91,6 @@ link:c44dc897fd41206ae2771877dcdd0b30
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i201 ;
-      mr:saveCache  "True" .
 
 link:ed5aef1aea8188844a89c10f8061c760
       mr:CFexport   "True" ;
@@ -101,7 +99,6 @@ link:ed5aef1aea8188844a89c10f8061c760
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/336> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3e9bb73dca8697662b7ce02a91588246>
       mr:CFexport   "True" ;
@@ -110,7 +107,6 @@ link:ed5aef1aea8188844a89c10f8061c760
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i217 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/612a4e6498ebac2e5114bf95c9e3aa0e>
       mr:CFexport   "True" ;
@@ -119,7 +115,6 @@ link:ed5aef1aea8188844a89c10f8061c760
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i010 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/31e3b2ca31b0cd45d4528faa4a4f09e2>
       mr:CFexport   "True" ;
@@ -128,7 +123,6 @@ link:ed5aef1aea8188844a89c10f8061c760
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i332 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/236d836347765f42820879d3d833fad7>
       mr:CFexport   "True" ;
@@ -137,7 +131,6 @@ link:ed5aef1aea8188844a89c10f8061c760
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/42> ;
-      mr:saveCache  "True" .
 
 link:db7bfbb537ded41b31b86746581f0427
       mr:CFexport   "True" ;
@@ -146,7 +139,14 @@ link:db7bfbb537ded41b31b86746581f0427
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i313 ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metOcean/linkage/8decc71aac6a7121b2ef0ed622a7f7c1>
+      mr:CFexport   "True" ;
+      mr:CFimport   "True" ;
+      mr:CFlink     <http://www.metarelate.net/metocean/cf/3cc5e05291b37f76b7f51a13fe5e5484> ;
+      mr:UMexport   "False" ;
+      mr:UMimport   "True" ;
+      mr:UMlink     moStCon:m01s15i238 ;
 
 link:b6ca2a5e0a1227bc6d1ca3b0092bcc90
       mr:CFexport   "True" ;
@@ -155,7 +155,6 @@ link:b6ca2a5e0a1227bc6d1ca3b0092bcc90
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/470ca7515c6a50af77f8606b5946d413>
       mr:CFexport   "True" ;
@@ -164,7 +163,6 @@ link:b6ca2a5e0a1227bc6d1ca3b0092bcc90
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i202 ;
-      mr:saveCache  "True" .
 
 link:df661365b395a1232aeecd4d0d4ab6bf
       mr:CFexport   "True" ;
@@ -173,7 +171,6 @@ link:df661365b395a1232aeecd4d0d4ab6bf
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i401 ;
-      mr:saveCache  "True" .
 
 link:e50acaea4d8527b71fedd59abfe1b558
       mr:CFexport   "True" ;
@@ -182,7 +179,6 @@ link:e50acaea4d8527b71fedd59abfe1b558
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i223 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/25da167f4f5476fb09e03f1387fd7752>
       mr:CFexport   "True" ;
@@ -191,7 +187,6 @@ link:e50acaea4d8527b71fedd59abfe1b558
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i102 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/126ea7304ca6530ed32fb3dabeafc6c7>
       mr:CFexport   "True" ;
@@ -200,7 +195,6 @@ link:e50acaea4d8527b71fedd59abfe1b558
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i208 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8fc2fab742277504b133ecdc6fb5f9e7>
       mr:CFexport   "True" ;
@@ -209,7 +203,6 @@ link:e50acaea4d8527b71fedd59abfe1b558
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i240 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2d31fac5e90adb7175bdfa4e0a0323ec>
       mr:CFexport   "True" ;
@@ -218,7 +211,6 @@ link:e50acaea4d8527b71fedd59abfe1b558
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i029 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/740af58c630bb4dc096813d830205dd5>
       mr:CFexport   "True" ;
@@ -227,7 +219,6 @@ link:e50acaea4d8527b71fedd59abfe1b558
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i101 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/50744511e85cf8980ebcb15a5ca8b638>
       mr:CFexport   "True" ;
@@ -236,7 +227,6 @@ link:e50acaea4d8527b71fedd59abfe1b558
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1373> ;
-      mr:saveCache  "True" .
 
 link:a47e3391ea2d5d0b250ee3c7b54ef808
       mr:CFexport   "True" ;
@@ -245,7 +235,6 @@ link:a47e3391ea2d5d0b250ee3c7b54ef808
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i260 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7eeef41cfefbe077e1ffef3fb2068818>
       mr:CFexport   "True" ;
@@ -254,7 +243,6 @@ link:a47e3391ea2d5d0b250ee3c7b54ef808
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i020 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6de936c024d0133f130e3b2a4811e8ee>
       mr:CFexport   "True" ;
@@ -263,7 +251,6 @@ link:a47e3391ea2d5d0b250ee3c7b54ef808
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i135 ;
-      mr:saveCache  "True" .
 
 link:e288e918440f0e2a2e7eddf51ec46052
       mr:CFexport   "True" ;
@@ -272,7 +259,6 @@ link:e288e918440f0e2a2e7eddf51ec46052
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i245 ;
-      mr:saveCache  "True" .
 
 link:cfda9b85612f7af5780fc19cb648e7eb
       mr:CFexport   "True" ;
@@ -281,7 +267,6 @@ link:cfda9b85612f7af5780fc19cb648e7eb
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i133 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6e201ebf7e56074c2473a00d729bb33d>
       mr:CFexport   "True" ;
@@ -290,7 +275,6 @@ link:cfda9b85612f7af5780fc19cb648e7eb
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i407 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3a2b2e543ad4d42cdd2af1f6eb6e50bf>
       mr:CFexport   "True" ;
@@ -299,7 +283,6 @@ link:cfda9b85612f7af5780fc19cb648e7eb
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i207 ;
-      mr:saveCache  "True" .
 
 link:c3c5cb77549387c5c2849312f9ecd19c
       mr:CFexport   "True" ;
@@ -308,7 +291,6 @@ link:c3c5cb77549387c5c2849312f9ecd19c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i144 ;
-      mr:saveCache  "True" .
 
 link:a4ec7095c1ef6a18cb1188703a802be2
       mr:CFexport   "True" ;
@@ -317,7 +299,6 @@ link:a4ec7095c1ef6a18cb1188703a802be2
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/322> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6078d4de4e9124bfd7b111a647e939a0>
       mr:CFexport   "True" ;
@@ -326,7 +307,6 @@ link:a4ec7095c1ef6a18cb1188703a802be2
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1395> ;
-      mr:saveCache  "True" .
 
 link:cf5bf023848722667b6b29737ef963d1
       mr:CFexport   "True" ;
@@ -335,7 +315,6 @@ link:cf5bf023848722667b6b29737ef963d1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i209 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4c850b2274c8405b8013464f6ebb1cde>
       mr:CFexport   "True" ;
@@ -344,7 +323,6 @@ link:cf5bf023848722667b6b29737ef963d1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/701> ;
-      mr:saveCache  "True" .
 
 link:f56f993070fcf3f3ee2db73eb1600cf4
       mr:CFexport   "True" ;
@@ -353,7 +331,6 @@ link:f56f993070fcf3f3ee2db73eb1600cf4
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/0/0> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/41e32c76370be7e4cf2ed9fbf14ac624>
       mr:CFexport   "True" ;
@@ -362,7 +339,6 @@ link:f56f993070fcf3f3ee2db73eb1600cf4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i003 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6af0e421832e2a9776f82ee57b5b3fff>
       mr:CFexport   "True" ;
@@ -371,7 +347,6 @@ link:f56f993070fcf3f3ee2db73eb1600cf4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i261 ;
-      mr:saveCache  "True" .
 
 link:d56aaa53674e079bde3ae4a0fc8e32b7
       mr:CFexport   "True" ;
@@ -380,7 +355,6 @@ link:d56aaa53674e079bde3ae4a0fc8e32b7
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i222 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/46c1253a5933e52833fc38a3d9e75d8a>
       mr:CFexport   "True" ;
@@ -389,7 +363,6 @@ link:d56aaa53674e079bde3ae4a0fc8e32b7
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i181 ;
-      mr:saveCache  "True" .
 
 link:e76fb93e00571d930c1d596111086ee9
       mr:CFexport   "True" ;
@@ -398,7 +371,6 @@ link:e76fb93e00571d930c1d596111086ee9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i004 ;
-      mr:saveCache  "True" .
 
 link:e5af8c3b85b30f3c79915a6b8d460666
       mr:CFexport   "True" ;
@@ -407,7 +379,6 @@ link:e5af8c3b85b30f3c79915a6b8d460666
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0d97559f0c50160a14ab8c787f537b63>
       mr:CFexport   "True" ;
@@ -416,7 +387,6 @@ link:e5af8c3b85b30f3c79915a6b8d460666
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i201 ;
-      mr:saveCache  "True" .
 
 link:c40e15e9ea52189b049a6c5055f0d65f
       mr:CFexport   "True" ;
@@ -425,7 +395,6 @@ link:c40e15e9ea52189b049a6c5055f0d65f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/50> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/03a96527a4f5a0b5fbfa81e13211e14a>
       mr:CFexport   "True" ;
@@ -434,7 +403,6 @@ link:c40e15e9ea52189b049a6c5055f0d65f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i223 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/70fe13f10299fd32bc02350a9df2e29c>
       mr:CFexport   "True" ;
@@ -443,7 +411,6 @@ link:c40e15e9ea52189b049a6c5055f0d65f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i225 ;
-      mr:saveCache  "True" .
 
 link:b8d1af48ed3757b335ee6d6cbcb19eb6
       mr:CFexport   "True" ;
@@ -452,7 +419,6 @@ link:b8d1af48ed3757b335ee6d6cbcb19eb6
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1532> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/912b87edb35fbd31b75b95d880d2e223>
       mr:CFexport   "True" ;
@@ -461,7 +427,6 @@ link:b8d1af48ed3757b335ee6d6cbcb19eb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i143 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/390e385022c8e9a85d50d14740b638b9>
       mr:CFexport   "True" ;
@@ -470,7 +435,6 @@ link:b8d1af48ed3757b335ee6d6cbcb19eb6
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/57> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/646af07e4ae4056a29163e395f940f83>
       mr:CFexport   "True" ;
@@ -479,7 +443,6 @@ link:b8d1af48ed3757b335ee6d6cbcb19eb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i229 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/514b55797896e944b40035c98496285d>
       mr:CFexport   "True" ;
@@ -488,7 +451,6 @@ link:b8d1af48ed3757b335ee6d6cbcb19eb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s04i201 ;
-      mr:saveCache  "True" .
 
 link:c7095cec5304ae8ed9c814a37c763154
       mr:CFexport   "True" ;
@@ -497,7 +459,6 @@ link:c7095cec5304ae8ed9c814a37c763154
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/61> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/48cb77a6dcffdb165c3127992460f694>
       mr:CFexport   "True" ;
@@ -506,7 +467,6 @@ link:c7095cec5304ae8ed9c814a37c763154
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s09i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4154aabbb64e69607b92a12277b64a9d>
       mr:CFexport   "True" ;
@@ -515,7 +475,6 @@ link:c7095cec5304ae8ed9c814a37c763154
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/332> ;
-      mr:saveCache  "True" .
 
 link:dbbfb4018e2012aac203051b4526c466
       mr:CFexport   "True" ;
@@ -524,7 +483,6 @@ link:dbbfb4018e2012aac203051b4526c466
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1> ;
-      mr:saveCache  "True" .
 
 link:f691edcc60fbda44e3a2322101feba97
       mr:CFexport   "True" ;
@@ -533,7 +491,6 @@ link:f691edcc60fbda44e3a2322101feba97
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i225 ;
-      mr:saveCache  "True" .
 
 link:a34cc0336c2010700601975775b05233
       mr:CFexport   "True" ;
@@ -542,7 +499,6 @@ link:a34cc0336c2010700601975775b05233
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i010 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/07be6875742dd7880bdda1613d6b13e5>
       mr:CFexport   "True" ;
@@ -551,7 +507,6 @@ link:a34cc0336c2010700601975775b05233
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i202 ;
-      mr:saveCache  "True" .
 
 link:d3564087438413da1a0636990419d300
       mr:CFexport   "True" ;
@@ -560,7 +515,6 @@ link:d3564087438413da1a0636990419d300
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i056 ;
-      mr:saveCache  "True" .
 
 link:b00149ae7b945a30b3557711dcb1478d
       mr:CFexport   "True" ;
@@ -569,7 +523,6 @@ link:b00149ae7b945a30b3557711dcb1478d
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1383> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/24dd555850b03e7f4472e058939506de>
       mr:CFexport   "True" ;
@@ -578,7 +531,6 @@ link:b00149ae7b945a30b3557711dcb1478d
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i207 ;
-      mr:saveCache  "True" .
 
 link:d1af629030e14fdf72dab4df673d2606
       mr:CFexport   "True" ;
@@ -587,7 +539,6 @@ link:d1af629030e14fdf72dab4df673d2606
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i234 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/439309c50d102d1db9e25b561bcfcc30>
       mr:CFexport   "True" ;
@@ -596,7 +547,6 @@ link:d1af629030e14fdf72dab4df673d2606
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i108 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/681f424d1552a7a9a4d15ade9bac0309>
       mr:CFexport   "True" ;
@@ -605,7 +555,6 @@ link:d1af629030e14fdf72dab4df673d2606
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i237 ;
-      mr:saveCache  "True" .
 
 link:ca65ed4b75df27d3a9e5642cff742a0c
       mr:CFexport   "True" ;
@@ -614,7 +563,6 @@ link:ca65ed4b75df27d3a9e5642cff742a0c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i238 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/087476dbacf505db582935c2ad034e3c>
       mr:CFexport   "True" ;
@@ -623,7 +571,6 @@ link:ca65ed4b75df27d3a9e5642cff742a0c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i009 ;
-      mr:saveCache  "True" .
 
 link:ddd5b437e3c03108ea11ed740e193178
       mr:CFexport   "True" ;
@@ -632,7 +579,6 @@ link:ddd5b437e3c03108ea11ed740e193178
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i026 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/905d876c92150927671f7face973284e>
       mr:CFexport   "True" ;
@@ -641,7 +587,6 @@ link:ddd5b437e3c03108ea11ed740e193178
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i025 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8c03420761e0fad2eec584f66eb99dfb>
       mr:CFexport   "True" ;
@@ -650,7 +595,6 @@ link:ddd5b437e3c03108ea11ed740e193178
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i203 ;
-      mr:saveCache  "True" .
 
 link:ffe6d2c95b4cc4f607cc9a3b90cd54da
       mr:CFexport   "True" ;
@@ -659,7 +603,6 @@ link:ffe6d2c95b4cc4f607cc9a3b90cd54da
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i214 ;
-      mr:saveCache  "True" .
 
 link:f712867b07eb6f72d9972bc0d638cfaa
       mr:CFexport   "True" ;
@@ -668,7 +611,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i121 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/72baf1e82d8cdc95da36c9b8678012b6>
       mr:CFexport   "True" ;
@@ -677,7 +619,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/116> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5a5819f07e316d4be6f73a3fe2b897db>
       mr:CFexport   "True" ;
@@ -686,7 +627,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/7/7> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/15abfec1b6b088da074c6f808b285bfd>
       mr:CFexport   "True" ;
@@ -695,7 +635,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/982> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/315640a993c7a8c8f863f5880e264ed5>
       mr:CFexport   "True" ;
@@ -704,7 +643,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/09fd0653698929e51389bdd8500519c5>
       mr:CFexport   "True" ;
@@ -713,7 +651,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/34> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/81d211b467a8b616473e1ced30afa3e1>
       mr:CFexport   "True" ;
@@ -722,7 +659,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i451 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/81616749d72ae3c9d8c7909753d9e037>
       mr:CFexport   "True" ;
@@ -731,7 +667,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m03s00i337 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/57d11cabf0f0d8a7eabc12d4b051f4c7>
       mr:CFexport   "True" ;
@@ -740,7 +675,6 @@ link:f712867b07eb6f72d9972bc0d638cfaa
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 link:cef1f77275091e7a93ab78bb0160bdeb
       mr:CFexport   "True" ;
@@ -749,7 +683,6 @@ link:cef1f77275091e7a93ab78bb0160bdeb
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/186> ;
-      mr:saveCache  "True" .
 
 link:d7e6bd417b2b9d6112c536d59bd19562
       mr:CFexport   "True" ;
@@ -758,7 +691,6 @@ link:d7e6bd417b2b9d6112c536d59bd19562
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s04i010 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2fb4f123746c2837b8c3caa61eec64fa>
       mr:CFexport   "True" ;
@@ -767,7 +699,6 @@ link:d7e6bd417b2b9d6112c536d59bd19562
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i203 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0280d0858de9aa24194e76136eb6345e>
       mr:CFexport   "True" ;
@@ -776,7 +707,6 @@ link:d7e6bd417b2b9d6112c536d59bd19562
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i209 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9d332870ff6af061fbf539d9419482b4>
       mr:CFexport   "True" ;
@@ -785,7 +715,6 @@ link:d7e6bd417b2b9d6112c536d59bd19562
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m06s00i101 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8e7b27f471211e3179910c16c4a3f320>
       mr:CFexport   "True" ;
@@ -794,7 +723,6 @@ link:d7e6bd417b2b9d6112c536d59bd19562
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/2/3> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/772089a3d13c135af81b9ea2a6d7c238>
       mr:CFexport   "True" ;
@@ -803,7 +731,6 @@ link:d7e6bd417b2b9d6112c536d59bd19562
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/261> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4b184836688a2d05603594190cd35eb2>
       mr:CFexport   "True" ;
@@ -812,7 +739,6 @@ link:d7e6bd417b2b9d6112c536d59bd19562
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i182 ;
-      mr:saveCache  "True" .
 
 link:edc82cb86368ea0fb807d7446c97ce16
       mr:CFexport   "True" ;
@@ -821,7 +747,6 @@ link:edc82cb86368ea0fb807d7446c97ce16
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/182> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/863035c0ca12d5f3fcdd4ca2dd203079>
       mr:CFexport   "True" ;
@@ -830,7 +755,6 @@ link:edc82cb86368ea0fb807d7446c97ce16
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i227 ;
-      mr:saveCache  "True" .
 
 link:d15d7277b04e66d38bfd7f7b3985b968
       mr:CFexport   "True" ;
@@ -839,7 +763,6 @@ link:d15d7277b04e66d38bfd7f7b3985b968
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i152 ;
-      mr:saveCache  "True" .
 
 link:bfdd7cbcdad7c69c707c46272c5f15af
       mr:CFexport   "True" ;
@@ -848,7 +771,6 @@ link:bfdd7cbcdad7c69c707c46272c5f15af
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s30i321 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4ffb1ec4e2001c49d36a85eb3ca95742>
       mr:CFexport   "True" ;
@@ -857,7 +779,6 @@ link:bfdd7cbcdad7c69c707c46272c5f15af
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i191 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2cb78dbb1c292accf7457879f8866d93>
       mr:CFexport   "True" ;
@@ -866,7 +787,6 @@ link:bfdd7cbcdad7c69c707c46272c5f15af
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i209 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/751a0d328991b604c497a254b8f89e2d>
       mr:CFexport   "True" ;
@@ -875,7 +795,6 @@ link:bfdd7cbcdad7c69c707c46272c5f15af
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i203 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2c1c5c4928067ba34842f44b4e0dedc2>
       mr:CFexport   "True" ;
@@ -884,7 +803,6 @@ link:bfdd7cbcdad7c69c707c46272c5f15af
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/207> ;
-      mr:saveCache  "True" .
 
 link:e79bb4caca5cbff2e59c17fc3473bfa1
       mr:CFexport   "True" ;
@@ -893,7 +811,6 @@ link:e79bb4caca5cbff2e59c17fc3473bfa1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i209 ;
-      mr:saveCache  "True" .
 
 link:e864bb12760e512401c675a53ea17df9
       mr:CFexport   "True" ;
@@ -902,7 +819,6 @@ link:e864bb12760e512401c675a53ea17df9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i201 ;
-      mr:saveCache  "True" .
 
 link:eaf4e8ec55d4abdcdcf7751136c91581
       mr:CFexport   "True" ;
@@ -911,7 +827,6 @@ link:eaf4e8ec55d4abdcdcf7751136c91581
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/336> ;
-      mr:saveCache  "True" .
 
 link:a57d5fc686303e0815134791171dfae3
       mr:CFexport   "True" ;
@@ -920,7 +835,6 @@ link:a57d5fc686303e0815134791171dfae3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i211 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/27b3eb720581c3bcc465bce79f2aaacc>
       mr:CFexport   "True" ;
@@ -929,7 +843,6 @@ link:a57d5fc686303e0815134791171dfae3
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/16> ;
-      mr:saveCache  "True" .
 
 link:fd289fd1d23ab316515165d4e185df5e
       mr:CFexport   "True" ;
@@ -938,7 +851,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i212 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/37533daaf9529e3dcc0f0513ce1dfff5>
       mr:CFexport   "True" ;
@@ -947,7 +859,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3d3a37ce003e91e5d8cd5b3942f7a945>
       mr:CFexport   "True" ;
@@ -956,7 +867,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i392 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1c7693a03b0187fc05fffd96fa69e2b9>
       mr:CFexport   "True" ;
@@ -965,7 +875,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i032 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2c9b0b625b0e146ca6557f77525028fa>
       mr:CFexport   "True" ;
@@ -974,7 +883,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i181 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6c7840a5bfca3f8c1d11def9480d3728>
       mr:CFexport   "True" ;
@@ -983,7 +891,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i130 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/29f64e8d26002cd10ce68a977c0d64ab>
       mr:CFexport   "True" ;
@@ -992,7 +899,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/73> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/37487f26bca268ac3d6eeb39f930337d>
       mr:CFexport   "True" ;
@@ -1001,7 +907,6 @@ link:fd289fd1d23ab316515165d4e185df5e
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/253> ;
-      mr:saveCache  "True" .
 
 link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:CFexport   "True" ;
@@ -1010,7 +915,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i190 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/73ff1fd9c894812b495950c334693559>
       mr:CFexport   "True" ;
@@ -1019,7 +923,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i242 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/82c2b0613bd1612d690ca25e107ee7e7>
       mr:CFexport   "True" ;
@@ -1028,7 +931,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i334 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/37bf6e13bd7a516569b37bd8f90af52b>
       mr:CFexport   "True" ;
@@ -1037,7 +939,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m15s00i243 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/99c28aca49dd93e1dd1fa00a7d0ddd9c>
       mr:CFexport   "True" ;
@@ -1046,7 +947,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/29e2b7cf1de0086c5bc89a618b4b23ae>
       mr:CFexport   "True" ;
@@ -1055,7 +955,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/326> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7b1e9c237738846c09871ac94b84b310>
       mr:CFexport   "True" ;
@@ -1064,7 +963,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/200> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4f05419b13d3c0ab14723767580081e0>
       mr:CFexport   "True" ;
@@ -1073,7 +971,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/328> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7b89d246b72480c75189cec27c94bb21>
       mr:CFexport   "True" ;
@@ -1082,7 +979,6 @@ link:a5bc25d1c5ea9c73ff548a6814faa27e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i232 ;
-      mr:saveCache  "True" .
 
 link:ca578e3537f56106699b26b07dfc0fb6
       mr:CFexport   "True" ;
@@ -1091,7 +987,6 @@ link:ca578e3537f56106699b26b07dfc0fb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i204 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7aeecdff5eb35518be362529a40550c9>
       mr:CFexport   "True" ;
@@ -1100,7 +995,6 @@ link:ca578e3537f56106699b26b07dfc0fb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i225 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/07eda7c5e1c0c45a4ffe2a2529c4abbf>
       mr:CFexport   "True" ;
@@ -1109,7 +1003,6 @@ link:ca578e3537f56106699b26b07dfc0fb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1026> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4ad8ef56ea863f2756d151b76e1371c1>
       mr:CFexport   "True" ;
@@ -1118,7 +1011,6 @@ link:ca578e3537f56106699b26b07dfc0fb6
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/3/3> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/49c6449da11d73f2583f52174258299e>
       mr:CFexport   "True" ;
@@ -1127,7 +1019,6 @@ link:ca578e3537f56106699b26b07dfc0fb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i203 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2d27eac3cbebde6d62204291ee7c761c>
       mr:CFexport   "True" ;
@@ -1136,7 +1027,6 @@ link:ca578e3537f56106699b26b07dfc0fb6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/203> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/45e25fc5f552f8053e6ae3344397f66b>
       mr:CFexport   "True" ;
@@ -1145,7 +1035,6 @@ link:ca578e3537f56106699b26b07dfc0fb6
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/3/1> ;
-      mr:saveCache  "True" .
 
 link:cde48471d4f8d936136b6a3aa1b0107a
       mr:CFexport   "True" ;
@@ -1154,7 +1043,6 @@ link:cde48471d4f8d936136b6a3aa1b0107a
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/687> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/73b40eac95637ba2d470d5e9da9935dd>
       mr:CFexport   "True" ;
@@ -1163,7 +1051,6 @@ link:cde48471d4f8d936136b6a3aa1b0107a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/329> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/682086560a84bc3c14c01edfc398e6a0>
       mr:CFexport   "True" ;
@@ -1172,7 +1059,6 @@ link:cde48471d4f8d936136b6a3aa1b0107a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i233 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/93772dd14a97492d3ed9a6a65110c3f7>
       mr:CFexport   "True" ;
@@ -1181,7 +1067,6 @@ link:cde48471d4f8d936136b6a3aa1b0107a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i452 ;
-      mr:saveCache  "True" .
 
 link:d87d1902e8b22917871aae50d36ff44c
       mr:CFexport   "True" ;
@@ -1190,7 +1075,6 @@ link:d87d1902e8b22917871aae50d36ff44c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i044 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5abe45d444758089fe50c93d18eb1d60>
       mr:CFexport   "True" ;
@@ -1199,7 +1083,6 @@ link:d87d1902e8b22917871aae50d36ff44c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i049 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/342b6a99954562add663f2d2bfab270d>
       mr:CFexport   "True" ;
@@ -1208,7 +1091,6 @@ link:d87d1902e8b22917871aae50d36ff44c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i223 ;
-      mr:saveCache  "True" .
 
 link:c07e95ec847764c260e382980419d8c2
       mr:CFexport   "True" ;
@@ -1217,7 +1099,6 @@ link:c07e95ec847764c260e382980419d8c2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i233 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/43c3c3f0e59c5ef21f00555653af343d>
       mr:CFexport   "True" ;
@@ -1226,7 +1107,6 @@ link:c07e95ec847764c260e382980419d8c2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s06i201 ;
-      mr:saveCache  "True" .
 
 link:adaee9071647d111bf0e518f586e8dd4
       mr:CFexport   "True" ;
@@ -1235,7 +1115,6 @@ link:adaee9071647d111bf0e518f586e8dd4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i151 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4f111514ba8823402237c12c161a416a>
       mr:CFexport   "True" ;
@@ -1244,7 +1123,6 @@ link:adaee9071647d111bf0e518f586e8dd4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i213 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0f582ece245d486692d91220d0f753ca>
       mr:CFexport   "True" ;
@@ -1253,7 +1131,6 @@ link:adaee9071647d111bf0e518f586e8dd4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i311 ;
-      mr:saveCache  "True" .
 
 link:ae099eaeb9d18dc8e042b69973ccd7f9
       mr:CFexport   "True" ;
@@ -1262,7 +1139,6 @@ link:ae099eaeb9d18dc8e042b69973ccd7f9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i184 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/343d8ff755e2369a9b9ef536b243efa0>
       mr:CFexport   "True" ;
@@ -1271,7 +1147,6 @@ link:ae099eaeb9d18dc8e042b69973ccd7f9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i312 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/718b50ae576216d48beee7508cd6fff5>
       mr:CFexport   "True" ;
@@ -1280,7 +1155,6 @@ link:ae099eaeb9d18dc8e042b69973ccd7f9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i238 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/627cc632670ebc13b56887f42152f636>
       mr:CFexport   "True" ;
@@ -1289,7 +1163,6 @@ link:ae099eaeb9d18dc8e042b69973ccd7f9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1720> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/622fbeab7b544d5330d041512184aca0>
       mr:CFexport   "True" ;
@@ -1298,7 +1171,6 @@ link:ae099eaeb9d18dc8e042b69973ccd7f9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/342> ;
-      mr:saveCache  "True" .
 
 link:f111d6bfb58d19ce211840d493f4b519
       mr:CFexport   "True" ;
@@ -1307,7 +1179,6 @@ link:f111d6bfb58d19ce211840d493f4b519
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/78> ;
-      mr:saveCache  "True" .
 
 link:e7efcdafc35a4fd3f778bd558db0bac9
       mr:CFexport   "True" ;
@@ -1316,7 +1187,6 @@ link:e7efcdafc35a4fd3f778bd558db0bac9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i227 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/93f9fb04f772aa4413d04f12b9c71c8c>
       mr:CFexport   "True" ;
@@ -1325,7 +1195,6 @@ link:e7efcdafc35a4fd3f778bd558db0bac9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i050 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/75e83b6c0960c056d070a3fc81e27702>
       mr:CFexport   "True" ;
@@ -1334,7 +1203,6 @@ link:e7efcdafc35a4fd3f778bd558db0bac9
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/151fa78e5a7a3409b392b161a616686d>
       mr:CFexport   "True" ;
@@ -1343,7 +1211,6 @@ link:e7efcdafc35a4fd3f778bd558db0bac9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i231 ;
-      mr:saveCache  "True" .
 
 link:a07bb9904bcc376331a12ea36082022a
       mr:CFexport   "True" ;
@@ -1352,7 +1219,6 @@ link:a07bb9904bcc376331a12ea36082022a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i235 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0be455f7f508b4bce374556d7daffc08>
       mr:CFexport   "True" ;
@@ -1361,7 +1227,6 @@ link:a07bb9904bcc376331a12ea36082022a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i013 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/80db7a7f8b55ac46e1653ef259e12a6f>
       mr:CFexport   "True" ;
@@ -1370,7 +1235,6 @@ link:a07bb9904bcc376331a12ea36082022a
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/6/6> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6bcb3e39f01c925a019f32cb5f8dcc55>
       mr:CFexport   "True" ;
@@ -1379,7 +1243,6 @@ link:a07bb9904bcc376331a12ea36082022a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i006 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4b3273bc435fcf3902f5c741f99e43b2>
       mr:CFexport   "True" ;
@@ -1388,7 +1251,6 @@ link:a07bb9904bcc376331a12ea36082022a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i182 ;
-      mr:saveCache  "True" .
 
 link:d78b2791cb92a961fc95717b79ca8aab
       mr:CFexport   "True" ;
@@ -1397,7 +1259,6 @@ link:d78b2791cb92a961fc95717b79ca8aab
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i208 ;
-      mr:saveCache  "True" .
 
 link:d8fafeb27f9d41a18ddd36b9939c217a
       mr:CFexport   "True" ;
@@ -1406,7 +1267,6 @@ link:d8fafeb27f9d41a18ddd36b9939c217a
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1564> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/85a2eee20de561a31cdf83271f7851d3>
       mr:CFexport   "True" ;
@@ -1415,7 +1275,6 @@ link:d8fafeb27f9d41a18ddd36b9939c217a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i004 ;
-      mr:saveCache  "True" .
 
 link:d68d346bf949f2fe5854d53d47cf0ba2
       mr:CFexport   "True" ;
@@ -1424,7 +1283,6 @@ link:d68d346bf949f2fe5854d53d47cf0ba2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m03s00i394 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6e4058c2e53d82c61ce259a1cdb99e38>
       mr:CFexport   "True" ;
@@ -1433,7 +1291,6 @@ link:d68d346bf949f2fe5854d53d47cf0ba2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i030 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4befd815fa9844e276cca763e61204a5>
       mr:CFexport   "True" ;
@@ -1442,7 +1299,6 @@ link:d68d346bf949f2fe5854d53d47cf0ba2
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/16> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/95c5b77e03ecd760e5923c43fea09722>
       mr:CFexport   "True" ;
@@ -1451,7 +1307,6 @@ link:d68d346bf949f2fe5854d53d47cf0ba2
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/2/2> ;
-      mr:saveCache  "True" .
 
 link:b476ee76a20e18a87ab536662e65392d
       mr:CFexport   "True" ;
@@ -1460,7 +1315,6 @@ link:b476ee76a20e18a87ab536662e65392d
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i119 ;
-      mr:saveCache  "True" .
 
 link:f11c67156131dcaf65afdb58e2111666
       mr:CFexport   "True" ;
@@ -1469,7 +1323,6 @@ link:f11c67156131dcaf65afdb58e2111666
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/108> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0882b00346a963e94627e9ce8158f90f>
       mr:CFexport   "True" ;
@@ -1478,7 +1331,6 @@ link:f11c67156131dcaf65afdb58e2111666
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1533> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/48499429995cef7130a581314d5b47d6>
       mr:CFexport   "True" ;
@@ -1487,7 +1339,6 @@ link:f11c67156131dcaf65afdb58e2111666
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i206 ;
-      mr:saveCache  "True" .
 
 link:ae1a8e203234835bee90fee686ec701b
       mr:CFexport   "True" ;
@@ -1496,7 +1347,6 @@ link:ae1a8e203234835bee90fee686ec701b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i210 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/145a02859a0526c719caaf7e6ac25eb6>
       mr:CFexport   "True" ;
@@ -1505,7 +1355,6 @@ link:ae1a8e203234835bee90fee686ec701b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i337 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/58cba79e8800bd665938016831008558>
       mr:CFexport   "True" ;
@@ -1514,7 +1363,6 @@ link:ae1a8e203234835bee90fee686ec701b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i236 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/21ae0c9f963ec438180486d6cb1d5e03>
       mr:CFexport   "True" ;
@@ -1523,7 +1371,6 @@ link:ae1a8e203234835bee90fee686ec701b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i142 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7a3f60a09d882e66022ac508c2f7916d>
       mr:CFexport   "True" ;
@@ -1532,7 +1379,6 @@ link:ae1a8e203234835bee90fee686ec701b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i051 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/34d10917b39df8d80cd7e07aaba369d9>
       mr:CFexport   "True" ;
@@ -1541,7 +1387,6 @@ link:ae1a8e203234835bee90fee686ec701b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/16> ;
-      mr:saveCache  "True" .
 
 link:ff09b84dd8c5c7051f7c125a3178773e
       mr:CFexport   "True" ;
@@ -1550,7 +1395,6 @@ link:ff09b84dd8c5c7051f7c125a3178773e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i258 ;
-      mr:saveCache  "True" .
 
 link:df5f6415832d39f28b53c896c980a0d1
       mr:CFexport   "True" ;
@@ -1559,7 +1403,6 @@ link:df5f6415832d39f28b53c896c980a0d1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/102> ;
-      mr:saveCache  "True" .
 
 link:fab9b86e863bd57812438a2200454f81
       mr:CFexport   "True" ;
@@ -1568,7 +1411,6 @@ link:fab9b86e863bd57812438a2200454f81
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/984> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7f048c322200c1632144e391a4367223>
       mr:CFexport   "True" ;
@@ -1577,7 +1419,6 @@ link:fab9b86e863bd57812438a2200454f81
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i185 ;
-      mr:saveCache  "True" .
 
 link:d2454f4a8d1a14c7c13b843c9c6c2583
       mr:CFexport   "True" ;
@@ -1586,7 +1427,6 @@ link:d2454f4a8d1a14c7c13b843c9c6c2583
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i048 ;
-      mr:saveCache  "True" .
 
 link:e6ce5f2b1da0bed7a08b3e58c45c5dc8
       mr:CFexport   "True" ;
@@ -1595,7 +1435,6 @@ link:e6ce5f2b1da0bed7a08b3e58c45c5dc8
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i233 ;
-      mr:saveCache  "True" .
 
 link:a8b4384ba6da2e3615e7e015505e3b37
       mr:CFexport   "True" ;
@@ -1604,7 +1443,6 @@ link:a8b4384ba6da2e3615e7e015505e3b37
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i218 ;
-      mr:saveCache  "True" .
 
 link:aaa00c08c68954c2d5cb23a09b789fa5
       mr:CFexport   "True" ;
@@ -1613,7 +1451,6 @@ link:aaa00c08c68954c2d5cb23a09b789fa5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i009 ;
-      mr:saveCache  "True" .
 
 link:d47bba497867925745beb08b6020e5e1
       mr:CFexport   "True" ;
@@ -1622,7 +1459,6 @@ link:d47bba497867925745beb08b6020e5e1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i026 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/409d8d48274e7d5555592b525969ea13>
       mr:CFexport   "True" ;
@@ -1631,7 +1467,6 @@ link:d47bba497867925745beb08b6020e5e1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i143 ;
-      mr:saveCache  "True" .
 
 link:f944e6b1c2415b5c15da3bc6d2de4674
       mr:CFexport   "True" ;
@@ -1640,7 +1475,6 @@ link:f944e6b1c2415b5c15da3bc6d2de4674
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/201> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/54da28d1eafe610093d8cbfddfaaa834>
       mr:CFexport   "True" ;
@@ -1649,7 +1483,6 @@ link:f944e6b1c2415b5c15da3bc6d2de4674
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/330> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/619a3c8450a6bf389a70e87625b6bff1>
       mr:CFexport   "True" ;
@@ -1658,7 +1491,6 @@ link:f944e6b1c2415b5c15da3bc6d2de4674
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i141 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7be6baeafce4d641e1c104f6714fc800>
       mr:CFexport   "True" ;
@@ -1667,7 +1499,6 @@ link:f944e6b1c2415b5c15da3bc6d2de4674
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/108> ;
-      mr:saveCache  "True" .
 
 link:ce2fbe2fca321b736bb8eaa0ca7f989b
       mr:CFexport   "True" ;
@@ -1676,7 +1507,6 @@ link:ce2fbe2fca321b736bb8eaa0ca7f989b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/322> ;
-      mr:saveCache  "True" .
 
 link:b98b3522dd1237394303ffa59a0fe088
       mr:CFexport   "True" ;
@@ -1685,7 +1515,6 @@ link:b98b3522dd1237394303ffa59a0fe088
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/3/9> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/05b573f1008fcd19ae6be0edbca568d3>
       mr:CFexport   "True" ;
@@ -1694,7 +1523,6 @@ link:b98b3522dd1237394303ffa59a0fe088
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/99c60d9ac135cf031a15ff0814099d18>
       mr:CFexport   "True" ;
@@ -1703,7 +1531,6 @@ link:b98b3522dd1237394303ffa59a0fe088
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1374> ;
-      mr:saveCache  "True" .
 
 link:d88a5a65b1a09ef8c77ee034f2bc0b81
       mr:CFexport   "True" ;
@@ -1712,7 +1539,6 @@ link:d88a5a65b1a09ef8c77ee034f2bc0b81
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i506 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7dcc6349fcd357bcf71475d4469d1388>
       mr:CFexport   "True" ;
@@ -1721,7 +1547,6 @@ link:d88a5a65b1a09ef8c77ee034f2bc0b81
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/63> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/743cea0f4f6b055903dfc803f803bc86>
       mr:CFexport   "True" ;
@@ -1730,16 +1555,6 @@ link:d88a5a65b1a09ef8c77ee034f2bc0b81
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/208> ;
-      mr:saveCache  "True" .
-
-<http://www.metarelate.net/metOcean/linkage/096dce7b942028d21b6ae5afaa07cf27>
-      mr:CFexport   "True" ;
-      mr:CFimport   "True" ;
-      mr:CFlink     <http://www.metarelate.net/metocean/cf/1c34ff274ecf57179310a7a75c8e529b> ;
-      mr:UMexport   "False" ;
-      mr:UMimport   "True" ;
-      mr:UMlink     moStCon:m01s15i239 ;
-      mr:saveCache  "True" .
 
 link:b8008bb807cce8f251e44ce09b8a6167
       mr:CFexport   "True" ;
@@ -1748,7 +1563,6 @@ link:b8008bb807cce8f251e44ce09b8a6167
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/56> ;
-      mr:saveCache  "True" .
 
 link:d62d47edc620c35b92e67cd34441de3b
       mr:CFexport   "True" ;
@@ -1757,7 +1571,6 @@ link:d62d47edc620c35b92e67cd34441de3b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i205 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/31dfa3f693b8697bf56071bc81be5ee3>
       mr:CFexport   "True" ;
@@ -1766,7 +1579,6 @@ link:d62d47edc620c35b92e67cd34441de3b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/321> ;
-      mr:saveCache  "True" .
 
 link:cb384c1cf891cf439392ec4c355e9be4
       mr:CFexport   "True" ;
@@ -1775,7 +1587,6 @@ link:cb384c1cf891cf439392ec4c355e9be4
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/200> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0ee871d90e4e90bc0bcbb2c74729eeab>
       mr:CFexport   "True" ;
@@ -1784,7 +1595,6 @@ link:cb384c1cf891cf439392ec4c355e9be4
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/1/0> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2b021529177cf34bf604119b3e08c0d5>
       mr:CFexport   "True" ;
@@ -1793,7 +1603,6 @@ link:cb384c1cf891cf439392ec4c355e9be4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i001 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/11bf66444f66c4a55f01e2095558ae17>
       mr:CFexport   "True" ;
@@ -1802,7 +1611,6 @@ link:cb384c1cf891cf439392ec4c355e9be4
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/209> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8bb34816e01365916c40b524da421943>
       mr:CFexport   "True" ;
@@ -1811,7 +1619,6 @@ link:cb384c1cf891cf439392ec4c355e9be4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i418 ;
-      mr:saveCache  "True" .
 
 link:cd675550ef33191af86accf74db9a6be
       mr:CFexport   "True" ;
@@ -1820,7 +1627,6 @@ link:cd675550ef33191af86accf74db9a6be
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i147 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4db56dbe6f1c789f471ba338f896af5c>
       mr:CFexport   "True" ;
@@ -1829,7 +1635,6 @@ link:cd675550ef33191af86accf74db9a6be
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i394 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8110c931089f04a083eaf7189b9b879a>
       mr:CFexport   "True" ;
@@ -1838,7 +1643,6 @@ link:cd675550ef33191af86accf74db9a6be
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i235 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7be7e8ac104d1bec188bd1d889e33ed0>
       mr:CFexport   "True" ;
@@ -1847,7 +1651,6 @@ link:cd675550ef33191af86accf74db9a6be
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/2/1> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/94dd7542475e50323579bd3ce0a85220>
       mr:CFexport   "True" ;
@@ -1856,7 +1659,6 @@ link:cd675550ef33191af86accf74db9a6be
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/333> ;
-      mr:saveCache  "True" .
 
 link:e70fb4228aae9e54f6a7b7e63ab789f5
       mr:CFexport   "True" ;
@@ -1865,7 +1667,6 @@ link:e70fb4228aae9e54f6a7b7e63ab789f5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i023 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/22e26315b3710f73d35af1acb80564d6>
       mr:CFexport   "True" ;
@@ -1874,7 +1675,6 @@ link:e70fb4228aae9e54f6a7b7e63ab789f5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i202 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5fa2a634c01a46be9359d523316ad858>
       mr:CFexport   "True" ;
@@ -1883,7 +1683,6 @@ link:e70fb4228aae9e54f6a7b7e63ab789f5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/94> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5a576adf529f8f1b759d0d08b8934ff2>
       mr:CFexport   "True" ;
@@ -1892,7 +1691,6 @@ link:e70fb4228aae9e54f6a7b7e63ab789f5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i044 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/50135bd6604ff07c3d964a40c899edf9>
       mr:CFexport   "True" ;
@@ -1901,7 +1699,6 @@ link:e70fb4228aae9e54f6a7b7e63ab789f5
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/117> ;
-      mr:saveCache  "True" .
 
 link:b83525d4f82d49658a7db62aa7847785
       mr:CFexport   "True" ;
@@ -1910,7 +1707,6 @@ link:b83525d4f82d49658a7db62aa7847785
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i188 ;
-      mr:saveCache  "True" .
 
 link:dabbd53939a87a2f7c487dfb2264abdd
       mr:CFexport   "True" ;
@@ -1919,7 +1715,6 @@ link:dabbd53939a87a2f7c487dfb2264abdd
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/335> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6bbc95b2ded39401b454485b6aa59f46>
       mr:CFexport   "True" ;
@@ -1928,7 +1723,6 @@ link:dabbd53939a87a2f7c487dfb2264abdd
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1385> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9f0508d8647e70afef078f14dba566af>
       mr:CFexport   "True" ;
@@ -1937,7 +1731,6 @@ link:dabbd53939a87a2f7c487dfb2264abdd
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s30i211 ;
-      mr:saveCache  "True" .
 
 link:cce1c013a147950716fa1e7246c991a9
       mr:CFexport   "True" ;
@@ -1946,7 +1739,6 @@ link:cce1c013a147950716fa1e7246c991a9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i505 ;
-      mr:saveCache  "True" .
 
 link:a169a10080936cc67483ef07c2d0c066
       mr:CFexport   "True" ;
@@ -1955,7 +1747,6 @@ link:a169a10080936cc67483ef07c2d0c066
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i218 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4fa6578ed57dcd5da47b9c3026ef9148>
       mr:CFexport   "True" ;
@@ -1964,7 +1755,6 @@ link:a169a10080936cc67483ef07c2d0c066
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/342> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0b02f481fd3790d290d2101cb0e10aca>
       mr:CFexport   "True" ;
@@ -1973,7 +1763,6 @@ link:a169a10080936cc67483ef07c2d0c066
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i222 ;
-      mr:saveCache  "True" .
 
 link:d7d648405b5f305989be3b625c17e861
       mr:CFexport   "True" ;
@@ -1982,7 +1771,6 @@ link:d7d648405b5f305989be3b625c17e861
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s30i324 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2757e4d6e770deaafe4442f172da6e94>
       mr:CFexport   "True" ;
@@ -1991,7 +1779,6 @@ link:d7d648405b5f305989be3b625c17e861
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/687> ;
-      mr:saveCache  "True" .
 
 link:c67f269165da708581ea9fe750c54a9f
       mr:CFexport   "True" ;
@@ -2000,7 +1787,6 @@ link:c67f269165da708581ea9fe750c54a9f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i408 ;
-      mr:saveCache  "True" .
 
 link:d8266053b84d5b56d667a813bb17ab6e
       mr:CFexport   "True" ;
@@ -2009,7 +1795,6 @@ link:d8266053b84d5b56d667a813bb17ab6e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i226 ;
-      mr:saveCache  "True" .
 
 link:ad5e548de4036cea6abcc144192ae404
       mr:CFexport   "True" ;
@@ -2018,7 +1803,6 @@ link:ad5e548de4036cea6abcc144192ae404
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i064 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1105ac949ce668c2f21dde98c9063235>
       mr:CFexport   "True" ;
@@ -2027,7 +1811,6 @@ link:ad5e548de4036cea6abcc144192ae404
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i252 ;
-      mr:saveCache  "True" .
 
 link:e1c7fec0b1d08db9d94a69298e429d2c
       mr:CFexport   "True" ;
@@ -2036,7 +1819,6 @@ link:e1c7fec0b1d08db9d94a69298e429d2c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i001 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2f7da82994b0089e29ad37a769e10405>
       mr:CFexport   "True" ;
@@ -2045,7 +1827,6 @@ link:e1c7fec0b1d08db9d94a69298e429d2c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s13i186 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/32bed6fe5ef6750dc7e88d15e84376a4>
       mr:CFexport   "True" ;
@@ -2054,7 +1835,6 @@ link:e1c7fec0b1d08db9d94a69298e429d2c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i186 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/76f642d840b4ccb9e254b88e498eeea6>
       mr:CFexport   "True" ;
@@ -2063,7 +1843,6 @@ link:e1c7fec0b1d08db9d94a69298e429d2c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i041 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/031a7c9beb76f05167d7ad011c0f107f>
       mr:CFexport   "True" ;
@@ -2072,7 +1851,6 @@ link:e1c7fec0b1d08db9d94a69298e429d2c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i211 ;
-      mr:saveCache  "True" .
 
 link:facd51ba6f43deba4b85bd125ba862b3
       mr:CFexport   "True" ;
@@ -2081,7 +1859,6 @@ link:facd51ba6f43deba4b85bd125ba862b3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/5> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8a8a5303e8f540cdab5d09390b8268ab>
       mr:CFexport   "True" ;
@@ -2090,7 +1867,6 @@ link:facd51ba6f43deba4b85bd125ba862b3
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/16> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/002cc91fb838c493315bb5139d575b67>
       mr:CFexport   "True" ;
@@ -2099,7 +1875,6 @@ link:facd51ba6f43deba4b85bd125ba862b3
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/8> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/74fdb0edec5523adbb08b8f268971c0c>
       mr:CFexport   "True" ;
@@ -2108,7 +1883,6 @@ link:facd51ba6f43deba4b85bd125ba862b3
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/6/1> ;
-      mr:saveCache  "True" .
 
 link:de2c20dd3d368b8079737e9af371fa40
       mr:CFexport   "True" ;
@@ -2117,7 +1891,6 @@ link:de2c20dd3d368b8079737e9af371fa40
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/79> ;
-      mr:saveCache  "True" .
 
 link:d6606ff155ab20a036cc745ad458ffb1
       mr:CFexport   "True" ;
@@ -2126,7 +1899,6 @@ link:d6606ff155ab20a036cc745ad458ffb1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i005 ;
-      mr:saveCache  "True" .
 
 link:e0b34120b76a5ee7ba724574ceb3a176
       mr:CFexport   "True" ;
@@ -2135,7 +1907,6 @@ link:e0b34120b76a5ee7ba724574ceb3a176
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i410 ;
-      mr:saveCache  "True" .
 
 link:e16eb72d04f7ed1fe9c9424607bae174
       mr:CFexport   "True" ;
@@ -2144,7 +1915,6 @@ link:e16eb72d04f7ed1fe9c9424607bae174
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i003 ;
-      mr:saveCache  "True" .
 
 link:d8309b198e8ac1eb9ccf668325dd7d31
       mr:CFexport   "True" ;
@@ -2153,7 +1923,6 @@ link:d8309b198e8ac1eb9ccf668325dd7d31
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i184 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2cd37b4e8bb814a51ea8520f918f470a>
       mr:CFexport   "True" ;
@@ -2162,7 +1931,6 @@ link:d8309b198e8ac1eb9ccf668325dd7d31
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5a0a8aa144a423958064cebaa3a39d77>
       mr:CFexport   "True" ;
@@ -2171,7 +1939,6 @@ link:d8309b198e8ac1eb9ccf668325dd7d31
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/97> ;
-      mr:saveCache  "True" .
 
 link:bb7601835e73976852aed8e030ceff0a
       mr:CFexport   "True" ;
@@ -2180,7 +1947,6 @@ link:bb7601835e73976852aed8e030ceff0a
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/395> ;
-      mr:saveCache  "True" .
 
 link:c7c95993ceff1b925ae9e57b00188529
       mr:CFexport   "True" ;
@@ -2189,7 +1955,6 @@ link:c7c95993ceff1b925ae9e57b00188529
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/8> ;
-      mr:saveCache  "True" .
 
 link:e923ede59e4d0cf79c9b9d006a15ed87
       mr:CFexport   "True" ;
@@ -2198,7 +1963,6 @@ link:e923ede59e4d0cf79c9b9d006a15ed87
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m15s00i244 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/71667734d238687994cd3f42b67511fe>
       mr:CFexport   "True" ;
@@ -2207,7 +1971,6 @@ link:e923ede59e4d0cf79c9b9d006a15ed87
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7e90c9f41f0aa2b71653a4926e4fd753>
       mr:CFexport   "True" ;
@@ -2216,7 +1979,6 @@ link:e923ede59e4d0cf79c9b9d006a15ed87
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i210 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/55ae5f261f4cdeb5bcbb76aa8b19bb1b>
       mr:CFexport   "True" ;
@@ -2225,7 +1987,6 @@ link:e923ede59e4d0cf79c9b9d006a15ed87
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i508 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/02ce3befb6b10b073c26b562fca40661>
       mr:CFexport   "True" ;
@@ -2234,7 +1995,6 @@ link:e923ede59e4d0cf79c9b9d006a15ed87
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i065 ;
-      mr:saveCache  "True" .
 
 link:c6819ca64f6cfd952345fae47093194b
       mr:CFexport   "True" ;
@@ -2243,7 +2003,6 @@ link:c6819ca64f6cfd952345fae47093194b
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/3/0> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/332bde33854853063ff812ea8af4955a>
       mr:CFexport   "True" ;
@@ -2252,7 +2011,6 @@ link:c6819ca64f6cfd952345fae47093194b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i235 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/98fe24ddec4cb7abad69444f7b77c05e>
       mr:CFexport   "True" ;
@@ -2261,7 +2019,6 @@ link:c6819ca64f6cfd952345fae47093194b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i010 ;
-      mr:saveCache  "True" .
 
 link:f93d3e23e9523df86cf155718f2a53ed
       mr:CFexport   "True" ;
@@ -2270,7 +2027,6 @@ link:f93d3e23e9523df86cf155718f2a53ed
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s09i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7d8a92208d0e7a37c0a528117ad52fe7>
       mr:CFexport   "True" ;
@@ -2279,7 +2035,6 @@ link:f93d3e23e9523df86cf155718f2a53ed
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i453 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5a405347f8e7214b4028dd7c623cb7f3>
       mr:CFexport   "True" ;
@@ -2288,7 +2043,6 @@ link:f93d3e23e9523df86cf155718f2a53ed
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i409 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/356efbce30024f65fe7ebb6a174319b9>
       mr:CFexport   "True" ;
@@ -2297,7 +2051,6 @@ link:f93d3e23e9523df86cf155718f2a53ed
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i031 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/43e0ddc034eb19991ec67d5505102d05>
       mr:CFexport   "True" ;
@@ -2306,7 +2059,6 @@ link:f93d3e23e9523df86cf155718f2a53ed
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i012 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7529d6399c9bf43814a04d03f29edc14>
       mr:CFexport   "True" ;
@@ -2315,7 +2067,6 @@ link:f93d3e23e9523df86cf155718f2a53ed
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i006 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9d0b4df50ba8ecf848e6f305012e85d4>
       mr:CFexport   "True" ;
@@ -2324,7 +2075,6 @@ link:f93d3e23e9523df86cf155718f2a53ed
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s06i185 ;
-      mr:saveCache  "True" .
 
 link:e94ddebbdcb0e957146c77b5c9a6c54e
       mr:CFexport   "True" ;
@@ -2333,7 +2083,6 @@ link:e94ddebbdcb0e957146c77b5c9a6c54e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i010 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/36d721bc1f18e3ebe4f4437bd4895409>
       mr:CFexport   "True" ;
@@ -2342,7 +2091,6 @@ link:e94ddebbdcb0e957146c77b5c9a6c54e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i244 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8527cd631539ab6e7e6aafc09170af3d>
       mr:CFexport   "True" ;
@@ -2351,7 +2099,6 @@ link:e94ddebbdcb0e957146c77b5c9a6c54e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i216 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/14344e5a6586666fde22d6a78f6653d4>
       mr:CFexport   "True" ;
@@ -2360,7 +2107,6 @@ link:e94ddebbdcb0e957146c77b5c9a6c54e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s30i212 ;
-      mr:saveCache  "True" .
 
 link:ac55eceeb02bf8ba026e5e4ff970b4fe
       mr:CFexport   "True" ;
@@ -2369,7 +2115,6 @@ link:ac55eceeb02bf8ba026e5e4ff970b4fe
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i249 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3995bd67ff583d288485f70e9cb04038>
       mr:CFexport   "True" ;
@@ -2378,7 +2123,6 @@ link:ac55eceeb02bf8ba026e5e4ff970b4fe
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1393> ;
-      mr:saveCache  "True" .
 
 link:f433c8cfe54d6b9c86b5592e0b3adbe2
       mr:CFexport   "True" ;
@@ -2387,7 +2131,6 @@ link:f433c8cfe54d6b9c86b5592e0b3adbe2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i140 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1101fb2f14fa6082e9639a74855839ab>
       mr:CFexport   "True" ;
@@ -2396,7 +2139,6 @@ link:f433c8cfe54d6b9c86b5592e0b3adbe2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i101 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0c0bb9fc09200a6c2475f57d80f33ea0>
       mr:CFexport   "True" ;
@@ -2405,7 +2147,6 @@ link:f433c8cfe54d6b9c86b5592e0b3adbe2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i183 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8a8791ca54305fff5802551856f8942c>
       mr:CFexport   "True" ;
@@ -2414,7 +2155,6 @@ link:f433c8cfe54d6b9c86b5592e0b3adbe2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i214 ;
-      mr:saveCache  "True" .
 
 link:e5b237afd35ce340c12cf724bbaf4553
       mr:CFexport   "True" ;
@@ -2423,7 +2163,6 @@ link:e5b237afd35ce340c12cf724bbaf4553
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m06s00i207 ;
-      mr:saveCache  "True" .
 
 link:e9163946cca7110a85721b48f1bbfa01
       mr:CFexport   "True" ;
@@ -2432,7 +2171,6 @@ link:e9163946cca7110a85721b48f1bbfa01
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/1/3> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/062fcd3ffcba2909b2f0948eded52676>
       mr:CFexport   "True" ;
@@ -2441,7 +2179,6 @@ link:e9163946cca7110a85721b48f1bbfa01
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i217 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/96406e2ea0bb5e7004c223c9a0c35aa6>
       mr:CFexport   "True" ;
@@ -2450,7 +2187,6 @@ link:e9163946cca7110a85721b48f1bbfa01
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/14/0> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5c2f6fa6848c50699482c78848ac8d24>
       mr:CFexport   "True" ;
@@ -2459,7 +2195,6 @@ link:e9163946cca7110a85721b48f1bbfa01
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i181 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/93e15dedadca10fdffdcfc48e1598761>
       mr:CFexport   "True" ;
@@ -2468,7 +2203,6 @@ link:e9163946cca7110a85721b48f1bbfa01
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i244 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/48650bd26fd33e2318c4071c079efd68>
       mr:CFexport   "True" ;
@@ -2477,7 +2211,6 @@ link:e9163946cca7110a85721b48f1bbfa01
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/7/8> ;
-      mr:saveCache  "True" .
 
 link:d5f81ad029659ac169d091720db3f3e9
       mr:CFexport   "True" ;
@@ -2486,7 +2219,6 @@ link:d5f81ad029659ac169d091720db3f3e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i245 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5f4003829cbe6f4fbf98e54efc6a2770>
       mr:CFexport   "True" ;
@@ -2495,7 +2227,6 @@ link:d5f81ad029659ac169d091720db3f3e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i058 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0f8e2e015729800462cb148f0fdad528>
       mr:CFexport   "True" ;
@@ -2504,7 +2235,6 @@ link:d5f81ad029659ac169d091720db3f3e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i205 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/434e55dbd979329d262b2371e092802a>
       mr:CFexport   "True" ;
@@ -2513,7 +2243,6 @@ link:d5f81ad029659ac169d091720db3f3e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i405 ;
-      mr:saveCache  "True" .
 
 link:f3fa56ad5289abd3ac511633edcf8cc6
       mr:CFexport   "True" ;
@@ -2522,7 +2251,6 @@ link:f3fa56ad5289abd3ac511633edcf8cc6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i132 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4af6673a627171fe55c0c47b9f3630a4>
       mr:CFexport   "True" ;
@@ -2531,7 +2259,6 @@ link:f3fa56ad5289abd3ac511633edcf8cc6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i205 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5c364b706c2b105e99847b8b2938ffaf>
       mr:CFexport   "True" ;
@@ -2540,7 +2267,6 @@ link:f3fa56ad5289abd3ac511633edcf8cc6
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/95> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5b7e3248253256aa79531fc8262e3512>
       mr:CFexport   "True" ;
@@ -2549,7 +2275,6 @@ link:f3fa56ad5289abd3ac511633edcf8cc6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i033 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6905ae09715fc96911586ced90f52058>
       mr:CFexport   "True" ;
@@ -2558,7 +2283,6 @@ link:f3fa56ad5289abd3ac511633edcf8cc6
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/453> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/25b1f45d17edc68b8b4e38c18a13eeae>
       mr:CFexport   "True" ;
@@ -2567,7 +2291,6 @@ link:f3fa56ad5289abd3ac511633edcf8cc6
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/328> ;
-      mr:saveCache  "True" .
 
 link:adaaa7a2098257298a85f000209f3349
       mr:CFexport   "True" ;
@@ -2576,7 +2299,6 @@ link:adaaa7a2098257298a85f000209f3349
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i139 ;
-      mr:saveCache  "True" .
 
 link:ddf65bbd4ffccb54bb63179a418eff60
       mr:CFexport   "True" ;
@@ -2585,7 +2307,6 @@ link:ddf65bbd4ffccb54bb63179a418eff60
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s04i204 ;
-      mr:saveCache  "True" .
 
 link:fe95206a40fa5ecd62f4471e015e4ae6
       mr:CFexport   "True" ;
@@ -2594,7 +2315,6 @@ link:fe95206a40fa5ecd62f4471e015e4ae6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i005 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/40309341dc3531d2069d993786d65982>
       mr:CFexport   "True" ;
@@ -2603,7 +2323,6 @@ link:fe95206a40fa5ecd62f4471e015e4ae6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i204 ;
-      mr:saveCache  "True" .
 
 link:c7004a180a88cf24f70083faddfeb759
       mr:CFexport   "True" ;
@@ -2612,7 +2331,6 @@ link:c7004a180a88cf24f70083faddfeb759
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i224 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9662692e935fd9944315699f60437926>
       mr:CFexport   "True" ;
@@ -2621,7 +2339,6 @@ link:c7004a180a88cf24f70083faddfeb759
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/42> ;
-      mr:saveCache  "True" .
 
 link:a958084f56e2b9f96556ab42ef083445
       mr:CFexport   "True" ;
@@ -2630,7 +2347,6 @@ link:a958084f56e2b9f96556ab42ef083445
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1386> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0cc4fd53336867b6f5e7268804563115>
       mr:CFexport   "True" ;
@@ -2639,7 +2355,6 @@ link:a958084f56e2b9f96556ab42ef083445
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1559> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/333a54bc5e6d622d7604e58029c134a0>
       mr:CFexport   "True" ;
@@ -2648,7 +2363,6 @@ link:a958084f56e2b9f96556ab42ef083445
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s04i004 ;
-      mr:saveCache  "True" .
 
 link:afe8e0179784dc6edf3b21d6588646d4
       mr:CFexport   "True" ;
@@ -2657,7 +2371,6 @@ link:afe8e0179784dc6edf3b21d6588646d4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/83> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/21fbd554dcf0b8888c2030dccd888a3d>
       mr:CFexport   "True" ;
@@ -2666,7 +2379,6 @@ link:afe8e0179784dc6edf3b21d6588646d4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i223 ;
-      mr:saveCache  "True" .
 
 link:ca589b98c27c131d1450a56d01bec7e9
       mr:CFexport   "True" ;
@@ -2675,7 +2387,6 @@ link:ca589b98c27c131d1450a56d01bec7e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i215 ;
-      mr:saveCache  "True" .
 
 link:d8f222c3fb03397d401876bf33f8b672
       mr:CFexport   "True" ;
@@ -2684,7 +2395,6 @@ link:d8f222c3fb03397d401876bf33f8b672
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i277 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5418d7d920a817e915bffdb7e6d0467a>
       mr:CFexport   "True" ;
@@ -2693,7 +2403,6 @@ link:d8f222c3fb03397d401876bf33f8b672
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1397> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/00ee7d1f5796a2ce47bced203c5f97c1>
       mr:CFexport   "True" ;
@@ -2702,7 +2411,6 @@ link:d8f222c3fb03397d401876bf33f8b672
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i136 ;
-      mr:saveCache  "True" .
 
 link:d0c6432cf16c748026f3bdf33a5f4f92
       mr:CFexport   "True" ;
@@ -2711,7 +2419,6 @@ link:d0c6432cf16c748026f3bdf33a5f4f92
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i150 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0fc333aaf079cba5ea9224fc983b5dd8>
       mr:CFexport   "True" ;
@@ -2720,7 +2427,6 @@ link:d0c6432cf16c748026f3bdf33a5f4f92
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/0/2> ;
-      mr:saveCache  "True" .
 
 link:b907815edb762c1167f63c710a175a39
       mr:CFexport   "True" ;
@@ -2729,7 +2435,6 @@ link:b907815edb762c1167f63c710a175a39
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i204 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/50fec6a4f1ad1722e3a2f3d8a87eecc3>
       mr:CFexport   "True" ;
@@ -2738,7 +2443,6 @@ link:b907815edb762c1167f63c710a175a39
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/95> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1ba200541a763b6d06543a1005e721f7>
       mr:CFexport   "True" ;
@@ -2747,7 +2451,6 @@ link:b907815edb762c1167f63c710a175a39
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i391 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/63ef42be1fb81bf3d7f7da7a77957ab4>
       mr:CFexport   "True" ;
@@ -2756,7 +2459,6 @@ link:b907815edb762c1167f63c710a175a39
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i218 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/48a8c911aa1d945b1bfc4a73f092b1d1>
       mr:CFexport   "True" ;
@@ -2765,7 +2467,6 @@ link:b907815edb762c1167f63c710a175a39
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/93> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0219187dfa849fd5424595f3f408495c>
       mr:CFexport   "True" ;
@@ -2774,7 +2475,6 @@ link:b907815edb762c1167f63c710a175a39
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i111 ;
-      mr:saveCache  "True" .
 
 link:d71e352fd6502036ba11bd1deb2f0256
       mr:CFexport   "True" ;
@@ -2783,7 +2483,6 @@ link:d71e352fd6502036ba11bd1deb2f0256
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i047 ;
-      mr:saveCache  "True" .
 
 link:e05dc036dbf54a9f9e99edff1aea11ae
       mr:CFexport   "True" ;
@@ -2792,7 +2491,6 @@ link:e05dc036dbf54a9f9e99edff1aea11ae
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/2/8> ;
-      mr:saveCache  "True" .
 
 link:e796e21455c04c2cf00b428a51419c67
       mr:CFexport   "True" ;
@@ -2801,7 +2499,6 @@ link:e796e21455c04c2cf00b428a51419c67
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i134 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/44ba0179e8db9e03b0a4f955821da8cf>
       mr:CFexport   "True" ;
@@ -2810,7 +2507,6 @@ link:e796e21455c04c2cf00b428a51419c67
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/116> ;
-      mr:saveCache  "True" .
 
 link:f260dedf9236fc16946e55df1d991140
       mr:CFexport   "True" ;
@@ -2819,7 +2515,6 @@ link:f260dedf9236fc16946e55df1d991140
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/20b28fff882664c45d10f4303a2ae8f9>
       mr:CFexport   "True" ;
@@ -2828,7 +2523,6 @@ link:f260dedf9236fc16946e55df1d991140
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1507> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/822c74b91f9340a92531e1a75c7f6ae1>
       mr:CFexport   "True" ;
@@ -2837,7 +2531,6 @@ link:f260dedf9236fc16946e55df1d991140
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i214 ;
-      mr:saveCache  "True" .
 
 link:d9cc0725eb28c6ca15e238721f78cc81
       mr:CFexport   "True" ;
@@ -2846,7 +2539,6 @@ link:d9cc0725eb28c6ca15e238721f78cc81
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i182 ;
-      mr:saveCache  "True" .
 
 link:cf18f911ecba48a6ef7f5752a04414bd
       mr:CFexport   "True" ;
@@ -2855,7 +2547,6 @@ link:cf18f911ecba48a6ef7f5752a04414bd
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i208 ;
-      mr:saveCache  "True" .
 
 link:a512926e0f157ffa775acb4673478dd6
       mr:CFexport   "True" ;
@@ -2864,7 +2555,6 @@ link:a512926e0f157ffa775acb4673478dd6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i060 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/75e2a9da351e1d93bc3433aa932b0500>
       mr:CFexport   "True" ;
@@ -2873,7 +2563,6 @@ link:a512926e0f157ffa775acb4673478dd6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1392> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9c6e549e644eceebd1f00f3568f6af9f>
       mr:CFexport   "True" ;
@@ -2882,7 +2571,6 @@ link:a512926e0f157ffa775acb4673478dd6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i213 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/477011bb630eb64177d234244fcf5981>
       mr:CFexport   "True" ;
@@ -2891,7 +2579,6 @@ link:a512926e0f157ffa775acb4673478dd6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i185 ;
-      mr:saveCache  "True" .
 
 link:efba78f0e4150825a38903eefe0aefe5
       mr:CFexport   "True" ;
@@ -2900,7 +2587,6 @@ link:efba78f0e4150825a38903eefe0aefe5
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 link:dbf51df01c19b39a455f6bbd293cda00
       mr:CFexport   "True" ;
@@ -2909,7 +2595,6 @@ link:dbf51df01c19b39a455f6bbd293cda00
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/187> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2e3c29e1bfc29cb15eb8b15b01fd11e6>
       mr:CFexport   "True" ;
@@ -2918,7 +2603,6 @@ link:dbf51df01c19b39a455f6bbd293cda00
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i187 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/69c3d29954b6588132fea2a739c56b7e>
       mr:CFexport   "True" ;
@@ -2927,7 +2611,6 @@ link:dbf51df01c19b39a455f6bbd293cda00
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/60> ;
-      mr:saveCache  "True" .
 
 link:c1233b2251f18b0b2f62a7f8672ff5bc
       mr:CFexport   "True" ;
@@ -2936,7 +2619,6 @@ link:c1233b2251f18b0b2f62a7f8672ff5bc
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/330> ;
-      mr:saveCache  "True" .
 
 link:cd886874dcef3c199ae43b097019b6b2
       mr:CFexport   "True" ;
@@ -2945,7 +2627,6 @@ link:cd886874dcef3c199ae43b097019b6b2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i202 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/59e7db04d369543447b6d1c7780bdccf>
       mr:CFexport   "True" ;
@@ -2954,7 +2635,6 @@ link:cd886874dcef3c199ae43b097019b6b2
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/702> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2e6ebcf5eb5fd395953d3ab81295eb78>
       mr:CFexport   "True" ;
@@ -2963,7 +2643,6 @@ link:cd886874dcef3c199ae43b097019b6b2
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i288 ;
-      mr:saveCache  "True" .
 
 link:ec36008f3880017014dc360ddc1bf8e9
       mr:CFexport   "True" ;
@@ -2972,7 +2651,6 @@ link:ec36008f3880017014dc360ddc1bf8e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i248 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8de3a056eaf970be1c0e55f4e14abef1>
       mr:CFexport   "True" ;
@@ -2981,7 +2659,6 @@ link:ec36008f3880017014dc360ddc1bf8e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i230 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/882df0f5cd2cc5b94f56855c2c707e38>
       mr:CFexport   "True" ;
@@ -2990,7 +2667,6 @@ link:ec36008f3880017014dc360ddc1bf8e9
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i204 ;
-      mr:saveCache  "True" .
 
 link:ebfbf488cfbf69f8904d51d9896347cd
       mr:CFexport   "True" ;
@@ -2999,7 +2675,6 @@ link:ebfbf488cfbf69f8904d51d9896347cd
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/82> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7b35da979ed71f5886e953ab7ca4d391>
       mr:CFexport   "True" ;
@@ -3008,7 +2683,6 @@ link:ebfbf488cfbf69f8904d51d9896347cd
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i042 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5cdb313b23656d30ebd2a000dea76e7c>
       mr:CFexport   "True" ;
@@ -3017,7 +2691,6 @@ link:ebfbf488cfbf69f8904d51d9896347cd
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/37> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4ed7a2f886e04a86f3be222489c84950>
       mr:CFexport   "True" ;
@@ -3026,7 +2699,6 @@ link:ebfbf488cfbf69f8904d51d9896347cd
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i052 ;
-      mr:saveCache  "True" .
 
 link:fd4261b962871d7e03550b0fde154083
       mr:CFexport   "True" ;
@@ -3035,7 +2707,6 @@ link:fd4261b962871d7e03550b0fde154083
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i270 ;
-      mr:saveCache  "True" .
 
 link:f4f8eef223a385c30f48159ca5a177b3
       mr:CFexport   "True" ;
@@ -3044,7 +2715,6 @@ link:f4f8eef223a385c30f48159ca5a177b3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i220 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0e4d5c3c6eb4ce0c5bc66701981a853a>
       mr:CFexport   "True" ;
@@ -3053,7 +2723,6 @@ link:f4f8eef223a385c30f48159ca5a177b3
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/1/22> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/690afabac293f1a70bdccb762b2c3526>
       mr:CFexport   "True" ;
@@ -3062,7 +2731,6 @@ link:f4f8eef223a385c30f48159ca5a177b3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i137 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/95ba5cd846792d9a69d83c633fcada46>
       mr:CFexport   "True" ;
@@ -3071,7 +2739,14 @@ link:f4f8eef223a385c30f48159ca5a177b3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i310 ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metOcean/linkage/175c28615c7d74b2242fa8962f309c7e>
+      mr:CFexport   "True" ;
+      mr:CFimport   "True" ;
+      mr:CFlink     <http://www.metarelate.net/metocean/cf/8d5050d5825e62e2132622358036f00a> ;
+      mr:UMexport   "False" ;
+      mr:UMimport   "True" ;
+      mr:UMlink     moStCon:m01s15i219 ;
 
 <http://www.metarelate.net/metOcean/linkage/5b3d859e9f156b8750706b3878cdcdcc>
       mr:CFexport   "True" ;
@@ -3080,7 +2755,6 @@ link:f4f8eef223a385c30f48159ca5a177b3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1025> ;
-      mr:saveCache  "True" .
 
 link:f38623813d395db9528f8534c3253451
       mr:CFexport   "True" ;
@@ -3089,7 +2763,6 @@ link:f38623813d395db9528f8534c3253451
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:CFexport   "True" ;
@@ -3098,7 +2771,6 @@ link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/7/6> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3ffc3ccc8dc158eaa7e07bcaa99cd2f5>
       mr:CFexport   "True" ;
@@ -3107,7 +2779,6 @@ link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i209 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/41f6c03cb634d716b53ab8e842af6505>
       mr:CFexport   "True" ;
@@ -3116,7 +2787,6 @@ link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i207 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/34b3d1dd210ac05e45b07224b4c24f6c>
       mr:CFexport   "True" ;
@@ -3125,7 +2795,6 @@ link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i227 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4c01a037b23a380ad153797e22f943f2>
       mr:CFexport   "True" ;
@@ -3134,7 +2803,6 @@ link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i220 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7f18811c1c3ee6cfe5b99771e790ee0e>
       mr:CFexport   "True" ;
@@ -3143,7 +2811,6 @@ link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i113 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3576d21cbcc5a03dc987b63b7bffba83>
       mr:CFexport   "True" ;
@@ -3152,7 +2819,6 @@ link:b306076ba7c4cd78d3e927ac9dd3dd5f
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 link:d223314d7f04d2c5c3076340ca18f641
       mr:CFexport   "True" ;
@@ -3161,7 +2827,6 @@ link:d223314d7f04d2c5c3076340ca18f641
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i231 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/43e033908a44813c27d00cb46d92dcec>
       mr:CFexport   "True" ;
@@ -3170,7 +2835,6 @@ link:d223314d7f04d2c5c3076340ca18f641
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/16> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9b838fbb4f5a098dbdf20bb590fde3ef>
       mr:CFexport   "True" ;
@@ -3179,7 +2843,6 @@ link:d223314d7f04d2c5c3076340ca18f641
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i255 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/90bbdad3741fe2642648835418905892>
       mr:CFexport   "True" ;
@@ -3188,7 +2851,6 @@ link:d223314d7f04d2c5c3076340ca18f641
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/203> ;
-      mr:saveCache  "True" .
 
 link:d7dce3f3a216b88092f484a1871c8353
       mr:CFexport   "True" ;
@@ -3197,7 +2859,6 @@ link:d7dce3f3a216b88092f484a1871c8353
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i215 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2b1a6086eb223053991f5f4eea8df4f4>
       mr:CFexport   "True" ;
@@ -3206,7 +2867,6 @@ link:d7dce3f3a216b88092f484a1871c8353
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i025 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9596042922f453cc9c94a2db7fd84768>
       mr:CFexport   "True" ;
@@ -3215,7 +2875,6 @@ link:d7dce3f3a216b88092f484a1871c8353
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5ce6ef1455de8c274fe0996e8fb04160>
       mr:CFexport   "True" ;
@@ -3224,7 +2883,6 @@ link:d7dce3f3a216b88092f484a1871c8353
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i302 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/733366a948de88bdf61f4813c3d0084e>
       mr:CFexport   "True" ;
@@ -3233,7 +2891,6 @@ link:d7dce3f3a216b88092f484a1871c8353
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i182 ;
-      mr:saveCache  "True" .
 
 link:b5656ad106a5d511c1cd22c1aed43925
       mr:CFexport   "True" ;
@@ -3242,7 +2899,6 @@ link:b5656ad106a5d511c1cd22c1aed43925
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i005 ;
-      mr:saveCache  "True" .
 
 link:f6b9a9a9576fb2af62e0dc61226cfa4b
       mr:CFexport   "True" ;
@@ -3251,7 +2907,6 @@ link:f6b9a9a9576fb2af62e0dc61226cfa4b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 link:bfb711a27e551ce23e6a9d400187d5a7
       mr:CFexport   "True" ;
@@ -3260,7 +2915,6 @@ link:bfb711a27e551ce23e6a9d400187d5a7
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s30i201 ;
-      mr:saveCache  "True" .
 
 link:d9ba0c3cb49314d54254780fe75c1948
       mr:CFexport   "True" ;
@@ -3269,7 +2923,6 @@ link:d9ba0c3cb49314d54254780fe75c1948
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i041 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3a0189579970f8c70cc01190f45e5abb>
       mr:CFexport   "True" ;
@@ -3278,7 +2931,6 @@ link:d9ba0c3cb49314d54254780fe75c1948
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i234 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/43104b55457500a0ca649d1e0a949c73>
       mr:CFexport   "True" ;
@@ -3287,7 +2939,6 @@ link:d9ba0c3cb49314d54254780fe75c1948
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i243 ;
-      mr:saveCache  "True" .
 
 link:cc7760655cf835b02fa3f49dd75a08ec
       mr:CFexport   "True" ;
@@ -3296,7 +2947,6 @@ link:cc7760655cf835b02fa3f49dd75a08ec
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i237 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/95f31741a770ee2acf39550569e988e2>
       mr:CFexport   "True" ;
@@ -3305,7 +2955,6 @@ link:cc7760655cf835b02fa3f49dd75a08ec
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i202 ;
-      mr:saveCache  "True" .
 
 link:e256ebbf8519526daa4f1673ed4dcc49
       mr:CFexport   "True" ;
@@ -3314,7 +2963,6 @@ link:e256ebbf8519526daa4f1673ed4dcc49
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/3/5> ;
-      mr:saveCache  "True" .
 
 link:ee0ca42cb119f8640e84b007b20c4da1
       mr:CFexport   "True" ;
@@ -3323,7 +2971,6 @@ link:ee0ca42cb119f8640e84b007b20c4da1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1386> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/44b2ea250a2a9755966a9dbc71d964a2>
       mr:CFexport   "True" ;
@@ -3332,7 +2979,6 @@ link:ee0ca42cb119f8640e84b007b20c4da1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i047 ;
-      mr:saveCache  "True" .
 
 link:c0daea1972c174f23b6a40ebe944728a
       mr:CFexport   "True" ;
@@ -3341,7 +2987,6 @@ link:c0daea1972c174f23b6a40ebe944728a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i034 ;
-      mr:saveCache  "True" .
 
 link:a633bf2d4aa86c3205a6549e576b8ce5
       mr:CFexport   "True" ;
@@ -3350,7 +2995,6 @@ link:a633bf2d4aa86c3205a6549e576b8ce5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i224 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/89a4e3e33ec60b0c811191e7a271a41c>
       mr:CFexport   "True" ;
@@ -3359,7 +3003,6 @@ link:a633bf2d4aa86c3205a6549e576b8ce5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i053 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7421567781edc70587028d7f93306007>
       mr:CFexport   "True" ;
@@ -3368,7 +3011,6 @@ link:a633bf2d4aa86c3205a6549e576b8ce5
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/332> ;
-      mr:saveCache  "True" .
 
 link:ede3ee39ed43c2055adf019ca1e65c54
       mr:CFexport   "True" ;
@@ -3377,7 +3019,6 @@ link:ede3ee39ed43c2055adf019ca1e65c54
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/981> ;
-      mr:saveCache  "True" .
 
 link:bb267228bd544b5c07675eb7b335bf0d
       mr:CFexport   "True" ;
@@ -3386,7 +3027,6 @@ link:bb267228bd544b5c07675eb7b335bf0d
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/210> ;
-      mr:saveCache  "True" .
 
 link:ba90009d9e6d95dd7f4836ae63f221b1
       mr:CFexport   "True" ;
@@ -3395,7 +3035,6 @@ link:ba90009d9e6d95dd7f4836ae63f221b1
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/1/1> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8607fa07bc5cd0832d0d4c0817690765>
       mr:CFexport   "True" ;
@@ -3404,7 +3043,6 @@ link:ba90009d9e6d95dd7f4836ae63f221b1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i295 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/415807b49a2bf5a7b13691595cc3a2cd>
       mr:CFexport   "True" ;
@@ -3413,7 +3051,6 @@ link:ba90009d9e6d95dd7f4836ae63f221b1
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1385> ;
-      mr:saveCache  "True" .
 
 link:b04caab420b9e2860964e626e3e7ea30
       mr:CFexport   "True" ;
@@ -3422,7 +3059,6 @@ link:b04caab420b9e2860964e626e3e7ea30
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/23> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3c08c49f1bf0530354b29d7506326112>
       mr:CFexport   "True" ;
@@ -3431,7 +3067,6 @@ link:b04caab420b9e2860964e626e3e7ea30
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1374> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4c10041ead7b24e802a2f91b7f0bada5>
       mr:CFexport   "True" ;
@@ -3440,7 +3075,6 @@ link:b04caab420b9e2860964e626e3e7ea30
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/88> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/402342d943124613b7596d8a0a15c245>
       mr:CFexport   "True" ;
@@ -3449,7 +3083,6 @@ link:b04caab420b9e2860964e626e3e7ea30
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/57> ;
-      mr:saveCache  "True" .
 
 link:f3140b7aa9dbcff94927fe40ae4918a7
       mr:CFexport   "True" ;
@@ -3458,7 +3091,6 @@ link:f3140b7aa9dbcff94927fe40ae4918a7
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i507 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7c550030f6910df16c6ed45c9f9332d9>
       mr:CFexport   "True" ;
@@ -3467,7 +3099,6 @@ link:f3140b7aa9dbcff94927fe40ae4918a7
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i217 ;
-      mr:saveCache  "True" .
 
 link:b6c633ec182c71c1b48bffd8c7982e7f
       mr:CFexport   "True" ;
@@ -3476,7 +3107,6 @@ link:b6c633ec182c71c1b48bffd8c7982e7f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i102 ;
-      mr:saveCache  "True" .
 
 link:a2321022e252804d8b9ff7e8434dc490
       mr:CFexport   "True" ;
@@ -3485,7 +3115,6 @@ link:a2321022e252804d8b9ff7e8434dc490
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/207> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9e0a534ffedb909dd84be435035e8fb8>
       mr:CFexport   "True" ;
@@ -3494,7 +3123,6 @@ link:a2321022e252804d8b9ff7e8434dc490
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/94> ;
-      mr:saveCache  "True" .
 
 link:e13e8b107c5eb148f88168132f419b9e
       mr:CFexport   "True" ;
@@ -3503,7 +3131,6 @@ link:e13e8b107c5eb148f88168132f419b9e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i278 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0d6d4ae8f6f23672e7c675bdaab64077>
       mr:CFexport   "True" ;
@@ -3512,7 +3139,6 @@ link:e13e8b107c5eb148f88168132f419b9e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i224 ;
-      mr:saveCache  "True" .
 
 link:eac25c4e85bfe4d6334968f55b5b859c
       mr:CFexport   "True" ;
@@ -3521,7 +3147,6 @@ link:eac25c4e85bfe4d6334968f55b5b859c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i183 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/93eedaf31a9f544f96f3502cd21659f5>
       mr:CFexport   "True" ;
@@ -3530,7 +3155,6 @@ link:eac25c4e85bfe4d6334968f55b5b859c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i220 ;
-      mr:saveCache  "True" .
 
 link:d2c5f8b03128f05f7dc51f4d6318e881
       mr:CFexport   "True" ;
@@ -3539,7 +3163,6 @@ link:d2c5f8b03128f05f7dc51f4d6318e881
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/117> ;
-      mr:saveCache  "True" .
 
 link:ce8d0a0f259028714efb2f5889805314
       mr:CFexport   "True" ;
@@ -3548,7 +3171,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i219 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5d3d1e48d128fdbfbb9bb962ba75da0f>
       mr:CFexport   "True" ;
@@ -3557,7 +3179,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/74c6e43f731befdb98375caed30fb862>
       mr:CFexport   "True" ;
@@ -3566,7 +3187,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i205 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/808af9f79720c5213e6a372b06a995d3>
       mr:CFexport   "True" ;
@@ -3575,7 +3195,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i004 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4d312d1fa1755482fa9110a958414c0e>
       mr:CFexport   "True" ;
@@ -3584,7 +3203,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/178> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/009edc14bfe4cb813c7dec028c3934d9>
       mr:CFexport   "True" ;
@@ -3593,7 +3211,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/701> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2eaae749bb86a5c03077814ed5909696>
       mr:CFexport   "True" ;
@@ -3602,7 +3219,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i228 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5419d325e8e4fbc56e9eb64f8686f130>
       mr:CFexport   "True" ;
@@ -3611,7 +3227,6 @@ link:ce8d0a0f259028714efb2f5889805314
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i406 ;
-      mr:saveCache  "True" .
 
 link:c669906eaef97a2a921e32706dc86387
       mr:CFexport   "True" ;
@@ -3620,7 +3235,6 @@ link:c669906eaef97a2a921e32706dc86387
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i242 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/65fc9cac1588f1f6395dc161048a7474>
       mr:CFexport   "True" ;
@@ -3629,7 +3243,6 @@ link:c669906eaef97a2a921e32706dc86387
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/79> ;
-      mr:saveCache  "True" .
 
 link:ce2ef34380e6ed6c78550682dbbd36c4
       mr:CFexport   "True" ;
@@ -3638,7 +3251,6 @@ link:ce2ef34380e6ed6c78550682dbbd36c4
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/2/10> ;
-      mr:saveCache  "True" .
 
 link:adc48f374beaaa538b6f42fb7c7557c1
       mr:CFexport   "True" ;
@@ -3647,7 +3259,6 @@ link:adc48f374beaaa538b6f42fb7c7557c1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s13i181 ;
-      mr:saveCache  "True" .
 
 link:ac0715906842940902d087a6c22b0f0b
       mr:CFexport   "True" ;
@@ -3656,7 +3267,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8f98c65e27e8ceee30f3c3a65734c443>
       mr:CFexport   "True" ;
@@ -3665,7 +3275,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/326> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6e37da5596c0f1171908aead85d0fa64>
       mr:CFexport   "True" ;
@@ -3674,7 +3283,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i043 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0674bb37739cb7bc9253eadf9f514ddc>
       mr:CFexport   "True" ;
@@ -3683,7 +3291,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i417 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/24cf80b1b4eb13ddb1cadb7ab7b97144>
       mr:CFexport   "True" ;
@@ -3692,7 +3299,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/335> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3b31fed2b1d1e470ea493b2e8cf443cf>
       mr:CFexport   "True" ;
@@ -3701,7 +3307,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/122> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6b4d433bccc172270643eb7bb6298a61>
       mr:CFexport   "True" ;
@@ -3710,7 +3315,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i186 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1327bdba45bc396a12b3c9b50901958b>
       mr:CFexport   "True" ;
@@ -3719,7 +3323,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i228 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/349cab491a1ac85ab6fd531943fcb0f3>
       mr:CFexport   "True" ;
@@ -3728,7 +3331,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i007 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/37dbe02ca6457fc229de99920d17a511>
       mr:CFexport   "True" ;
@@ -3737,7 +3339,6 @@ link:ac0715906842940902d087a6c22b0f0b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i460 ;
-      mr:saveCache  "True" .
 
 link:b3a15305de5395282c64923179f1c0c8
       mr:CFexport   "True" ;
@@ -3746,16 +3347,6 @@ link:b3a15305de5395282c64923179f1c0c8
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i181 ;
-      mr:saveCache  "True" .
-
-<http://www.metarelate.net/metOcean/linkage/011cdce4f831287397a7fc3758e15d3c>
-      mr:CFexport   "True" ;
-      mr:CFimport   "True" ;
-      mr:CFlink     <http://www.metarelate.net/metocean/cf/bee0bc2a1c95fbc4d33ed82bce014c77> ;
-      mr:UMexport   "False" ;
-      mr:UMimport   "True" ;
-      mr:UMlink     moStCon:m01s15i219 ;
-      mr:saveCache  "True" .
 
 link:a564affe853557c9c21dab01d86f8109
       mr:CFexport   "True" ;
@@ -3764,7 +3355,6 @@ link:a564affe853557c9c21dab01d86f8109
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i258 ;
-      mr:saveCache  "True" .
 
 link:f78c8d219b25a790db26362a5ada5839
       mr:CFexport   "True" ;
@@ -3773,7 +3363,6 @@ link:f78c8d219b25a790db26362a5ada5839
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i185 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7a28e58adefa2f3c74a3047ff3981827>
       mr:CFexport   "True" ;
@@ -3782,7 +3371,6 @@ link:f78c8d219b25a790db26362a5ada5839
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i212 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9017e568ab62cd91869843a18214aca8>
       mr:CFexport   "True" ;
@@ -3791,7 +3379,6 @@ link:f78c8d219b25a790db26362a5ada5839
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/115> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8bbcd889035b9a2be8b95447d76ecf7b>
       mr:CFexport   "True" ;
@@ -3800,7 +3387,6 @@ link:f78c8d219b25a790db26362a5ada5839
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i024 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/60b8eb3d46e3c100b8be9977ad65812e>
       mr:CFexport   "True" ;
@@ -3809,7 +3395,6 @@ link:f78c8d219b25a790db26362a5ada5839
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i222 ;
-      mr:saveCache  "True" .
 
 link:e6b8a14a0cff39cde94a5794cf448fa6
       mr:CFexport   "True" ;
@@ -3818,7 +3403,6 @@ link:e6b8a14a0cff39cde94a5794cf448fa6
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/27> ;
-      mr:saveCache  "True" .
 
 link:b503748aacf88be46bc7b24739f26e86
       mr:CFexport   "True" ;
@@ -3827,7 +3411,6 @@ link:b503748aacf88be46bc7b24739f26e86
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i028 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6ea12633c642657a219220f700674b32>
       mr:CFexport   "True" ;
@@ -3836,7 +3419,6 @@ link:b503748aacf88be46bc7b24739f26e86
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s13i182 ;
-      mr:saveCache  "True" .
 
 link:f1ad5c9dda33f4483034dc8f1bf88e3c
       mr:CFexport   "True" ;
@@ -3845,7 +3427,6 @@ link:f1ad5c9dda33f4483034dc8f1bf88e3c
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1559> ;
-      mr:saveCache  "True" .
 
 link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:CFexport   "True" ;
@@ -3854,7 +3435,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i131 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4fb032a937adf02c38e5443437707faf>
       mr:CFexport   "True" ;
@@ -3863,7 +3443,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i051 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/45aad5c27f955fcc126d74c519c69bc8>
       mr:CFexport   "True" ;
@@ -3872,7 +3451,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s09i010 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/09b2203a5940ec4e60e62e81d181e0f7>
       mr:CFexport   "True" ;
@@ -3881,7 +3459,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i206 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/00516eda6f342b69d583e668de2e7f4a>
       mr:CFexport   "True" ;
@@ -3890,7 +3467,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s30i202 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/112eaf984733a505e5ecd62294353db5>
       mr:CFexport   "True" ;
@@ -3899,7 +3475,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i205 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8eda8c23a28ca26bf0bfd9e3a572616a>
       mr:CFexport   "True" ;
@@ -3908,7 +3483,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7fa7c891406982d0aae61520a7ab37bb>
       mr:CFexport   "True" ;
@@ -3917,7 +3491,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i254 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3285fa0be9acee9acef37b6fe533b2c5>
       mr:CFexport   "True" ;
@@ -3926,7 +3499,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/62> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2f4771caae81b393732dd30c630090ec>
       mr:CFexport   "True" ;
@@ -3935,7 +3507,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/74> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/921393eb4e131d51049fdfbd8e7fe6d9>
       mr:CFexport   "True" ;
@@ -3944,7 +3515,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i149 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/82042aa6e30202985d91bca8eb6b0413>
       mr:CFexport   "True" ;
@@ -3953,7 +3523,6 @@ link:bd8fbf42de3ad2e9c64b9ede7c1a819c
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i509 ;
-      mr:saveCache  "True" .
 
 link:f7136b0a0cc4774e48f119e177a85c8f
       mr:CFexport   "True" ;
@@ -3962,7 +3531,6 @@ link:f7136b0a0cc4774e48f119e177a85c8f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/37> ;
-      mr:saveCache  "True" .
 
 link:a5c38357ba786225c26f0eff71972500
       mr:CFexport   "True" ;
@@ -3971,7 +3539,6 @@ link:a5c38357ba786225c26f0eff71972500
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i023 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9e206b7a67629bd8fcc7156aded5893e>
       mr:CFexport   "True" ;
@@ -3980,7 +3547,6 @@ link:a5c38357ba786225c26f0eff71972500
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s08i234 ;
-      mr:saveCache  "True" .
 
 link:ac2f64edef30f68c63544905492b70d4
       mr:CFexport   "True" ;
@@ -3989,7 +3555,6 @@ link:ac2f64edef30f68c63544905492b70d4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i435 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/699ce42d46701f94f7367d1b3987985e>
       mr:CFexport   "True" ;
@@ -3998,7 +3563,6 @@ link:ac2f64edef30f68c63544905492b70d4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m03s00i177 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3077629ea1fd3dab94ac537204add0e0>
       mr:CFexport   "True" ;
@@ -4007,7 +3571,6 @@ link:ac2f64edef30f68c63544905492b70d4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/122> ;
-      mr:saveCache  "True" .
 
 link:b2c4553dfd714e8fd042cff63961aa36
       mr:CFexport   "True" ;
@@ -4016,7 +3579,6 @@ link:b2c4553dfd714e8fd042cff63961aa36
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/56> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5924fbceaf1cb06ac58e27a9c723df5e>
       mr:CFexport   "True" ;
@@ -4025,7 +3587,6 @@ link:b2c4553dfd714e8fd042cff63961aa36
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s13i185 ;
-      mr:saveCache  "True" .
 
 link:e7d20b28acb638afe8e62ae23fd81ed6
       mr:CFexport   "True" ;
@@ -4034,7 +3595,6 @@ link:e7d20b28acb638afe8e62ae23fd81ed6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i043 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0fc5d3242b2c34efe0e9145f6232adc4>
       mr:CFexport   "True" ;
@@ -4043,7 +3603,6 @@ link:e7d20b28acb638afe8e62ae23fd81ed6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i046 ;
-      mr:saveCache  "True" .
 
 link:cc4e9ca170d5b8bfa09352b1ae217b72
       mr:CFexport   "True" ;
@@ -4052,7 +3611,6 @@ link:cc4e9ca170d5b8bfa09352b1ae217b72
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i025 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5d16ac3f59ab390245a5962424317ac6>
       mr:CFexport   "True" ;
@@ -4061,7 +3619,6 @@ link:cc4e9ca170d5b8bfa09352b1ae217b72
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/27> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5e48062f921ddc778866f4baaf045218>
       mr:CFexport   "True" ;
@@ -4070,7 +3627,6 @@ link:cc4e9ca170d5b8bfa09352b1ae217b72
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/36> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9e7b52d229589040c127b007c8b23c6b>
       mr:CFexport   "True" ;
@@ -4079,7 +3635,6 @@ link:cc4e9ca170d5b8bfa09352b1ae217b72
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1720> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2c2510df092a103525612479de17b82c>
       mr:CFexport   "True" ;
@@ -4088,7 +3643,6 @@ link:cc4e9ca170d5b8bfa09352b1ae217b72
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/111> ;
-      mr:saveCache  "True" .
 
 link:f878ebd9effc670338d5eb39a8b85221
       mr:CFexport   "True" ;
@@ -4097,7 +3651,6 @@ link:f878ebd9effc670338d5eb39a8b85221
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/99a51470e5dae10fa938327530d712a0>
       mr:CFexport   "True" ;
@@ -4106,7 +3659,6 @@ link:f878ebd9effc670338d5eb39a8b85221
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i212 ;
-      mr:saveCache  "True" .
 
 link:c187c4eb56c89cb503684d18e36b6d90
       mr:CFexport   "True" ;
@@ -4115,7 +3667,6 @@ link:c187c4eb56c89cb503684d18e36b6d90
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i208 ;
-      mr:saveCache  "True" .
 
 link:a41dd501f1d02341a500a912a7bb57a7
       mr:CFexport   "True" ;
@@ -4124,7 +3675,6 @@ link:a41dd501f1d02341a500a912a7bb57a7
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i066 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1e2a0ea66ccaaf75a7497b0aec782f34>
       mr:CFexport   "True" ;
@@ -4133,7 +3683,6 @@ link:a41dd501f1d02341a500a912a7bb57a7
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i269 ;
-      mr:saveCache  "True" .
 
 link:f6ebb07f9d707df8f47873ac3f991d36
       mr:CFexport   "True" ;
@@ -4142,7 +3691,6 @@ link:f6ebb07f9d707df8f47873ac3f991d36
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i048 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/75c9c7f079500a95f4ae69c04c79e599>
       mr:CFexport   "True" ;
@@ -4151,7 +3699,6 @@ link:f6ebb07f9d707df8f47873ac3f991d36
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/321> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9967af7fb69ec29d799faea26761c44e>
       mr:CFexport   "True" ;
@@ -4160,7 +3707,6 @@ link:f6ebb07f9d707df8f47873ac3f991d36
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/8> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/36d2e1a060a5f35fc11ecbd0d221bb2c>
       mr:CFexport   "True" ;
@@ -4169,7 +3715,6 @@ link:f6ebb07f9d707df8f47873ac3f991d36
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i186 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1563dac70e0126b38990f21d662fabbd>
       mr:CFexport   "True" ;
@@ -4178,7 +3723,6 @@ link:f6ebb07f9d707df8f47873ac3f991d36
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i225 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/857f9228d58801f4522cd32ef990db29>
       mr:CFexport   "True" ;
@@ -4187,7 +3731,6 @@ link:f6ebb07f9d707df8f47873ac3f991d36
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i205 ;
-      mr:saveCache  "True" .
 
 link:be10478a36069229b905440a00425071
       mr:CFexport   "True" ;
@@ -4196,7 +3739,6 @@ link:be10478a36069229b905440a00425071
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i127 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1331930508f1fae06a0d5e04aed587b0>
       mr:CFexport   "True" ;
@@ -4205,7 +3747,6 @@ link:be10478a36069229b905440a00425071
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/702> ;
-      mr:saveCache  "True" .
 
 link:e7d2cd5166f78fe6f4c981ddb55563d3
       mr:CFexport   "True" ;
@@ -4214,7 +3755,6 @@ link:e7d2cd5166f78fe6f4c981ddb55563d3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i226 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/98fdfe113c49a5cebdeba2e58aacd12e>
       mr:CFexport   "True" ;
@@ -4223,7 +3763,6 @@ link:e7d2cd5166f78fe6f4c981ddb55563d3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i180 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7359aee937ad053584851d737d2c3ea5>
       mr:CFexport   "True" ;
@@ -4232,7 +3771,6 @@ link:e7d2cd5166f78fe6f4c981ddb55563d3
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1564> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/770d7aa01ecb129bdaeb007d8c34aaf1>
       mr:CFexport   "True" ;
@@ -4241,7 +3779,6 @@ link:e7d2cd5166f78fe6f4c981ddb55563d3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i223 ;
-      mr:saveCache  "True" .
 
 link:b05dcc7a4ca3a185fef0aa3ff9d4eef6
       mr:CFexport   "True" ;
@@ -4250,7 +3787,6 @@ link:b05dcc7a4ca3a185fef0aa3ff9d4eef6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i146 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/988bba53bd796224df124769c7b31db9>
       mr:CFexport   "True" ;
@@ -4259,7 +3795,6 @@ link:b05dcc7a4ca3a185fef0aa3ff9d4eef6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i012 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8cde41025541f5f47f24a73bb633b644>
       mr:CFexport   "True" ;
@@ -4268,7 +3803,6 @@ link:b05dcc7a4ca3a185fef0aa3ff9d4eef6
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/0/1/13> ;
-      mr:saveCache  "True" .
 
 link:e379afd23825f7e1e84b923bed80f3ca
       mr:CFexport   "True" ;
@@ -4277,7 +3811,6 @@ link:e379afd23825f7e1e84b923bed80f3ca
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/73> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3e24a1829a23530b353daeec4e8acb46>
       mr:CFexport   "True" ;
@@ -4286,7 +3819,6 @@ link:e379afd23825f7e1e84b923bed80f3ca
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s16i202 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2be42b26173e52e9d35ce52039966fc5>
       mr:CFexport   "True" ;
@@ -4295,7 +3827,6 @@ link:e379afd23825f7e1e84b923bed80f3ca
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i262 ;
-      mr:saveCache  "True" .
 
 link:d7d77218154cc0873b31c146e158fc8e
       mr:CFexport   "True" ;
@@ -4304,7 +3835,6 @@ link:d7d77218154cc0873b31c146e158fc8e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i461 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4290269ad10aae2fd3bd0e0e625d3ae5>
       mr:CFexport   "True" ;
@@ -4313,7 +3843,6 @@ link:d7d77218154cc0873b31c146e158fc8e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i237 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2aeb77f8c3562f8d5aa5da6ca5cb079a>
       mr:CFexport   "True" ;
@@ -4322,7 +3851,6 @@ link:d7d77218154cc0873b31c146e158fc8e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i003 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6868f943fcda83e3670da0633501581c>
       mr:CFexport   "True" ;
@@ -4331,7 +3859,6 @@ link:d7d77218154cc0873b31c146e158fc8e
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/214246346b1a8ccdf83acade0e793e77>
       mr:CFexport   "True" ;
@@ -4340,7 +3867,6 @@ link:d7d77218154cc0873b31c146e158fc8e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i232 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9f3402f7067476a090ac82ebdf768d4a>
       mr:CFexport   "True" ;
@@ -4349,7 +3875,6 @@ link:d7d77218154cc0873b31c146e158fc8e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i270 ;
-      mr:saveCache  "True" .
 
 link:d45e3c20064ddeea9e97364e54231572
       mr:CFexport   "True" ;
@@ -4358,7 +3883,6 @@ link:d45e3c20064ddeea9e97364e54231572
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s20i024 ;
-      mr:saveCache  "True" .
 
 link:ed167fda360a0733f7e3fa3fcf50acc1
       mr:CFexport   "True" ;
@@ -4367,7 +3891,6 @@ link:ed167fda360a0733f7e3fa3fcf50acc1
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1373> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/476a2cdcbf729898bd5e1a0de14ab050>
       mr:CFexport   "True" ;
@@ -4376,7 +3899,6 @@ link:ed167fda360a0733f7e3fa3fcf50acc1
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/23> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/810abf46dafb0f2c9b5a6fec6c1d32e9>
       mr:CFexport   "True" ;
@@ -4385,7 +3907,6 @@ link:ed167fda360a0733f7e3fa3fcf50acc1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i235 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/77c39d1c50565ca698489f6278483410>
       mr:CFexport   "True" ;
@@ -4394,7 +3915,6 @@ link:ed167fda360a0733f7e3fa3fcf50acc1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i054 ;
-      mr:saveCache  "True" .
 
 link:c4fe7ffb8c27d77f178670fe127c6350
       mr:CFexport   "True" ;
@@ -4403,7 +3923,6 @@ link:c4fe7ffb8c27d77f178670fe127c6350
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i215 ;
-      mr:saveCache  "True" .
 
 link:dda98ed2c5d29911ec0a400594dac2b0
       mr:CFexport   "True" ;
@@ -4412,7 +3931,6 @@ link:dda98ed2c5d29911ec0a400594dac2b0
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/324> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/966c8e0eac272548efec074cf9a30c9e>
       mr:CFexport   "True" ;
@@ -4421,7 +3939,6 @@ link:dda98ed2c5d29911ec0a400594dac2b0
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i040 ;
-      mr:saveCache  "True" .
 
 link:d7b211a5dd8d56397d3673acc39ffb5a
       mr:CFexport   "True" ;
@@ -4430,7 +3947,6 @@ link:d7b211a5dd8d56397d3673acc39ffb5a
       mr:GRIBexport  "True" ;
       mr:GRIBimport  "True" ;
       mr:UMlink     <http://data.wmo.int/def/grib2/codeflag/4.2/2/0/0> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8f8ffb7718393088194e77d309beda4e>
       mr:CFexport   "True" ;
@@ -4439,7 +3955,6 @@ link:d7b211a5dd8d56397d3673acc39ffb5a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i216 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/061992da831be5cba53c29336535daba>
       mr:CFexport   "True" ;
@@ -4448,7 +3963,6 @@ link:d7b211a5dd8d56397d3673acc39ffb5a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i148 ;
-      mr:saveCache  "True" .
 
 link:ca84b0ec433aceef90addec1727c0dc6
       mr:CFexport   "True" ;
@@ -4457,7 +3971,6 @@ link:ca84b0ec433aceef90addec1727c0dc6
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/184> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4379c3bede18ae90da50a4354f744d9d>
       mr:CFexport   "True" ;
@@ -4466,7 +3979,6 @@ link:ca84b0ec433aceef90addec1727c0dc6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i122 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/76294a9d1f9db42d66df939bb5e6d0fa>
       mr:CFexport   "True" ;
@@ -4475,7 +3987,6 @@ link:ca84b0ec433aceef90addec1727c0dc6
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i230 ;
-      mr:saveCache  "True" .
 
 link:f26f678c4393536b0d4ee9f6dcceaac8
       mr:CFexport   "True" ;
@@ -4484,7 +3995,6 @@ link:f26f678c4393536b0d4ee9f6dcceaac8
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/102> ;
-      mr:saveCache  "True" .
 
 link:caf0d57a5db8e4ce93df413b546b9539
       mr:CFexport   "True" ;
@@ -4493,7 +4003,6 @@ link:caf0d57a5db8e4ce93df413b546b9539
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1395> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/601d086489b20a7e64c18c3aeadee68f>
       mr:CFexport   "True" ;
@@ -4502,7 +4011,6 @@ link:caf0d57a5db8e4ce93df413b546b9539
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/19> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/1b6e6a410f36aa0592561e2dff82b2b6>
       mr:CFexport   "True" ;
@@ -4511,7 +4019,6 @@ link:caf0d57a5db8e4ce93df413b546b9539
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i166 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5720a008a6067b77b3c6c7eb8bdb0197>
       mr:CFexport   "True" ;
@@ -4520,7 +4027,6 @@ link:caf0d57a5db8e4ce93df413b546b9539
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/209> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/62f07966f0754b626cce1d0053380305>
       mr:CFexport   "True" ;
@@ -4529,7 +4035,6 @@ link:caf0d57a5db8e4ce93df413b546b9539
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/8> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/2529fce8c3e51421ce88c644bc70638d>
       mr:CFexport   "True" ;
@@ -4538,7 +4043,6 @@ link:caf0d57a5db8e4ce93df413b546b9539
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/261> ;
-      mr:saveCache  "True" .
 
 link:f396d01c0520df77e806c551d23ee0be
       mr:CFexport   "True" ;
@@ -4547,7 +4051,6 @@ link:f396d01c0520df77e806c551d23ee0be
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/7> ;
-      mr:saveCache  "True" .
 
 link:ace7a0ffa3ca7b7c6681b2c558aa8ae3
       mr:CFexport   "True" ;
@@ -4556,7 +4059,6 @@ link:ace7a0ffa3ca7b7c6681b2c558aa8ae3
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/93> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/506d036b5a8256fb28577613156927e7>
       mr:CFexport   "True" ;
@@ -4565,7 +4067,14 @@ link:ace7a0ffa3ca7b7c6681b2c558aa8ae3
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/253> ;
-      mr:saveCache  "True" .
+
+<http://www.metarelate.net/metOcean/linkage/5a64becb2976b93f1400260bdb886fee>
+      mr:CFexport   "True" ;
+      mr:CFimport   "True" ;
+      mr:CFlink     <http://www.metarelate.net/metocean/cf/f996bdbd4b609227c79c81c54c93f444> ;
+      mr:UMexport   "False" ;
+      mr:UMimport   "True" ;
+      mr:UMlink     moStCon:m01s15i239 ;
 
 <http://www.metarelate.net/metOcean/linkage/063f2eca3d1e63f52ddbca2fab6aece0>
       mr:CFexport   "True" ;
@@ -4574,7 +4083,6 @@ link:ace7a0ffa3ca7b7c6681b2c558aa8ae3
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/99> ;
-      mr:saveCache  "True" .
 
 link:c42e729f4d94e8a846dc317db5501d0e
       mr:CFexport   "True" ;
@@ -4583,7 +4091,6 @@ link:c42e729f4d94e8a846dc317db5501d0e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i224 ;
-      mr:saveCache  "True" .
 
 link:a3a52094a1d50fce42a3f60d72df56db
       mr:CFexport   "True" ;
@@ -4592,7 +4099,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/111> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7094c1e8de7c385211f817649ae9c8a0>
       mr:CFexport   "True" ;
@@ -4601,7 +4107,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i150 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/151955ab292d9dcfed63e916d02a5dbb>
       mr:CFexport   "True" ;
@@ -4610,7 +4115,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i313 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3999b20e6309424a1516ad10a8cfba81>
       mr:CFexport   "True" ;
@@ -4619,7 +4123,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/0664ff640cff666c01cdf50f7725af60>
       mr:CFexport   "True" ;
@@ -4628,7 +4131,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m06s00i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/938ebf6077ec5aface8eff6b859b064d>
       mr:CFexport   "True" ;
@@ -4637,7 +4139,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i186 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/4cfc3f87a4d45709773b227a372c4966>
       mr:CFexport   "True" ;
@@ -4646,7 +4147,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/30> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/165a5ed6974f373cf09622ee42e92d0d>
       mr:CFexport   "True" ;
@@ -4655,7 +4155,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s06i186 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/399134de7460412f6eba822de120d96d>
       mr:CFexport   "True" ;
@@ -4664,7 +4163,6 @@ link:a3a52094a1d50fce42a3f60d72df56db
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i406 ;
-      mr:saveCache  "True" .
 
 link:f6f09c0d5bd37ba85f6df94bb652862e
       mr:CFexport   "True" ;
@@ -4673,7 +4171,6 @@ link:f6f09c0d5bd37ba85f6df94bb652862e
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
 
 link:f93c06e0062a8e5e429fae5904e3e7bb
       mr:CFexport   "True" ;
@@ -4682,7 +4179,6 @@ link:f93c06e0062a8e5e429fae5904e3e7bb
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i214 ;
-      mr:saveCache  "True" .
 
 link:ec9fd722920d4e5f8dd29a297c102485
       mr:CFexport   "True" ;
@@ -4691,7 +4187,6 @@ link:ec9fd722920d4e5f8dd29a297c102485
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i049 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/47a952f09eb527fed644303a755e69e5>
       mr:CFexport   "True" ;
@@ -4700,7 +4195,6 @@ link:ec9fd722920d4e5f8dd29a297c102485
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i150 ;
-      mr:saveCache  "True" .
 
 link:af6bcbfbbdd001bcba1a009d5a44a8e1
       mr:CFexport   "True" ;
@@ -4709,16 +4203,6 @@ link:af6bcbfbbdd001bcba1a009d5a44a8e1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i298 ;
-      mr:saveCache  "True" .
-
-<http://www.metarelate.net/metOcean/linkage/258116b1dea2500ea088e5298f99de23>
-      mr:CFexport   "True" ;
-      mr:CFimport   "True" ;
-      mr:CFlink     <http://www.metarelate.net/metocean/cf/514c02c082a2ba19a174679917dcf322> ;
-      mr:UMexport   "False" ;
-      mr:UMimport   "True" ;
-      mr:UMlink     moStCon:m01s15i238 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/74fd800d11a36520f4b85fe591310483>
       mr:CFexport   "True" ;
@@ -4727,7 +4211,6 @@ link:af6bcbfbbdd001bcba1a009d5a44a8e1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i217 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6c9c1b8c17861b944ec264ed17b57f27>
       mr:CFexport   "True" ;
@@ -4736,7 +4219,6 @@ link:af6bcbfbbdd001bcba1a009d5a44a8e1
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s30i320 ;
-      mr:saveCache  "True" .
 
 link:a2cfa2d9dbda836c346840a5a4c53764
       mr:CFexport   "True" ;
@@ -4745,7 +4227,6 @@ link:a2cfa2d9dbda836c346840a5a4c53764
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s04i202 ;
-      mr:saveCache  "True" .
 
 link:cb7211b525be0a91fe87b2d0972442c4
       mr:CFexport   "True" ;
@@ -4754,7 +4235,6 @@ link:cb7211b525be0a91fe87b2d0972442c4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i233 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8e10c0bc05bc5bb966f18592fa05f72c>
       mr:CFexport   "True" ;
@@ -4763,7 +4243,6 @@ link:cb7211b525be0a91fe87b2d0972442c4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s00i171 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/3d31d12c302faf5d6406f909c0d555a4>
       mr:CFexport   "True" ;
@@ -4772,7 +4251,6 @@ link:cb7211b525be0a91fe87b2d0972442c4
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i220 ;
-      mr:saveCache  "True" .
 
 link:b16071cbc45cb54559e8d9163b005778
       mr:CFexport   "True" ;
@@ -4781,7 +4259,6 @@ link:b16071cbc45cb54559e8d9163b005778
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i228 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7ba3b0f07b18f296786ed664f9608758>
       mr:CFexport   "True" ;
@@ -4790,7 +4267,6 @@ link:b16071cbc45cb54559e8d9163b005778
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/74> ;
-      mr:saveCache  "True" .
 
 link:bd75e6c28cc76a300a30592dd296bd3b
       mr:CFexport   "True" ;
@@ -4799,7 +4275,6 @@ link:bd75e6c28cc76a300a30592dd296bd3b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/40> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/095f30db0bc4fc2e843c1367b50f2ca2>
       mr:CFexport   "True" ;
@@ -4808,7 +4283,6 @@ link:bd75e6c28cc76a300a30592dd296bd3b
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i314 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/13135a9713765734ff492d6bbe4c0ecc>
       mr:CFexport   "True" ;
@@ -4817,7 +4291,6 @@ link:bd75e6c28cc76a300a30592dd296bd3b
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/220> ;
-      mr:saveCache  "True" .
 
 link:d6cb6852cc72f8da867fa158aa920e46
       mr:CFexport   "True" ;
@@ -4826,7 +4299,6 @@ link:d6cb6852cc72f8da867fa158aa920e46
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i255 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7ff8f1aa675b68aff0cf58d03c37b62e>
       mr:CFexport   "True" ;
@@ -4835,7 +4307,6 @@ link:d6cb6852cc72f8da867fa158aa920e46
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/112> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/5bcce77bd71f8e119d1148eb788ea224>
       mr:CFexport   "True" ;
@@ -4844,7 +4315,6 @@ link:d6cb6852cc72f8da867fa158aa920e46
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/208> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/13fbaa238cf6458ba3bafbc7b77bb7ba>
       mr:CFexport   "True" ;
@@ -4853,7 +4323,6 @@ link:d6cb6852cc72f8da867fa158aa920e46
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i261 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/93d4580a05b9f3d0c7c3e147ade54c5c>
       mr:CFexport   "True" ;
@@ -4862,7 +4331,6 @@ link:d6cb6852cc72f8da867fa158aa920e46
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i219 ;
-      mr:saveCache  "True" .
 
 link:bbccd361ab0ee377d19f13dd5138e0d0
       mr:CFexport   "True" ;
@@ -4871,7 +4339,6 @@ link:bbccd361ab0ee377d19f13dd5138e0d0
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/183> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/7bd34d315f73b21ea1c6a90a83ee395f>
       mr:CFexport   "True" ;
@@ -4880,7 +4347,6 @@ link:bbccd361ab0ee377d19f13dd5138e0d0
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i215 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8bb3d0003d8af2a1f3ed12c6617b87ce>
       mr:CFexport   "True" ;
@@ -4889,7 +4355,6 @@ link:bbccd361ab0ee377d19f13dd5138e0d0
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/7> ;
-      mr:saveCache  "True" .
 
 link:a040ecec1e676a8dbeefb3907f4214aa
       mr:CFexport   "True" ;
@@ -4898,7 +4363,6 @@ link:a040ecec1e676a8dbeefb3907f4214aa
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/97> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/9ca28a26abcc499f52f3d3a0389a339c>
       mr:CFexport   "True" ;
@@ -4907,7 +4371,6 @@ link:a040ecec1e676a8dbeefb3907f4214aa
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/206> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/870605da01b36f89d99f5f9a9a43ccba>
       mr:CFexport   "True" ;
@@ -4916,7 +4379,6 @@ link:a040ecec1e676a8dbeefb3907f4214aa
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m06s00i103 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/76524e840dd70add67a431fbfbe06f91>
       mr:CFexport   "True" ;
@@ -4925,7 +4387,6 @@ link:a040ecec1e676a8dbeefb3907f4214aa
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s03i393 ;
-      mr:saveCache  "True" .
 
 link:c37ec14be3991a22c14b5e29b909ed26
       mr:CFexport   "True" ;
@@ -4934,7 +4395,6 @@ link:c37ec14be3991a22c14b5e29b909ed26
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i221 ;
-      mr:saveCache  "True" .
 
 link:efa15167e1f68623d545564aa0a3c51e
       mr:CFexport   "True" ;
@@ -4943,7 +4403,6 @@ link:efa15167e1f68623d545564aa0a3c51e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s00i002 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/183deb52b50336bd8a5c82dc374956f1>
       mr:CFexport   "True" ;
@@ -4952,7 +4411,6 @@ link:efa15167e1f68623d545564aa0a3c51e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s12i187 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/546d55685452d29042d6789437afe75d>
       mr:CFexport   "True" ;
@@ -4961,7 +4419,6 @@ link:efa15167e1f68623d545564aa0a3c51e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s01i238 ;
-      mr:saveCache  "True" .
 
 link:e4ae5ac534896b1fc8a1aac92ca9d94a
       mr:CFexport   "True" ;
@@ -4970,7 +4427,6 @@ link:e4ae5ac534896b1fc8a1aac92ca9d94a
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/329> ;
-      mr:saveCache  "True" .
 
 link:e83fbab6ac26f5724140990efdc75b0e
       mr:CFexport   "True" ;
@@ -4979,7 +4435,6 @@ link:e83fbab6ac26f5724140990efdc75b0e
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m02s32i202 ;
-      mr:saveCache  "True" .
 
 link:f5ae6898f71c05306b50f4a1343cadea
       mr:CFexport   "True" ;
@@ -4988,7 +4443,6 @@ link:f5ae6898f71c05306b50f4a1343cadea
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s30i211 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/38cad00be227ccd896987d37793345af>
       mr:CFexport   "True" ;
@@ -4997,7 +4451,6 @@ link:f5ae6898f71c05306b50f4a1343cadea
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s04i203 ;
-      mr:saveCache  "True" .
 
 link:bdab6964b65a4e6beb1c1379814b774a
       mr:CFexport   "True" ;
@@ -5006,7 +4459,6 @@ link:bdab6964b65a4e6beb1c1379814b774a
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1507> ;
-      mr:saveCache  "True" .
 
 link:e9fb8eaee714dce9662dcd0aa754637f
       mr:CFexport   "True" ;
@@ -5015,7 +4467,6 @@ link:e9fb8eaee714dce9662dcd0aa754637f
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s02i208 ;
-      mr:saveCache  "True" .
 
 link:ac9686e0ced2ed762412558d3ac18c99
       mr:CFexport   "True" ;
@@ -5024,7 +4475,6 @@ link:ac9686e0ced2ed762412558d3ac18c99
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/206> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/17f25def901556eebf5795f50816f8be>
       mr:CFexport   "True" ;
@@ -5033,7 +4483,6 @@ link:ac9686e0ced2ed762412558d3ac18c99
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s15i201 ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/63efb70f7883c4a3abd65a9f0aee0e18>
       mr:CFexport   "True" ;
@@ -5042,7 +4491,6 @@ link:ac9686e0ced2ed762412558d3ac18c99
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/5> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/8774b35876995066fc37700a2a29a43c>
       mr:CFexport   "True" ;
@@ -5051,7 +4499,6 @@ link:ac9686e0ced2ed762412558d3ac18c99
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s05i185 ;
-      mr:saveCache  "True" .
 
 link:f97f4c52569521a60f79c4cdb772f3df
       mr:CFexport   "True" ;
@@ -5060,7 +4507,6 @@ link:f97f4c52569521a60f79c4cdb772f3df
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/1382> ;
-      mr:saveCache  "True" .
 
 <http://www.metarelate.net/metOcean/linkage/6cd19c20b047c325836e2f9fd4a7ae28>
       mr:CFexport   "True" ;
@@ -5069,7 +4515,6 @@ link:f97f4c52569521a60f79c4cdb772f3df
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/118> ;
-      mr:saveCache  "True" .
 
 link:b39b8de28068edf1812df42d55738dcf
       mr:CFexport   "True" ;
@@ -5078,7 +4523,6 @@ link:b39b8de28068edf1812df42d55738dcf
       mr:UMexport   "False" ;
       mr:UMimport   "True" ;
       mr:UMlink     moStCon:m01s33i007 ;
-      mr:saveCache  "True" .
 
 link:d75a537a0c4f76b2112c300f96cfbf43
       mr:CFexport   "True" ;
@@ -5087,5 +4531,5 @@ link:d75a537a0c4f76b2112c300f96cfbf43
       mr:UMexport   "True" ;
       mr:UMimport   "False" ;
       mr:UMlink     <http://reference.metoffice.gov.uk/def/um/fieldcode/501> ;
-      mr:saveCache  "True" .
+
 

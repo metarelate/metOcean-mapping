@@ -52,7 +52,7 @@ class SearchParam(forms.Form):
     #     return self.cleaned_data
 
 class UMParam(forms.Form):
-    '''
+    '''A django form for adding UM elements to a linkage search path
     '''
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
@@ -65,7 +65,7 @@ class UMParam(forms.Form):
         self.fields['parameter'].choices = choices
 
 class GRIBParam(forms.Form):
-    '''
+    '''A django form for adding GRIB elements to a linkage search path
     '''
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
@@ -79,7 +79,7 @@ class GRIBParam(forms.Form):
 
             
 class CFParam(forms.Form):
-    '''
+    '''A django form for adding CF elements to a linkage search path
     '''
     parameter = forms.CharField(max_length=100, required=False)
     cf_type = forms.ChoiceField(choices=[('Field','Field')], required=False)

@@ -1,4 +1,5 @@
 
+
 # (C) British Crown Copyright 2011 - 2012, Met Office
 #
 # This file is part of metOcean-mapping.
@@ -16,21 +17,24 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
+import collections
 import hashlib
-import re
 
 import metocean.prefixes as prefixes
 
 
-def make_hash(pred_obj, omitted=[]):
-    ''' create an md5 hash from the pred_obj (object list) dictionary
-    skip any 'ommited' (list) predicates and objects'''
+def make_hash(pred_obj, omitted=None):
+    ''' creates and returns an md5 hash of the elements in the pred_obj
+    (object list) dictionary
+    skipping any 'ommited' (list) predicates and objects'''
+    if omitted is None:
+        omitted = []
     pre = prefixes.Prefixes()
-
-    
     mmd5 = hashlib.md5()
-    
-    for pred in pred_obj.keys():
+    #sort keys
+    po_keys = pred_obj.keys()
+    po_keys.sort()
+    for pred in po_keys:
         if pred not in omitted:
             pred_elems = pred.split(':')
             if len(pred_elems) == 2:
@@ -39,7 +43,8 @@ def make_hash(pred_obj, omitted=[]):
                 else:
                     raise ValueError('predicate not in prefixes.py')
             else:
-                raise ValueError('make hash passed a predicate which is not of the form <prefix>:<item>')
+                raise ValueError('make hash passed a predicate '
+                                 'which is not of the form <prefix>:<item>')
             if isinstance(pred_obj[pred], list):
                 for obj in pred_obj[pred]:
                     mmd5.update(predicate)
@@ -112,11 +117,9 @@ def save_cache(fuseki_process, graph, debug=False):
     } 
     ''' % (graph,graph)
     delete_results = fuseki_process.run_query(qstr, update=True, debug=debug)
-    pattern = re.compile('saveCache')
     save_string = ''
     for line in results.split('\n'):
-        if not pattern.search(line):
-            #print 'writing', line
+        if not line.strip().startswith('mr:saveCache'):
             save_string += line
             save_string += '\n'
     return save_string

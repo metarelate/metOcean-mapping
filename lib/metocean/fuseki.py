@@ -41,6 +41,7 @@ STATICDATA = parser.get('metocean','staticData')
 TDB = parser.get('metocean','TDB')
 JENAROOT = parser.get('metocean','jenaroot')
 FUSEKIROOT = parser.get('metocean','fusekiroot')
+DATASET = '/metocean'
 
 os.environ['JENAROOT'] = JENAROOT
 os.environ['FUSEKI_HOME'] = FUSEKIROOT
@@ -96,7 +97,7 @@ class FusekiServer(object):
                                        '--loc=%s'%TDB,
                                        '--update',
                                        '--port=%i' % self._port,
-                                       '/metocean'])
+                                       DATASET])
             i = 0
             while not self._check_port():
                 i+=1
@@ -119,12 +120,10 @@ class FusekiServer(object):
         return self._check_port()
 
     def _check_port(self):
-        #address='localhost'
-        address = self._host
         s = socket.socket() 
         #print "Attempting to connect to %s on port %s." %(address, port)
         try: 
-            s.connect((address, self._port)) 
+            s.connect((self._host, self._port)) 
             #print "Connected to server %s on port %s." %(address, port) 
             return True 
         except socket.error, e: 
@@ -157,7 +156,7 @@ class FusekiServer(object):
             #print save_string
             #print subgraph
             with open(subgraph, 'a') as sg:
-                for line in save_string.split('\n'):
+                for line in save_string.splitlines():
                     if not line.startswith('@prefix'):
                         #print 'writing', line
                         sg.write(line)
@@ -195,7 +194,7 @@ class FusekiServer(object):
 
 
     def run_query(self, query_string, output='json', update=False, debug=False):
-        '''All queries should be run through a FusekiServer instance's run_query method
+        '''run a query_string on the FusekiServer instance
         '''
         if not self.status():
             self.start()
@@ -217,10 +216,7 @@ class FusekiServer(object):
                 (action, "%s %s" % (pre.sparql, query_string)),
                 ("output", output),
                 ("stylesheet","/static/xml-to-html-links.xsl")])
-        if self._host == 'localhost':
-            BASEURL = "http://127.0.0.1:%i/metocean/%s?" % (self._port, action)
-        else:
-            BASEURL = "http://%s/%s?" % (self._host, action)
+        BASEURL = "http://%s:%i%s/%s?" % (self._host, self._port, DATASET, action)
         data = ''
         try:
             data = opener.open(Request(BASEURL), qstr).read()

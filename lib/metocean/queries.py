@@ -1,4 +1,5 @@
 
+
 # (C) British Crown Copyright 2011 - 2012, Met Office
 #
 # This file is part of metOcean-mapping.
@@ -16,10 +17,44 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
+import collections
 import hashlib
 
 import metocean.prefixes as prefixes
 
+
+def make_hash(pred_obj, omitted=None):
+    ''' creates and returns an md5 hash of the elements in the pred_obj
+    (object list) dictionary
+    skipping any 'ommited' (list) predicates and objects'''
+    if omitted is None:
+        omitted = []
+    pre = prefixes.Prefixes()
+    mmd5 = hashlib.md5()
+    #sort keys
+    po_keys = pred_obj.keys()
+    po_keys.sort()
+    for pred in po_keys:
+        if pred not in omitted:
+            pred_elems = pred.split(':')
+            if len(pred_elems) == 2:
+                if pre.has_key(pred_elems[0]):
+                    predicate = '%s%s' % (pre[pred_elems[0]], pred_elems[1])
+                else:
+                    raise ValueError('predicate not in prefixes.py')
+            else:
+                raise ValueError('make hash passed a predicate '
+                                 'which is not of the form <prefix>:<item>')
+            if isinstance(pred_obj[pred], list):
+                for obj in pred_obj[pred]:
+                    mmd5.update(predicate)
+                    mmd5.update(obj)
+            else:
+                mmd5.update(predicate)
+                mmd5.update(pred_obj[pred])
+    md5 = str(mmd5.hexdigest())
+    return md5
+    
 
 def revert_cache(fuseki_process, graph, debug=False):
     '''
@@ -65,7 +100,7 @@ def save_cache(fuseki_process, graph, debug=False):
     }
     } 
     ''' % graph
-    results = run_query(qstr, output="text", debug=debug)
+    results = fuseki_process.run_query(qstr, output="text", debug=debug)
     qstr = '''
     DELETE
     {  GRAPH <%s>
@@ -81,8 +116,13 @@ def save_cache(fuseki_process, graph, debug=False):
         }
     } 
     ''' % (graph,graph)
-    not_results = run_query(qstr, update=True, debug=debug)
-    return results
+    delete_results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    save_string = ''
+    for line in results.split('\n'):
+        if not line.strip().startswith('mr:saveCache'):
+            save_string += line
+            save_string += '\n'
+    return save_string
 
 
 def query_cache(fuseki_process, graph, debug=False):
@@ -99,7 +139,7 @@ def query_cache(fuseki_process, graph, debug=False):
         }
     } 
     ''' % (graph)
-    results = run_query(qstr, debug=debug)
+    results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
 
@@ -118,9 +158,9 @@ def current_mappings(fuseki_process, debug=False):
           SELECT ?map ?replaces
           WHERE
           {
-           ?map mr:replaces ?replaces .
+           ?map dc:replaces ?replaces .
 
-           MINUS {?map ^mr:replaces+ ?map}
+           MINUS {?map ^dc:replaces+ ?map}
            }
         }
     }
@@ -154,9 +194,12 @@ def mapping_by_link(fuseki_process, paramlist=False,debug=False):
        ?reason
        ?link
        (GROUP_CONCAT(DISTINCT(?cfitem); SEPARATOR = "&") AS ?cfelems) 
-       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
+       ?cfim ?cfex 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+       ?umim ?umex 
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
+       ?gribim ?gribex
        WHERE
        {
               GRAPH <http://metocean/cflinks.ttl> {
@@ -171,25 +214,31 @@ def mapping_by_link(fuseki_process, paramlist=False,debug=False):
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:replaces ?replaces ;
+                dc:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
 
        FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:replaces+ ?map}
+       MINUS {?map ^dc:replaces+ ?map}
        } GRAPH <http://metocean/linkages.ttl> {
 %s
        OPTIONAL
-           {?link mr:CFlink ?cflink . }
+           {?link mr:CFlink ?cflink ;
+                  mr:CFimport ?cfim ;
+                  mr:CFexport ?cfex . }
        OPTIONAL
-           {?link mr:UMlink ?umlink . }
+           {?link mr:UMlink ?umlink ;
+                  mr:UMimport ?umim ;
+                  mr:UMexport ?umex . }
        OPTIONAL
-           {?link mr:GRIBlink ?griblink .}
-       
+           {?link mr:GRIBlink ?griblink ;
+                  mr:GRIBimport ?gribim ;
+                  mr:GRIBexport ?gribex .}
+              
 
     } } } }
-    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
     ''' % (linkpattern)
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
@@ -219,39 +268,46 @@ def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
        ?comment
        ?reason
        ?link
-       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
+       ?cfim ?cfex 
        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+       ?umim ?umex
        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-
+       ?gribim ?gribex
 
     WHERE
       
- { GRAPH <http://mappings/mappings.ttl> {
+ { GRAPH <http://metocean/mappings.ttl> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
-                mr:replaces ?replaces ;
+                dc:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
                 mr:linkage ?link .
 %s
        FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^mr:replaces+ ?map}
+       MINUS {?map ^dc:replaces+ ?map}
            }
-GRAPH <http://mappings/linkages.ttl> {
+GRAPH <http://metocean/linkages.ttl> {
        OPTIONAL
-           {?link mr:CFlink ?cflink .         
-           }
+           {?link mr:CFlink ?cflink ;
+                  mr:CFimport ?cfim ;
+                  mr:CFexport ?cfex . }
        OPTIONAL
-           {?link mr:UMlink ?umlink . }
+           {?link mr:UMlink ?umlink ;
+                  mr:UMimport ?umim ;
+                  mr:UMexport ?umex . }
        OPTIONAL
-           {?link mr:GRIBlink ?griblink .}
+           {?link mr:GRIBlink ?griblink ;
+                  mr:GRIBimport ?gribim ;
+                  mr:GRIBexport ?gribex .}
        
 
     }}
-    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
     ''' % (linkpattern)
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
@@ -335,7 +391,7 @@ def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
     qstr = '''
         SELECT DISTINCT ?subject
         WHERE {
-            GRAPH <%s> { ?subject ?p ?o } .
+            GRAPH <http://%s> { ?subject ?p ?o } .
             FILTER( REGEX(str(?subject), '%s') ) .            
         }
         ORDER BY ?subject
@@ -376,9 +432,11 @@ def get_cflinks(fuseki_process, pred_obj=None, debug=False):
     filterstr = ''
     if pred_obj:
         for key in pred_obj.keys():
-            filterstr += '''FILTER (bound(?%s))
-            FILTER (regex(str(?%s), str(%s), "i"))
-            ''' % (key.split(':')[1],key.split(':')[1],pred_obj[key])
+            filterstr += '''FILTER (bound(?{key}))
+            FILTER (STRSTARTS(str(?{key}), str({val})))
+            FILTER (STRENDS(str(?{key}), str({val})))
+            FILTER (STRLEN(str(?{key})) = STRLEN(str({val})))
+            '''.format(key=key.split(':')[1], val=pred_obj[key])
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
     WHERE
@@ -406,16 +464,9 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
     if one already exists, use this in preference
     subj_pref is the prefix for the subject, e.g. http://www.metarelate.net/metocean/cf, http://www.metarelate.net/metocean/linkage
     '''
+    md5 = make_hash(po_dict)
 
-    mmd5 = hashlib.md5()
-    
-    for pred in po_dict.keys():
-        mmd5.update(pred)
-        mmd5.update(po_dict[pred])
-
-    md5 = str(mmd5.hexdigest())
-    #ask yourself whether you want to calculate the MD5 here and use it to test, or whether to pass the predicates and objects to SPARQL to query
-    current_link = get_by_attrs(po_dict)
+    current_link = get_cflinks(fuseki_process, po_dict)
     if len(current_link) == 0:
         pred_obj = ''
         for pred in po_dict.keys():
@@ -431,7 +482,7 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
         }
         ''' % (subj_pref, md5, pred_obj)
         results = fuseki_process.run_query(qstr, update=True, debug=debug)
-        current_link = get_cflinks(po_dict)
+        current_link = get_cflinks(fuseki_process, po_dict)
     return current_link
 
 
@@ -444,9 +495,13 @@ def get_linkage(fuseki_process, fso_dict, debug=False):
     subj_pref = 'http://www.metarelate.net/metOcean/linkage'
     search_string = ''
     for fstring in fso_dict.keys():
-        for obj in fso_dict[fstring]:
+        if isinstance(fso_dict[fstring], list):
+            for obj in fso_dict[fstring]:
+                search_string += '''
+                %s %s ;''' % (fstring, obj)
+        else:
             search_string += '''
-            mr:%slink %s ;''' % (fstring.upper(), obj)
+            %s %s ;''' % (fstring, fso_dict[fstring])
     if search_string != '':
         search_string += '.'
         qstr = '''
@@ -473,15 +528,7 @@ def get_linkage(fuseki_process, fso_dict, debug=False):
         results = fuseki_process.run_query(qstr, debug=debug)
         if len(results) == 1 and results[0] == {}:
             pre = prefixes.Prefixes()
-            mmd5 = hashlib.md5()
-            pred_obj = ''
-            for format,objects in fso_dict.iteritems():
-                for obj in objects:
-                    (pre['mr'], format, obj)
-                    mmd5.update('%s%slink' % (pre['mr'], format))
-                    mmd5.update(obj)
-
-            md5 = str(mmd5.hexdigest())
+            md5 = make_hash(fso_dict)
 
             inststr = '''
             INSERT DATA
@@ -508,35 +555,30 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     results = None
     pre = prefixes.Prefixes()
 
-    if po_dict.has_key('owner') and \
-        po_dict.has_key('watcher') and \
-        po_dict.has_key('creator') and len(po_dict['creator'])==1 and \
-        po_dict.has_key('status') and len(po_dict['status'])==1 and \
-        po_dict.has_key('replaces') and len(po_dict['replaces'])==1 and \
-        po_dict.has_key('comment') and len(po_dict['comment'])==1 and \
-        po_dict.has_key('reason') and len(po_dict['reason'])==1 and \
-        po_dict.has_key('linkage') and len(po_dict['linkage'])==1:
-        
-        mmd5 = hashlib.md5()
+    if po_dict.has_key('mr:owner') and \
+        po_dict.has_key('mr:watcher') and \
+        po_dict.has_key('mr:creator') and len(po_dict['mr:creator'])==1 and \
+        po_dict.has_key('mr:status') and len(po_dict['mr:status'])==1 and \
+        po_dict.has_key('dc:replaces') and len(po_dict['dc:replaces'])==1 and \
+        po_dict.has_key('mr:comment') and len(po_dict['mr:comment'])==1 and \
+        po_dict.has_key('mr:reason') and len(po_dict['mr:reason'])==1 and \
+        po_dict.has_key('mr:linkage') and len(po_dict['mr:linkage'])==1:
+
+        md5 = make_hash(po_dict, ['mr:creation'])
 
         pred_obj = ''
         for pred,objects in po_dict.iteritems():
             for obj in objects:
-                pattern_string = ''' mr:%s %s ;
+                pattern_string = ''' %s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
-                if pred != 'creation':
-                    mmd5.update('%s%s' % (pre['mr'], pred))
-                    mmd5.update(obj)
-
-        md5 = str(mmd5.hexdigest())
         # check if we already have one:
-        result = subject_graph_pattern('http://mappings/',
+        result = subject_graph_pattern(fuseki_process, 'http://metocean/mappings.ttl',
                 'http://www.metarelate.net/metocean/mapping/%s' % md5)
         if len(result) == 0:
             qstr = '''
             INSERT DATA
-            { GRAPH <http://metocena/mappings.ttl>
+            { GRAPH <http://metocean/mappings.ttl>
             { <%s/%s> %s
             mr:saveCache "True" .
             }
@@ -554,7 +596,7 @@ def get_contacts(fuseki_process, register, debug=False):
     SELECT ?s
     WHERE
     { GRAPH <http://contacts/contacts.ttl> {
-        ?s iso19135:definedInRegister ?register .
+        ?s skos:member ?register .
            OPTIONAL{
                ?s mr:retired ?retired}
                }

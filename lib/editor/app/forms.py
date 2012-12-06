@@ -29,10 +29,8 @@ from django.utils.safestring import mark_safe
 
 import metocean.prefixes as prefixes
 import metocean.queries as moq
-import models
 from settings import READ_ONLY
-
-fuseki_process = models.fuseki_process
+from settings import fuseki_process
 
 class SearchParam(forms.Form):
     '''
@@ -54,22 +52,34 @@ class SearchParam(forms.Form):
     #     return self.cleaned_data
 
 class UMParam(forms.Form):
-    '''
+    '''A django form for adding UM elements to a linkage search path
     '''
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
         super(UMParam, self).__init__(*args, **kwargs)
-        version = '8.2'
-        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stash.vn%s.ttl' % version)
+        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stashconcepts.ttl')
         #define choices
-        choices = [('um;' + stash['subject'], stash['subject'].split('/')[-2]) for stash in stashRes]
+        choices = [('um;' + stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
+        
+
+        self.fields['parameter'].choices = choices
+
+class GRIBParam(forms.Form):
+    '''A django form for adding GRIB elements to a linkage search path
+    '''
+    parameter = forms.ChoiceField()
+    def __init__(self,  *args, **kwargs):
+        super(GRIBParam, self).__init__(*args, **kwargs)
+        gribRes = moq.subject_by_graph(fuseki_process, 'http://grib/codesflags.ttl')
+        #define choices
+        choices = [('grib;' + grib['subject'], grib['subject']) for grib in gribRes]
         
 
         self.fields['parameter'].choices = choices
 
             
 class CFParam(forms.Form):
-    '''
+    '''A django form for adding CF elements to a linkage search path
     '''
     parameter = forms.CharField(max_length=100, required=False)
     cf_type = forms.ChoiceField(choices=[('Field','Field')], required=False)
@@ -221,30 +231,6 @@ class MappingEditForm(forms.Form):
             self.expand_links(kwargs, 'cflinks')
             self.expand_links(kwargs, 'umlinks')
             self.expand_links(kwargs, 'griblinks')
-            # cflinks = None
-            # if kwargs['initial'].has_key('cflinks'):
-            #     cflinks = kwargs['initial']['cflinks']
-            # if cflinks:
-            #     for i, cflink in enumerate(cflinks.split('&')):
-            #         for k,v in moq.get_cflink_by_id(cflink)[0].iteritems():
-            #             self.fields['cflink%i_%s' % (i,k)] = forms.URLField(initial=v)
-            #             self.fields['cflink%i_%s' % (i,k)].widget.attrs['readonly'] = True
-            #             self.fields['cflink%i_%s' % (i,k)].widget.attrs['size'] = 50
-            # umlinks = None
-            # if kwargs['initial'].has_key('umlinks'):
-            #     umlinks = kwargs['initial']['umlinks']
-            # if umlinks:
-            #     for i, umlink in enumerate(umlinks.split('&')):
-            #         self.fields['umlink%i' % i] = forms.URLField(initial=umlink)
-            #         self.fields['umlink%i' % i].widget.attrs['readonly'] = True
-            #         self.fields['umlink%i' % i].widget.attrs['size'] = 50
-            # griblinks = None
-            # if kwargs['initial'].has_key('cflinks'):
-            #     griblinks = kwargs['initial']['griblinks']
-            # if griblinks:
-            #     for i, griblink in enumerate(griblinks.split('&')):
-            #         self.fields['griblink%i' % i] = forms.URLField(initial=griblink)
-            #         self.fields['griblink%i' % i].widget.attrs['readonly'] = True
 
 
     def clean(self):
@@ -253,18 +239,6 @@ class MappingEditForm(forms.Form):
         else:
             return self.cleaned_data
 
-    # def clean_last_edit(self):
-    #     data = self.cleaned_data.get('last_edit')
-    #     try:
-    #         return str(datetime.datetime(*time.strptime(str(data), self.isoformat)[:6]))
-    #     except ValueError:
-    #         raise forms.ValidationError("Invalid ISO DateTime format")
-        # for isoformat in self.isoformat:
-        #     try:
-        #         return str(datetime.datetime(*time.strptime(str(data), isoformat)[:6]))
-        #     except ValueError:
-        #         continue
-        # raise forms.ValidationError("Invalid ISO DateTime format")
 
     def expand_links(self, kwargs, name):
         links = None

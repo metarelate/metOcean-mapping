@@ -41,6 +41,7 @@ STATICDATA = parser.get('metocean','staticData')
 TDB = parser.get('metocean','TDB')
 JENAROOT = parser.get('metocean','jenaroot')
 FUSEKIROOT = parser.get('metocean','fusekiroot')
+DATASET = '/metocean'
 
 os.environ['JENAROOT'] = JENAROOT
 os.environ['FUSEKI_HOME'] = FUSEKIROOT
@@ -48,6 +49,7 @@ os.environ['FUSEKI_HOME'] = FUSEKIROOT
 
 
 def process_data(jsondata):
+    '''helper method to take JSON output from a query and return the results'''
     resultslist = []
     try:
         jdata = json.loads(jsondata)
@@ -68,10 +70,12 @@ def process_data(jsondata):
 
 
 class FusekiServer(object):
-
-    def __init__(self, port):
+    '''A class to represent an instance of a process managing a triple database and a Fuseki Server
+    '''
+    def __init__(self, port, host='localhost'):
         self._process = None
         self._port = port
+        self._host = host
         
     def __enter__(self):
         self.start()
@@ -93,7 +97,7 @@ class FusekiServer(object):
                                        '--loc=%s'%TDB,
                                        '--update',
                                        '--port=%i' % self._port,
-                                       '/metocean'])
+                                       DATASET])
             i = 0
             while not self._check_port():
                 i+=1
@@ -116,11 +120,10 @@ class FusekiServer(object):
         return self._check_port()
 
     def _check_port(self):
-        address='localhost'
         s = socket.socket() 
         #print "Attempting to connect to %s on port %s." %(address, port)
         try: 
-            s.connect((address, self._port)) 
+            s.connect((self._host, self._port)) 
             #print "Connected to server %s on port %s." %(address, port) 
             return True 
         except socket.error, e: 
@@ -148,11 +151,14 @@ class FusekiServer(object):
         '''
         maingraph = 'metocean'
         for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
-            graph = 'http://%s/%s' % (maingraph, subgraph)
+            graph = 'http://%s/%s' % (maingraph, subgraph.split('/')[-1])
             save_string = queries.save_cache(self, graph)
+            #print save_string
+            #print subgraph
             with open(subgraph, 'a') as sg:
-                for line in save_string:
+                for line in save_string.splitlines():
                     if not line.startswith('@prefix'):
+                        #print 'writing', line
                         sg.write(line)
                         sg.write('\n')
 
@@ -188,6 +194,8 @@ class FusekiServer(object):
 
 
     def run_query(self, query_string, output='json', update=False, debug=False):
+        '''run a query_string on the FusekiServer instance
+        '''
         if not self.status():
             self.start()
         # use null ProxyHandler to ignore proxy for localhost access
@@ -208,8 +216,7 @@ class FusekiServer(object):
                 (action, "%s %s" % (pre.sparql, query_string)),
                 ("output", output),
                 ("stylesheet","/static/xml-to-html-links.xsl")])
-
-        BASEURL="http://127.0.0.1:3131/metocean/%s?" % action
+        BASEURL = "http://%s:%i%s/%s?" % (self._host, self._port, DATASET, action)
         data = ''
         try:
             data = opener.open(Request(BASEURL), qstr).read()

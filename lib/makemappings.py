@@ -48,10 +48,34 @@ umcfdict = dict(umcf.STASH_TO_CF, **moreumcf.MOSIG_STASH_TO_CF)
 
 linkages = []
 
+fcuri = 'http://reference.metoffice.gov.uk/def/um/fieldcode/'
+
+
+
+for fc,cf in umcf.LBFC_TO_CF.iteritems():
+    adict = {}
+    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
+    if umcf.CF_TO_LBFC.has_key(cf) and umcf.CF_TO_LBFC[cf] == fc:
+        adict['rootA'] = {'mr:rootA':['<%s%i>' % (fcuri,fc)]}
+    else:
+        adict['rootA'] = {'mr:rootA':['<%s%i>' % (fcuri,fc)], 'mr:direction':['"AB"']}
+    adict['rootB'] = 'cfl'
+    linkages.append(adict)
+
+for cf,fc in umcf.CF_TO_LBFC.iteritems():
+    if not (umcf.LBFC_TO_CF.has_key(fc) and umcf.LBFC_TO_CF[fc] == cf):
+        adict = {}
+        adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
+        adict['rootA'] = {'mr:rootA':['<%s%i>' % (fcuri,fc)], 'mr:direction':['"BA"']}
+        adict['rootB'] = 'cfl'
+        linkages.append(adict)
+
+
+
 for stash,cf in umcfdict.iteritems():
     adict = {}
-    adict['source'] = {'mr:source':['<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % stash]}
-    adict['target'] = 'cfl'
+    adict['rootA'] = {'mr:rootA':['<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % stash], 'mr:direction':['"AB"']}
+    adict['rootB'] = 'cfl'
     adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
     linkages.append(adict)
 
@@ -60,14 +84,22 @@ griburi = 'http://codes.wmo.int/grib2/codeflag/4.2'
 for sn,gribcf in gribParams.iteritems():
     adict = {}
     adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % gribcf['standard_name'], 'mrcf:units':'"%s"' % gribcf['units'], 'mrcf:type':'"Field"'}
-    adict['target'] = 'cfl'
-    adict['source'] = {'mr:source':['<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber'])]}
+    adict['rootB'] = 'cfl'
+    adict['rootA'] = {'mr:rootA':['<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber'])]}
     linkages.append(adict)
-    adict = {}
-    adict['target'] = {'mr:target':['<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber'])]}
-    adict['source'] = 'cfl'
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % gribcf['standard_name'], 'mrcf:units':'"%s"' % gribcf['units'], 'mrcf:type':'"Field"'}
-    linkages.append(adict)
+
+adict = {} 
+adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % 'eastward_wind', 'mrcf:units':'"%s"' % 'm s-1'}
+adict['rootA'] = {'mr:rootA':['<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i002'], 'mr:direction':['"AB"']}
+adict['rootB'] = 'cfl'
+linkages.append(adict)
+
+adict = {} 
+adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % 'northward_wind', 'mrcf:units':'"%s"' % 'm s-1'}
+adict['rootA'] = {'mr:rootA':['<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i003'], 'mr:direction':['"AB"']}
+adict['rootB'] = 'cfl'
+linkages.append(adict)
+
 
 # print linkages
 # print len(linkages)
@@ -76,21 +108,6 @@ for sn,gribcf in gribParams.iteritems():
 #     if link.has_key('grib'):
 #         print link
 
-fcuri = 'http://reference.metoffice.gov.uk/def/um/fieldcode/'
-
-for fc,cf in umcf.LBFC_TO_CF.iteritems():
-    adict = {}
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
-    adict['source'] = {'mr:source':['<%s%i>' % (fcuri,fc)]}
-    adict['target'] = 'cfl'
-    linkages.append(adict)
-
-for cf,fc in umcf.CF_TO_LBFC.iteritems():
-    adict = {}
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
-    adict['target'] = {'mr:target':['<%s%i>' % (fcuri,fc)]}
-    adict['source'] = 'cfl'
-    linkages.append(adict)
 
 #     written = '"False"'
 #     for link in linkages:
@@ -146,10 +163,10 @@ with fu.FusekiServer(3131) as fu_p:
     for newlink in linkages:
         cflink = moq.create_cflink(fu_p, newlink['cfl'], 'http://www.metarelate.net/metocean/cf')
         if len(cflink) == 1:
-            if newlink['source'] == 'cfl':
-                newlink['source'] = {'mr:source':['<%s>' % cflink[0]['s']]}
-            elif newlink['target'] == 'cfl':
-                newlink['target'] = {'mr:target':['<%s>' % cflink[0]['s']]}
+            if newlink['rootA'] == 'cfl':
+                newlink['rootA'] = {'mr:rootA':['<%s>' % cflink[0]['s']]}
+            elif newlink['rootB'] == 'cfl':
+                newlink['rootB'] = {'mr:rootB':['<%s>' % cflink[0]['s']]}
             else:
                 print newlink
                 raise ValueError('no cflink')
@@ -161,8 +178,8 @@ with fu.FusekiServer(3131) as fu_p:
 #                 linkage_dict =  dict(linkage_dict, **newlink[key])
         #linkage = moq.get_linkage(fu_p, linkage_dict)
         map_dict = mapping_p_o.copy()
-        map_dict = dict(map_dict, **newlink['source'])
-        map_dict = dict(map_dict, **newlink['target'])
+        map_dict = dict(map_dict, **newlink['rootA'])
+        map_dict = dict(map_dict, **newlink['rootB'])
         #if len(linkage) == 1:
         #    map_dict['mr:linkage'] = ['<%s>' % linkage[0]['linkage']]
         #else:

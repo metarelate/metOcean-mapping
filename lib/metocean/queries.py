@@ -169,20 +169,68 @@ def current_mappings(fuseki_process, debug=False):
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
 
+def overlap(fuseki_process, debug=False):
+    """return all mapping which are a subset of another mapping based on roots"""
+    qstr = '''
+    SELECT ?smap (COUNT(?map) as ?maps)   
+    WHERE  
+    {  GRAPH <http://metocean/mappings.ttl> {         
+      ?smap mr:rootA ?srootA ;
+            mr:rootB ?srootB .     
+      {?smap (mr:rootA | mr:rootB) ?rootA}     
+      UNION     
+      {?smap (mr:rootA | mr:rootB) ?rootB}      
+    {  SELECT ?map ?rootA ?rootB    
+    WHERE  { GRAPH <http://metocean/mappings.ttl> {
+    ?map mr:rootA ?rootA ;
+    mr:rootB ?rootB .  }
+    } }  
+    }
+    } 
+    GROUP BY ?smap
+
+    '''
+    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    return results
+
+def overlap2(fuseki_process, debug=False):
+    qstr = '''
+    
+    SELECT ?smap ?map ?srootA ?rootA ?srootB ?rootB 
+
+    WHERE  
+    {  GRAPH <http://metocean/mappings.ttl> {         
+      ?smap mr:rootA ?srootA ;
+            mr:rootB ?srootB .     
+    FILTER(!(regex(str(?smap), str(?map))))
+      {?smap (mr:rootA | mr:rootB) ?rootA}     
+    UNION
+      {?smap (mr:rootA | mr:rootB) ?rootB}      
+
+
+    {  SELECT ?map ?rootA ?rootB    
+    WHERE  { GRAPH <http://metocean/mappings.ttl> {    ?map mr:rootA ?rootA ;         mr:rootB ?rootB .  } } }  
+     }  
+    }
+    '''
+    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    return results
+
+
 def mapping_by_link(fuseki_process, paramlist=False,debug=False):
-    '''
-    return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
+    """
+    return all the valid mappings, with cf elements expanded, for a given data format and linklist, 
     or all mappings if linklist is left as False 
-    '''
+    """
     
     linkpattern = ''
     if paramlist:
         #linkpattern = '''          '''
         for param in paramlist:
             linkpattern += '''
-            { ?map mr:source <%s> . }
+            { ?map mr:rootA <%s> . }
             UNION
-            { ?map mr:target <%s> . }
+            { ?map mr:rootB <%s> . }
             ''' % (param, param)
         linkpattern.rstrip(';')
         linkpattern += ' .'
@@ -237,8 +285,8 @@ def mapping_by_link(fuseki_process, paramlist=False,debug=False):
        ?replaces
        ?comment
        ?reason
-       (GROUP_CONCAT(DISTINCT(?source); SEPARATOR = "&") AS ?sources)
-       (GROUP_CONCAT(DISTINCT(?target); SEPARATOR = "&") AS ?targets)
+       (GROUP_CONCAT(DISTINCT(?rootB); SEPARATOR = "&") AS ?rootAs)
+       (GROUP_CONCAT(DISTINCT(?rootA); SEPARATOR = "&") AS ?rootBs)
        (GROUP_CONCAT(DISTINCT(?tcfitem); SEPARATOR = "&") AS ?tcfelems)
        (GROUP_CONCAT(DISTINCT(?scfitem); SEPARATOR = "&") AS ?scfelems) 
 WHERE {
@@ -252,17 +300,17 @@ GRAPH <http://metocean/mappings.ttl> {
                 dc:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
-                mr:source ?source ;
-                mr:target ?target ;
+                mr:rootA ?rootA ;
+                mr:rootB ?rootB ;
 %s
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^dc:replaces+ ?map}
        }
 
 GRAPH <http://metocean/cflinks.ttl> {
-              OPTIONAL {?source ?cfp ?cfo .
+              OPTIONAL {?rootA ?cfp ?cfo .
               BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?scfitem) }
-              OPTIONAL {?target ?cfp ?cfo .
+              OPTIONAL {?rootB ?cfp ?cfo .
               BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?tcfitem) }
               }
 }

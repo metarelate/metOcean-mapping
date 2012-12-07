@@ -15,7 +15,7 @@ digraph records {
 ## class definitions
 
    	cflink [
-	label = "<title> CFlink |<cflink>CFlink + |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units"
+	label = "<title> CFlink |<cflink>cflink + |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units"
 	];
 
 

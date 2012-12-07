@@ -193,6 +193,133 @@ def overlap(fuseki_process, debug=False):
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
 
+def source_overlap(fuseki_process, debug=False):
+    qstr = '''
+    SELECT ?map ?testmap ?source ?testsource ?target
+
+    WHERE
+    {
+     filter (STRSTARTS(str(?source), str(?testsource)))
+     filter (STRENDS(str(?source), str(?testsource)))
+     filter (STRLEN(str(?source)) = STRLEN(str(?testsource)))
+     filter (!(regex(str(?map), str(?testmap))))
+    {
+    SELECT ?map ?source ?target
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "AB" ;
+            mr:rootA ?source ;
+            mr:rootB ?target .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "BA" ;
+            mr:rootB ?source ;
+            mr:rootA ?target .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootB ?source ;
+            mr:rootA ?target .
+       MINUS { ?map mr:direction ?dir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootA ?source ;
+            mr:rootB ?target .
+       MINUS { ?map mr:direction ?dir}
+
+      } }
+
+    }
+
+    } 
+
+
+    {
+    SELECT ?testmap ?testsource ?testtarget
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap mr:direction "AB" ;
+            mr:rootA ?testsource ;
+            mr:rootB ?testtarget .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap mr:direction "BA" ;
+            mr:rootB ?testsource ;
+            mr:rootA ?testtarget .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap  mr:rootB ?testsource ;
+            mr:rootA ?testtarget .
+       MINUS { ?testmap mr:direction ?testdir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap  mr:rootA ?testsource ;
+            mr:rootB ?testtarget .
+       MINUS { ?testmap mr:direction ?testdir}
+
+      } }
+
+    } 
+
+    }
+
+    }
+    '''
+    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    return results
+
+def sourceNtarget(fuseki_process, debug=False):
+    qstr = '''
+    SELECT ?map ?source ?target
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "AB" ;
+            mr:rootA ?source ;
+            mr:rootB ?target .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "BA" ;
+            mr:rootB ?source ;
+            mr:rootA ?target .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootB ?source ;
+            mr:rootA ?target .
+       MINUS { ?map mr:direction ?dir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootA ?source ;
+            mr:rootB ?target .
+       MINUS { ?map mr:direction ?dir}
+
+      } }
+
+    }
+    '''
+    #ORDER BY ?map
+    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    return results
+
+    
+
+
 def overlap2(fuseki_process, debug=False):
     qstr = '''
     
@@ -215,6 +342,7 @@ def overlap2(fuseki_process, debug=False):
     '''
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
+
 
 
 def mapping_by_link(fuseki_process, paramlist=False,debug=False):

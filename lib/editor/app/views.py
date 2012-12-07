@@ -157,11 +157,12 @@ def new_mapping(request):
         search_path = [(param.split(';')[0],param.split(';')[1]) for param in request_search]
         for elem in search_path:
             fso_dict['mr:%slink' % (elem[0].upper())].append('<%s>' % elem[1])
-        linkage = moq.get_linkage(fuseki_process, fso_dict)
-        print 'linkage: ', linkage
+        #linkage = moq.get_linkage(fuseki_process, fso_dict)
+        #print 'linkage: ', linkage
         #should only have 1 res > imposed by queries
-        dataset = linkage[0]
-        dataset['mapping'] = "None"
+        #dataset = linkage[0]
+        dataset = {'mapping': "None"}
+        #dataset[
     else:
         print 'not searching'
         #redirect to search
@@ -193,10 +194,10 @@ def mapping(request):
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     request_search = request_search_path.split('|')
     if request_search != [u'']:
-        search_path = [(param.split(';')[0],param.split(';')[1]) for param in request_search]
+        search_path = [param.split(';')[1] for param in request_search]
         #print search_path
     else:
-        search_path = [('','')]
+        search_path = False#[('','')]
     pre = prefixes.Prefixes()
 
     MappingFormSet = formset_factory(forms.MappingEditForm, extra=0)
@@ -205,7 +206,8 @@ def mapping(request):
         formset = MappingFormSet(request.POST)
         if formset.is_valid():
             process_formset(formset, request)
-            return HttpResponseRedirect(url_with_querystring(reverse('mapping'), ref=request_search_path))
+            return HttpResponseRedirect(url_with_querystring(
+                reverse('mapping'), ref=request_search_path))
         else:
             print formset.errors
     else:
@@ -215,12 +217,12 @@ def mapping(request):
         create = False
         print 'urecordm'
         print urecordm
-        if len(urecordm) > 1:
-            warning_msg = (
-                'Warning: '
-                '%s Active Data Records with the same search pattern found.' %
-                (len(urecordm)))
-        elif len(urecordm) == 1 and urecordm[0] == {}:
+        # if len(urecordm) == 2 and 
+        # elif len(urecordm) > 1:
+        #     warning_msg = (
+        #         '%s Active Data Records with the same search pattern found.' %
+        #         (len(urecordm)))
+        if len(urecordm) == 1 and urecordm[0] == {}:
             #print 'create active'
             searchurl = url_with_querystring(reverse('new_mapping'),ref=request_search_path)
             create = {'url': searchurl}
@@ -235,7 +237,7 @@ def mapping(request):
                 replaceslabel = ''
             data_set = dict(
                 mapping = item.get('map'),
-                linkage = item.get('link'),
+#                linkage = item.get('link'),
                 last_edit = item.get('creation'),
                 last_editor = item.get('creator'),
                 current_status = item.get('status'),
@@ -245,9 +247,12 @@ def mapping(request):
                 watchers = item.get('watchers'),
                 #replaces = mark_safe("%s" % replaceslabel),
                 replaces = replacesurl,
-                cflinks = item.get('cflinks'),
-                umlinks = item.get('umlinks'),
-                griblinks = item.get('griblinks')
+                sources = item.get('sources'),
+                targets = item.get('targets'),
+                
+#                cflinks = item.get('cflinks'),
+#                umlinks = item.get('umlinks'),
+#                griblinks = item.get('griblinks')
                 )
             initial_data_set.append(data_set)
         formset = MappingFormSet(initial=initial_data_set)
@@ -299,7 +304,7 @@ def process_form(form, request):
     if mapping_p_o['mr:comment'] == ['""']:
         mapping_p_o['mr:comment'] = ['"None"']
     mapping_p_o['mr:reason'] = ['"%s"' % form.cleaned_data['reason']]
-    mapping_p_o['mr:linkage'] = ['<%s>' % form.cleaned_data['linkage']]
+#    mapping_p_o['mr:linkage'] = ['<%s>' % form.cleaned_data['linkage']]
 
     #check to see if the updated mapping record is simply the last one
     if mapping_p_o['mr:owner'] == ['"%s"' % form.cleaned_data['owners']] and \
@@ -307,8 +312,8 @@ def process_form(form, request):
     mapping_p_o['mr:creator'] == ['"%s"' % form.cleaned_data['last_editor']] and \
     mapping_p_o['mr:status'] == ['"%s"' % form.cleaned_data['current_status']] and \
     mapping_p_o['mr:comment'] == ['"%s"' % form.cleaned_data.get('last_comment')] and \
-    mapping_p_o['mr:reason'] == ['"%s"' % form.cleaned_data['reason']] and \
-    mapping_p_o['mr:linkage'] == ['<%s>' % form.cleaned_data['linkage']]:
+    mapping_p_o['mr:reason'] == ['"%s"' % form.cleaned_data['reason']]:# and \
+#    mapping_p_o['mr:linkage'] == ['<%s>' % form.cleaned_data['linkage']]:
         changed = False
     else:
         changed = True

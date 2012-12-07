@@ -16,7 +16,7 @@ class Prefixes(dict):
         'xsd'      : 'http://www.w3.org/2001/XMLSchema#',
         'dc'       : 'http://purl.org/dc/terms/',
         'map'      : 'http://www.metarelate.net/metOcean/mapping/',
-        'link'     : 'http://www.metarelate.net/metOcean/linkage/',
+        'cflink'   : 'http://www.metarelate.net/metOcean/cflink/',
         'mr'       : 'http://www.metarelate.net/predicates/index.html#',
         'mrcf'     : 'http://www.metarelate.net/predicates/CF.html#',
         'github'   : 'https://github.com/' ,

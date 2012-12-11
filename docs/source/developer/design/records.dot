@@ -18,12 +18,10 @@ digraph records {
 	label = "<title> CFlink |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units|<cflink>CFlink + "
 	];
 
-        linkage [
-	label = "<title> Linkage |ID: md5 |<umlink>umlink + |<griblink>griblink + |<cflink>cflink + "
-	];
 
 	mapping [
-	label = "<title> Mapping |ID: md5 |replaces |creation |creator |owner + |watcher + |<plink>linkage |status |comment |reason "
+	label = "<title> Mapping |ID: md5 |<target> target +|format |<source> source + |replaces |creation |creator |owner + |watcher + |status |comment |reason "
+
 	];
 
 	release [
@@ -43,15 +41,17 @@ digraph records {
 
 ## relations
 
-	mapping:plink -> linkage:title;
 
 	release:con -> mapping:title
 
-	linkage:umlink -> um
+	mapping:source -> um
 
-	linkage:griblink -> grib
+	mapping:source -> grib
 
-	linkage:cflink -> cflink
+	mapping:source -> cflink:title
+
+	mapping:target -> mapping:title
+
 
 	cflink:cflink -> cflink:title 
 

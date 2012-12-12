@@ -15,14 +15,12 @@ digraph records {
 ## class definitions
 
    	cflink [
-	label = "<title> CFlink |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units|<cflink>CFlink + "
+	label = "<title> CFlink |<cflink>cflink + |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units"
 	];
 
 
 	mapping [
-	label = "<title> Mapping |ID: md5 |<target> target +|format |<source> source + |replaces |creation |creator |owner + |watcher + |status |comment |reason "
-
-	];
+	label = "<title> Mapping |ID: md5 |<target> target +|format |<source> source + |replaces |creation |creator |owner + |watcher + |status |comment |reason "	];
 
 	release [
 	label = "<title> Release |version|previous|date|<con>constituent + |standard"
@@ -42,6 +40,7 @@ digraph records {
 ## relations
 
 
+
 	release:con -> mapping:title
 
 	mapping:source -> um
@@ -51,7 +50,6 @@ digraph records {
 	mapping:source -> cflink:title
 
 	mapping:target -> mapping:title
-
 
 	cflink:cflink -> cflink:title 
 

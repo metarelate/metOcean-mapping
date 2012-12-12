@@ -188,7 +188,7 @@ class MappingEditForm(forms.Form):
     error_css_class = 'error'
     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
     mapping = forms.CharField(max_length=200)
-    linkage = forms.CharField(max_length=200)
+#    linkage = forms.CharField(max_length=200)
     last_edit = forms.CharField(max_length=50, required=False)
     last_editor = forms.CharField(max_length=50)
     #editor = forms.CharField(max_length=50, required=False)
@@ -207,9 +207,11 @@ class MappingEditForm(forms.Form):
     replaces = forms.CharField(max_length=128, required=False)
     current_status = forms.CharField(max_length=15)
     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()])
-    cflinks = forms.CharField(max_length=1000, required=False)
-    umlinks = forms.CharField(max_length=1000, required=False)
-    griblinks  = forms.CharField(max_length=1000, required=False)
+#    cflinks = forms.CharField(max_length=1000, required=False)
+#    umlinks = forms.CharField(max_length=1000, required=False)
+#    griblinks  = forms.CharField(max_length=1000, required=False)
+    sources = forms.CharField(max_length=1000, required=False)
+    targets  = forms.CharField(max_length=1000, required=False)
 
     def __init__(self, *args, **kwargs):
         super(MappingEditForm, self).__init__(*args, **kwargs)
@@ -223,14 +225,16 @@ class MappingEditForm(forms.Form):
         self.fields['last_reason'].widget.attrs['readonly'] = True
         #self.fields['replaces'].widget = URLwidget()
         self.fields['mapping'].widget.attrs['readonly'] = True
-        self.fields['linkage'].widget = forms.HiddenInput()
-        self.fields['cflinks'].widget = forms.HiddenInput()
-        self.fields['umlinks'].widget = forms.HiddenInput()
-        self.fields['griblinks'].widget = forms.HiddenInput()
-        if kwargs.has_key('initial'):
-            self.expand_links(kwargs, 'cflinks')
-            self.expand_links(kwargs, 'umlinks')
-            self.expand_links(kwargs, 'griblinks')
+        self.fields['sources'].widget.attrs['readonly'] = True
+        self.fields['targets'].widget.attrs['readonly'] = True
+        #self.fields['linkage'].widget = forms.HiddenInput()
+        #self.fields['cflinks'].widget = forms.HiddenInput()
+        #self.fields['umlinks'].widget = forms.HiddenInput()
+        #self.fields['griblinks'].widget = forms.HiddenInput()
+        #if kwargs.has_key('initial'):
+        #    self.expand_links(kwargs, 'cflinks')
+        #    self.expand_links(kwargs, 'umlinks')
+        #    self.expand_links(kwargs, 'griblinks')
 
 
     def clean(self):
@@ -285,9 +289,9 @@ class MappingNewForm(MappingEditForm):
         self.fields['current_status'].required = False
         self.fields['reason'].widget.attrs['readonly'] = True
         self.fields['next_status'].widget.attrs['readonly'] = True
-        if kwargs.has_key('initial'):
-            self.expand_links(kwargs, 'cflinks')
-            self.expand_links(kwargs, 'umlinks')
-            self.expand_links(kwargs, 'griblinks')
+        #if kwargs.has_key('initial'):
+        #    self.expand_links(kwargs, 'cflinks')
+        #    self.expand_links(kwargs, 'umlinks')
+        #    self.expand_links(kwargs, 'griblinks')
         
         

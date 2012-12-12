@@ -44,7 +44,8 @@ def make_hash(pred_obj, omitted=None):
                     raise ValueError('predicate not in prefixes.py')
             else:
                 raise ValueError('make hash passed a predicate '
-                                 'which is not of the form <prefix>:<item>')
+                                 'which is not of the form <prefix>:<item>'
+                    '%s' % pred)
             if isinstance(pred_obj[pred], list):
                 for obj in pred_obj[pred]:
                     mmd5.update(predicate)
@@ -165,119 +166,357 @@ def current_mappings(fuseki_process, debug=False):
         }
     }
     '''
-    results = fuseki_process.run_query(qstr, update=True, debug=debug)
-    return results
-
-def mapping_by_link(fuseki_process, paramlist=False,debug=False):
-    '''
-    return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
-    or all mappings if linklist is left as False 
-    '''
-    linkpattern = ''
-    if paramlist:
-        linkpattern = '''          ?link '''
-        for param in paramlist:
-            linkpattern += '''
-                    mr:%slink <%s> ;
-            ''' % (param[0].upper(),param[1])
-        linkpattern.rstrip(';')
-        linkpattern += ' .'
-    qstr = '''
-    SELECT ?map
-       (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
-       (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
-       ?creator 
-       ?creation 
-       ?status 
-       ?replaces
-       ?comment
-       ?reason
-       ?link
-       (GROUP_CONCAT(DISTINCT(?cfitem); SEPARATOR = "&") AS ?cfelems) 
-       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
-       ?cfim ?cfex 
-       (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
-       ?umim ?umex 
-       (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-       ?gribim ?gribex
-       WHERE
-       {
-              GRAPH <http://metocean/cflinks.ttl> {
-              ?cflink ?cfp ?cfo .
-              BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?cfitem)
-              }
-       { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cflink ?umlink ?griblink
-
-       WHERE { GRAPH <http://metocean/mappings.ttl> {
-           ?map mr:owner ?owner ;
-                mr:watcher ?watcher ;
-                mr:creator ?creator ;
-                mr:creation ?creation ;
-                mr:status ?status ;
-                dc:replaces ?replaces ;
-                mr:comment ?comment ;
-                mr:reason ?reason ;
-                mr:linkage ?link .
-
-       FILTER (?status NOT IN ("Deprecated", "Broken"))
-       MINUS {?map ^dc:replaces+ ?map}
-       } GRAPH <http://metocean/linkages.ttl> {
-%s
-       OPTIONAL
-           {?link mr:CFlink ?cflink ;
-                  mr:CFimport ?cfim ;
-                  mr:CFexport ?cfex . }
-       OPTIONAL
-           {?link mr:UMlink ?umlink ;
-                  mr:UMimport ?umim ;
-                  mr:UMexport ?umex . }
-       OPTIONAL
-           {?link mr:GRIBlink ?griblink ;
-                  mr:GRIBimport ?gribim ;
-                  mr:GRIBexport ?gribex .}
-              
-
-    } } } }
-    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
-    ''' % (linkpattern)
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
-def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
-    '''
-    return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
-    or all mappings if linklist is left as False 
-    '''
-    linkpattern = ''
-    if linklist:
-        linkpattern = '''          ?link '''
-        for link in linklist:
-            linkpattern += '''
-                    mr:%slink <%s> ;
-            ''' % (dataformat.upper(),link)
-        linkpattern.rstrip(';')
-        linkpattern += ' .'
+def path_follower(fuseki_process, debug=False):
     qstr = '''
-    SELECT ?map
-       (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
-       (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
-       ?creator 
-       ?creation 
-       ?status 
-       ?replaces
-       ?comment
-       ?reason
-       ?link
-       (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
-       ?cfim ?cfex 
-       (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
-       ?umim ?umex
-       (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-       ?gribim ?gribex
+    SELECT ?map ?source ?samplesource ?target ?sampletarget
+    WHERE {
+    FILTER (?target = ?samplesource)
+    %s
+    %s
+    }
+    ''' % (_source_and_target(), _source_and_target('sample'))
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+
+def overlap(fuseki_process, debug=False):
+    """return all mapping which are a subset of another mapping based on roots"""
+    qstr = '''
+    SELECT ?smap (COUNT(?map) as ?maps)   
+    WHERE  
+    {  GRAPH <http://metocean/mappings.ttl> {         
+      ?smap mr:rootA ?srootA ;
+            mr:rootB ?srootB .     
+      {?smap (mr:rootA | mr:rootB) ?rootA}     
+      UNION     
+      {?smap (mr:rootA | mr:rootB) ?rootB}      
+    {  SELECT ?map ?rootA ?rootB    
+    WHERE  { GRAPH <http://metocean/mappings.ttl> {
+    ?map mr:rootA ?rootA ;
+    mr:rootB ?rootB .  }
+    } }  
+    }
+    } 
+    GROUP BY ?smap
+
+    '''
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+def source_to_target(fuseki_process, debug=False):
+    qstr = '''
+    SELECT ?map ?testmap ?source ?testsource ?target ?testtarget
 
     WHERE
-      
- { GRAPH <http://metocean/mappings.ttl> {
+    {
+     filter (?source = ?testsource)
+     filter (!(?map = ?testmap))
+     filter (regex(str(?target), SUBSTR(str(?testtarget),1,26)))
+    %s
+    }
+    ORDER BY ?source
+    ''' % _source_target()
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+
+def source_overlap(fuseki_process, debug=False):
+    qstr = '''
+    SELECT ?map ?testmap ?source ?testsource ?target ?testtarget
+
+    WHERE
+    {
+     filter (STRSTARTS(str(?source), str(?testsource)))
+     filter (STRENDS(str(?source), str(?testsource)))
+     filter (STRLEN(str(?source)) = STRLEN(str(?testsource)))
+     filter (!(regex(str(?map), str(?testmap))))
+     filter (regex(str(?target), SUBSTR(str(?testtarget),1,26)))
+    %s
+    %s
+    }
+    ''' % (_source_and_target(), _source_and_target('test'))
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+def _source_and_target(label=''):
+    qstr = '''{
+    SELECT ?%(pre)smap ?%(pre)ssource ?%(pre)starget
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap mr:direction "AB" ;
+            mr:rootA ?%(pre)ssource ;
+            mr:rootB ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap mr:direction "BA" ;
+            mr:rootB ?%(pre)ssource ;
+            mr:rootA ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap  mr:rootB ?%(pre)ssource ;
+            mr:rootA ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+       MINUS { ?%(pre)smap mr:direction ?%(pre)sdir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap  mr:rootA ?%(pre)ssource ;
+            mr:rootB ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+       MINUS { ?%(pre)smap mr:direction ?%(pre)sdir}
+      } }
+    }
+    }''' % {'pre':label}
+    return qstr
+
+def _source_target():
+    qstr = '''{
+    SELECT ?map ?source ?target
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "AB" ;
+            mr:rootA ?source ;
+            mr:rootB ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "BA" ;
+            mr:rootB ?source ;
+            mr:rootA ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootB ?source ;
+            mr:rootA ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+       MINUS { ?map mr:direction ?dir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootA ?source ;
+            mr:rootB ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+       MINUS { ?map mr:direction ?dir}
+      } }
+    }
+    } 
+
+    {
+    SELECT ?testmap ?testsource ?testtarget
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap mr:direction "AB" ;
+            mr:rootA ?testsource ;
+            mr:rootB ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap mr:direction "BA" ;
+            mr:rootB ?testsource ;
+            mr:rootA ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap  mr:rootB ?testsource ;
+            mr:rootA ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+       MINUS { ?testmap mr:direction ?testdir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?testmap  mr:rootA ?testsource ;
+            mr:rootB ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
+       MINUS { ?testmap mr:direction ?testdir}
+      } }
+    } 
+    }
+    '''
+    return qstr
+
+def sourceNtarget(fuseki_process, debug=False):
+    qstr = '''
+    SELECT ?map ?source ?target
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "AB" ;
+            mr:rootA ?source ;
+            mr:rootB ?target .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map mr:direction "BA" ;
+            mr:rootB ?source ;
+            mr:rootA ?target .
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootB ?source ;
+            mr:rootA ?target .
+       MINUS { ?map mr:direction ?dir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?map  mr:rootA ?source ;
+            mr:rootB ?target .
+       MINUS { ?map mr:direction ?dir}
+
+      } }
+
+    }
+    '''
+    #ORDER BY ?map
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+    
+
+
+def overlap2(fuseki_process, debug=False):
+    qstr = '''
+    
+    SELECT ?smap ?map ?srootA ?rootA ?srootB ?rootB 
+
+    WHERE  
+    {  GRAPH <http://metocean/mappings.ttl> {         
+      ?smap mr:rootA ?srootA ;
+            mr:rootB ?srootB .     
+    FILTER(!(regex(str(?smap), str(?map))))
+      {?smap (mr:rootA | mr:rootB) ?rootA}     
+    UNION
+      {?smap (mr:rootA | mr:rootB) ?rootB}      
+
+
+    {  SELECT ?map ?rootA ?rootB    
+    WHERE  { GRAPH <http://metocean/mappings.ttl> {    ?map mr:rootA ?rootA ;         mr:rootB ?rootB .  } } }  
+     }  
+    }
+    '''
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+
+
+def mapping_by_link(fuseki_process, paramlist=False,debug=False):
+    """
+    return all the valid mappings, with cf elements expanded, for a given data format and linklist, 
+    or all mappings if linklist is left as False 
+    """
+    
+    linkpattern = ''
+    if paramlist:
+        #linkpattern = '''          '''
+        for param in paramlist:
+            linkpattern += '''
+            { ?map mr:rootA <%s> . }
+            UNION
+            { ?map mr:rootB <%s> . }
+            ''' % (param, param)
+        linkpattern.rstrip(';')
+        linkpattern += ' .'
+#     qstr = '''
+#     SELECT ?map
+#        (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
+#        (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
+#        ?creator 
+#        ?creation 
+#        ?status 
+#        ?replaces
+#        ?comment
+#        ?reason
+#        (GROUP_CONCAT(DISTINCT(?source); SEPARATOR = "&") AS ?sources)
+#        (GROUP_CONCAT(DISTINCT(?target); SEPARATOR = "&") AS ?targets)
+#        (GROUP_CONCAT(DISTINCT(?tcfitem); SEPARATOR = "&") AS ?tcfelems)
+#        (GROUP_CONCAT(DISTINCT(?scfitem); SEPARATOR = "&") AS ?scfelems) 
+#        WHERE
+#        {
+#               GRAPH <http://metocean/cflinks.ttl> {
+#               OPTIONAL {?source ?cfp ?cfo .
+#               BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?scfitem) }
+#               OPTIONAL {?target ?cfp ?cfo .
+#               BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?tcfitem) }
+#               }
+#        { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?replaces ?comment ?reason ?source ?target
+
+#        WHERE { GRAPH <http://metocean/mappings.ttl> {
+#            ?map mr:owner ?owner ;
+#                 mr:watcher ?watcher ;
+#                 mr:creator ?creator ;
+#                 mr:creation ?creation ;
+#                 mr:status ?status ;
+#                 dc:replaces ?replaces ;
+#                 mr:comment ?comment ;
+#                 mr:reason ?reason ;
+#                 mr:source ?source ;
+#                 mr:target ?target ;
+# %s
+#        FILTER (?status NOT IN ("Deprecated", "Broken"))
+#        MINUS {?map ^dc:replaces+ ?map}
+#        }  } } }
+#     GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason 
+#     ''' % (linkpattern)
+    qstr = '''
+        SELECT ?map
+       (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
+       (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
+       ?creator 
+       ?creation 
+       ?status 
+       ?replaces
+       ?comment
+       ?reason
+       (GROUP_CONCAT(DISTINCT(?rootB); SEPARATOR = "&") AS ?rootAs)
+       (GROUP_CONCAT(DISTINCT(?rootA); SEPARATOR = "&") AS ?rootBs)
+       (GROUP_CONCAT(DISTINCT(?tcfitem); SEPARATOR = "&") AS ?tcfelems)
+       (GROUP_CONCAT(DISTINCT(?scfitem); SEPARATOR = "&") AS ?scfelems) 
+WHERE {
+    
+GRAPH <http://metocean/mappings.ttl> {
            ?map mr:owner ?owner ;
                 mr:watcher ?watcher ;
                 mr:creator ?creator ;
@@ -286,31 +525,94 @@ def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
                 dc:replaces ?replaces ;
                 mr:comment ?comment ;
                 mr:reason ?reason ;
-                mr:linkage ?link .
+                mr:rootA ?rootA ;
+                mr:rootB ?rootB ;
 %s
        FILTER (?status NOT IN ("Deprecated", "Broken"))
        MINUS {?map ^dc:replaces+ ?map}
-           }
-GRAPH <http://metocean/linkages.ttl> {
-       OPTIONAL
-           {?link mr:CFlink ?cflink ;
-                  mr:CFimport ?cfim ;
-                  mr:CFexport ?cfex . }
-       OPTIONAL
-           {?link mr:UMlink ?umlink ;
-                  mr:UMimport ?umim ;
-                  mr:UMexport ?umex . }
-       OPTIONAL
-           {?link mr:GRIBlink ?griblink ;
-                  mr:GRIBimport ?gribim ;
-                  mr:GRIBexport ?gribex .}
-       
+       }
 
-    }}
-    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
+GRAPH <http://metocean/cflinks.ttl> {
+              OPTIONAL {?rootA ?cfp ?cfo .
+              BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?scfitem) }
+              OPTIONAL {?rootB ?cfp ?cfo .
+              BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?tcfitem) }
+              }
+}
+    GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason 
     ''' % (linkpattern)
+
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
+
+# def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
+#     '''
+#     return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
+#     or all mappings if linklist is left as False 
+#     '''
+#     linkpattern = ''
+#     if linklist:
+#         linkpattern = '''          ?link '''
+#         for link in linklist:
+#             linkpattern += '''
+#                     mr:%slink <%s> ;
+#             ''' % (dataformat.upper(),link)
+#         linkpattern.rstrip(';')
+#         linkpattern += ' .'
+#     qstr = '''
+#     SELECT ?map
+#        (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
+#        (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
+#        ?creator 
+#        ?creation 
+#        ?status 
+#        ?replaces
+#        ?comment
+#        ?reason
+#        ?link
+#        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
+#        ?cfim ?cfex 
+#        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+#        ?umim ?umex
+#        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
+#        ?gribim ?gribex
+
+#     WHERE
+      
+#  { GRAPH <http://metocean/mappings.ttl> {
+#            ?map mr:owner ?owner ;
+#                 mr:watcher ?watcher ;
+#                 mr:creator ?creator ;
+#                 mr:creation ?creation ;
+#                 mr:status ?status ;
+#                 dc:replaces ?replaces ;
+#                 mr:comment ?comment ;
+#                 mr:reason ?reason ;
+#                 mr:linkage ?link .
+# %s
+#        FILTER (?status NOT IN ("Deprecated", "Broken"))
+#        MINUS {?map ^dc:replaces+ ?map}
+#            }
+# GRAPH <http://metocean/linkages.ttl> {
+#        OPTIONAL
+#            {?link mr:CFlink ?cflink ;
+#                   mr:CFimport ?cfim ;
+#                   mr:CFexport ?cfex . }
+#        OPTIONAL
+#            {?link mr:UMlink ?umlink ;
+#                   mr:UMimport ?umim ;
+#                   mr:UMexport ?umex . }
+#        OPTIONAL
+#            {?link mr:GRIBlink ?griblink ;
+#                   mr:GRIBimport ?gribim ;
+#                   mr:GRIBexport ?gribex .}
+       
+
+#     }}
+#     GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
+#     ''' % (linkpattern)
+#     results = fuseki_process.run_query(qstr, debug=debug)
+#     return results
 
 
 
@@ -486,64 +788,64 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
     return current_link
 
 
-def get_linkage(fuseki_process, fso_dict, debug=False):
-    '''
-    return a linkage if one exists, using the full record:
-        a dictionary of format strings and lists of objects.
-    if one does not exist, create it
-    '''
-    subj_pref = 'http://www.metarelate.net/metOcean/linkage'
-    search_string = ''
-    for fstring in fso_dict.keys():
-        if isinstance(fso_dict[fstring], list):
-            for obj in fso_dict[fstring]:
-                search_string += '''
-                %s %s ;''' % (fstring, obj)
-        else:
-            search_string += '''
-            %s %s ;''' % (fstring, fso_dict[fstring])
-    if search_string != '':
-        search_string += '.'
-        qstr = '''
-        SELECT ?linkage
-            (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
-            (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
-            (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
+# def get_linkage(fuseki_process, fso_dict, debug=False):
+#     '''
+#     return a linkage if one exists, using the full record:
+#         a dictionary of format strings and lists of objects.
+#     if one does not exist, create it
+#     '''
+#     subj_pref = 'http://www.metarelate.net/metOcean/linkage'
+#     search_string = ''
+#     for fstring in fso_dict.keys():
+#         if isinstance(fso_dict[fstring], list):
+#             for obj in fso_dict[fstring]:
+#                 search_string += '''
+#                 %s %s ;''' % (fstring, obj)
+#         else:
+#             search_string += '''
+#             %s %s ;''' % (fstring, fso_dict[fstring])
+#     if search_string != '':
+#         search_string += '.'
+#         qstr = '''
+#         SELECT ?linkage
+#             (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+#             (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+#             (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
 
-        WHERE
-        { GRAPH <http://metocean/linkages.ttl>{
-            ?linkage %s
-       OPTIONAL
-           {?linkage mr:CFlink ?cflink . }
-       OPTIONAL
-           {?linkage mr:UMlink ?umlink . }
-       OPTIONAL
-           {?linkage mr:GRIBlink ?griblink .}
-            FILTER (regex(str(?linkage),"%s", "i"))
-            }
-        }
-        GROUP BY ?linkage
-        ''' % (search_string, subj_pref)
+#         WHERE
+#         { GRAPH <http://metocean/linkages.ttl>{
+#             ?linkage %s
+#        OPTIONAL
+#            {?linkage mr:CFlink ?cflink . }
+#        OPTIONAL
+#            {?linkage mr:UMlink ?umlink . }
+#        OPTIONAL
+#            {?linkage mr:GRIBlink ?griblink .}
+#             FILTER (regex(str(?linkage),"%s", "i"))
+#             }
+#         }
+#         GROUP BY ?linkage
+#         ''' % (search_string, subj_pref)
 
-        results = fuseki_process.run_query(qstr, debug=debug)
-        if len(results) == 1 and results[0] == {}:
-            pre = prefixes.Prefixes()
-            md5 = make_hash(fso_dict)
+#         results = fuseki_process.run_query(qstr, debug=debug)
+#         if len(results) == 1 and results[0] == {}:
+#             pre = prefixes.Prefixes()
+#             md5 = make_hash(fso_dict)
 
-            inststr = '''
-            INSERT DATA
-            { GRAPH <http://metocean/linkages.ttl>
-            { <%s/%s> %s
-            mr:saveCache "True" .
-            }
-            }
-            ''' % (subj_pref, md5, search_string.rstrip('.'))
-            insert_results = fuseki_process.run_query(inststr, update=True, debug=debug)
-            results = fuseki_process.run_query(qstr, debug=debug)
-    else:
-        results = []
+#             inststr = '''
+#             INSERT DATA
+#             { GRAPH <http://metocean/linkages.ttl>
+#             { <%s/%s> %s
+#             mr:saveCache "True" .
+#             }
+#             }
+#             ''' % (subj_pref, md5, search_string.rstrip('.'))
+#             insert_results = fuseki_process.run_query(inststr, update=True, debug=debug)
+#             results = fuseki_process.run_query(qstr, debug=debug)
+#     else:
+#         results = []
 
-    return results
+#     return results
 
 
 
@@ -561,14 +863,20 @@ def create_mapping(fuseki_process, po_dict, debug=False):
         po_dict.has_key('mr:status') and len(po_dict['mr:status'])==1 and \
         po_dict.has_key('dc:replaces') and len(po_dict['dc:replaces'])==1 and \
         po_dict.has_key('mr:comment') and len(po_dict['mr:comment'])==1 and \
-        po_dict.has_key('mr:reason') and len(po_dict['mr:reason'])==1 and \
-        po_dict.has_key('mr:linkage') and len(po_dict['mr:linkage'])==1:
+        po_dict.has_key('mr:reason') and len(po_dict['mr:reason'])==1:# and \
+        #po_dict.has_key('mr:linkage') and len(po_dict['mr:linkage'])==1:
 
         md5 = make_hash(po_dict, ['mr:creation'])
 
         pred_obj = ''
         for pred,objects in po_dict.iteritems():
-            for obj in objects:
+            if isinstance(objects, list):
+                for obj in objects:
+                    pattern_string = ''' %s %s ;
+                    ''' % (pred, obj)
+                    pred_obj += pattern_string
+            else:
+                obj = objects
                 pattern_string = ''' %s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
@@ -629,6 +937,7 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
 def print_records(res):
     ''' helper for command line query interpretation'''
     for r in res:
+        print '###result:'
         for k,v in r.iteritems():
             print k, '  ', v
 

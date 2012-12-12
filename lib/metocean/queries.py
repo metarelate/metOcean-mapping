@@ -166,8 +166,21 @@ def current_mappings(fuseki_process, debug=False):
         }
     }
     '''
-    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    results = fuseki_process.run_query(qstr, debug=debug)
     return results
+
+def path_follower(fuseki_process, debug=False):
+    qstr = '''
+    SELECT ?map ?source ?samplesource ?target ?sampletarget
+    WHERE {
+    FILTER (?target = ?samplesource)
+    %s
+    %s
+    }
+    ''' % (_source_and_target(), _source_and_target('sample'))
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
 
 def overlap(fuseki_process, debug=False):
     """return all mapping which are a subset of another mapping based on roots"""
@@ -190,12 +203,29 @@ def overlap(fuseki_process, debug=False):
     GROUP BY ?smap
 
     '''
-    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    results = fuseki_process.run_query(qstr, debug=debug)
     return results
+
+def source_to_target(fuseki_process, debug=False):
+    qstr = '''
+    SELECT ?map ?testmap ?source ?testsource ?target ?testtarget
+
+    WHERE
+    {
+     filter (?source = ?testsource)
+     filter (!(?map = ?testmap))
+     filter (regex(str(?target), SUBSTR(str(?testtarget),1,26)))
+    %s
+    }
+    ORDER BY ?source
+    ''' % _source_target()
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
 
 def source_overlap(fuseki_process, debug=False):
     qstr = '''
-    SELECT ?map ?testmap ?source ?testsource ?target
+    SELECT ?map ?testmap ?source ?testsource ?target ?testtarget
 
     WHERE
     {
@@ -203,41 +233,102 @@ def source_overlap(fuseki_process, debug=False):
      filter (STRENDS(str(?source), str(?testsource)))
      filter (STRLEN(str(?source)) = STRLEN(str(?testsource)))
      filter (!(regex(str(?map), str(?testmap))))
-    {
+     filter (regex(str(?target), SUBSTR(str(?testtarget),1,26)))
+    %s
+    %s
+    }
+    ''' % (_source_and_target(), _source_and_target('test'))
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+def _source_and_target(label=''):
+    qstr = '''{
+    SELECT ?%(pre)smap ?%(pre)ssource ?%(pre)starget
+    WHERE  
+    {  {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap mr:direction "AB" ;
+            mr:rootA ?%(pre)ssource ;
+            mr:rootB ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap mr:direction "BA" ;
+            mr:rootB ?%(pre)ssource ;
+            mr:rootA ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap  mr:rootB ?%(pre)ssource ;
+            mr:rootA ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+       MINUS { ?%(pre)smap mr:direction ?%(pre)sdir}
+
+      } }
+    UNION
+    {GRAPH <http://metocean/mappings.ttl> {         
+      ?%(pre)smap  mr:rootA ?%(pre)ssource ;
+            mr:rootB ?%(pre)starget ;
+            mr:status ?%(pre)sstatus .
+       FILTER (?%(pre)sstatus NOT IN ("Deprecated", "Broken"))
+       MINUS {?%(pre)smap ^dc:replaces+ ?%(pre)smap}
+       MINUS { ?%(pre)smap mr:direction ?%(pre)sdir}
+      } }
+    }
+    }''' % {'pre':label}
+    return qstr
+
+def _source_target():
+    qstr = '''{
     SELECT ?map ?source ?target
     WHERE  
     {  {GRAPH <http://metocean/mappings.ttl> {         
       ?map mr:direction "AB" ;
             mr:rootA ?source ;
-            mr:rootB ?target .
-
+            mr:rootB ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
       } }
     UNION
     {GRAPH <http://metocean/mappings.ttl> {         
       ?map mr:direction "BA" ;
             mr:rootB ?source ;
-            mr:rootA ?target .
+            mr:rootA ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
 
       } }
     UNION
     {GRAPH <http://metocean/mappings.ttl> {         
       ?map  mr:rootB ?source ;
-            mr:rootA ?target .
+            mr:rootA ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
        MINUS { ?map mr:direction ?dir}
 
       } }
     UNION
     {GRAPH <http://metocean/mappings.ttl> {         
       ?map  mr:rootA ?source ;
-            mr:rootB ?target .
+            mr:rootB ?target ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
        MINUS { ?map mr:direction ?dir}
-
       } }
-
     }
-
     } 
-
 
     {
     SELECT ?testmap ?testsource ?testtarget
@@ -245,39 +336,45 @@ def source_overlap(fuseki_process, debug=False):
     {  {GRAPH <http://metocean/mappings.ttl> {         
       ?testmap mr:direction "AB" ;
             mr:rootA ?testsource ;
-            mr:rootB ?testtarget .
+            mr:rootB ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
 
       } }
     UNION
     {GRAPH <http://metocean/mappings.ttl> {         
       ?testmap mr:direction "BA" ;
             mr:rootB ?testsource ;
-            mr:rootA ?testtarget .
+            mr:rootA ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
 
       } }
     UNION
     {GRAPH <http://metocean/mappings.ttl> {         
       ?testmap  mr:rootB ?testsource ;
-            mr:rootA ?testtarget .
+            mr:rootA ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
        MINUS { ?testmap mr:direction ?testdir}
 
       } }
     UNION
     {GRAPH <http://metocean/mappings.ttl> {         
       ?testmap  mr:rootA ?testsource ;
-            mr:rootB ?testtarget .
+            mr:rootB ?testtarget ;
+            mr:status ?status .
+       FILTER (?status NOT IN ("Deprecated", "Broken"))
+       MINUS {?map ^dc:replaces+ ?map}
        MINUS { ?testmap mr:direction ?testdir}
-
       } }
-
     } 
-
-    }
-
     }
     '''
-    results = fuseki_process.run_query(qstr, update=True, debug=debug)
-    return results
+    return qstr
 
 def sourceNtarget(fuseki_process, debug=False):
     qstr = '''
@@ -314,7 +411,7 @@ def sourceNtarget(fuseki_process, debug=False):
     }
     '''
     #ORDER BY ?map
-    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
     
@@ -340,7 +437,7 @@ def overlap2(fuseki_process, debug=False):
      }  
     }
     '''
-    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
 
@@ -840,6 +937,7 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
 def print_records(res):
     ''' helper for command line query interpretation'''
     for r in res:
+        print '###result:'
         for k,v in r.iteritems():
             print k, '  ', v
 

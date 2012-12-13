@@ -122,6 +122,9 @@ def save_cache(fuseki_process, graph, debug=False):
         if not line.strip().startswith('mr:saveCache'):
             save_string += line
             save_string += '\n'
+        else:
+            if line.endswith('.'):
+                save_string += '\t.\n'
     return save_string
 
 
@@ -440,7 +443,7 @@ def get_cflinks(fuseki_process, pred_obj=None, debug=False):
     qstr  = '''
     SELECT ?s ?type ?standard_name ?units ?long_name
     WHERE
-    { GRAPH <http://metocean/cflinks.ttl> {
+    { GRAPH <http://metarelate.net/cflinks.ttl> {
     ?s mrcf:type ?type .
     OPTIONAL
     { ?s mrcf:standard_name ?standard_name .}
@@ -475,7 +478,7 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
             pred_obj += pattern_string
         qstr = '''
         INSERT DATA
-        { GRAPH <http://metocean/cflinks.ttl>
+        { GRAPH <http://metarelate.net/cflinks.ttl>
         { <%s/%s> %s
         mr:saveCache "True" .
         }
@@ -486,65 +489,105 @@ def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
     return current_link
 
 
-def get_linkage(fuseki_process, fso_dict, debug=False):
+# def get_linkage(fuseki_process, fso_dict, debug=False):
+#     '''
+#     return a linkage if one exists, using the full record:
+#         a dictionary of format strings and lists of objects.
+#     if one does not exist, create it
+#     '''
+#     subj_pref = 'http://www.metarelate.net/metOcean/linkage'
+#     search_string = ''
+#     for fstring in fso_dict.keys():
+#         if isinstance(fso_dict[fstring], list):
+#             for obj in fso_dict[fstring]:
+#                 search_string += '''
+#                 %s %s ;''' % (fstring, obj)
+#         else:
+#             search_string += '''
+#             %s %s ;''' % (fstring, fso_dict[fstring])
+#     if search_string != '':
+#         search_string += '.'
+#         qstr = '''
+#         SELECT ?linkage
+#             (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
+#             (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
+#             (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
+
+#         WHERE
+#         { GRAPH <http://metocean/linkages.ttl>{
+#             ?linkage %s
+#        OPTIONAL
+#            {?linkage mr:CFlink ?cflink . }
+#        OPTIONAL
+#            {?linkage mr:UMlink ?umlink . }
+#        OPTIONAL
+#            {?linkage mr:GRIBlink ?griblink .}
+#             FILTER (regex(str(?linkage),"%s", "i"))
+#             }
+#         }
+#         GROUP BY ?linkage
+#         ''' % (search_string, subj_pref)
+
+#         results = fuseki_process.run_query(qstr, debug=debug)
+#         if len(results) == 1 and results[0] == {}:
+#             pre = prefixes.Prefixes()
+#             md5 = make_hash(fso_dict)
+
+#             inststr = '''
+#             INSERT DATA
+#             { GRAPH <http://metocean/linkages.ttl>
+#             { <%s/%s> %s
+#             mr:saveCache "True" .
+#             }
+#             }
+#             ''' % (subj_pref, md5, search_string.rstrip('.'))
+#             insert_results = fuseki_process.run_query(inststr, update=True, debug=debug)
+#             results = fuseki_process.run_query(qstr, debug=debug)
+#     else:
+#         results = []
+
+#     return results
+
+def get_concept(fuseki_process, po_dict, debug=False):
     '''
-    return a linkage if one exists, using the full record:
-        a dictionary of format strings and lists of objects.
-    if one does not exist, create it
     '''
-    subj_pref = 'http://www.metarelate.net/metOcean/linkage'
+    subj_pref = 'http://www.metarelate.net/metOcean/concept'
     search_string = ''
-    for fstring in fso_dict.keys():
-        if isinstance(fso_dict[fstring], list):
-            for obj in fso_dict[fstring]:
+    for pred in po_dict.keys():
+        if isinstance(po_dict[pred], list):
+            for obj in po_dict[pred]:
                 search_string += '''
-                %s %s ;''' % (fstring, obj)
+                %s %s ;''' % (pred, obj)
         else:
             search_string += '''
-            %s %s ;''' % (fstring, fso_dict[fstring])
+            %s %s ;''' % (pred, po_dict[pred])
     if search_string != '':
         search_string += '.'
-        qstr = '''
-        SELECT ?linkage
-            (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
-            (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
-            (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-
+        
+        qstr = '''SELECT ?concept
         WHERE
-        { GRAPH <http://metocean/linkages.ttl>{
-            ?linkage %s
-       OPTIONAL
-           {?linkage mr:CFlink ?cflink . }
-       OPTIONAL
-           {?linkage mr:UMlink ?umlink . }
-       OPTIONAL
-           {?linkage mr:GRIBlink ?griblink .}
-            FILTER (regex(str(?linkage),"%s", "i"))
-            }
+        { GRAPH <http://metarelate.net/concepts.ttl> {
+        ?concept %s
         }
-        GROUP BY ?linkage
-        ''' % (search_string, subj_pref)
-
+        }
+        ''' % search_string
         results = fuseki_process.run_query(qstr, debug=debug)
-        if len(results) == 1 and results[0] == {}:
-            pre = prefixes.Prefixes()
-            md5 = make_hash(fso_dict)
-
-            inststr = '''
-            INSERT DATA
-            { GRAPH <http://metocean/linkages.ttl>
-            { <%s/%s> %s
+        #if len(results) == 1 and results[0] == {}:
+        if len(results) == 0:
+            md5 = make_hash(po_dict)
+            instr = '''INSERT DATA
+            { GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> %s
             mr:saveCache "True" .
             }
             }
             ''' % (subj_pref, md5, search_string.rstrip('.'))
-            insert_results = fuseki_process.run_query(inststr, update=True, debug=debug)
+            insert_results = fuseki_process.run_query(instr, update=True, debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
     else:
         results = []
 
     return results
-
 
 
 def create_mapping(fuseki_process, po_dict, debug=False):
@@ -555,36 +598,32 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     results = None
     pre = prefixes.Prefixes()
 
-    if po_dict.has_key('mr:owner') and \
-        po_dict.has_key('mr:watcher') and \
-        po_dict.has_key('mr:creator') and len(po_dict['mr:creator'])==1 and \
-        po_dict.has_key('mr:status') and len(po_dict['mr:status'])==1 and \
-        po_dict.has_key('dc:replaces') and len(po_dict['dc:replaces'])==1 and \
-        po_dict.has_key('mr:comment') and len(po_dict['mr:comment'])==1 and \
-        po_dict.has_key('mr:reason') and len(po_dict['mr:reason'])==1 and \
-        po_dict.has_key('mr:linkage') and len(po_dict['mr:linkage'])==1:
+    md5 = make_hash(po_dict, ['mr:creation'])
 
-        md5 = make_hash(po_dict, ['mr:creation'])
-
-        pred_obj = ''
-        for pred,objects in po_dict.iteritems():
+    pred_obj = ''
+    for pred,objects in po_dict.iteritems():
+        if isinstance(objects, list):
             for obj in objects:
                 pattern_string = ''' %s %s ;
                 ''' % (pred, obj)
                 pred_obj += pattern_string
-        # check if we already have one:
-        result = subject_graph_pattern(fuseki_process, 'http://metocean/mappings.ttl',
-                'http://www.metarelate.net/metocean/mapping/%s' % md5)
-        if len(result) == 0:
-            qstr = '''
-            INSERT DATA
-            { GRAPH <http://metocean/mappings.ttl>
-            { <%s/%s> %s
-            mr:saveCache "True" .
-            }
-            }
-            ''' % (subj_pref, md5, pred_obj)
-            results = fuseki_process.run_query(qstr, update=True, debug=debug)
+        else:
+            pattern_string = ''' %s %s ;
+            ''' % (pred, obj)
+            pred_obj += pattern_string
+    # check if we already have one:
+    result = subject_graph_pattern(fuseki_process, 'http://metarelate.net/mappings.ttl',
+            'http://www.metarelate.net/metocean/mapping/%s' % md5)
+    if len(result) == 0:
+        qstr = '''
+        INSERT DATA
+        { GRAPH <http://metarelate.net/mappings.ttl>
+        { <%s/%s> %s
+        mr:saveCache "True" .
+        }
+        }
+        ''' % (subj_pref, md5, pred_obj)
+        results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
 
 

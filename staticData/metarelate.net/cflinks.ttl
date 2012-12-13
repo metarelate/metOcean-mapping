@@ -1,0 +1,1697 @@
+#(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping.
+#metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the
+#GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License,
+#or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#See the GNU Lesser General Public License for more details. You should have received a copy of the
+#GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/."
+
+@prefix cfsn: <http://def.cfconventions.org/standard_names/> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix github: <https://github.com/> .
+@prefix link: <http://www.metarelate.net/metOcean/linkage/> .
+@prefix map: <http://www.metarelate.net/metOcean/mapping/> .
+@prefix metoc: <http://www.metarelate.net/metOcean/> .
+@prefix moStCon: <http://reference.metoffice.gov.uk/def/um/stash/concept/> .
+@prefix moStEG: <http://reference.metoffice.gov.uk/def/um/stash/endgame/> .
+@prefix moStND: <http://reference.metoffice.gov.uk/def/um/stash/new_dynamics/> .
+@prefix mof: <http://reference.metoffice.gov.uk/def/um/fieldcode/> .
+@prefix momet08: <http://reference.metoffice.gov.uk/def/um/met08/> .
+@prefix moumdpC4: <http://reference.metoffice.gov.uk/def/um/umdp/c4/> .
+@prefix moumdpC4Pseud: <http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/> .
+@prefix mr: <http://www.metarelate.net/predicates/index.html#> .
+@prefix mrcf: <http://www.metarelate.net/predicates/CF.html#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+<http://www.metarelate.net/metocean/cf/8e091ff8a0e9821e0db437b425d35698>
+      mrcf:standard_name  cfsn:soil_thermal_capacity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "J kg-1 K-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0361e7652a20c20a19ffb336977ba486>
+      mrcf:standard_name  cfsn:northward_transformed_eulerian_mean_air_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/647a583ccb227d47cafc597ad54d71ea>
+      mrcf:standard_name  cfsn:ocean_mixed_layer_thickness ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/480fa74a394b12009dad53254ee761ba>
+      mrcf:standard_name  cfsn:surface_runoff_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b380281150b7c33ee41e97b6bf89ff9d>
+      mrcf:standard_name  cfsn:mass_fraction_of_unfrozen_water_in_soil_moisture ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/06f1771790852a5072d737551622eb3b>
+      mrcf:standard_name  cfsn:volume_fraction_of_condensed_water_in_soil_at_critical_point ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2dd80a7fd164f2c6a1b94838eb6e6fbd>
+      mrcf:standard_name  cfsn:surface_net_downward_longwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5be799961c0aa6c56a64e9f6238c63b2>
+      mrcf:standard_name  cfsn:surface_downwelling_longwave_flux_in_air_assuming_clear_sky ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5a40e8878ce79033f0ceb4474aac1a7c>
+      mrcf:standard_name  cfsn:tendency_of_eastward_wind_due_to_convection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/706ffec541c1556b0d8eb4cbfef8bcf2>
+      mrcf:standard_name  cfsn:mole_fraction_of_cfc12_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/48cb46198eb23a4559b5575b88d61dee>
+      mrcf:standard_name  cfsn:surface_air_pressure ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/3a30740c3fdea5da18dac7397450e9cb>
+      mrcf:standard_name  cfsn:product_of_omega_and_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6bc1c5edc3b872f529060bee46c07cc7>
+      mrcf:standard_name  cfsn:tendency_of_mass_fraction_of_cloud_ice_in_air_due_to_advection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/53ec8314b3746bad42d2e9d3db9d4aa3>
+      mrcf:standard_name  cfsn:specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg kg-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/7fe19fb9249812e75de4889354a96f0c>
+      mrcf:standard_name  cfsn:sea_ice_albedo ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/20ba7d02420f114c721141332ce42247>
+      mrcf:standard_name  cfsn:air_density ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-3" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/91ec162506fa2b561de2760bace1c688>
+      mrcf:standard_name  cfsn:upward_eastward_momentum_flux_in_air_due_to_nonorographic_eastward_gravity_waves ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6337bb2ad91adf34121631d64790091d>
+      mrcf:standard_name  cfsn:cloud_mixing_ratio ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg kg-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/db41a118dd223b8112a3721ca9af2095>
+      mrcf:standard_name  cfsn:eastward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/de86cb41f8147911568df735770beece>
+      mrcf:standard_name  cfsn:water_flux_into_sea_water_from_rivers ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a9e48bcd44076e4de30189a36e105edc>
+      mrcf:standard_name  cfsn:air_pressure ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0c83bdaf5cf988ec21c35a55938c6932>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_omega ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/01c9b509560376beef1cf09e61b077ec>
+      mrcf:standard_name  cfsn:cloud_area_fraction_in_atmosphere_layer ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/db446c432d5b895c9aafbf9829028c3c>
+      mrcf:standard_name  cfsn:upward_air_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/cbf9d1b4d7b3f60a3fc64102cb47a600>
+      mrcf:standard_name  cfsn:land_area_fraction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ba5d8d9328a2a15a97702b25ca5b7ba5>
+      mrcf:standard_name  cfsn:surface_downward_eastward_stress ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/df759516dcab707360747783393353a2>
+      mrcf:standard_name  cfsn:tendency_of_eastward_wind_due_to_eliassen_palm_flux_divergence ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6c63ac2606dadf0b38101cc2d3f8903b>
+      mrcf:standard_name  cfsn:toa_incoming_shortwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ab0f53d67da49cda67cb66cd1e9dcdfb>
+      mrcf:standard_name  cfsn:soil_moisture_content_at_field_capacity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/43e5c19c873ca04b9537c8347398dd74>
+      mrcf:standard_name  cfsn:rainfall_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5b5325d2a9c53559d07499873808449f>
+      mrcf:standard_name  cfsn:sea_water_salinity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1e3 psu @0.035" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/bef7378f305ee2642aecdfe37acd4aed>
+      mrcf:standard_name  cfsn:tendency_of_northward_wind_due_to_diffusion ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/7bbf2d81e906b7a830c4259f4755c42a>
+      mrcf:standard_name  cfsn:toa_outgoing_longwave_flux_assuming_clear_sky ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/9e8326cf50b6eefbaf8f9051221908f0>
+      mrcf:standard_name  cfsn:mole_fraction_of_ozone_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "mole mole-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/4e4dcdf21914e4cb4771fe1e0be6fa53>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_diffusion ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6871961b61215330c5bf6df4a522706d>
+      mrcf:standard_name  cfsn:air_potential_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2edd3c691bff91b73dc9c7de424c6b3e>
+      mrcf:standard_name  cfsn:tendency_of_sea_ice_area_fraction_due_to_thermodynamics ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/dd735c4465764920010fa6caf4b70207>
+      mrcf:standard_name  cfsn:mole_fraction_of_peroxynitric_acid_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "mole mole-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/41ac4f9ecf3b5668a796cb49784e6261>
+      mrcf:standard_name  cfsn:surface_northward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8d9efbc269ee51054515777ac89aa53e>
+      mrcf:standard_name  cfsn:tendency_of_mass_fraction_of_cloud_liquid_water_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/53135d65a863de63a45eb15a774b6065>
+      mrcf:standard_name  cfsn:surface_snow_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/82a39ce905732a5f928c34ae683f0875>
+      mrcf:standard_name  cfsn:leaf_area_index ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/843dc9c3da15f699f0fca289369aeba6>
+      mrcf:standard_name  cfsn:surface_downwelling_longwave_flux_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/fcda03c6a4ce0062bab990c9b7dda6fe>
+      mrcf:standard_name  cfsn:tendency_of_sea_ice_thickness_due_to_dynamics ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/c94dfece2e442e8b20014d8e3147c2cf>
+      mrcf:standard_name  cfsn:square_of_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f0832a6a3eff00a6662eb523c009d397>
+      mrcf:standard_name  cfsn:snowfall_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e50d5b77d16c6722e2410fa5e9b8ab75>
+      mrcf:standard_name  cfsn:mole_fraction_of_chlorine_nitrate_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "mole mole-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/22edc8b16f61335daccdda894cdfdff2>
+      mrcf:standard_name  cfsn:convective_inhibition ;
+      mrcf:type     "Field" ;
+      mrcf:units    "J kg-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e01a731fa3685c33ed89a58d84a79cde>
+      mrcf:standard_name  cfsn:tendency_of_specific_humidity_due_to_advection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8a281c15fe94de58f2e062062c959716>
+      mrcf:standard_name  cfsn:square_of_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8b2803497b8e78cfc8b684fc3541f018>
+      mrcf:standard_name  cfsn:stratiform_rainfall_rate ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/73818551a7c005b8b69aa4430502e073>
+      mrcf:standard_name  cfsn:mass_fraction_of_ozone_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/85c0798eeb87dfb37d8a6684dfd7fcd5>
+      mrcf:standard_name  cfsn:volume_fraction_of_condensed_water_in_soil_at_wilting_point ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f58ef93ba3dbcde862251d7676bbd2b6>
+      mrcf:standard_name  cfsn:tropopause_altitude ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/92ec2bd49e13cc4c88eab32d9e605114>
+      mrcf:standard_name  cfsn:dimensionless_exner_function ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6e69bc259664bbfdaf7f7db14926e350>
+      mrcf:standard_name  cfsn:subsurface_runoff_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/55eca80041ad2a6dd198a4503a6250c1>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_upward_air_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d0de544682cb04f8a224034e5767fbe9>
+      mrcf:standard_name  cfsn:northward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a2e7b8e90abe58b376e5163930212ed5>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/795b484cf60e45a53579ea46a232ffbc>
+      mrcf:standard_name  cfsn:mass_fraction_of_convective_cloud_liquid_water_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5613a028aead649d37623a425599c168>
+      mrcf:standard_name  cfsn:surface_albedo_assuming_deep_snow ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/789d4996fe5477be4fe3287ddc5dbeb5>
+      mrcf:standard_name  cfsn:convective_cloud_area_fraction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5df74ae55935b087936ad16a58ca3886>
+      mrcf:standard_name  cfsn:water_equivalent_of_accumulated_snow_depth ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/439f1e10e188186df88a8517bbb8ba1c>
+      mrcf:standard_name  cfsn:square_of_upward_air_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6d95577e691c9efab51ae4c2a2b0ebe2>
+      mrcf:standard_name  cfsn:precipitable_water ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/105dfd4e8a998a53af38027d4402bb85>
+      mrcf:standard_name  cfsn:upward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/98e74c85ebf896ea5023904cec28e3c8>
+      mrcf:standard_name  cfsn:stratiform_snowfall_rate ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/79bbdcd8c61368f4f5662d34da8fc61e>
+      mrcf:standard_name  cfsn:square_of_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b566d3a9a1e0f99e50f7501a9616c73c>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/cee40e7ab3e01721880d548436af359a>
+      mrcf:standard_name  cfsn:mass_fraction_of_carbon_dioxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/75fda995f7bdbee477fe6ea79cdbafbf>
+      mrcf:standard_name  cfsn:sea_surface_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/7f8d59a9a65949666b2b1128152aaf36>
+      mrcf:standard_name  cfsn:pressure ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/9ec55d8e213b4df3372dc1b61a6ba1da>
+      mrcf:standard_name  cfsn:canopy_water_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/c3e0b2699eb7892d11e4d8634108392f>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_northward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0e50a6b4182227c1ed7ff88ccab156b1>
+      mrcf:standard_name  cfsn:mole_fraction_of_atomic_chlorine_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/12cc1da0ebf4f82a603e9134687eb01d>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_upward_air_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/7dc66faf183a3246a5e06a4d78997bf8>
+      mrcf:standard_name  cfsn:surface_snow_and_ice_melt_heat_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/bae870b7d1e0ab3dfcd5f76be107aad7>
+      mrcf:standard_name  cfsn:upward_sea_ice_basal_heat_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e9a58c5e0c2ad8e795565d9aa43433f9>
+      mrcf:standard_name  cfsn:stratiform_rainfall_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e830cf452749385284a3335c66742471>
+      mrcf:standard_name  cfsn:mole_fraction_of_cfc11_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a0d7d207ec0da909f520f46019fb12d1>
+      mrcf:standard_name  cfsn:soil_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2a1b3795c1c8797d22a2e0e6b5fd02a0>
+      mrcf:standard_name  cfsn:sea_surface_salinity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1e3 psu @0.035" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/28db484cef45b5e49192aae467aae81e>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_omega ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/19e07e3f08f42c8c4f75650abe5df147>
+      mrcf:standard_name  cfsn:virtual_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a3fb8c873a03de709bfc13e1cc5086f5>
+      mrcf:standard_name  cfsn:wind_mixing_energy_flux_into_sea_water ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6283641f39ed75e112006da0bfa1f0b6>
+      mrcf:standard_name  cfsn:soil_thermal_conductivity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-1 K-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ae2b16dad8fadbbae5ec170db7f7884f>
+      mrcf:standard_name  cfsn:tendency_of_eastward_wind_due_to_gravity_wave_drag ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/92a9f490f2cb2f50aa297de7b1ddc4fa>
+      mrcf:standard_name  cfsn:soil_albedo ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e39a49dd0757bc64413ded671433df4a>
+      mrcf:standard_name  cfsn:northward_ocean_heat_transport ;
+      mrcf:type     "Field" ;
+      mrcf:units    "PW" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/813aad68f0a55ceb9e52e6ca2b8565f5>
+      mrcf:standard_name  cfsn:surface_upward_water_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a49b0fa41ee4d520830125b5513d9fe9>
+      mrcf:standard_name  cfsn:square_of_northward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/768376560646d0bc491d50499e639099>
+      mrcf:standard_name  cfsn:tendency_of_sea_ice_area_fraction_due_to_dynamics ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/c6ace6fe23710cf85350b2e9be550137>
+      mrcf:standard_name  cfsn:mass_fraction_of_unfrozen_water_in_soil_moisture ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d76679247fbf665c30027771c83ff748>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/73972c91cd79d938a79c6a95f8a7b32c>
+      mrcf:standard_name  cfsn:cloud_water ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0464b9824f8057227c50ccc06289fe6c>
+      mrcf:standard_name  cfsn:atmosphere_kinetic_energy_content ;
+      mrcf:type     "Field" ;
+      mrcf:units    "J m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f4ab270c5503c0f5e12bcd4f26ed7756>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_longwave_heating_assuming_clear_sky ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/9bf5901dcb23f6cf14025ce705ed473c>
+      mrcf:standard_name  cfsn:tendency_of_specific_humidity_due_to_diffusion ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/963c69fa96cb12063822240778cc1334>
+      mrcf:standard_name  cfsn:mass_fraction_of_cloud_liquid_water_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/54ee34a7d5ac5e7e31dc16cb45737a98>
+      mrcf:standard_name  cfsn:downward_heat_flux_in_soil ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b1e1d48ef3b4351d92a80d562e32fd30>
+      mrcf:standard_name  cfsn:mole_fraction_of_dichlorine_peroxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ca880c558f4f238a94733ac1bcc4d861>
+      mrcf:standard_name  <http://def.cfconventions.org/standard_names/vertical_velocity_(pressure)> ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/47377c70356bc78daade8bc84d51e250>
+      mrcf:standard_name  cfsn:mole_fraction_of_nitrogen_trioxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "mole mole-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/883028489f9edf130f7cc2dae2eacba1>
+      mrcf:standard_name  cfsn:mole_fraction_of_atomic_nitrogen_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f13d27865b3f1c313aad4879f8df3338>
+      mrcf:standard_name  cfsn:cloud_area_fraction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8cecab6206979167079c0d0727a35c04>
+      mrcf:standard_name  cfsn:total_cloud_cover ;
+      mrcf:type     "Field" ;
+      mrcf:units    "%" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/cbbb04a53782cb51428bbb69171bbd4e>
+      mrcf:standard_name  cfsn:tendency_of_eastward_wind_due_to_diffusion ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/50e22cdcd8280afd691ed49752c8a21d>
+      mrcf:standard_name  cfsn:product_of_specific_humidity_and_omega ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/7aa38b413f231c25678b29e6aae75729>
+      mrcf:standard_name  cfsn:mass_fraction_of_frozen_water_in_soil_moisture ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5510af03f87e8dd85d08485612c42457>
+      mrcf:standard_name  cfsn:northward_eliassen_palm_flux_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/67fd72056ed95ef41f0091d6f963e06e>
+      mrcf:standard_name  cfsn:precipitation_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/751fcaafc5c1377c2b9d205a9f467c28>
+      mrcf:standard_name  cfsn:tendency_of_ocean_barotropic_streamfunction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm3 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/37a39f26bea631580cff5a71fbbb902b>
+      mrcf:standard_name  cfsn:tendency_of_upward_air_velocity_due_to_advection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/18b0c95e54835c9adfea8f9a48c192e5>
+      mrcf:standard_name  cfsn:geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/29702695700d5fa2aba2d11990531d39>
+      mrcf:standard_name  cfsn:product_of_omega_and_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0059031ab75c1cfbaca466e6d6e74b53>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_shortwave_heating_assuming_clear_sky ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/58ee9a14affcc71250492b6c26222b47>
+      mrcf:standard_name  cfsn:eastward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/41c0faa2f0e945da8f496b13c404662c>
+      mrcf:standard_name  cfsn:surface_upward_sensible_heat_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/856596913f87a1cc008ebcb0b0facc3a>
+      mrcf:standard_name  cfsn:air_pressure_at_sea_level ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b13bf8300b8a84327587841622c56ef6>
+      mrcf:standard_name  cfsn:convective_snowfall_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/374d2818d73e18fb2c1a592544f0a0e1>
+      mrcf:standard_name  cfsn:surface_snow_area_fraction_where_land ;
+      mrcf:type     "Field" ;
+      mrcf:units    "%" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/24fbf48cfb82333cd16c887fcea03a8a>
+      mrcf:standard_name  cfsn:specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/da304073c9d4c7811f631ff020fd2c23>
+      mrcf:standard_name  cfsn:toa_outgoing_shortwave_flux_assuming_clear_sky ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/11de34c8fcc27b5066283859e0ccb522>
+      mrcf:standard_name  cfsn:water_potential_evaporation_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a23df0eb0a6cf5d4017ee7172cbe2b9d>
+      mrcf:standard_name  cfsn:upward_eastward_momentum_flux_in_air_due_to_nonorographic_westward_gravity_waves ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/90a519dbb921c037623cb1ac6a2c3148>
+      mrcf:standard_name  cfsn:icao_standard_atmosphere_reference_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b14b9259e827d015be06c04d57e0d79d>
+      mrcf:standard_name  cfsn:sea_water_potential_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "degC" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/01a4525176c0578e32594b98e9641f5d>
+      mrcf:standard_name  cfsn:soil_hydraulic_conductivity_at_saturation ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6577714b81b70c6e823bad94814c7d6a>
+      mrcf:standard_name  cfsn:age_of_stratospheric_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Years" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/41474086d1209d0e9fb41a003ff84a05>
+      mrcf:standard_name  cfsn:potential_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b3e5f5be8ccce04949a379740f8352af>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/db086f61e278a40a8285a132b6555f02>
+      mrcf:standard_name  cfsn:downward_eastward_stress_at_sea_ice_base ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b6c47fdfffae49845a7bd160d31c8f52>
+      mrcf:standard_name  cfsn:mole_fraction_of_hypochlorous_acid_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/97ac51792dbb624d38cd303dadc5195c>
+      mrcf:standard_name  cfsn:mole_fraction_of_chlorine_monoxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e0462118983d7984a80ee76ec9121b43>
+      mrcf:standard_name  cfsn:soil_moisture_content ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/69669f5d92ef100f0aa9cfbb8dc9354f>
+      mrcf:standard_name  cfsn:stratiform_snowfall_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/dad45343649d2069c7f0c89a60e86a7b>
+      mrcf:standard_name  cfsn:upward_eastward_momentum_flux_in_air_due_to_orographic_gravity_waves ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/c79c7a9edc548ae230918eeedb64eef6>
+      mrcf:standard_name  cfsn:y_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2f4a2a8c0bfb51095fb783559f3405db>
+      mrcf:standard_name  cfsn:convective_snowfall_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5faba7e11244748fd225155fa00a4e21>
+      mrcf:standard_name  cfsn:surface_air_pressure ;
+      mrcf:type     "Field" ;
+      mrcf:units    "g cm-1 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6fa5fe7cd2d025017cffe5db010d1a0b>
+      mrcf:standard_name  cfsn:surface_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/90874040f40163e9889b34e57ed1c6b2>
+      mrcf:standard_name  cfsn:mass_fraction_of_cloud_ice_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f8d08cfb0cf2f1aa986d7fb82a36eb55>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_omega ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a699e9bfacb10a6ee8e3c75bcfdf36e9>
+      mrcf:standard_name  cfsn:tendency_of_mass_fraction_of_cloud_ice_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5c5ec7ff2443878c2161da68a493a285>
+      mrcf:standard_name  cfsn:heat_flux_correction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0867937816ec5a0c0eca7fdd86d30edc>
+      mrcf:standard_name  cfsn:tropopause_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/3b1a59e6fc026a9953a60128bb02160c>
+      mrcf:standard_name  cfsn:atmosphere_cloud_ice_content ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/1c710224cc644ecf899428ac074df7c1>
+      mrcf:standard_name  cfsn:water_sublimation_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/1008932540d88288d858727f12d167f0>
+      mrcf:standard_name  cfsn:atmosphere_eastward_stress_due_to_gravity_wave_drag ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/173594cea5e84ae35098e68e5ecbb667>
+      mrcf:standard_name  cfsn:moisture_content_of_soil_layer ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/bd759dd120a40c147426e1cfe94639c3>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/672d7cd9cf31688b7f0d6758f75e29c7>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/fc5af7a70b29ccb922adb11ddea4f5d2>
+      mrcf:standard_name  cfsn:tendency_of_specific_humidity_due_to_convection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ff964988b3a85259cbe7aed2b8806e53>
+      mrcf:standard_name  cfsn:tendency_of_sea_ice_thickness_due_to_thermodynamics ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8f4c79005f0a9d15a0a15307a117bf33>
+      mrcf:standard_name  cfsn:mole_fraction_of_methane_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "mole mole-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d7314a61baeaead8c0707422252a9fc7>
+      mrcf:standard_name  cfsn:surface_altitude ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/1614cfe3ef747827c8e919ad39e40547>
+      mrcf:standard_name  cfsn:tendency_of_northward_wind_due_to_gravity_wave_drag ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ab2dab3e1c6d484abbe7a4eb49e021dc>
+      mrcf:standard_name  cfsn:square_of_lagrangian_tendency_of_air_pressure ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b3956d0df277fc13ae60f5abcf29e5e1>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f320d6705fb4ed102ef37ed79ac2edb2>
+      mrcf:standard_name  cfsn:air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0d3ab087194d83c9f56f673c6ee191ce>
+      mrcf:standard_name  cfsn:atmosphere_cloud_liquid_water_content ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d59436b791db5a895febf9b7be755da8>
+      mrcf:standard_name  cfsn:northward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d416b6521bd48d6977f9e2e7014c6f40>
+      mrcf:standard_name  cfsn:air_pressure_at_freezing_level ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b20d93aae117615c3e166c1fd6c549df>
+      mrcf:standard_name  cfsn:tropopause_net_downward_longwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5c25917de65bdd3e259251e11b7a7351>
+      mrcf:standard_name  cfsn:large_scale_cloud_liquid_water_content_of_atmosphere_layer ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/78603414c11910ffbc5edfa6084f5d02>
+      mrcf:standard_name  cfsn:atmosphere_boundary_layer_thickness ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d646f91e8df11cc059f462fc6ac0e3ac>
+      mrcf:standard_name  cfsn:geopotential_height_anomaly ;
+      mrcf:type     "Field" ;
+      mrcf:units    "gpm" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/07566a8c6388be5bf8e93192a5c4710a>
+      mrcf:standard_name  cfsn:prescribed_heat_flux_into_slab_ocean ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/915387f8afea39fbb38a6356b931a2ab>
+      mrcf:standard_name  cfsn:product_of_upward_air_velocity_and_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/bbff839f43f900bc54dec36b4bf78e6d>
+      mrcf:standard_name  cfsn:baroclinic_northward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/1156876425e60bf8ffec7fbf67bfe5df>
+      mrcf:standard_name  cfsn:specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0dd9fb11b5c23d6533f40955cc67b6c4>
+      mrcf:standard_name  cfsn:downward_northward_stress_at_sea_ice_base ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/c074e547b8caf7b652ff101e5369a96e>
+      mrcf:standard_name  cfsn:geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "gpm" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/29779b5be3b48489864e3322e6c7263d>
+      mrcf:standard_name  cfsn:square_of_geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/647dcaa6e1ba7b6709155197c7791242>
+      mrcf:standard_name  cfsn:tropopause_upwelling_shortwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/12f0108a62e1e5c67796444310e78e4e>
+      mrcf:standard_name  cfsn:land_cover ;
+      mrcf:type     "Field" ;
+      mrcf:units    "proportion" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/9ce797d04d814796c65b1af3bf6ae11d>
+      mrcf:standard_name  cfsn:surface_roughness_length ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f015d535476709953dbfcfe44133668d>
+      mrcf:standard_name  cfsn:pressure_reduced_to_msl ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/326cd7c420ce0576c0b0c207866e62ce>
+      mrcf:standard_name  cfsn:tropopause_air_pressure ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/495a22484f68d468114925030ea9f60b>
+      mrcf:standard_name  cfsn:surface_downwelling_shortwave_flux_in_air_assuming_clear_sky ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/4e6216aa14ac7251a9701b74b1caa25f>
+      mrcf:standard_name  cfsn:product_of_geopotential_height_and_omega ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/3457a396bf7e26a5305fea64761da706>
+      mrcf:standard_name  cfsn:product_of_air_temperature_and_omega ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K Pa s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/10224b67fd3c24a45012286dcf39fbd1>
+      mrcf:standard_name  cfsn:total_ozone ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Dobson" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b6cd8e4904a2bedcac04ddbb273225e0>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/36f1e3cc8089e2388d7a610e2832fa84>
+      mrcf:standard_name  cfsn:tendency_of_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b200b6b29bf899d860f214c285d395bc>
+      mrcf:standard_name  cfsn:relative_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "%" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a6b6fb62a823aea351547d7500a3a125>
+      mrcf:standard_name  cfsn:ertel_potential_vorticity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K m2 kg-1 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2240e52ca7541e701c572dce3966a6ea>
+      mrcf:standard_name  cfsn:air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kelvin" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/094f37b8131ccd72f3fa3cb1f57d38b1>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_longwave_heating ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/93dfb36475b88f1303a055e828318244>
+      mrcf:standard_name  cfsn:surface_downwelling_shortwave_flux_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2607bd9fabec1597a1d573a23c3a00ac>
+      mrcf:standard_name  cfsn:mass_fraction_of_dimethyl_sulfide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/cdcf058bdd861694f3ba3f8cbb31fc74>
+      mrcf:standard_name  cfsn:surface_runoff_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d6d458d44ce752ff2a24ac1b253109c7>
+      mrcf:standard_name  cfsn:mole_fraction_of_bromine_chloride_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ccf75df85b1abe77391315b5c86a45a3>
+      mrcf:standard_name  cfsn:snow_grain_size ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1e-6 m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/637cf22054f67d7e40ff979db2063039>
+      mrcf:standard_name  cfsn:soil_suction_at_saturation ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e95cbd220f95fbd477d3a2edc79a3b70>
+      mrcf:standard_name  cfsn:surface_downward_northward_stress ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/298c7cdc15ca97a9e8e8e8ca0799af3b>
+      mrcf:standard_name  cfsn:mole_fraction_of_chlorine_nitrate_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/3a24aaa8227a0d1db7105fe92d5f4a3c>
+      mrcf:standard_name  cfsn:convective_cloud_area_fraction_of_atmosphere_layer ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a30ef8b7df3344cee2696419f84ed13c>
+      mrcf:standard_name  cfsn:square_of_eastward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ae9f18778fd4721c5b432d18e9420144>
+      mrcf:standard_name  cfsn:tendency_of_mass_fraction_of_cloud_liquid_water_in_air_due_to_advection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/72140e5de179f698653ada89734ed5b4>
+      mrcf:standard_name  cfsn:surface_snow_melt_flux_where_land ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f064776e31881125413153e2e603cdfa>
+      mrcf:standard_name  cfsn:toa_outgoing_longwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0d336569267336ec7b6dd36d36cc560c>
+      mrcf:standard_name  cfsn:tendency_of_northward_wind_due_to_convection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2e3cc6e236a97fbacc6d1ad88590828b>
+      mrcf:standard_name  cfsn:surface_net_downward_shortwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0c7172eb08c5f9ef4d2394435947dbb7>
+      mrcf:standard_name  cfsn:sea_ice_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/96e9d94437aa1b9a7b7e9976738d4fc3>
+      mrcf:standard_name  cfsn:storm_relative_helicity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "J kg-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/83e662473da9e2df852791089d83cd03>
+      mrcf:standard_name  cfsn:geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/cec2f609cdf0ce4b37df95d640d4a78b>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_convection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ba293b53539f6e97244c8fd8cde20e9e>
+      mrcf:standard_name  cfsn:convective_rainfall_rate ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/54edec39e043779f604b67b62e0028c4>
+      mrcf:standard_name  cfsn:snowfall_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ba9ac66bfbfa0b0650fe6f8eda55bf48>
+      mrcf:standard_name  cfsn:northward_ocean_salt_transport ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1e7kg s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/3475d5ef061529d8dbb20094203e16e7>
+      mrcf:standard_name  cfsn:upward_eliassen_palm_flux_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/4bd4534cac559e3c66b2aca9703a2db1>
+      mrcf:standard_name  cfsn:downward_heat_flux_in_sea_ice ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8dc9fb5063e1bc0c617a67636dc1d8ac>
+      mrcf:standard_name  cfsn:root_depth ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/0b6934d9e8f2d6c9eac75d505d77c282>
+      mrcf:standard_name  cfsn:convective_rainfall_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/cf0df117bba12877ee57333355de598b>
+      mrcf:standard_name  cfsn:atmosphere_relative_vorticity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/c2ddbad98823313d6f2745eb9dd30121>
+      mrcf:standard_name  cfsn:lagrangian_tendency_of_air_pressure ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/9000efbaf5c030a924026ed5b98f479d>
+      mrcf:standard_name  cfsn:surface_snow_thickness ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/68262385dcfd6c0a8fcb9577555304d1>
+      mrcf:standard_name  cfsn:surface_upward_latent_heat_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/9526cf3826ee55a4caf4ce5dc25aa4ab>
+      mrcf:standard_name  cfsn:tendency_of_eastward_wind_due_to_orographic_gravity_wave_drag ;
+      mrcf:type     "Field" ;
+      mrcf:units    "MKS" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/4ba60d53b0ee08fc524977bbf717b4d4>
+      mrcf:standard_name  cfsn:barotropic_northward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/67f94c964777132865b11b2679f6a0cc>
+      mrcf:standard_name  cfsn:mole_fraction_of_bromine_nitrate_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f15a36be8c4f51cd57228350330d30a7>
+      mrcf:standard_name  cfsn:mole_fraction_of_chlorine_dioxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/02251123798f13a6cdea8e6475ed1f3e>
+      mrcf:standard_name  cfsn:convective_available_potential_energy ;
+      mrcf:type     "Field" ;
+      mrcf:units    "J kg-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a27a41e5a00b52d455e21df5a3ee0aa4>
+      mrcf:standard_name  cfsn:divergence_of_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/14ed6e39a6251d563bc5bb139a19abbb>
+      mrcf:standard_name  cfsn:gross_primary_productivity_of_carbon ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8be83e8be20db7cf8ad1195eb2a5cde3>
+      mrcf:standard_name  cfsn:tropopause_downwelling_longwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/70ff36ef48630305288cb2b4df27f1e6>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_shortwave_heating ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/714497006e00946773a517dd05657883>
+      mrcf:standard_name  cfsn:tendency_of_northward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/43fe151ddc9bd85bb567a83ff9bc000e>
+      mrcf:standard_name  cfsn:sea_ice_area_fraction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/80645a718868c3c792a7caa50acf131a>
+      mrcf:standard_name  cfsn:potential_vorticity_of_atmosphere_layer ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa-1 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/4a07ce85216627b3af74d41adb1e1ec2>
+      mrcf:standard_name  cfsn:mole_fraction_of_nitrous_oxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/96ca4015ac0943c2cd273f5238981054>
+      mrcf:standard_name  cfsn:surface_albedo_assuming_no_snow ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/60819e2db3d3ac6dd537411ee062855f>
+      mrcf:standard_name  cfsn:northward_sea_ice_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a74079392fb5c312f0649cf9bbaa4605>
+      mrcf:standard_name  cfsn:mass_fraction_of_sulfur_dioxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a703bb29b49f543c5e3f44fd027ca849>
+      mrcf:standard_name  cfsn:stratiform_cloud_area_fraction_in_atmosphere_layer ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/682f6b26db09c9bc6fef7d79fe03f313>
+      mrcf:standard_name  cfsn:age_of_stratospheric_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/29098fd8123e99f4404ea0715f2d5736>
+      mrcf:standard_name  cfsn:wind_speed ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/2e95629e7d4663ef0f593cf0274efb05>
+      mrcf:standard_name  cfsn:net_downward_shortwave_flux_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/edb961186c98f3b8a72ba19415330ffc>
+      mrcf:standard_name  cfsn:surface_snow_melt_heat_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/3bb3a4054aa6eec66433d8b2087d580d>
+      mrcf:standard_name  cfsn:ocean_barotropic_streamfunction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm3 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/12cc45e50bd93cd953781e0dc600fdf6>
+      mrcf:standard_name  cfsn:tendency_of_eastward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a638cfd1f57e358342ccda015c3fa174>
+      mrcf:standard_name  cfsn:barotropic_eastward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/dba38addf5764ad3bf4d33f397a39e2f>
+      mrcf:standard_name  cfsn:mole_fraction_of_dinitrogen_pentoxide_in_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "mole mole-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/6cfeb5503cd45a3164e36fd4ab2a5ed4>
+      mrcf:standard_name  cfsn:subsurface_runoff_amount ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/65e0f5b8b3223a10829340d37a9220ca>
+      mrcf:standard_name  cfsn:product_of_northward_wind_and_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e12167b9fc9198b7de964eb091a4bbb4>
+      mrcf:standard_name  cfsn:product_of_air_temperature_and_specific_humidity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/58a698281e217fe31b88825cc40537b7>
+      mrcf:standard_name  cfsn:downward_heat_flux_in_soil ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8202e8fd6f0173929d2720f14574672f>
+      mrcf:standard_name  cfsn:product_of_upward_air_velocity_and_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/47e022184148a59b836c1c9f14a19db8>
+      mrcf:standard_name  cfsn:specific_kinetic_energy_of_air ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/7d97cd4b165c07c6421699333fc5be56>
+      mrcf:standard_name  cfsn:eastward_sea_ice_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/884614449f40e2ab1703ed9c56bed150>
+      mrcf:standard_name  cfsn:tendency_of_upward_air_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5a74fd9b1a57deedc52a415c9beb2bc6>
+      mrcf:standard_name  cfsn:tendency_of_northward_wind_due_to_advection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/f4401a0356a880827efdfe43e4a55b68>
+      mrcf:standard_name  cfsn:atmosphere_northward_stress_due_to_gravity_wave_drag ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Pa" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/5c1440ce8094d505d6d38d03b574d7fe>
+      mrcf:standard_name  cfsn:soil_porosity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/b5c8a0de151cbe3faa6258d5a12d471c>
+      mrcf:standard_name  cfsn:surface_upwelling_shortwave_flux_in_air_assuming_clear_sky ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/995b564f099f95454dd428ccc9552377>
+      mrcf:standard_name  cfsn:soil_carbon_content ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/3d4f7bcd72d3c752cb421e236d025517>
+      mrcf:standard_name  cfsn:vegetation_area_fraction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/4df4cb876d9ed78a75ba6e07aaf8f4b6>
+      mrcf:standard_name  cfsn:square_of_northward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/4aeb0df483f30d3b185a44080cc76c81>
+      mrcf:standard_name  cfsn:sea_ice_thickness ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d8bc2c30e08cd92e6ff01cf0a8412d98>
+      mrcf:standard_name  cfsn:land_binary_mask ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ca2e9f1a92739ef2dc155afac00a804d>
+      mrcf:standard_name  cfsn:canopy_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/d68fa867bb9a84edaa072307841b5ecb>
+      mrcf:standard_name  cfsn:mass_fraction_of_frozen_water_in_soil_moisture ;
+      mrcf:type     "Field" ;
+      mrcf:units    "1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ed371bb7e6a8c7cd50c56a79e5a3f06d>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature_due_to_advection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ac399bc150e200e764fb8585c8e4cdf5>
+      mrcf:standard_name  cfsn:air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/24fe838c66edc4335afc191519129297>
+      mrcf:standard_name  cfsn:toa_outgoing_shortwave_flux ;
+      mrcf:type     "Field" ;
+      mrcf:units    "W m-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8cdc2eda3d960cfff00b5758752d4132>
+      mrcf:standard_name  cfsn:square_of_eastward_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m2 s-2" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a5e84eb5f47168a4e4b082f5ad625be0>
+      mrcf:standard_name  cfsn:tendency_of_eastward_wind_due_to_advection ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/53c3e5739daa86040a4327fd3f3fbec2>
+      mrcf:standard_name  cfsn:x_wind ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/a2e9e39213f6a42705e5b3600b407e3b>
+      mrcf:standard_name  cfsn:baroclinic_eastward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "cm s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/7b90220db212e8ed6dfcaca4ec239e41>
+      mrcf:standard_name  cfsn:absolute_vorticity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/ad8e5a8aaf295a9892876d1dd1c4259c>
+      mrcf:standard_name  cfsn:tendency_of_air_temperature ;
+      mrcf:type     "Field" ;
+      mrcf:units    "K s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/fe09323f435990f05c07fa5941397540>
+      mrcf:standard_name  cfsn:water_flux_correction ;
+      mrcf:type     "Field" ;
+      mrcf:units    "Kg m-2 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/8487a9394c285bcc4d2b8ce178b10150>
+      mrcf:standard_name  cfsn:surface_eastward_sea_water_velocity ;
+      mrcf:type     "Field" ;
+      mrcf:units    "m s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/c445f32cba179ccc18f0ad42303db5ee>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_omega ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/1f9689a0309e510d53746a3f58c8e507>
+      mrcf:standard_name  cfsn:tendency_of_air_density ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-3 s-1" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e3bad29a0e056a3f6c7d782cdd1418b0>
+      mrcf:standard_name  cfsn:product_of_eastward_wind_and_geopotential_height ;
+      mrcf:type     "Field" ;
+      mrcf:units    "" ;
+	.
+
+<http://www.metarelate.net/metocean/cf/e1994f3ddbe1b44ceb8f63036abd0940>
+      mrcf:standard_name  cfsn:net_primary_productivity_of_carbon ;
+      mrcf:type     "Field" ;
+      mrcf:units    "kg m-2 s-1" ;
+	.
+

@@ -149,7 +149,7 @@ class FusekiServer(object):
         appending to the relevant ttl files
         remove saveCache flags after saving
         '''
-        maingraph = 'metocean'
+        maingraph = 'metarelate.net'
         for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
             graph = 'http://%s/%s' % (maingraph, subgraph.split('/')[-1])
             save_string = queries.save_cache(self, graph)

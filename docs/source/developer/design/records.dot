@@ -18,9 +18,12 @@ digraph records {
 	label = "<title> CFlink |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units|<cflink>CFlink + "
 	];
 
+	concept [
+	label = "<title> Concept |ID: md5|<format> format |<source> source +"
+	];
 
 	mapping [
-	label = "<title> Mapping |ID: md5 |<target> target +|format |<source> source + |replaces |creation |creator |owner + |watcher + |status |comment |reason "
+	label = "<title> Mapping |ID: md5 |<target> target |<relates> relates |replaces |creation |creator |owner + |watcher + |status |comment |reason "
 
 	];
 
@@ -44,14 +47,15 @@ digraph records {
 
 	release:con -> mapping:title
 
-	mapping:source -> um
+	mapping:relates -> concept:title
 
-	mapping:source -> grib
+	mapping:target -> concept:title
 
-	mapping:source -> cflink:title
+	concept:source -> um
 
-	mapping:target -> mapping:title
+	concept:source -> grib
 
+	concept:source -> cflink:title
 
 	cflink:cflink -> cflink:title 
 

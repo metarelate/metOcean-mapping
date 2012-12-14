@@ -168,7 +168,7 @@ class FusekiServer(object):
         '''
         identify all cached changes in the metocean graph and remove them, reverting the TDB to the same state as the saved ttl files
         '''
-        maingraph = 'metocean'
+        maingraph = 'metarelate.net'
         for ingraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
             graph = 'http://%s/%s' % (maingraph, subgraph)
             revert_string = queries.revert_cache(self, graph)

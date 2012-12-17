@@ -12,7 +12,7 @@ owner
 
 URI:  http://www.metarelate.net/predicates/index.html#owner
 
-Definition:
+Definition: a github user and metarelate collaborator who has joint ownership of a mapping
 
 Label:  owner
 
@@ -22,7 +22,7 @@ watcher
 
 URI:  http://www.metarelate.net/predicates/index.html#watcher
 
-Definition:
+Definition: a github user and metarelate collaborator who monitors a mapping
 
 Label:  watcher
 
@@ -32,7 +32,7 @@ creator
 
 URI:  http://www.metarelate.net/predicates/index.html#creator
 
-Definition:
+Definition: a github user and metarelate collaborator who authored a mapping
 
 Label:  creator
 
@@ -41,26 +41,17 @@ status
 
 URI:  http://www.metarelate.net/predicates/index.html#status
 
-Definition:
+Definition: the status of a mapping: 'Approved', 'Proposed', 'Draft', 'Broken', 'Deprecated'
 
 Label:  status
 
-
-replaces
-----------
-
-URI:  http://www.metarelate.net/predicates/index.html#replaces
-
-Definition:
-
-Label:  replaces
 
 creation
 -----------
 
 URI:  http://www.metarelate.net/predicates/index.html#creation
 
-Definition:
+Definition: A date and time when a mapping was created
 
 Label:  creation
 
@@ -69,7 +60,8 @@ comment
 
 URI:  http://www.metarelate.net/predicates/index.html#comment
 
-Definition:
+Definition: A free text comment about the mapping 
+
 Label:  comment
 
 reason
@@ -81,14 +73,41 @@ Definition:
 
 Label:  reason
 
-linkage
+relates
 --------
 
-URI:  http://www.metarelate.net/predicates/index.html#linkage
+URI:  http://www.metarelate.net/predicates/index.html#relates
 
-Definition:
+Definition: a metarelate concept which is the source of this mapping
 
-Label:  linkage
+Label:  relates
+
+target
+--------
+
+URI:  http://www.metarelate.net/predicates/index.html#target
+
+Definition: a metarelate concept which this mapping points to
+
+Label:  target
+
+source
+--------
+
+URI:  http://www.metarelate.net/predicates/index.html#source
+
+Definition: a format specific metadata definition which is part of the definition of a metarelate concept 
+
+Label:  source
+
+format
+------
+
+URI:  http://www.metarelate.net/predicates/index.html#format
+
+Definition: a data format which metarelate supports 
+
+Label: format
 
 saveCache
 ----------
@@ -133,16 +152,7 @@ Label: retired
 MetaRelate Formats
 ==================
 
-MetaRelate defines a number of format predicates enabling the linking of supported metadata schemes
-
-CFlink
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#CFlink
-
-Definition:
-
-Label:  CFlink
+MetaRelate defines a number of format specific predicates enabling the definition of structured collections within metarelate.
 
 
 .. toctree::
@@ -150,76 +160,3 @@ Label:  CFlink
 
    CF
 
-CFexport
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#CFexport
-
-Definition: A flag to indicate if this relationship is recommended for export to CF
-
-Label:  CFexport
-
-CFimport
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#CFimport
-
-Definition: A flag to indicate if this relationship is recommended for import to CF
-
-Label:  CFimport
-
-
-UMlink
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#UMlink
-
-Definition:
-
-Label:  UMlink
-
-UMexport
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#UMexport
-
-Definition: A flag to indicate if this relationship is recommended for export to UM
-
-Label:  UMexport
-
-UMimport
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#UMimport
-
-Definition: A flag to indicate if this relationship is recommended for import to UM
-
-Label:  UMimport
-
-
-GRIBlink
------------
-
-URI:  http://www.metarelate.net/predicates/index.html#GRIBlink
-
-Definition:
-
-Label:  GRIBlink
-
-GRIBexport
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#GRIBexport
-
-Definition: A flag to indicate if this relationship is recommended for export to GRIB
-
-Label:  GRIBexport
-
-GRIBimport
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#GRIBimport
-
-Definition: A flag to indicate if this relationship is recommended for import to GRIB
-
-Label:  GRIBimport

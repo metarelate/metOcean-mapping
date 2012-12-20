@@ -75,9 +75,37 @@
 
 </form>
 
+{% else %}
+{% if formlist %}
+
+<form action="" method="post">
+
+<table class="recordtable">
+
+{% for form in formlist %}
+<tr>
+<td>
+{% csrf_token %}
+{{ formlist.management_form }}
+
+{{ form.as_table }}
+
+</td>
+
+</tr>
+{% endfor %}
+</table>
+
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="View Selection"/>
+{% endif %}
+
+</form>
+
 
 
 {% endif %}
+
+
 
 
 

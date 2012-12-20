@@ -37,34 +37,9 @@
 {% endfor %}
 {% endif %}
 
-{% if umitems %}
-{% for item in umitems %}
-<li>{{ item }}</li>
-{% endfor %}
-{% endif %}
 
-{% if addum %}
-<li><a href="{{ addum.url }}"> {{ addum.label }} </a></li>
-{% endif %}
-
-{% if cfitems %}
-{% for item in cfitems %}
-<li>{{ item }}</li>
-{% endfor %}
-{% endif %}
-
-{% if addcf %}
-<li><a href="{{ addcf.url }}"> {{ addcf.label }} </a></li>
-{% endif %}
-
-{% if gribitems %}
-{% for item in gribitems %}
-<li>{{ item }}</li>
-{% endfor %}
-{% endif %}
-
-{% if addgrib %}
-<li><a href="{{ addgrib.url }}"> {{ addgrib.label }} </a></li>
+{% if add %}
+<li><a href="{{ add.url }}"> {{ add.label }} </a></li>
 {% endif %}
 
 

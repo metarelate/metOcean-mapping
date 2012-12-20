@@ -6,10 +6,10 @@
 #See the GNU Lesser General Public License for more details. You should have received a copy of the
 #GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/."
 
+@prefix cflink: <http://www.metarelate.net/metOcean/cflink/> .
 @prefix cfsn: <http://def.cfconventions.org/standard_names/> .
 @prefix dc: <http://purl.org/dc/terms/> .
 @prefix github: <https://github.com/> .
-@prefix link: <http://www.metarelate.net/metOcean/linkage/> .
 @prefix map: <http://www.metarelate.net/metOcean/mapping/> .
 @prefix metoc: <http://www.metarelate.net/metOcean/> .
 @prefix moStCon: <http://reference.metoffice.gov.uk/def/um/stash/concept/> .

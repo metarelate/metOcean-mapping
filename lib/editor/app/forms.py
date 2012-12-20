@@ -32,6 +32,46 @@ import metocean.queries as moq
 from settings import READ_ONLY
 from settings import fuseki_process
 
+
+
+
+def get_states():
+
+    STATES = (
+        'Draft',
+        'Proposed',
+        'Approved',
+        'Broken',
+        'Deprecated',
+    )
+    return STATES
+
+def get_reasons():
+
+    REASONS = (
+        'new mapping',
+        'added metadata',
+        'corrected metadata',
+        'linked to new format',
+        'corrected links',
+        'changed status'
+        )
+    return REASONS
+
+class URLwidget(forms.TextInput):
+    def render(self, name, value, attrs=None):
+        if value in ('None', None):
+            tpl = value
+        else:
+            tpl = u'<a href="%s">%s</a>' % (reverse('mapdisplay', 
+                kwargs={'hashval' : value}), "go to replaces")
+        return mark_safe(tpl)
+
+    def clean(self):
+        return self.cleaned_data
+
+
+
 class SearchParam(forms.Form):
     '''
     '''
@@ -59,7 +99,7 @@ class UMParam(forms.Form):
         super(UMParam, self).__init__(*args, **kwargs)
         stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stashconcepts.ttl')
         #define choices
-        choices = [('um;' + stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
+        choices = [(stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
         
 
         self.fields['parameter'].choices = choices
@@ -72,7 +112,7 @@ class GRIBParam(forms.Form):
         super(GRIBParam, self).__init__(*args, **kwargs)
         gribRes = moq.subject_by_graph(fuseki_process, 'http://grib/codesflags.ttl')
         #define choices
-        choices = [('grib;' + grib['subject'], grib['subject']) for grib in gribRes]
+        choices = [(grib['subject'], grib['subject']) for grib in gribRes]
         
 
         self.fields['parameter'].choices = choices
@@ -120,50 +160,12 @@ class CFParam(forms.Form):
             cflink = cfres[0]['s']
         else:
             cflink = ''
-        cleaned_data['parameter'] = 'cf;'+cflink
+        cleaned_data['parameter'] = cflink
         # print 'cflink: ',cflink
         return cleaned_data
         
 
 
-
-
-def get_states():
-
-    STATES = (
-        'Draft',
-        'Proposed',
-        'Approved',
-        'Broken',
-        'Deprecated',
-    )
-    return STATES
-
-def get_reasons():
-
-    REASONS = (
-        'new mapping',
-        'added metadata',
-        'corrected metadata',
-        'linked to new format',
-        'corrected links',
-        'changed status'
-        )
-    return REASONS
-
-
-
-class URLwidget(forms.TextInput):
-    def render(self, name, value, attrs=None):
-        if value in ('None', None):
-            tpl = value
-        else:
-            tpl = u'<a href="%s">%s</a>' % (reverse('mapdisplay', 
-                kwargs={'hashval' : value}), "go to replaces")
-        return mark_safe(tpl)
-
-    def clean(self):
-        return self.cleaned_data
 
 
 class ContactForm(forms.Form):
@@ -198,10 +200,10 @@ class MappingEditForm(forms.Form):
     comment = forms.CharField(max_length=200,required=False)
     last_reason = forms.CharField(max_length=50)
     reason = forms.ChoiceField(choices=[(x,x) for x in get_reasons()])
-    owners = forms.CharField(max_length=200)
+    owners = forms.CharField(max_length=200, required=False)
     add_owners = forms.CharField(max_length=200, required=False)
     remove_owners = forms.CharField(max_length=200, required=False)
-    watchers = forms.CharField(max_length=200)
+    watchers = forms.CharField(max_length=200, required=False)
     add_watchers = forms.CharField(max_length=200, required=False)
     remove_watchers = forms.CharField(max_length=200, required=False)
     replaces = forms.CharField(max_length=128, required=False)
@@ -211,7 +213,9 @@ class MappingEditForm(forms.Form):
 #    umlinks = forms.CharField(max_length=1000, required=False)
 #    griblinks  = forms.CharField(max_length=1000, required=False)
     sources = forms.CharField(max_length=1000, required=False)
+    sources_view = forms.CharField(max_length=1000, required=False)
     targets  = forms.CharField(max_length=1000, required=False)
+    targets_view = forms.CharField(max_length=1000, required=False)
 
     def __init__(self, *args, **kwargs):
         super(MappingEditForm, self).__init__(*args, **kwargs)
@@ -224,17 +228,12 @@ class MappingEditForm(forms.Form):
         self.fields['last_comment'].widget.attrs['readonly'] = True
         self.fields['last_reason'].widget.attrs['readonly'] = True
         #self.fields['replaces'].widget = URLwidget()
+        self.fields['replaces'].widget.attrs['readonly'] = True
         self.fields['mapping'].widget.attrs['readonly'] = True
         self.fields['sources'].widget.attrs['readonly'] = True
         self.fields['targets'].widget.attrs['readonly'] = True
-        #self.fields['linkage'].widget = forms.HiddenInput()
-        #self.fields['cflinks'].widget = forms.HiddenInput()
-        #self.fields['umlinks'].widget = forms.HiddenInput()
-        #self.fields['griblinks'].widget = forms.HiddenInput()
-        #if kwargs.has_key('initial'):
-        #    self.expand_links(kwargs, 'cflinks')
-        #    self.expand_links(kwargs, 'umlinks')
-        #    self.expand_links(kwargs, 'griblinks')
+        self.fields['sources'].widget = forms.HiddenInput()
+        self.fields['targets'].widget = forms.HiddenInput()
 
 
     def clean(self):
@@ -293,5 +292,31 @@ class MappingNewForm(MappingEditForm):
         #    self.expand_links(kwargs, 'cflinks')
         #    self.expand_links(kwargs, 'umlinks')
         #    self.expand_links(kwargs, 'griblinks')
-        
-        
+
+
+class ConceptForm(forms.Form):
+    """Form for the display and selection of concepts"""
+    concept = forms.CharField(max_length=200)
+    sources = forms.CharField(max_length=200)
+    display = forms.BooleanField()
+    def __init__(self, *args, **kwargs):
+       super(ConceptForm, self).__init__(*args, **kwargs)
+       self.fields['concept'].widget.attrs['readonly'] = True
+       self.fields['sources'].widget.attrs['readonly'] = True
+       self.fields['concept'].widget = forms.HiddenInput()
+
+
+class MappingForm(forms.Form):
+    """Form for the display and selection of mappings"""
+    mapping = forms.CharField(max_length=200)
+    source = forms.CharField(max_length=200)
+    target = forms.CharField(max_length=200)
+    display = forms.BooleanField()
+    def __init__(self, *args, **kwargs):
+       super(MappingForm, self).__init__(*args, **kwargs)
+       self.fields['mapping'].widget.attrs['readonly'] = True
+       self.fields['source'].widget.attrs['readonly'] = True
+       self.fields['target'].widget.attrs['readonly'] = True
+#       self.fields['mapping'].widget = forms.HiddenInput()
+
+    

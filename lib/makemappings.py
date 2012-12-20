@@ -162,7 +162,7 @@ with fu.FusekiServer(3131) as fu_p:
                     newlink['target'] = {'mr:target':'<%s>' % concept[0]['concept']}
                 else:
                     raise ValueError('no concept: %s' % newlink['target']) 
-                newlink['target'] = {'mr:target':['<%s>' % cflink[0]['s']]}
+                #newlink['target'] = {'mr:target':['<%s>' % cflink[0]['s']]}
                 concept = moq.get_concept(fu_p, newlink['relates']['mr:relates'])
                 if len(concept) == 1:
                     newlink['relates']['mr:relates'] = '<%s>' % concept[0]['concept']
@@ -186,7 +186,8 @@ with fu.FusekiServer(3131) as fu_p:
         # map_dict['mr:linkage'] = ['<%s>' % linkage[0]['linkage']]
         #else:
         # raise ValueError('create_linkage failed on %s; %i linkages returned' % (newlink['cfl'], len(linkage)))
-        
+#        print map_dict
+#        break
         new_mapping = moq.create_mapping(fu_p, map_dict)
     print 'saving cached changes'
     fu_p.save()

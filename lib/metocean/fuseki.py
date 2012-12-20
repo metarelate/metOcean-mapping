@@ -58,12 +58,13 @@ def process_data(jsondata):
     vars = jdata['head']['vars']
     data = jdata['results']['bindings']
     for item in data:
-        tmplist = {}
+        tmpdict = {}
         for var in vars:
             tmpvar = item.get(var)
             if tmpvar:
-                tmplist[var] = tmpvar.get('value')
-        resultslist.append(tmplist)
+                tmpdict[var] = tmpvar.get('value')
+        if tmpdict != {}:
+            resultslist.append(tmpdict)
     return resultslist
 
 

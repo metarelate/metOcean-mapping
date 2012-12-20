@@ -73,17 +73,17 @@ def search_param(request):
         })
     return render_to_response('form.html', context)
 
-def format_param(request, format):
+def format_param(request, fformat):
     '''
     '''
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     param_list = request_search_path.split('|')
-    if format == 'um':
+    if fformat == 'um':
         Searchform = forms.UMParam
-    elif format == 'cf':
+    elif fformat == 'cf':
         Searchform = forms.CFParam
-    elif format == 'grib':
+    elif fformat == 'grib':
         Searchform = forms.GRIBParam
     else:
         raise NameError("there is no form available for this format type")
@@ -92,7 +92,7 @@ def format_param(request, format):
         if form.is_valid():
             param_list.append(form.cleaned_data['parameter'])
             param_string = '|'.join(param_list).lstrip('|')
-            url = url_with_querystring(reverse('search'),ref=param_string)
+            url = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref=param_string)
             return HttpResponseRedirect(url)
     else:
         form = Searchform()
@@ -103,46 +103,134 @@ def format_param(request, format):
     return render_to_response('form.html', context)
 
 
-def search(request):
-    '''
-    '''
+def search(request, fformat):
+    """Select a set of parameters for a concept search"""
     itemlist = ['Search Parameters:']
-    umitems = []
-    cfitems = []
-    gribitems = []
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    param_list = request_search_path.split('|')
-    for param in param_list:
-        #itemlist.append(param)
-        params = param.split(';')
-        if params[0] == 'um':
-            umitems.append(params[1])
-        elif params[0] == 'cf':
-            cfitems.append(params[1])
-        elif params[0] == 'grib':
-            gribitems.append(params[1])
-    addumurl = url_with_querystring(reverse('format_param', kwargs={'format':'um'}),ref=request_search_path)
-    addum = {'url':addumurl, 'label':'add UM parameter'}
-    addcfurl = url_with_querystring(reverse('format_param', kwargs={'format':'cf'}),ref=request_search_path)
-    addcf = {'url':addcfurl, 'label':'add CF parameter'}
-    addgriburl = url_with_querystring(reverse('format_param', kwargs={'format':'grib'}),ref=request_search_path)
-    addgrib = {'url':addgriburl, 'label':'add GRIB parameter'}
-    searchurl = url_with_querystring(reverse('mapping'),ref=request_search_path)
-    search = {'url':searchurl, 'label':'search'}
-    clear = {'url':reverse('search'), 'label': 'clear'}
+    paramlist = request_search_path.split('|')
+    for param in paramlist:
+        itemlist.append(param)
+    addurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat}),ref=request_search_path)
+    add = {'url':addurl, 'label':'add parameter'}
+    conurl = url_with_querystring(reverse('concepts', kwargs={'fformat':fformat}), ref=request_search_path)
+    concepts = {'url':conurl, 'label':'find concepts'}
     context = RequestContext(request, {
         'itemlist' : itemlist,
-        'umitems': umitems,
-        'addum': addum,
-        'cfitems': cfitems,
-        'addcf': addcf,
-        'gribitems': gribitems,
-        'addgrib':addgrib,
-        'search': search,
-        'clear': clear,
+        'add' : add,
+        'search': concepts,
         })
     return render_to_response('main.html', context)
+
+
+
+def concepts(request, fformat):
+    """returns a view listing all the concepts which match or submatch the search pattern
+    """
+    request_search_path = request.GET.get('ref', '')
+    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    request_search = request_search_path.split('|')
+    if request_search != [u'']:
+        search_path = request_search
+    else:
+        search_path = False#[('','')]
+    ConceptFormSet = formset_factory(forms.ConceptForm, extra=0)
+    if request.method == 'POST': # If the form has been submitted...
+        formlist = ConceptFormSet(data=request.POST)
+        concepts = []
+        if formlist.is_valid():
+            for form in formlist:
+                if form.cleaned_data['display'] is True:
+                    concepts.append(form.cleaned_data['concept'])
+            param_string = '|'.join(concepts)
+            url = url_with_querystring(reverse('mappings'),ref=param_string)
+            return HttpResponseRedirect(url)
+        else:
+            print formlist.errors
+    else:
+        if search_path:
+            sources = ['<%s>' % source for source in search_path]
+            po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
+                   'mr:source':sources}
+        else:
+            po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat}
+        concept_match = moq.get_superset_concept(fuseki_process, po_dict, True)
+        initial_dataset = []
+        con_strs = moq.concept_sources(fuseki_process, concept_match)
+        for con in con_strs:
+            concept = con['concept']
+            sources = con['sources'].split('&')
+            source_view = [source.split('/')[-1] for source in sources]
+            init = {'concept':concept, 'sources': '&'.join(source_view), 'display': True}
+            initial_dataset.append(init)
+        formlist = ConceptFormSet(initial = initial_dataset)
+    context_dict = {
+            'formlist' : formlist,
+            'read_only' : READ_ONLY,
+            }
+    context = RequestContext(request, context_dict)
+    return render_to_response('form.html', context)
+
+def mappings(request):
+    """
+    list mappings which meet reference the concept search criteria
+    by concept by source then target
+    """
+    request_search_path = request.GET.get('ref', '')
+    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    request_search = request_search_path.split('|')
+    if request_search != [u'']:
+        search_path = request_search
+    else:
+        search_path = False#[('','')]
+    MappingFormSet = formset_factory(forms.MappingForm, extra=0)
+    if request.method == 'POST': # If the form has been submitted...
+        formlist = MappingFormSet(data=request.POST)
+        mappings = []
+        if formlist.is_valid():
+            for form in formlist:
+                if form.cleaned_data['display'] is True:
+                    mappings.append(form.cleaned_data['mapping'])
+            param_string = '|'.join(mappings)
+            url = url_with_querystring(reverse('edit_mappings'),ref=param_string)
+            return HttpResponseRedirect(url)
+        else:
+            print formlist.errors
+    else:
+        #print 'request.GET: ', request.GET
+        #print 'request: ', request
+        initial_dataset = []
+        if search_path:
+            concepts = ['<%s>' % source for source in search_path]
+            mappings = moq.mappings_by_concept(fuseki_process, concepts)
+        else:
+            mappings = []
+        for mapping in mappings:
+            source_strs = moq.concept_sources(fuseki_process, [{'concept': mapping['source']}])
+            target_strs = moq.concept_sources(fuseki_process,[{'concept': mapping['target']}])
+            if len(source_strs) != 1 or len(target_strs) != 1:
+                raise ValueError('one and only one source list and target list is required, but not delivered')
+            sources = source_strs[0]['sources'].split('&')
+            if source_strs[0].has_key('cfitems'):
+                source_view = [','.join([ss.split(';')[1].split('/')[-1] for ss in source_strs[0]['cfitems'].split('&')])]
+            else:
+                source_view = [source.split('/')[-1] for source in sources]
+            targets = target_strs[0]['sources'].split('&')
+            if target_strs[0].has_key('cfitems'):
+                target_view = [','.join([ts.split(';')[1].split('/')[-1] for ts in target_strs[0]['cfitems'].split('&')])]
+            else:
+                target_view = [target.split('/')[-1] for target in targets]
+            init = {'mapping':mapping['map'], 'source': '&'.join(source_view), 'target': '&'.join(target_view), 'display': True}
+            initial_dataset.append(init)
+        formlist = MappingFormSet(initial = initial_dataset)
+    context_dict = {
+            'formlist' : formlist,
+            'read_only' : READ_ONLY,
+            }
+    context = RequestContext(request, context_dict)
+    return render_to_response('form.html', context)
+
+    
 
 
 def new_mapping(request):
@@ -161,7 +249,7 @@ def new_mapping(request):
         #print 'linkage: ', linkage
         #should only have 1 res > imposed by queries
         #dataset = linkage[0]
-        dataset = {'mapping': "None"}
+        dataset = {'mapping': ""}
         #dataset[
     else:
         print 'not searching'
@@ -188,13 +276,13 @@ def new_mapping(request):
 
     
 
-def mapping(request):
+def edit_mappings(request):
     '''form view to edit one or more records, retrieved based on a format specific request'''
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     request_search = request_search_path.split('|')
     if request_search != [u'']:
-        search_path = [param.split(';')[1] for param in request_search]
+        search_path = request_search
         #print search_path
     else:
         search_path = False#[('','')]
@@ -205,64 +293,58 @@ def mapping(request):
     if request.method == 'POST':
         formset = MappingFormSet(request.POST)
         if formset.is_valid():
-            process_formset(formset, request)
+            # process formset creates a new mapping record for
+            # each form which has changed and returns the list of
+            # mapping IDs for created and unchanged mappings
+            
+            query_search_path = process_formset(formset, request)
             return HttpResponseRedirect(url_with_querystring(
-                reverse('mapping'), ref=request_search_path))
+                reverse('edit_mappings'), ref=query_search_path))
         else:
             print formset.errors
     else:
-        print 'search_path'
-        print search_path
-        urecordm = moq.mapping_by_link(fuseki_process, search_path)
-        create = False
-        print 'urecordm'
-        print urecordm
-        # if len(urecordm) == 2 and 
-        # elif len(urecordm) > 1:
-        #     warning_msg = (
-        #         '%s Active Data Records with the same search pattern found.' %
-        #         (len(urecordm)))
-        if len(urecordm) == 1 and urecordm[0] == {}:
-            #print 'create active'
-            searchurl = url_with_querystring(reverse('new_mapping'),ref=request_search_path)
-            create = {'url': searchurl}
+        map_records = moq.mapping_by_id(fuseki_process, search_path)
         initial_data_set = []
-        for item in urecordm:
-            data_set = {}
-            mapurl = item.get('map')
-            replacesurl = item.get('replaces')
-            if replacesurl:
-                replaceslabel = replacesurl.split('/')[-1]
-            else:
-                replaceslabel = ''
-            data_set = dict(
-                mapping = item.get('map'),
-#                linkage = item.get('link'),
-                last_edit = item.get('creation'),
-                last_editor = item.get('creator'),
-                current_status = item.get('status'),
-                last_comment = item.get('comment'),
-                last_reason = item.get('reason'),
-                owners = item.get('owners'),
-                watchers = item.get('watchers'),
-                #replaces = mark_safe("%s" % replaceslabel),
-                replaces = replacesurl,
-                sources = item.get('sources'),
-                targets = item.get('targets'),
-                
-#                cflinks = item.get('cflinks'),
-#                umlinks = item.get('umlinks'),
-#                griblinks = item.get('griblinks')
-                )
-            initial_data_set.append(data_set)
+        if len(map_records) > 0:
+            for item in map_records:
+                data_set = {}
+                mapurl = item.get('map')
+                source = item.get('relates')
+                source_view = '&'.join([s.split('/')[-1] for s in item.get('relates_sources').split('&')])
+                if item.get('relates_cfitems') is not None:
+                    #source = item.get('relates_cfitems')
+                    source_view = '&'.join([','.join([ss.split(';')[1].split('/')[-1]
+                                                      for ss in item.get('relates_cfitems').split('&')])])
+                target = item.get('target')
+                target_view = '&'.join([t.split('/')[-1] for t in item.get('target_sources').split('&')])
+                if item.get('target_cfitems') is not None:
+                    #target = item.get('target_cfitems')
+                    target_view = '&'.join([','.join([ss.split(';')[1].split('/')[-1]
+                                                      for ss in item.get('target_cfitems').split('&')])])
+                data_set = dict(
+                    mapping = item.get('map'),
+                    last_edit = item.get('creation'),
+                    last_editor = item.get('creator'),
+                    current_status = item.get('status'),
+                    last_comment = item.get('comment'),
+                    last_reason = item.get('reason'),
+                    owners = item.get('owners'),
+                    watchers = item.get('watchers'),
+                    replaces = item.get('replaces'),
+                    #replaces = mark_safe("%s" % replaceslabel),
+                    #replaces = replacesurl,
+                    sources = source,
+                    sources_view = source_view,
+                    targets = target,
+                    targets_view = target_view,
+                    )
+                initial_data_set.append(data_set)
         formset = MappingFormSet(initial=initial_data_set)
     context_dict = {'viewname' : 'Edit Record',
             'title' : 'Edit Record: %s' % request,
             'formset' : formset,
             'read_only' : READ_ONLY,
             'error' : warning_msg,}
-    if create:
-        context_dict['create'] = create
     context = RequestContext(request, context_dict)
     return render_to_response('form.html', context)
         
@@ -270,8 +352,11 @@ def mapping(request):
 def process_formset(formset,request):
     ''' ingest the new or edit form and pass changes to the SPARQL endpoint query as a dictionary'''
     #for now, assume that the link has not changed, thus mapping record updates only allowed
+    maps = []
     for form in formset:
-        process_form(form, request)
+        maps.append(process_form(form, request))
+    mappings = '|'.join(maps)
+    return mappings
 
 def process_form(form, request):
     globalDateTime = datetime.datetime.now().isoformat()
@@ -283,42 +368,66 @@ def process_form(form, request):
         if form.cleaned_data['add_%ss' % label] != '':
             for val in form.cleaned_data['add_%ss' % label].split(','):
                 mapping_p_o['mr:%s' % label].append('"%s"' % val)
-        if form.cleaned_data['%ss' % label] != 'None':
+        if form.cleaned_data['%ss' % label] != '':
             for val in form.cleaned_data['%ss' % label].split(','):
                 if val not in form.cleaned_data['remove_%ss' % label].split(',') and\
                     val not in mapping_p_o['mr:%s' % label].split(','):
                     mapping_p_o['mr:%s' % label].append('"%s"' % val)
-        if len(mapping_p_o['mr:%s' % label]) == 0:
-            mapping_p_o['mr:%s' % label] = ['"None"']
+        #if len(mapping_p_o['mr:%s' % label]) == 0:
+        #    mapping_p_o['mr:%s' % label] = ['"None"']
 
     mapping_p_o['mr:creator'] = ['<%s>' % form.cleaned_data['editor']]
     if mapping_p_o['mr:creator'] == ['""']:
         mapping_p_o['mr:creator'] = ['"None"']
     mapping_p_o['mr:creation'] = ['"%s"^^xsd:dateTime' % globalDateTime]
     mapping_p_o['mr:status'] = ['"%s"' % form.cleaned_data['next_status']]
-    if form.cleaned_data['mapping'] == "None":
-        mapping_p_o['dc:replaces'] = ['"%s"' % form.cleaned_data['mapping']]
-    else:
+    if form.cleaned_data['mapping'] != "":
         mapping_p_o['dc:replaces'] = ['<%s>' % form.cleaned_data['mapping']]
-    mapping_p_o['mr:comment'] = ['"%s"' % form.cleaned_data.get('comment')]
-    if mapping_p_o['mr:comment'] == ['""']:
-        mapping_p_o['mr:comment'] = ['"None"']
+    if form.cleaned_data['comment'] != '':
+        mapping_p_o['mr:comment'] = ['"%s"' % form.cleaned_data['comment']]
     mapping_p_o['mr:reason'] = ['"%s"' % form.cleaned_data['reason']]
-#    mapping_p_o['mr:linkage'] = ['<%s>' % form.cleaned_data['linkage']]
+    mapping_p_o['mr:relates'] = ['<%s>' % relates for relates in form.cleaned_data['sources'].split('&')]
+    mapping_p_o['mr:target'] = ['<%s>' % target for target in form.cleaned_data['targets'].split('&')]
 
     #check to see if the updated mapping record is simply the last one
-    if mapping_p_o['mr:owner'] == ['"%s"' % form.cleaned_data['owners']] and \
-    mapping_p_o['mr:watcher'] == ['"%s"' % form.cleaned_data['watchers']] and \
-    mapping_p_o['mr:creator'] == ['"%s"' % form.cleaned_data['last_editor']] and \
-    mapping_p_o['mr:status'] == ['"%s"' % form.cleaned_data['current_status']] and \
-    mapping_p_o['mr:comment'] == ['"%s"' % form.cleaned_data.get('last_comment')] and \
-    mapping_p_o['mr:reason'] == ['"%s"' % form.cleaned_data['reason']]:# and \
-#    mapping_p_o['mr:linkage'] == ['<%s>' % form.cleaned_data['linkage']]:
-        changed = False
-    else:
+    changed = False
+    if mapping_p_o.has_key('mr:owner') and \
+        mapping_p_o['mr:owner'] != ['"%s"' % owner for owner in form.cleaned_data['owners'].split(',')]:
         changed = True
+        print 'owner: changed = True'
+    if mapping_p_o.has_key('mr:watcher') and \
+        mapping_p_o['mr:watcher'] != ['"%s"' % watcher for watcher in form.cleaned_data['watchers'].split(',')]:
+        changed = True
+        print 'watcher: changed = True'
+    if mapping_p_o['mr:creator'] != ['"%s"' % form.cleaned_data['last_editor']]:
+        changed = True
+        print 'creator: changed = True'
+    if mapping_p_o['mr:status'] != ['"%s"' % form.cleaned_data['current_status']]:
+        changed = True
+        print 'status: changed = True'
+    if mapping_p_o.has_key('mr:comment') and \
+        mapping_p_o['mr:comment'] != ['"%s"' % form.cleaned_data['comment']]:
+        changed = True
+        print 'comment: changed = True'
+    if mapping_p_o['mr:reason'] != ['"%s"' % form.cleaned_data['reason']]:
+        changed = True
+        print 'reason: changed = True'
+    if mapping_p_o['mr:relates'] != ['"%s"' % form.cleaned_data['sources']]:
+        changed = True
+        print 'relates: changed = True'
+    if mapping_p_o['mr:target'] != ['"%s"' % form.cleaned_data['targets']]:
+        changed = True
+        print 'target: changed = True'
 
+
+    print 'changed: ', changed
+    print mapping_p_o
 
     if changed:
-        res = moq.create_mapping(fuseki_process, mapping_p_o, True)
+        mapping = moq.create_mapping(fuseki_process, mapping_p_o, True)
+    else:
+        mapping = form.cleaned_data['mapping']
+        print 'unchanged'
+
+    return mapping
 

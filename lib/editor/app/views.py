@@ -40,9 +40,21 @@ from settings import READ_ONLY
 from settings import fuseki_process
 
 def home(request):
-    searchurl = url_with_querystring(reverse('search'),ref='')
-    search = {'url':searchurl, 'label':'search for a mapping'}
-    context = RequestContext(request, {'search':search})
+    persist = fuseki_process.query_cache()
+    cache_status = '%i statements in the local triple store are flagged as not existing in the persistent StaticData store' % len(persist)
+    cache_state = moq.print_records(persist)
+    if request.method == 'POST':
+        form = forms.HomeForm(request.POST)
+        if form.is_valid():
+            pass
+    else:
+        form = forms.HomeForm(initial={'cache_status':cache_status, 'cache_state':cache_state})
+    con_dict = {}
+    searchurl = url_with_querystring(reverse('fsearch'),ref='')
+    con_dict['search'] = {'url':searchurl, 'label':'search for mappings'}
+    con_dict['control'] = {'control':'control'}
+    con_dict['form'] = form
+    context = RequestContext(request, con_dict)
     return render_to_response('main.html', context)
 
 
@@ -79,8 +91,10 @@ def format_param(request, fformat):
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     param_list = request_search_path.split('|')
-    if fformat == 'um':
-        Searchform = forms.UMParam
+    if fformat == 'umSTASH':
+        Searchform = forms.UMSTASHParam
+    elif fformat == 'umFC':
+        Searchform = forms.UMFCParam
     elif fformat == 'cf':
         Searchform = forms.CFParam
     elif fformat == 'grib':
@@ -92,6 +106,8 @@ def format_param(request, fformat):
         if form.is_valid():
             param_list.append(form.cleaned_data['parameter'])
             param_string = '|'.join(param_list).lstrip('|')
+            if fformat.startswith('um'):
+                fformat = 'um'
             url = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref=param_string)
             return HttpResponseRedirect(url)
     else:
@@ -103,6 +119,21 @@ def format_param(request, fformat):
     return render_to_response('form.html', context)
 
 
+def fsearch(request):
+    """
+    Select a format
+    """
+    urls = {}
+    formats = ['um', 'cf', 'grib']
+    for form in formats:
+        searchurl = url_with_querystring(reverse('search', kwargs={'fformat':form}),ref='')
+        search = {'url':searchurl, 'label':'search for %s concepts' % form}
+        urls[form] = search
+    context = RequestContext(request, urls)
+    return render_to_response('main.html', context)
+        
+    
+
 def search(request, fformat):
     """Select a set of parameters for a concept search"""
     itemlist = ['Search Parameters:']
@@ -111,22 +142,84 @@ def search(request, fformat):
     paramlist = request_search_path.split('|')
     for param in paramlist:
         itemlist.append(param)
-    addurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat}),ref=request_search_path)
-    add = {'url':addurl, 'label':'add parameter'}
+    con_dict = {'itemlist' : itemlist}
+    if fformat == 'um':
+        stashurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat + 'STASH'}),ref=request_search_path)
+        addstash = {'url':stashurl, 'label': 'add STASH concept'}
+        con_dict['addstash'] = addstash
+        fcurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat + 'FC'}),ref=request_search_path)
+        addfc = {'url':fcurl, 'label': 'add Field Code'}
+        con_dict['addfc'] = addfc
+    else:
+        addurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat}),ref=request_search_path)
+        add = {'url':addurl, 'label':'add parameter'}
+        con_dict['add'] = add
     conurl = url_with_querystring(reverse('concepts', kwargs={'fformat':fformat}), ref=request_search_path)
-    concepts = {'url':conurl, 'label':'find concepts'}
-    context = RequestContext(request, {
-        'itemlist' : itemlist,
-        'add' : add,
-        'search': concepts,
-        })
+    concepts = {'url':conurl, 'label':'find partially matching concepts'}
+    xconurl = url_with_querystring(reverse('concept', kwargs={'fformat':fformat}), ref=request_search_path)
+    xconcepts = {'url':xconurl, 'label':'find exactly matching concepts'}
+    con_dict['search'] = concepts
+    con_dict['exact'] = xconcepts
+    clearurl = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref='')
+    con_dict['clear'] = {'url':clearurl, 'label':'clear parameters'}
+    context = RequestContext(request,con_dict)
     return render_to_response('main.html', context)
 
-
+def concept(request, fformat):
+    """
+    returns a view of the concept exactly matching the search pattern
+    """
+    if fformat == 'grib':
+        fformat = 'grib/2'
+    request_search_path = request.GET.get('ref', '')
+    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    search_path = request_search_path.split('|')
+    sources = ['<%s>' % source for source in search_path]
+    po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
+                'mr:source':sources}
+    context_dict = {}
+    if request.method == 'POST':
+        form = forms.ConceptForm(request.POST)
+        if form.is_valid():
+            #redirect
+            if form.cleaned_data['operation'] == 'create':
+                concept_match = moq.get_concept(fuseki_process, po_dict, create=True)
+            redirect = url_with_querystring(reverse('mappings'), ref=request_search_path)
+            return HttpResponseRedirect(redirect)
+        else:
+            print form.errors
+            
+    else:        
+        concept_match = moq.get_concept(fuseki_process, po_dict, create=False)
+        con_strs = moq.concept_sources(fuseki_process, concept_match)
+        if len(con_strs) == 1:
+            con = con_strs[0]
+            concept = con['concept']
+            sources = con['sources'].split('&')
+            source_view = [source.split('/')[-1] for source in sources]
+            init = {'concept':concept, 'sources': '&'.join(source_view), 'display': True}
+            form = forms.ConceptForm(initial = init)
+            
+        elif len(con_strs) == 0:
+            context_dict['create'] = True
+            source_view = [source.split('/')[-1] for source in search_path]
+            init = {'sources': '&'.join(source_view), 'display': True}
+            form = forms.ConceptForm(initial = init)
+        else:
+            raise ValueError('Two exact matches for concept exist: %s' % search_path) 
+    
+    context_dict['form'] = form
+    context_dict['read_only'] =  READ_ONLY
+            
+    context = RequestContext(request, context_dict)
+    return render_to_response('form.html', context)
+        
 
 def concepts(request, fformat):
     """returns a view listing all the concepts which match or submatch the search pattern
     """
+    if fformat == 'grib':
+        fformat = 'grib/2'
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     request_search = request_search_path.split('|')
@@ -154,7 +247,7 @@ def concepts(request, fformat):
                    'mr:source':sources}
         else:
             po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat}
-        concept_match = moq.get_superset_concept(fuseki_process, po_dict, True)
+        concept_match = moq.get_superset_concept(fuseki_process, po_dict)
         initial_dataset = []
         con_strs = moq.concept_sources(fuseki_process, concept_match)
         for con in con_strs:
@@ -165,15 +258,16 @@ def concepts(request, fformat):
             initial_dataset.append(init)
         formlist = ConceptFormSet(initial = initial_dataset)
     context_dict = {
-            'formlist' : formlist,
-            'read_only' : READ_ONLY,
-            }
+
+        'formlist' : formlist,
+        'read_only' : READ_ONLY,
+        }
     context = RequestContext(request, context_dict)
     return render_to_response('form.html', context)
 
 def mappings(request):
     """
-    list mappings which meet reference the concept search criteria
+    list mappings which reference the concept search criteria
     by concept by source then target
     """
     request_search_path = request.GET.get('ref', '')
@@ -224,9 +318,13 @@ def mappings(request):
             initial_dataset.append(init)
         formlist = MappingFormSet(initial = initial_dataset)
     context_dict = {
-            'formlist' : formlist,
-            'read_only' : READ_ONLY,
-            }
+        'formlist' : formlist,
+        'read_only' : READ_ONLY,
+        }
+    if len(request_search) == 1:
+        create_url = url_with_querystring(reverse('new_mapping'), ref=request_search_path)
+        create = {'url':create_url, 'label':'create a new mapping'}
+        context_dict['create'] = create
     context = RequestContext(request, context_dict)
     return render_to_response('form.html', context)
 
@@ -235,26 +333,30 @@ def mappings(request):
 
 def new_mapping(request):
     '''form view to create a new mapping record'''
+    ## need to implement the functinoality to
+      ##select the other concept
+      ## reverse direction
+      ## make a pair of mirror mappings
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     request_search = request_search_path.split('|')
-    dataset = None
-    if request_search != [u'']:
-        fso_dict = collections.defaultdict(list)
-        print 'searching'
-        search_path = [(param.split(';')[0],param.split(';')[1]) for param in request_search]
-        for elem in search_path:
-            fso_dict['mr:%slink' % (elem[0].upper())].append('<%s>' % elem[1])
-        #linkage = moq.get_linkage(fuseki_process, fso_dict)
-        #print 'linkage: ', linkage
-        #should only have 1 res > imposed by queries
-        #dataset = linkage[0]
-        dataset = {'mapping': ""}
-        #dataset[
-    else:
-        print 'not searching'
-        #redirect to search
-        #search_path = [('','')]
+    # dataset = None
+    # if request_search != [u'']:
+    #     fso_dict = collections.defaultdict(list)
+    #     print 'searching'
+    #     search_path = [(param.split(';')[0],param.split(';')[1]) for param in request_search]
+    #     for elem in search_path:
+    #         fso_dict['mr:%slink' % (elem[0].upper())].append('<%s>' % elem[1])
+    #     #linkage = moq.get_linkage(fuseki_process, fso_dict)
+    #     #print 'linkage: ', linkage
+    #     #should only have 1 res > imposed by queries
+    #     #dataset = linkage[0]
+    #     dataset = {'mapping': ""}
+    #     #dataset[
+    # else:
+    #     print 'not searching'
+    #     #redirect to search
+    #     #search_path = [('','')]
     MapForm = forms.MappingNewForm
     if request.method == 'POST': # If the form has been submitted...
         form = MapForm(request.POST) # A form bound to the POST data

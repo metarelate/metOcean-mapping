@@ -71,6 +71,33 @@ class URLwidget(forms.TextInput):
         return self.cleaned_data
 
 
+class HomeForm(forms.Form):
+    """
+    Form to support the home control panel
+    """
+    cache_status = forms.CharField(max_length=200, 
+                                   widget=forms.TextInput(attrs={'size':'100',
+                                                                 'readonly':True}))
+    cache_state = forms.CharField(required=False,
+                                  widget=forms.Textarea(attrs={'cols':100,
+                                                               'rows':50,
+                                                               'readonly':True}))
+
+    def clean(self):
+        #print 'home submitted'
+        if self.data.has_key('load'):
+            print 'data loaded'
+            fuseki_process.load()
+        elif self.data.has_key('revert'):
+            print 'save cache reverted'
+            fuseki_process.revert()
+        elif self.data.has_key('save'):
+            print  'cached changes saved'
+        elif self.data.has_key('validate'):
+            print 'validate'
+        #print self.cleaned_data
+        return self.cleaned_data
+
 
 class SearchParam(forms.Form):
     '''
@@ -91,18 +118,32 @@ class SearchParam(forms.Form):
     # def clean(self):
     #     return self.cleaned_data
 
-class UMParam(forms.Form):
-    '''A django form for adding UM elements to a linkage search path
+class UMSTASHParam(forms.Form):
+    '''A django form for adding UM STASH elements to a linkage search path
     '''
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
-        super(UMParam, self).__init__(*args, **kwargs)
+        super(UMSTASHParam, self).__init__(*args, **kwargs)
         stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stashconcepts.ttl')
         #define choices
         choices = [(stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
         
 
         self.fields['parameter'].choices = choices
+
+class UMFCParam(forms.Form):
+    '''A django form for adding UM STASH elements to a linkage search path
+    '''
+    parameter = forms.ChoiceField()
+    def __init__(self,  *args, **kwargs):
+        super(UMFCParam, self).__init__(*args, **kwargs)
+        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/fieldcode.ttl')
+        #define choices
+        choices = [(stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
+        
+
+        self.fields['parameter'].choices = choices
+
 
 class GRIBParam(forms.Form):
     '''A django form for adding GRIB elements to a linkage search path
@@ -209,9 +250,6 @@ class MappingEditForm(forms.Form):
     replaces = forms.CharField(max_length=128, required=False)
     current_status = forms.CharField(max_length=15)
     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()])
-#    cflinks = forms.CharField(max_length=1000, required=False)
-#    umlinks = forms.CharField(max_length=1000, required=False)
-#    griblinks  = forms.CharField(max_length=1000, required=False)
     sources = forms.CharField(max_length=1000, required=False)
     sources_view = forms.CharField(max_length=1000, required=False)
     targets  = forms.CharField(max_length=1000, required=False)
@@ -296,14 +334,22 @@ class MappingNewForm(MappingEditForm):
 
 class ConceptForm(forms.Form):
     """Form for the display and selection of concepts"""
-    concept = forms.CharField(max_length=200)
+    concept = forms.CharField(max_length=200, required=False)
     sources = forms.CharField(max_length=200)
-    display = forms.BooleanField()
+    display = forms.BooleanField(required=False)
     def __init__(self, *args, **kwargs):
        super(ConceptForm, self).__init__(*args, **kwargs)
        self.fields['concept'].widget.attrs['readonly'] = True
        self.fields['sources'].widget.attrs['readonly'] = True
        self.fields['concept'].widget = forms.HiddenInput()
+    def clean(self):
+        if self.data.has_key('create'):
+            self.cleaned_data['operation'] = 'create'
+            #make one
+        elif self.data.has_key('search'):
+            self.cleaned_data['operation'] = 'search'
+        
+        return self.cleaned_data
 
 
 class MappingForm(forms.Form):
@@ -311,7 +357,7 @@ class MappingForm(forms.Form):
     mapping = forms.CharField(max_length=200)
     source = forms.CharField(max_length=200)
     target = forms.CharField(max_length=200)
-    display = forms.BooleanField()
+    display = forms.BooleanField(required=False)
     def __init__(self, *args, **kwargs):
        super(MappingForm, self).__init__(*args, **kwargs)
        self.fields['mapping'].widget.attrs['readonly'] = True

@@ -31,6 +31,7 @@
 
 {% block content %}
 
+
 {% if form %}
 <form action="" method="post">
 
@@ -41,7 +42,17 @@
 </table>
 
 
-<input class="recordbutton" type="submit" value="Submit" />
+
+
+{% if create %}
+<p>
+This concept does not exist.  You can create it.
+<p>
+
+<input class="recordbutton" type="submit" value="Create" name="create"/>
+{% else %}
+<input class="recordbutton" type="submit" value="Submit" name="search"/>
+{% endif %}
 
 </form>
 
@@ -61,6 +72,8 @@
 {{ formset.management_form }}
 <table class="recordtable">
 {{ form.as_table }}
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Change Source" name="Change Source"/>
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Change Target" name="Change Target"/>
 </table>
 </td>
 {% endfor %}
@@ -70,13 +83,19 @@
 {% if create %}
 <li><a href="{{ create.url }}"> Create this mapping </a>  </li>
 {% else %}
-<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Update"/>
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Update" name="submit edits"/>
 {% endif %}
 
 </form>
 
 {% else %}
 {% if formlist %}
+
+{% if create %}
+
+<a href="{{ create.url }}">Create a new mapping with this concept</a>
+
+{% endif %}
 
 <form action="" method="post">
 

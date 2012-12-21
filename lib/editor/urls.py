@@ -11,9 +11,11 @@ urlpatterns = patterns('',
     url(r'^searchparam/(?P<fformat>[^/]+)/$', 'editor.app.views.format_param', name='format_param'),
     url(r'^mappings/$', 'editor.app.views.mappings', name='mappings'),
     url(r'^edit_mappings/$', 'editor.app.views.edit_mappings', name='edit_mappings'),
+    url(r'^fsearch/$', 'editor.app.views.fsearch', name='fsearch'),
     url(r'^search/(?P<fformat>[^/]+)/$', 'editor.app.views.search', name='search'),
-    url(r'^newmap/$', 'editor.app.views.new_mapping', name='new_mapping'),
+    url(r'^new_mapping/$', 'editor.app.views.new_mapping', name='new_mapping'),
     url(r'^concepts/(?P<fformat>[^/]+)/$', 'editor.app.views.concepts', name='concepts'),
+    url(r'^concept/(?P<fformat>[^/]+)/$', 'editor.app.views.concept', name='concept'),
     # url(r'^editor/', include('editor.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

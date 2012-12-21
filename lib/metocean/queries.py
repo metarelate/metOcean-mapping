@@ -606,7 +606,7 @@ def get_superset_concept(fuseki_process, po_dict, debug=False):
     return results
 
 
-def get_concept(fuseki_process, po_dict, debug=False):
+def get_concept(fuseki_process, po_dict, debug=False, create=True):
     """
     return the concept which matches the predicate object
     dictionary exactly
@@ -646,7 +646,7 @@ def get_concept(fuseki_process, po_dict, debug=False):
         ''' % (n_sources, search_string)
         results = fuseki_process.run_query(qstr, debug=debug)
         #if len(results) == 1 and results[0] == {}:
-        if len(results) == 0:
+        if len(results) == 0 and create:
             md5 = make_hash(po_dict)
             instr = '''INSERT DATA
             { GRAPH <http://metarelate.net/concepts.ttl> {
@@ -781,7 +781,7 @@ def get_contacts(fuseki_process, register, debug=False):
     qstr = '''
     SELECT ?s
     WHERE
-    { GRAPH <http://contacts/contacts.ttl> {
+    { GRAPH <http://metarelate.net/contacts.ttl> {
         ?s skos:member ?register .
            OPTIONAL{
                ?s mr:retired ?retired}
@@ -799,7 +799,7 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
     '''
     qstr = '''
     INSERT DATA
-    { GRAPH <http://contacts/contacts.ttl> {
+    { GRAPH <http://metarelate.net/contacts.ttl> {
     %s a mr:contact ;
     iso19135:definedInRegister %s ;
     mr:creation "%s"^^xsd:dateTime .
@@ -814,7 +814,16 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
 
 def print_records(res):
     ''' helper for command line query interpretation'''
+    print_string = ''
     for r in res:
-        for k,v in r.iteritems():
-            print k, '  ', v
+        if len(r.keys()) == 3 and r.has_key('s') and r.has_key('p') and r.has_key('o'):
+            print_string += '%s\n' % r['s']
+            print_string += '\t%s\n' % r['p']
+            print_string += '\t\t%s\n' % r['o']
+            print_string += '\n'
+        else:
+            for k,v in r.iteritems():
+                print_string += '%s %s\n' (k, v)
+            print_string += '\n'
+    return print_string
 

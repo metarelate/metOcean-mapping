@@ -87,7 +87,7 @@ target
 
 URI:  http://www.metarelate.net/predicates/index.html#target
 
-Definition: a metarelate concept which this mapping points to
+Definition: a metarelate concept which this mapping relates to
 
 Label:  target
 
@@ -96,7 +96,7 @@ source
 
 URI:  http://www.metarelate.net/predicates/index.html#source
 
-Definition: a format specific metadata definition which is part of the definition of a metarelate concept 
+Definition: a metarelate concept which this mapping relates from 
 
 Label:  source
 
@@ -108,6 +108,15 @@ URI:  http://www.metarelate.net/predicates/index.html#format
 Definition: a data format which metarelate supports 
 
 Label: format
+
+component
+---------
+
+URI: http://www.metarelate.net/predicates/index.html#component
+
+Definition: a format specific metadata definition which is part of the definition of a metarelate concept 
+
+Label: component
 
 saveCache
 ----------

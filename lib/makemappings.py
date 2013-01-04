@@ -58,7 +58,7 @@ for fc,cf in umcf.LBFC_TO_CF.iteritems():
 #    if umcf.CF_TO_LBFC.has_key(cf) and umcf.CF_TO_LBFC[cf] == fc:
 #        adict['rootA'] = {'mr:rootA':['<%s%i>' % (fcuri,fc)]}
 #    else:
-    adict['relates'] = {'mr:relates':{'mr:source':'<%s%i>' % (fcuri,fc), 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
+    adict['source'] = {'mr:source':{'mr:component':'<%s%i>' % (fcuri,fc), 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
     adict['target'] = 'cfl'
     linkages.append(adict)
 
@@ -66,15 +66,15 @@ for cf,fc in umcf.CF_TO_LBFC.iteritems():
 #    if not (umcf.LBFC_TO_CF.has_key(fc) and umcf.LBFC_TO_CF[fc] == cf):
     adict = {}
     adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
-    adict['relates'] = {'mr:relates':{'mr:source':'<%s%i>' % (fcuri,fc), 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
-    adict['target'] = 'cfl'
+    adict['target'] = {'mr:target':{'mr:component':'<%s%i>' % (fcuri,fc), 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
+    adict['source'] = 'cfl'
     linkages.append(adict)
 
 
 
 for stash,cf in umcfdict.iteritems():
     adict = {}
-    adict['relates'] = {'mr:relates':{'mr:source':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % stash,'mr:format':'<http://metarelate.net/metocean/format/um>'}}
+    adict['source'] = {'mr:source':{'mr:component':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % stash,'mr:format':'<http://metarelate.net/metocean/format/um>'}}
     adict['target'] = 'cfl'
     adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
     linkages.append(adict)
@@ -85,24 +85,24 @@ for sn,gribcf in gribParams.iteritems():
     adict = {}
     adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % gribcf['standard_name'], 'mrcf:units':'"%s"' % gribcf['units'], 'mrcf:type':'"Field"'}
     adict['target'] = 'cfl'
-    adict['relates'] = {'mr:relates':{'mr:source':'<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber']),'mr:format':'<http://metarelate.net/metocean/format/grib/2>'}}
+    adict['source'] = {'mr:source':{'mr:component':'<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber']),'mr:format':'<http://metarelate.net/metocean/format/grib/2>'}}
     linkages.append(adict)
     adict = {}
     adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % gribcf['standard_name'], 'mrcf:units':'"%s"' % gribcf['units'], 'mrcf:type':'"Field"'}
-    adict['relates'] = 'cfl'
-    adict['target'] = {'mr:target':{'mr:source':'<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber']),'mr:format':'<http://metarelate.net/metocean/format/grib/2>'}}
+    adict['source'] = 'cfl'
+    adict['target'] = {'mr:target':{'mr:component':'<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber']),'mr:format':'<http://metarelate.net/metocean/format/grib/2>'}}
     linkages.append(adict)
     
 
 adict = {}
 adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % 'eastward_wind', 'mrcf:units':'"%s"' % 'm s-1'}
-adict['relates'] = {'mr:relates':{'mr:source':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i002', 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
+adict['source'] = {'mr:source':{'mr:component':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i002', 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
 adict['target'] = 'cfl'
 linkages.append(adict)
 
 adict = {}
 adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % 'northward_wind', 'mrcf:units':'"%s"' % 'm s-1'}
-adict['relates'] = {'mr:relates':{'mr:source':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i003', 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
+adict['source'] = {'mr:source':{'mr:component':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i003', 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
 adict['target'] = 'cfl'
 linkages.append(adict)
 
@@ -125,9 +125,10 @@ ttl_str = '''#(C) British Crown Copyright 2011 - 2012, Met Office This file is p
 pre = prefixes.Prefixes()
 
 for st_file in glob.glob('/net/home/h04/itmh/metarelate/metOcean-mapping/staticData/metarelate.net/*.ttl'):
-    with open(st_file, 'w') as st:
-        st.write(ttl_str)
-        st.write(pre.turtle)
+    if st_file.split('/')[-1] != 'contacts.ttl':
+        with open(st_file, 'w') as st:
+            st.write(ttl_str)
+            st.write(pre.turtle)
 
 
 globalDateTime = datetime.datetime.now().isoformat()
@@ -145,29 +146,29 @@ with fu.FusekiServer(3131) as fu_p:
     for newlink in linkages:
         cflink = moq.create_cflink(fu_p, newlink['cfl'], 'http://www.metarelate.net/metocean/cf')
         if len(cflink) == 1:
-            if newlink['relates'] == 'cfl':
-                concept = moq.get_concept(fu_p,{'mr:source':['<%s>' % cflink[0]['s']], 'mr:format':'<http://metarelate.net/metocean/format/cf>'})
+            if newlink['source'] == 'cfl':
+                concept = moq.get_concept(fu_p,{'mr:component':['<%s>' % cflink[0]['s']], 'mr:format':'<http://metarelate.net/metocean/format/cf>'})
                 if len(concept) == 1:
-                    newlink['relates'] = {'mr:relates':'<%s>' % concept[0]['concept']}
+                    newlink['source'] = {'mr:source':'<%s>' % concept[0]['concept']}
                 else:
-                    raise ValueError('no concept: %s' % newlink['relates']) 
+                    raise ValueError('no concept: %s' % newlink['source']) 
                 concept = moq.get_concept(fu_p, newlink['target']['mr:target'])
                 if len(concept) == 1:
                     newlink['target']['mr:target'] = '<%s>' % concept[0]['concept']
                 else:
                     raise ValueError('no concept: %s' % newlink['target']['mr:target'])
             elif newlink['target'] == 'cfl':
-                concept = moq.get_concept(fu_p,{'mr:source':['<%s>' % cflink[0]['s']], 'mr:format':'<http://metarelate.net/metocean/format/cf>'})
+                concept = moq.get_concept(fu_p,{'mr:component':['<%s>' % cflink[0]['s']], 'mr:format':'<http://metarelate.net/metocean/format/cf>'})
                 if len(concept) == 1:
                     newlink['target'] = {'mr:target':'<%s>' % concept[0]['concept']}
                 else:
                     raise ValueError('no concept: %s' % newlink['target']) 
                 #newlink['target'] = {'mr:target':['<%s>' % cflink[0]['s']]}
-                concept = moq.get_concept(fu_p, newlink['relates']['mr:relates'])
+                concept = moq.get_concept(fu_p, newlink['source']['mr:source'])
                 if len(concept) == 1:
-                    newlink['relates']['mr:relates'] = '<%s>' % concept[0]['concept']
+                    newlink['source']['mr:source'] = '<%s>' % concept[0]['concept']
                 else:
-                    raise ValueError('no concept: %s' % newlink['relates']['mr:relates'])
+                    raise ValueError('no concept: %s' % newlink['source']['mr:source'])
             else:
                 print newlink
                 raise ValueError('no cflink')
@@ -180,7 +181,7 @@ with fu.FusekiServer(3131) as fu_p:
 # linkage_dict = dict(linkage_dict, **newlink[key])
         #linkage = moq.get_linkage(fu_p, linkage_dict)
         map_dict = mapping_p_o.copy()
-        map_dict = dict(map_dict, **newlink['relates'])
+        map_dict = dict(map_dict, **newlink['source'])
         map_dict = dict(map_dict, **newlink['target'])
         #if len(linkage) == 1:
         # map_dict['mr:linkage'] = ['<%s>' % linkage[0]['linkage']]

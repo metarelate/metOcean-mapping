@@ -335,12 +335,12 @@ class MappingNewForm(MappingEditForm):
 class ConceptForm(forms.Form):
     """Form for the display and selection of concepts"""
     concept = forms.CharField(max_length=200, required=False)
-    sources = forms.CharField(max_length=200)
+    components = forms.CharField(max_length=200)
     display = forms.BooleanField(required=False)
     def __init__(self, *args, **kwargs):
        super(ConceptForm, self).__init__(*args, **kwargs)
        self.fields['concept'].widget.attrs['readonly'] = True
-       self.fields['sources'].widget.attrs['readonly'] = True
+       self.fields['components'].widget.attrs['readonly'] = True
        self.fields['concept'].widget = forms.HiddenInput()
     def clean(self):
         if self.data.has_key('create'):

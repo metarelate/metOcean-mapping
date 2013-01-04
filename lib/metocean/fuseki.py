@@ -154,8 +154,6 @@ class FusekiServer(object):
         for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
             graph = 'http://%s/%s' % (maingraph, subgraph.split('/')[-1])
             save_string = queries.save_cache(self, graph)
-            #print save_string
-            #print subgraph
             with open(subgraph, 'a') as sg:
                 for line in save_string.splitlines():
                     if not line.startswith('@prefix'):
@@ -205,6 +203,25 @@ class FusekiServer(object):
                             '--graph=http://%s%s' % (graph,subgraph), '--loc=%s'% TDB, infile]
                 print space.join(loadCall)
                 subprocess.check_call(loadCall)
+
+    def retrieve_mappings(self, source_format, target_format, nsources=None, ntargets=None, source_prefix=None, target_prefix=None):
+        """return the format specific mappings for a particular source and target format
+        """
+        source_concepts = queries.get_concepts_by_format(self, source_format,
+                                                     source_prefix, nsources)
+        sc = ['<%s>' % sc['concept'] for sc in source_concepts]
+        target_concepts = queries.get_concepts_by_format(self, target_format,
+                                                     target_prefix, ntargets)
+        tc = ['<%s>' % tc['concept'] for tc in target_concepts]
+        st_mappings = queries.mappings_by_ordered_concept(self, sc, tc)
+        mappings = [st['map'] for st in st_mappings]
+        if len(mappings) == 0:
+            st_maps = []
+        else:
+            st_maps = queries.mapping_by_id(self, mappings)
+        return st_maps
+
+
 
 
 

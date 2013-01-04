@@ -174,9 +174,9 @@ def concept(request, fformat):
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     search_path = request_search_path.split('|')
-    sources = ['<%s>' % source for source in search_path]
+    components = ['<%s>' % component for component in search_path]
     po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
-                'mr:source':sources}
+                'mr:component':components}
     context_dict = {}
     if request.method == 'POST':
         form = forms.ConceptForm(request.POST)
@@ -191,19 +191,19 @@ def concept(request, fformat):
             
     else:        
         concept_match = moq.get_concept(fuseki_process, po_dict, create=False)
-        con_strs = moq.concept_sources(fuseki_process, concept_match)
+        con_strs = moq.concept_components(fuseki_process, concept_match)
         if len(con_strs) == 1:
             con = con_strs[0]
             concept = con['concept']
-            sources = con['sources'].split('&')
-            source_view = [source.split('/')[-1] for source in sources]
-            init = {'concept':concept, 'sources': '&'.join(source_view), 'display': True}
+            components = con['components'].split('&')
+            component_view = [component.split('/')[-1] for component in components]
+            init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
             form = forms.ConceptForm(initial = init)
             
         elif len(con_strs) == 0:
             context_dict['create'] = True
-            source_view = [source.split('/')[-1] for source in search_path]
-            init = {'sources': '&'.join(source_view), 'display': True}
+            component_view = [component.split('/')[-1] for component in search_path]
+            init = {'components': '&'.join(component_view), 'display': True}
             form = forms.ConceptForm(initial = init)
         else:
             raise ValueError('Two exact matches for concept exist: %s' % search_path) 
@@ -242,19 +242,19 @@ def concepts(request, fformat):
             print formlist.errors
     else:
         if search_path:
-            sources = ['<%s>' % source for source in search_path]
+            components = ['<%s>' % component for component in search_path]
             po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
-                   'mr:source':sources}
+                   'mr:component':components}
         else:
             po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat}
         concept_match = moq.get_superset_concept(fuseki_process, po_dict)
         initial_dataset = []
-        con_strs = moq.concept_sources(fuseki_process, concept_match)
+        con_strs = moq.concept_components(fuseki_process, concept_match)
         for con in con_strs:
             concept = con['concept']
-            sources = con['sources'].split('&')
-            source_view = [source.split('/')[-1] for source in sources]
-            init = {'concept':concept, 'sources': '&'.join(source_view), 'display': True}
+            components = con['components'].split('&')
+            component_view = [component.split('/')[-1] for component in components]
+            init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
             initial_dataset.append(init)
         formlist = ConceptFormSet(initial = initial_dataset)
     context_dict = {
@@ -300,16 +300,16 @@ def mappings(request):
         else:
             mappings = []
         for mapping in mappings:
-            source_strs = moq.concept_sources(fuseki_process, [{'concept': mapping['source']}])
-            target_strs = moq.concept_sources(fuseki_process,[{'concept': mapping['target']}])
+            source_strs = moq.concept_components(fuseki_process, [{'concept': mapping['source']}])
+            target_strs = moq.concept_components(fuseki_process,[{'concept': mapping['target']}])
             if len(source_strs) != 1 or len(target_strs) != 1:
                 raise ValueError('one and only one source list and target list is required, but not delivered')
-            sources = source_strs[0]['sources'].split('&')
+            sources = source_strs[0]['components'].split('&')
             if source_strs[0].has_key('cfitems'):
                 source_view = [','.join([ss.split(';')[1].split('/')[-1] for ss in source_strs[0]['cfitems'].split('&')])]
             else:
                 source_view = [source.split('/')[-1] for source in sources]
-            targets = target_strs[0]['sources'].split('&')
+            targets = target_strs[0]['components'].split('&')
             if target_strs[0].has_key('cfitems'):
                 target_view = [','.join([ts.split(';')[1].split('/')[-1] for ts in target_strs[0]['cfitems'].split('&')])]
             else:
@@ -411,18 +411,26 @@ def edit_mappings(request):
             for item in map_records:
                 data_set = {}
                 mapurl = item.get('map')
-                source = item.get('relates')
-                source_view = '&'.join([s.split('/')[-1] for s in item.get('relates_sources').split('&')])
-                if item.get('relates_cfitems') is not None:
+                source = item.get('source')
+                if item.get('source_cfitems') is not None:
                     #source = item.get('relates_cfitems')
-                    source_view = '&'.join([','.join([ss.split(';')[1].split('/')[-1]
-                                                      for ss in item.get('relates_cfitems').split('&')])])
+                    source_view = ''
+                    cftargets = item.get('source_cfitems').split('&')
+                    for cft in cftargets:
+                        source_view = '|'.join([','.join([ss.split(';')[1].split('/')[-1]
+                                                      for ss in item.get('source_cfitems').split('|')])])
+                else:
+                    source_view = '&'.join([s.split('/')[-1] for s in item.get('source_comps').split('&')])
                 target = item.get('target')
-                target_view = '&'.join([t.split('/')[-1] for t in item.get('target_sources').split('&')])
                 if item.get('target_cfitems') is not None:
                     #target = item.get('target_cfitems')
-                    target_view = '&'.join([','.join([ss.split(';')[1].split('/')[-1]
-                                                      for ss in item.get('target_cfitems').split('&')])])
+                    cftargets = item.get('target_cfitems').split('&')
+                    target_view = ''
+                    for cft in cftargets:
+                        target_view += '|'.join([','.join([ss.split(';')[1].split('/')[-1]
+                                                          for ss in cft.split('|')])])
+                else:
+                    target_view = '&'.join([t.split('/')[-1] for t in item.get('target_comps').split('&')])
                 data_set = dict(
                     mapping = item.get('map'),
                     last_edit = item.get('creation'),

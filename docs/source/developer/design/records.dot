@@ -15,16 +15,16 @@ digraph records {
 ## class definitions
 
    	cflink [
-	label = "<title> CFlink |<cflink>cflink + |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units"
+	label = "<title> CFlink |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units"
 	];
 
 	concept [
-	label = "<title> Concept |ID: md5|<format> format |<source> source +"
+	label = "<title> Concept |ID: md5|<format> format |<component> component +"
 	];
 
 	mapping [
 
-	label = "<title> Mapping |ID: md5 |<target> target |<relates> relates |replaces |creation |creator |owner + |watcher + |status |comment |reason "
+	label = "<title> Mapping |ID: md5 |<target> target |<source> source |replaces |creation |creator |owner + |watcher + |status |comment |reason "
 
 	];
 
@@ -50,16 +50,14 @@ digraph records {
 
 	release:con -> mapping:title
 
-	mapping:relates -> concept:title
+	mapping:source -> concept:title
 
 	mapping:target -> concept:title
 
-	concept:source -> um
+	concept:component -> um
 
-	concept:source -> grib
+	concept:component -> grib
 
-	concept:source -> cflink:title
-
-	cflink:cflink -> cflink:title 
+	concept:component -> cflink:title
 
 }

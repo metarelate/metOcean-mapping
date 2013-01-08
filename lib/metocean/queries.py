@@ -819,8 +819,8 @@ def mapping_by_id(fuseki_process, mappings=None, debug=False):
        ?target_format
        (GROUP_CONCAT(DISTINCT(?target_comp); SEPARATOR = "&") AS ?target_comps)
        (GROUP_CONCAT(DISTINCT(?targetcfitems); SEPARATOR = "&") AS ?target_cfitems)
-        WHERE
-         { GRAPH <http://metarelate.net/mappings.ttl> {
+       WHERE
+       { GRAPH <http://metarelate.net/mappings.ttl> {
            ?map mr:creator ?creator ;
                 mr:creation ?creation ;
                 mr:status ?status ;
@@ -851,7 +851,7 @@ def mapping_by_id(fuseki_process, mappings=None, debug=False):
            ?target_comp ?cfp ?cfo .
            BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?targetcfitem) } }
            GROUP BY ?target_comp }
-        }
+           }
         GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?source ?source_format ?target ?target_format
     ''' % (search_string)
     results = fuseki_process.run_query(qstr, debug=debug)
@@ -891,9 +891,42 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
-    
-        
-    
+###validation rules
+
+def multiple_mappings(fuseki_process, debug=False):
+    """returns all the mappings which map the same source to a different target"""
+    qstr = '''SELECT ?amap ?asource ?atarget ?bmap ?bsource ?btarget
+    WHERE {
+    GRAPH <http://metarelate.net/mappings.ttl> {
+    ?amap mr:status ?astatus ;
+         mr:source ?asource ;
+         mr:target ?atarget .
+    FILTER (?astatus NOT IN ("Deprecated", "Broken"))
+    MINUS {?amap ^dc:replaces+ ?anothermap}
+    }
+    GRAPH <http://metarelate.net/mappings.ttl> {
+    ?bmap mr:status ?bstatus ;
+         mr:source ?bsource ;
+         mr:target ?btarget .
+    FILTER (?bstatus NOT IN ("Deprecated", "Broken"))
+    MINUS {?bmap ^dc:replaces+ ?anothermap}
+    }
+    GRAPH <http://metarelate.net/concepts.ttl> {
+    ?asource mr:format ?asourceformat .
+    ?bsource mr:format ?bsourceformat .
+    ?atarget mr:format ?atargetformat .
+    ?btarget mr:format ?btargetformat .
+    }
+    filter (?amap != ?bmap)
+    filter (?asource = ?bsource)
+    filter (?atarget != ?btarget)
+    filter (?atargetformat = ?btargetformat)
+    }
+    ORDER BY ?asource
+    '''
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
 
 def print_records(res):
     """ helper for command line query interpretation"""

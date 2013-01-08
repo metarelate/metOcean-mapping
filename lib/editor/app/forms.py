@@ -94,7 +94,8 @@ class HomeForm(forms.Form):
         elif self.data.has_key('save'):
             print  'cached changes saved'
         elif self.data.has_key('validate'):
-            print 'validate'
+            print 'validate triplestore'
+            self.cleaned_data['validation'] = fuseki_process.validate()
         #print self.cleaned_data
         return self.cleaned_data
 

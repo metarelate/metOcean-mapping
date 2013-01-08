@@ -222,6 +222,14 @@ class FusekiServer(object):
         return st_maps
 
 
+    def validate(self):
+        """run the validation queries"""
+        failures = {}
+        mm_string = 'The following mappings are ambiguous, providing multiple targets in the same format for a particular source'
+        failures[mm_string] = queries.multiple_mappings(self)
+        return failures
+
+
 
 
 

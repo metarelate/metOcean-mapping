@@ -39,6 +39,17 @@ import metocean.queries as moq
 from settings import READ_ONLY
 from settings import fuseki_process
 
+def cfitems_str(cfitems):
+    """view the collection of cfitems as a single string
+    remove all url encoding from the elements"""
+    print 'cfitems: ', cfitems
+    items = cfitems.split('&')
+    items = [i.split('|') for i in items]
+    items = [[j.split(';')[0].split('#')[-1] +';' + j.split(';')[1].split('/')[-1] for j in i] for i in items]
+    cfi = '&'.join(['|'.join(elem) for elem in items])
+    return cfi
+    
+
 def home(request):
     persist = fuseki_process.query_cache()
     cache_status = '%i statements in the local triple store are flagged as not existing in the persistent StaticData store' % len(persist)
@@ -46,7 +57,17 @@ def home(request):
     if request.method == 'POST':
         form = forms.HomeForm(request.POST)
         if form.is_valid():
-            pass
+            invalids = form.cleaned_data.get('validation')
+            if invalids:
+                for key in invalids:
+                    invalids[key] = '|'.join([inv['amap'] for inv in invalids[key]])
+                #request_string = '&'.join(['%s;%sd' % (key, invalids[key])  for key in invalids[key]])
+                request_string = '|'.join([invalids[key] for key in invalids])
+                print request_string
+                url = url_with_querystring(reverse('invalid_mappings'),ref=request_string)
+                return HttpResponseRedirect(url)
+                
+                
     else:
         form = forms.HomeForm(initial={'cache_status':cache_status, 'cache_state':cache_state})
     con_dict = {}
@@ -57,6 +78,55 @@ def home(request):
     context = RequestContext(request, con_dict)
     return render_to_response('main.html', context)
 
+def invalid_mappings(request):
+    """
+    list mappings which reference the concept search criteria
+    by concept by source then target
+    """
+    request_search_path = request.GET.get('ref', '')
+    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    request_search = request_search_path.split('|')
+    if request_search != [u'']:
+        search_path = request_search
+    else:
+        search_path = False#[('','')]
+    MappingFormSet = formset_factory(forms.MappingForm, extra=0)
+    if request.method == 'POST': # If the form has been submitted...
+        formlist = MappingFormSet(data=request.POST)
+        mappings = []
+        if formlist.is_valid():
+            for form in formlist:
+                if form.cleaned_data['display'] is True:
+                    mappings.append(form.cleaned_data['mapping'])
+            param_string = '|'.join(mappings)
+            url = url_with_querystring(reverse('edit_mappings'),ref=param_string)
+            return HttpResponseRedirect(url)
+        else:
+            print formlist.errors
+    else:
+        initial_dataset = []
+        if search_path:
+            mappings = moq.mapping_by_id(fuseki_process, search_path)
+        else:
+            mappings = []
+        for mapping in mappings:
+            sources = mapping['source_comps'].split('&')
+            targets = mapping['target_comps'].split('&')
+            source_view = '&'.join([source.split('/')[-1] for source in sources])
+            target_view = '&'.join([target.split('/')[-1] for target in targets])
+            target_view = cfitems_str(mapping['target_cfitems'])
+            init = {'mapping':mapping['map'], 'source': source_view, 'target': target_view, 'display': True}
+            initial_dataset.append(init)
+        formlist = MappingFormSet(initial = initial_dataset)
+    context_dict = {
+        'formlist' : formlist,
+        'read_only' : READ_ONLY,
+        }
+    context = RequestContext(request, context_dict)
+    return render_to_response('form.html', context)
+
+
+    
 
 def url_with_querystring(path, **kwargs):
     ''' helper function '''
@@ -277,6 +347,7 @@ def mappings(request):
         search_path = request_search
     else:
         search_path = False#[('','')]
+    print 'search_path: ', search_path
     MappingFormSet = formset_factory(forms.MappingForm, extra=0)
     if request.method == 'POST': # If the form has been submitted...
         formlist = MappingFormSet(data=request.POST)
@@ -400,6 +471,7 @@ def edit_mappings(request):
             # mapping IDs for created and unchanged mappings
             
             query_search_path = process_formset(formset, request)
+            print 'qsp: ', query_search_path.split('|')
             return HttpResponseRedirect(url_with_querystring(
                 reverse('edit_mappings'), ref=query_search_path))
         else:
@@ -413,7 +485,6 @@ def edit_mappings(request):
                 mapurl = item.get('map')
                 source = item.get('source')
                 if item.get('source_cfitems') is not None:
-                    #source = item.get('relates_cfitems')
                     source_view = ''
                     cftargets = item.get('source_cfitems').split('&')
                     for cft in cftargets:
@@ -496,7 +567,7 @@ def process_form(form, request):
     if form.cleaned_data['comment'] != '':
         mapping_p_o['mr:comment'] = ['"%s"' % form.cleaned_data['comment']]
     mapping_p_o['mr:reason'] = ['"%s"' % form.cleaned_data['reason']]
-    mapping_p_o['mr:relates'] = ['<%s>' % relates for relates in form.cleaned_data['sources'].split('&')]
+    mapping_p_o['mr:source'] = ['<%s>' % source for source in form.cleaned_data['sources'].split('&')]
     mapping_p_o['mr:target'] = ['<%s>' % target for target in form.cleaned_data['targets'].split('&')]
 
     #check to see if the updated mapping record is simply the last one
@@ -509,7 +580,7 @@ def process_form(form, request):
         mapping_p_o['mr:watcher'] != ['"%s"' % watcher for watcher in form.cleaned_data['watchers'].split(',')]:
         changed = True
         print 'watcher: changed = True'
-    if mapping_p_o['mr:creator'] != ['"%s"' % form.cleaned_data['last_editor']]:
+    if mapping_p_o['mr:creator'] != ['<%s>' % form.cleaned_data['last_editor']]:
         changed = True
         print 'creator: changed = True'
     if mapping_p_o['mr:status'] != ['"%s"' % form.cleaned_data['current_status']]:
@@ -522,10 +593,10 @@ def process_form(form, request):
     if mapping_p_o['mr:reason'] != ['"%s"' % form.cleaned_data['reason']]:
         changed = True
         print 'reason: changed = True'
-    if mapping_p_o['mr:relates'] != ['"%s"' % form.cleaned_data['sources']]:
+    if mapping_p_o['mr:source'] != ['<%s>' % form.cleaned_data['sources']]:
         changed = True
-        print 'relates: changed = True'
-    if mapping_p_o['mr:target'] != ['"%s"' % form.cleaned_data['targets']]:
+        print 'source: changed = True'
+    if mapping_p_o['mr:target'] != ['<%s>' % form.cleaned_data['targets']]:
         changed = True
         print 'target: changed = True'
 
@@ -534,7 +605,7 @@ def process_form(form, request):
     print mapping_p_o
 
     if changed:
-        mapping = moq.create_mapping(fuseki_process, mapping_p_o, True)
+        mapping = moq.create_mapping(fuseki_process, mapping_p_o)
     else:
         mapping = form.cleaned_data['mapping']
         print 'unchanged'

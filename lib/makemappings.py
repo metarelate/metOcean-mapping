@@ -79,7 +79,7 @@ for stash,cf in umcfdict.iteritems():
     adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
     linkages.append(adict)
 
-griburi = 'http://codes.wmo.int/grib2/codeflag/4.2'
+griburi = 'http://codes.wmo.int/grib/2/codeflag/4.2'
 
 for sn,gribcf in gribParams.iteritems():
     adict = {}

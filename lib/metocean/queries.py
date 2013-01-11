@@ -910,6 +910,9 @@ def multiple_mappings(fuseki_process, debug=False):
          mr:target ?btarget .
     FILTER (?bstatus NOT IN ("Deprecated", "Broken"))
     MINUS {?bmap ^dc:replaces+ ?anothermap}
+    filter (?bmap != ?amap)
+    filter (?bsource = ?asource)
+    filter (?btarget != ?atarget)
     }
     GRAPH <http://metarelate.net/concepts.ttl> {
     ?asource mr:format ?asourceformat .
@@ -917,10 +920,7 @@ def multiple_mappings(fuseki_process, debug=False):
     ?atarget mr:format ?atargetformat .
     ?btarget mr:format ?btargetformat .
     }
-    filter (?amap != ?bmap)
-    filter (?asource = ?bsource)
-    filter (?atarget != ?btarget)
-    filter (?atargetformat = ?btargetformat)
+    filter (?btargetformat = ?atargetformat)
     }
     ORDER BY ?asource
     '''

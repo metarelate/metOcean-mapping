@@ -40,14 +40,38 @@ from settings import READ_ONLY
 from settings import fuseki_process
 
 def cfitems_str(cfitems):
-    """view the collection of cfitems as a single string
-    remove all url encoding from the elements"""
+    """returns the collection of cfitems as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen"""
     print 'cfitems: ', cfitems
     items = cfitems.split('&')
     items = [i.split('|') for i in items]
     items = [[j.split(';')[0].split('#')[-1] +';' + j.split(';')[1].split('/')[-1] for j in i] for i in items]
     cfi = '&'.join(['|'.join(elem) for elem in items])
     return cfi
+
+
+def gribitems_str(gribitems):
+    """returns the collection of grib items as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen
+    """
+    return None
+
+def fcitems_str(gribitems):
+    """returns the collection of fieldcode items as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen
+    """
+    return None
+    
+def stashitems_str(gribitems):
+    """returns the collection of stash items as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen
+    """
+    return None
+
     
 
 def home(request):
@@ -428,6 +452,12 @@ def new_mapping(request):
     #     print 'not searching'
     #     #redirect to search
     #     #search_path = [('','')]
+    dataset = {}
+    if request_search != [u'']:
+        dataset['sources'] = request_search[0]
+        if len(request_search) == 2:
+               dataset['targets'] = request_search[1]
+    
     MapForm = forms.MappingNewForm
     if request.method == 'POST': # If the form has been submitted...
         form = MapForm(request.POST) # A form bound to the POST data

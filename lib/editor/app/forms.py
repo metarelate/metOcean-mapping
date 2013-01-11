@@ -33,6 +33,45 @@ from settings import READ_ONLY
 from settings import fuseki_process
 
 
+def cfitems_str(cfitems):
+    """returns the collection of cfitems as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen"""
+    print 'cfitems: ', cfitems
+    items = cfitems.split('&')
+    items = [i.split('|') for i in items]
+    items = [[j.split(';')[0].split('#')[-1] +';' + j.split(';')[1].split('/')[-1] for j in i] for i in items]
+    cfi = '&'.join(['|'.join(elem) for elem in items])
+    return cfi
+
+
+def gribitems_str(gribitems):
+    """returns the collection of grib items as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen
+    """
+    return None
+
+def fcitems_str(gribitems):
+    """returns the collection of fieldcode items as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen
+    """
+    return None
+    
+def stashitems_str(gribitems):
+    """returns the collection of stash items as a single string,
+    removing all url encoding from the elements,
+    for viewing on screen
+    """
+    return None
+
+def umitems_str(umitems):
+    """
+    """
+    #check for field code or stash concept
+    return None
+
 
 
 def get_states():

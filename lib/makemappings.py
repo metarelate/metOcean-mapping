@@ -1,5 +1,5 @@
 
-
+import copy
 import datetime
 import glob
 import time
@@ -54,56 +54,78 @@ fcuri = 'http://reference.metoffice.gov.uk/def/um/fieldcode/'
 
 for fc,cf in umcf.LBFC_TO_CF.iteritems():
     adict = {}
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
-#    if umcf.CF_TO_LBFC.has_key(cf) and umcf.CF_TO_LBFC[cf] == fc:
-#        adict['rootA'] = {'mr:rootA':['<%s%i>' % (fcuri,fc)]}
-#    else:
-    adict['source'] = {'mr:source':{'mr:component':'<%s%i>' % (fcuri,fc), 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
-    adict['target'] = 'cfl'
+    adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
+                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+    if umcf.CF_TO_LBFC.has_key(cf) and umcf.CF_TO_LBFC[cf] == fc:
+        adict['mr:invertible'] = '"True"'
+    else:
+        adict['mr:invertible'] = '"False"'
+    adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:lbfc', 'rdfs:literal':'mofc:%i' % fc}],
+                       'mr:format':['<http://metarelate.net/metocean/format/um>']}
     linkages.append(adict)
 
 for cf,fc in umcf.CF_TO_LBFC.iteritems():
-#    if not (umcf.LBFC_TO_CF.has_key(fc) and umcf.LBFC_TO_CF[fc] == cf):
-    adict = {}
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
-    adict['target'] = {'mr:target':{'mr:component':'<%s%i>' % (fcuri,fc), 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
-    adict['source'] = 'cfl'
-    linkages.append(adict)
+    if not (umcf.LBFC_TO_CF.has_key(fc) and umcf.LBFC_TO_CF[fc] == cf):
+        adict = {}
+        adict['mr:source'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
+                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+        adict['mr:target'] = {'skos:member':[{'rdf:Property':'moumdpF3:lbfc', 'rdfs:literal':'mofc:%i' % fc}],
+                           'mr:format':['<http://metarelate.net/metocean/format/um>']}
+        adict['mr:invertible'] = '"False"'
+        linkages.append(adict)
 
 
 
 for stash,cf in umcfdict.iteritems():
     adict = {}
-    adict['source'] = {'mr:source':{'mr:component':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % stash,'mr:format':'<http://metarelate.net/metocean/format/um>'}}
-    adict['target'] = 'cfl'
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % cf[0], 'mrcf:units':'"%s"' % cf[1], 'mrcf:type':'"Field"'}
+    adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
+                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+    adict['mr:invertible'] = '"False"'
+    adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % stash}],
+                       'mr:format':['<http://metarelate.net/metocean/format/um>']}
     linkages.append(adict)
 
-griburi = 'http://codes.wmo.int/grib/2/codeflag/4.2'
+#griburi = 'http://codes.wmo.int/grib/2/codeflag/4.2'
 
 for sn,gribcf in gribParams.iteritems():
     adict = {}
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % gribcf['standard_name'], 'mrcf:units':'"%s"' % gribcf['units'], 'mrcf:type':'"Field"'}
-    adict['target'] = 'cfl'
-    adict['source'] = {'mr:source':{'mr:component':'<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber']),'mr:format':'<http://metarelate.net/metocean/format/grib/2>'}}
-    linkages.append(adict)
-    adict = {}
-    adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % gribcf['standard_name'], 'mrcf:units':'"%s"' % gribcf['units'], 'mrcf:type':'"Field"'}
-    adict['source'] = 'cfl'
-    adict['target'] = {'mr:target':{'mr:component':'<%s/%s/%s/%s>' % (griburi,gribcf['discipline'],gribcf['parameterCategory'],gribcf['parameterNumber']),'mr:format':'<http://metarelate.net/metocean/format/grib/2>'}}
+    adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
+                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % gribcf['standard_name']},
+                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % gribcf['units']},
+                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+    adict['mr:invertible'] = '"True"'
+    adict['mr:source'] = {'skos:member':[{'rdf:Property':'gribapi:edition', 'rdfs:literal':'2'},
+                                         {'rdf:Property':'gribapi:discipline', 'rdfs:literal':'%s' % gribcf['discipline']},
+                                         {'rdf:Property':'gribapi:parameterCategory', 'rdfs:literal':'%s' % gribcf['parameterCategory']},
+                                         {'rdf:Property':'gribapi:parameterNumber', 'rdfs:literal':'%s' % gribcf['parameterNumber']}],
+                       'mr:format':['<http://metarelate.net/metocean/format/grib>']}
     linkages.append(adict)
     
 
 adict = {}
-adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % 'eastward_wind', 'mrcf:units':'"%s"' % 'm s-1'}
-adict['source'] = {'mr:source':{'mr:component':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i002', 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
-adict['target'] = 'cfl'
+adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
+                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % 'eastward_wind'},
+                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % 'm s-1'},
+                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % 'm01s00i002'}],
+                       'mr:format':['<http://metarelate.net/metocean/format/um>']}
+adict['mr:invertible'] = '"False"'
 linkages.append(adict)
 
 adict = {}
-adict['cfl'] = {'mrcf:standard_name':'<http://def.cfconventions.org/standard_names/%s>' % 'northward_wind', 'mrcf:units':'"%s"' % 'm s-1'}
-adict['source'] = {'mr:source':{'mr:component':'<http://reference.metoffice.gov.uk/def/um/stash/concept/%s>' % 'm01s00i003', 'mr:format':'<http://metarelate.net/metocean/format/um>'}}
-adict['target'] = 'cfl'
+adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
+                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % 'northward_wind'},
+                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % 'm s-1'},
+                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % 'm01s00i003'}],
+                       'mr:format':['<http://metarelate.net/metocean/format/um>']}
+adict['mr:invertible'] = '"False"'
 linkages.append(adict)
 
 
@@ -133,63 +155,44 @@ for st_file in glob.glob('/net/home/h04/itmh/metarelate/metOcean-mapping/staticD
 
 globalDateTime = datetime.datetime.now().isoformat()
 mapping_p_o = {}
-mapping_p_o['mr:creator'] = ['<https://github.com/marqh>']
-mapping_p_o['mr:creation'] = ['"%s"^^xsd:dateTime' % globalDateTime]
+mapping_p_o['dc:creator'] = ['<https://github.com/marqh>']
+mapping_p_o['dc:date'] = ['"%s"^^xsd:dateTime' % globalDateTime]
 mapping_p_o['mr:status'] = ['"Draft"']
-mapping_p_o['mr:comment'] = ['"Imported from external mapping resource"']
+mapping_p_o['skos:note'] = ['"Imported from external mapping resource: Iris 1.1"']
 mapping_p_o['mr:reason'] = ['"new mapping"']
 
+
+    # adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
+    #                    'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+    #                 {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+    #                 {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
 
 with fu.FusekiServer(3131) as fu_p:
     fu_p.load()
     print 'load complete'
     for newlink in linkages:
-        cflink = moq.create_cflink(fu_p, newlink['cfl'], 'http://www.metarelate.net/metocean/cf')
-        if len(cflink) == 1:
-            if newlink['source'] == 'cfl':
-                concept = moq.get_concept(fu_p,{'mr:component':['<%s>' % cflink[0]['s']], 'mr:format':'<http://metarelate.net/metocean/format/cf>'})
-                if len(concept) == 1:
-                    newlink['source'] = {'mr:source':'<%s>' % concept[0]['concept']}
+        map_dict = copy.deepcopy(mapping_p_o)
+        map_dict['mr:invertible'] = newlink['mr:invertible']
+        st = ['mr:source', 'mr:target']
+        for pref in st:
+            members = newlink[pref]['skos:member']
+            memberids = []
+            for v_dict in members:
+                val_res = moq.get_value(fu_p, v_dict)
+                if len(val_res) == 1:
+                    valID = '%s' % val_res[0]['value']
                 else:
-                    raise ValueError('no concept: %s' % newlink['source']) 
-                concept = moq.get_concept(fu_p, newlink['target']['mr:target'])
-                if len(concept) == 1:
-                    newlink['target']['mr:target'] = '<%s>' % concept[0]['concept']
-                else:
-                    raise ValueError('no concept: %s' % newlink['target']['mr:target'])
-            elif newlink['target'] == 'cfl':
-                concept = moq.get_concept(fu_p,{'mr:component':['<%s>' % cflink[0]['s']], 'mr:format':'<http://metarelate.net/metocean/format/cf>'})
-                if len(concept) == 1:
-                    newlink['target'] = {'mr:target':'<%s>' % concept[0]['concept']}
-                else:
-                    raise ValueError('no concept: %s' % newlink['target']) 
-                #newlink['target'] = {'mr:target':['<%s>' % cflink[0]['s']]}
-                concept = moq.get_concept(fu_p, newlink['source']['mr:source'])
-                if len(concept) == 1:
-                    newlink['source']['mr:source'] = '<%s>' % concept[0]['concept']
-                else:
-                    raise ValueError('no concept: %s' % newlink['source']['mr:source'])
+                    raise ValueError('%i results returned from get_value %s' % (len(val_res), str(val_res)))
+                memberids.append(valID)
+            fc_dict = {'mr:format' : newlink[pref]['mr:format'],
+                       'skos:member' : memberids}
+            fc_res = moq.get_format_concept(fu_p, fc_dict)
+            if len(fc_res) == 1:
+                fcID = '%s' % fc_res[0]['formatConcept']
             else:
-                print newlink
-                raise ValueError('no cflink')
-        else:
-            raise ValueError('create_cflink failed on %s; %i cflinks retrieved' % (newlink['cfl'], len(cflink)))
-        
-# linkage_dict = {}
-# for key in newlink.keys():
-# if key != 'cfl':
-# linkage_dict = dict(linkage_dict, **newlink[key])
-        #linkage = moq.get_linkage(fu_p, linkage_dict)
-        map_dict = mapping_p_o.copy()
-        map_dict = dict(map_dict, **newlink['source'])
-        map_dict = dict(map_dict, **newlink['target'])
-        #if len(linkage) == 1:
-        # map_dict['mr:linkage'] = ['<%s>' % linkage[0]['linkage']]
-        #else:
-        # raise ValueError('create_linkage failed on %s; %i linkages returned' % (newlink['cfl'], len(linkage)))
-#        print map_dict
-#        break
-        new_mapping = moq.create_mapping(fu_p, map_dict)
+                raise ValueError('%i results returned from get_format_concept %s' % (len(fc_res), str(fc_res)))
+            map_dict[pref] = fcID
+        map_res = moq.create_mapping(fu_p, map_dict)
     print 'saving cached changes'
     fu_p.save()
 

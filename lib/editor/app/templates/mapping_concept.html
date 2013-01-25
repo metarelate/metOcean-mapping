@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% load dict_keys %}
+<!--
+# (C) British Crown Copyright 2011 - 2012, Met Office
+#
+# This file is part of metOcean-mapping.
+#
+# metOcean-mapping is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU Lesser General Public License 
+# as published by the Free Software Foundation, either version 3 of 
+# the License, or (at your option) any later version.
+#
+# metOcean-mapping is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+{% block title %}: {{ title }}{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
+<script src="{{ ADMIN_MEDIA_PREFIX }}js/admin/RelatedObjectLookups.js"></script>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<p>The time is {% current_time "%Y-%m-%d %I:%M %p" %}.</p>
+
+{% if form %}
+<form action="" method="post">
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Create this mapping"/>
+
+{% csrf_token %}
+<table border="1" class="recordtable">
+{{ form.as_table }}
+</table>
+</form>
+{% endif %}
+
+<table border="1" class="recordtable">
+
+
+{% if mapping %}
+
+<tr>
+
+    <td>
+
+    <h2>Mapping Source</h2>
+
+
+    <table border="1" class="recordtable">
+    <tr>
+    <td>
+    <h4>Format</h4>
+    {% multi_key mapping "mr:source,mr:format" %}
+    </td></tr>
+    <tr><td>
+    <h4>Definition</h4>
+    <ul>
+    {% for member in  mapping|multi_key:"mr:source,skos:member" %}
+
+        {% if member.url %}
+          <li> <a href="{{ member.url }}">{{ member.label }} </a>
+          </li>
+        {% endif %}
+      
+        {% if member|multi_key:"rdf:Property" %}
+          <li>{{ member|multi_key:"rdf:Property" }}</li>
+          
+          <ul>
+          {% if member|multi_key:"rdfs:literal" %}
+            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
+          {% endif %}
+          {% if member|multi_key:"remove" %}
+            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
+          {% endif %}
+          </ul>
+        {% endif %}
+
+        {% if member|multi_key:"skos:member" %}
+
+          <li>Sub Component </li>
+          <ul>
+            {% if member|multi_key:"remove" %}
+
+            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
+            {% endif %}
+
+
+          {% for sub_member in member|multi_key:"skos:member" %}
+
+
+            {% if sub_member.url %}
+              <li> <a href="{{ sub_member.url }}">{{ sub_member.label }} </a>
+              </li>
+            {% endif %}
+
+            {% if sub_member|multi_key:"rdf:Property" %}
+
+              <li>{{ sub_member|multi_key:"rdf:Property" }}</li>
+
+              <ul>
+              {% if sub_member|multi_key:"rdfs:literal" %}
+                <li>{{ sub_member|multi_key:"rdfs:literal" }}</li>
+              {% endif %}
+              {% if sub_member|multi_key:"remove" %}
+                <li><a href="{{ sub_member|multi_key:"remove,url" }}"> {{ sub_member|multi_key:"remove,label" }}</a></li>
+              {% endif %}
+            </ul>
+            {% endif %}
+
+          {% endfor %}
+          </ul>
+        {% endif %}
+
+
+
+    {% endfor %}
+    </ul>
+    </tr></td>
+    </table>
+
+    </td>
+
+
+    <td>
+
+    <h2>Mapping Target</h2>
+
+
+    <table border="1" class="recordtable">
+    <tr>
+    <td>
+    <h4>Format</h4>
+    {% multi_key mapping "mr:target,mr:format" %}
+    </td></tr>
+    <tr><td>
+    <h4>Definition</h4>
+    <ul>
+    {% for member in  mapping|multi_key:"mr:target,skos:member" %}
+
+        {% if member.url %}
+          <li> <a href="{{ member.url }}">{{ member.label }} </a>
+          </li>
+        {% endif %}
+      
+        {% if member|multi_key:"rdf:Property" %}
+          <li>{{ member|multi_key:"rdf:Property" }}</li>
+          
+          <ul>
+          {% if member|multi_key:"rdfs:literal" %}
+            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
+          {% endif %}
+          {% if member|multi_key:"remove" %}
+            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
+          {% endif %}
+          </ul>
+        {% endif %}
+
+        {% if member|multi_key:"skos:member" %}
+
+          <li>Sub Component </li>
+          <ul>
+            {% if member|multi_key:"remove" %}
+            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
+            {% endif %}
+
+
+          {% for sub_member in member|multi_key:"skos:member" %}
+
+
+            {% if sub_member.url %}
+              <li> <a href="{{ sub_member.url }}">{{ sub_member.label }} </a>
+              </li>
+            {% endif %}
+
+            {% if sub_member|multi_key:"rdf:Property" %}
+
+              <li>{{ sub_member|multi_key:"rdf:Property" }}</li>
+
+              <ul>
+              {% if sub_member|multi_key:"rdfs:literal" %}
+                <li>{{ sub_member|multi_key:"rdfs:literal" }}</li>
+              {% endif %}
+              {% if sub_member|multi_key:"remove" %}
+                <li><a href="{{ sub_member|multi_key:"remove,url" }}"> {{ sub_member|multi_key:"remove,label" }}</a></li>
+              {% endif %}
+              </ul>
+            {% endif %}
+            
+          {% endfor %}
+           </ul>
+        {% endif %}
+
+
+
+    {% endfor %}
+    </ul>
+    </tr></td>
+    </table>
+
+
+
+{% endif %}
+
+</tr>
+
+
+<tr>
+<td>
+<h2>Value Mappings</h2>
+</td>
+</tr>
+
+{% if mapping|multi_key:"mr:valueMap" %}
+
+
+{% for valuemap in mapping|multi_key:"mr:valueMap" %}
+<tr><td>
+<p>
+{{ valuemap|multi_key:"mr:sourceFC" }}
+
+<ul>
+<li> {{ valuemap|multi_key:"mr:sourceVal" }}</li>
+</ul>
+</td><td>
+<p>
+{{ valuemap|multi_key:"mr:targetFC" }}
+
+<ul>
+<li> {{ valuemap|multi_key:"mr:targetVal" }}</li>
+</ul>
+</td>
+</td></tr>
+{% endfor %}
+
+
+{% endif %}
+
+{% if mapping|multi_key:"addValueMap,url" %}
+<tr>
+<td>
+<a href="{{ mapping|multi_key:"addValueMap,url" }}"> {{ mapping|multi_key:"addValueMap,label" }}</a>
+</td>
+</tr>
+
+
+{% endif %}
+</table>
+
+
+{% endblock %}

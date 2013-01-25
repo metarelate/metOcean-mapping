@@ -14,25 +14,30 @@ digraph records {
 
 ## class definitions
 
-   	cflink [
-	label = "<title> CFlink |ID: md5 |<type>type |<sn>standard_name |<ln>long_name |<units>units"
+   	value [
+	label = "<title> value ID(sha-1) |<prop> rdf:property | rdfs:literal"
 	];
 
-	concept [
-	label = "<title> Concept |ID: md5|<format> format |<component> component +"
+   	formatconcept [
+	label = "<title> mr:formatConcept ID(sha-1) |<format> mr:format |<component> skos:member +"
+	];
+
+	valuemap [
+	label = "<title> valueMap ID(sha-1) |<sourcefc> mr:sourceFC +|<targetfc> mr:targetFC +|<sourceval> mr:sourceVal |<targetval> mr:targetVal "
 	];
 
 	mapping [
-
-	label = "<title> Mapping |ID: md5 |<target> target |<source> source |replaces |creation |creator |owner + |watcher + |status |comment |reason "
-
+	label = "<title> Mapping ID(sha-1) |<source> mr:source |<target> mr:target |mr:invertible | dc:replaces  |<valmap> mr:valueMap +|mr:status |skos:note |mr:reason |dc:date |<c> dc:creator |<o> mr:owner + |<w> mr:watcher +"
 	];
 
 
 	release [
-	label = "<title> Release |version|previous|date|<con>constituent + |standard"
+	label = "<title> Release ID(version)|dc:replaces|dc:date|<con>skos:member + |mr:status +"
 	];
 
+	contact [
+	label = "<title> Contact ID(username) | dc:dateAccepted | skos:member"
+	];
 
 	um [
 	label = "UM Namespace"
@@ -42,22 +47,41 @@ digraph records {
 	label = "GRIB Namespace"
 	];
 
+	cf [
+	label = "CF Namespace"
+	];
 
+	mrnamed [
+	label = "Metarelate name"
+	];
 
 ## relations
 
 
-
 	release:con -> mapping:title
+	
+	mapping:source -> formatconcept:title
 
-	mapping:source -> concept:title
+	mapping:target -> formatconcept:title
 
-	mapping:target -> concept:title
+	formatconcept:component -> formatconcept:title
 
-	concept:component -> um
+	formatconcept:component -> value:title
 
-	concept:component -> grib
+	mapping:valmap -> valuemap:title
 
-	concept:component -> cflink:title
+	valuemap:sourceval -> value:title
+	valuemap:sourcefc -> formatconcept:title
+	valuemap:targetval -> value:title
+	valuemap:targetfc -> formatconcept:title
+
+	value:prop -> um
+	value:prop -> grib
+	value:prop -> cf
+	value:prop -> mrnamed
+
+	mapping:c -> contact
+	mapping:o -> contact
+	mapping:w -> contact
 
 }

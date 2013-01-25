@@ -48,25 +48,6 @@ os.environ['FUSEKI_HOME'] = FUSEKIROOT
 
 
 
-def process_data(jsondata):
-    '''helper method to take JSON output from a query and return the results'''
-    resultslist = []
-    try:
-        jdata = json.loads(jsondata)
-    except (ValueError, TypeError):
-        return resultslist
-    vars = jdata['head']['vars']
-    data = jdata['results']['bindings']
-    for item in data:
-        tmpdict = {}
-        for var in vars:
-            tmpvar = item.get(var)
-            if tmpvar:
-                tmpdict[var] = tmpvar.get('value')
-        if tmpdict != {}:
-            resultslist.append(tmpdict)
-    return resultslist
-
 
 
 
@@ -142,6 +123,8 @@ class FusekiServer(object):
             self.stop()
         for TDBfile in glob.glob("%s*"% TDB):
             os.remove(TDBfile)
+        return glob.glob("%s*"% TDB)
+        
 
 
     def save(self):
@@ -193,7 +176,7 @@ class FusekiServer(object):
         '''
         load data from all the ttl files in the STATICDATA folder into a new TDB
         '''
-        self.clean()
+        print 'clean:', self.clean()
         for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             graph = ingraph.split('/')[-1] + '/'
             for infile in glob.glob(os.path.join(ingraph, '*.ttl')):
@@ -245,7 +228,8 @@ class FusekiServer(object):
         pre = prefixes.Prefixes()
         if debug == True:
             print pre.sparql
-            print query_string
+            for i, line in enumerate(query_string.split('\n')):
+                print i, line
         if update:
             action = 'update'
             qstr = urlencode([
@@ -270,3 +254,33 @@ class FusekiServer(object):
             return data
 
 
+def process_data(jsondata):
+    '''helper method to take JSON output from a query and return the results'''
+    resultslist = []
+    try:
+        jdata = json.loads(jsondata)
+    except (ValueError, TypeError):
+        return resultslist
+    vars = jdata['head']['vars']
+    data = jdata['results']['bindings']
+    for item in data:
+        tmpdict = {}
+        for var in vars:
+            tmpvar = item.get(var)
+            if tmpvar:
+                val = tmpvar.get('value')
+                if str(val).startswith('http://') or str(val).startswith('https://') :
+                    val = '<%s>' % val
+                tmpdict[var] = val
+        if tmpdict != {}:
+            resultslist.append(tmpdict)
+    return resultslist
+
+def group_by(resultslist, group_by):
+    """
+    implementation of group_by functionality as a post processing step
+    takes a resultslist, as output from process_data and uses the named group_by
+    keys to aggregate the quantities into lists
+    """
+    modresults = resultslist
+    return modresults

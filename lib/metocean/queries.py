@@ -68,7 +68,8 @@ def make_hash(pred_obj, omitted=None):
 
 def revert_cache(fuseki_process, graph, debug=False):
     """
-    update a graph in the triple database removing all records flagged with the saveCache predicate
+    update a graph in the triple database removing all records
+    flagged with the saveCache predicate
     """
     qstr = '''
     DELETE
@@ -186,8 +187,61 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
     mr:creation "%s"^^xsd:dateTime .
     } }
     ''' % (contact, register, creation)
+    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    return results
+
+def create_mediator(fuseki_process, label, fformat, debug=False):
+    """
+    create a new mediator
+    """
+    ff = fformat.rstrip('}').split('/')[-1]
+    med = '<http://www.metarelate.net/metocean/mediates/{}/{}>'.format(ff,
+                                                                       label)
+    qstr = '''
+    INSERT DATA
+    { GRAPH <http://metarelate.net/concepts.ttl> {
+    %s a skos:Concept ;
+         skos:label %s
+         mr:format %s .
+         } }
+    ''' % (med, label, fformat)
+    results = fuseki_process.run_query(qstr, update=True, debug=debug)
+    return results
+
+def get_mediators(fuseki_process, debug=False):
+    """
+    return all mediators from the triple store
+    """
+    qstr = '''
+    SELECT ?mediator ?format ?label
+    WHERE
+    { GRAPH <http://metarelate.net/contacts.ttl> {
+        ?mediator mr:format ?format ;
+                  skos:label ?label
+    FILTER(regex(str(?mediator),"http://www.metarelate.net/metocean/mediates/"))
+    }
+    ''' 
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
+    
+
+
+def print_records(res):
+    """ helper for command line query interpretation"""
+    print_string = ''
+    for r in res:
+        if len(r.keys()) == 3 and r.has_key('s') and \
+            r.has_key('p') and r.has_key('o'):
+            print_string += '%s\n' % r['s']
+            print_string += '\t%s\n' % r['p']
+            print_string += '\t\t%s\n' % r['o']
+            print_string += '\n'
+        else:
+            for k,v in r.iteritems():
+                print_string += '%s %s\n' (k, v)
+            print_string += '\n'
+    return print_string
+
 
 
 ### blank node queries #####
@@ -199,14 +253,18 @@ def get_value(fuseki_process, po_dict, debug=False):
     optional_prefixes = set(('rdfs:literal'))
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_prefixes):
-        raise ValueError('%s is not a subset of the allowed predicates set for a value record %s' % (preds, allowed_preds))
+        ec = '''{} is not a subset of the allowed predicates set
+                for a value record {}'''.format(preds, allowed_preds)
+        raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/value'
     assign_string = '?value '
     search_string = ''
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) == 1:
-                raise ValueError('get_value only accepts 1 statement per predicate %s' % str(po_dict))
+                ec = '''get_value only accepts 1 statement per predicate {}'''
+                ec = ec.format(str(po_dict))
+                raise ValueError(ec)
             else:
                 for obj in po_dict[pred]:
                     assign_string += ''' %s ?%s ;
@@ -214,7 +272,6 @@ def get_value(fuseki_process, po_dict, debug=False):
                     search_string += '''
                     %s %s ;''' % (pred,obj)
         else:
-            # raise ValueError('objects in the pred_objects dict must be strings')
             search_string += '''
             %s %s ;''' % (pred, po_dict[pred])
     if search_string != '':
@@ -238,50 +295,101 @@ def get_value(fuseki_process, po_dict, debug=False):
             }
             }
             ''' % (subj_pref, sha1, search_string)
-            insert_results = fuseki_process.run_query(instr, update=True, debug=debug)
+            insert_results = fuseki_process.run_query(instr, update=True,
+                                                      debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
     else:
         results = []
     return results
 
+def retrieve_value(fuseki_process, val_id, debug=False):
+    """
+    retrieve a value record from it's id
+    or None if one does not exist
+    """
+    qstr = '''SELECT ?value ?Property ?literal
+    WHERE {
+    GRAPH <http://metarelate.net/concepts.ttl> {
+        ?value rdf:Property ?Property ;
+               rdfs:literal ?literal .
+        FILTER(?value = %s)
+        }
+    }
+    ''' % val_id
+    results = fuseki_process.run_query(qstr, debug=debug)
+    if len(results) == 0:
+        val = None
+    elif len(results) >1:
+        raise ValueError('{} is a malformed value'.format(results))
+    else:
+        val = results[0]
+    return val
+
+    
+    
 
 def get_format_concept(fuseki_process, po_dict, debug=False):
-    """return a formatConcept record ID and format, matching the pred_obj dictionary
+    """return a formatConcept record ID and format, matching the
+    pred_obj dictionary
     create one if it does not exist"""
-    allowed_prefixes = set(('mr:format','skos:member'))
+    allowed_prefixes = set(('mr:format','skos:member', 'dc:requires',
+                            'dc:mediator'))
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_prefixes):
-        raise ValueError('%s is not a subset of the allowed predicates set for a formatConcept record %s' % (preds, allowed_preds))
+        ec = '''{} is not a subset of the allowed predicates set for
+                a formatConcept record {}'''
+        ec = ec.format(preds, allowed_preds)
+        raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/formatConcept'
     search_string = ''
     n_members = 0
+    n_reqs = 0
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
             if pred == 'mr:format' and len(po_dict[pred]) != 1:
-                raise ValueError('get_format_concept only accepts 1 mr:format statement %s' % str(po_dict))
-            else:
+                ec = '''get_format_concept only accepts 1 mr:format statement
+                        The po_dict in this case is not valid
+                        {} '''
+                ec = ec.format(str(po_dict))
+                raise ValueError(ec)
+            elif pred == 'dc:mediator' and len(po_dict[pred]) != 1:
+                ec = '''get_format_concept only accepts 1 dc:mediator statement
+                        The po_dict in this case is not valid
+                        {} '''
+                ec = ec.format(str(po_dict))
+                raise ValueError(ec)
+            elif pred == 'dc:requires':
                 for obj in po_dict[pred]:
                     search_string += '''
                     %s %s ;''' % (pred, obj)
-                    if pred == 'skos:member':
-                        n_members +=1
+                    n_reqs +=1
+            elif pred == 'skos:member':
+                for obj in po_dict[pred]:
+                    search_string += '''
+                    %s %s ;''' % (pred, obj)
+                    n_members +=1
         else:
             search_string += '''
             %s %s ;''' % (pred, po_dict[pred])
             if pred == 'skos:member':
                 n_members =1
+    if n_reqs != 0:
+        n_members = n_members * n_reqs
     if search_string != '':
-        qstr = '''SELECT ?formatConcept ?format
+        qstr = '''SELECT ?formatConcept ?format 
         WHERE { {
-        SELECT ?formatConcept ?format (COUNT(?member) AS ?members)
+        SELECT ?formatConcept ?format (COUNT(
+            CONCAT(str(?member),str(?requires))) AS ?members)
         WHERE{
         GRAPH <http://metarelate.net/concepts.ttl> {
         ?formatConcept mr:format ?format ;
                        skos:member ?member ;
                %s .
+        OPTIONAL{?formatConcept dc:requires ?requires .}
+        OPTIONAL{?formatConcept dc:mediator ?mediator .}
         }
         }
-        GROUP BY ?formatConcept ?format
+        GROUP BY ?formatConcept ?format ?mediator
         }
         FILTER(?members = %i)}
         ''' % (search_string, n_members)
@@ -297,26 +405,61 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
             }
             }
             ''' % (subj_pref, sha1, search_string)
-            insert_results = fuseki_process.run_query(instr, update=True, debug=debug)
+            insert_results = fuseki_process.run_query(instr, update=True,
+                                                      debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
     else:
         results = []
     return results
 
+def retrieve_format_concept(fuseki_process, fcId, debug=False):
+    """
+    return a formatConcept record from the provided id
+    or None if one does not exist
+    """
+    qstr = '''SELECT ?formatConcept ?format ?requires ?mediator
+    (GROUP_CONCAT(?amember; SEPARATOR='&') AS ?member)
+    (GROUP_CONCAT(?arequires; SEPARATOR='&') AS ?requires)
+    WHERE {
+    GRAPH <http://metarelate.net/concepts.ttl> {
+        ?formatConcept mr:format ?format ;
+                       skos:member ?amember ;.
+        OPTIONAL{?formatConcept dc:requires ?arequires .}
+        OPTIONAL{?formatConcept dc:mediator ?mediator .}
+        FILTER(?formatConcept = %s)
+        }
+    }
+    GROUP BY ?formatConcept ?format
+    ''' % fcId
+    results = fuseki_process.run_query(qstr, debug=debug)
+    if len(results) == 0:
+        fCon = None
+    elif len(results) >1:
+        raise ValueError('{} is a malformed formatConcept'.format(results))
+    else:
+        fCon = results[0]
+    return fCon
 
 def get_value_map(fuseki_process, po_dict, debug=False):
-    """return a formatConcept record ID, matching the pred_obj dictionary
+    """return a valueMap record ID, matching the pred_obj dictionary
     create one if it does not exist"""
-    allowed_prefixes = set(('mr:sourceFC', 'mr:sourceVal', 'mr:targetFC', 'mr:targetVal'))
+    allowed_prefixes = set(('mr:sourceFC', 'mr:sourceVal',
+                            'mr:targetFC', 'mr:targetVal'))
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_prefixes):
-        raise ValueError('%s is not a subset of the allowed predicates set for a valueMap record %s' % (preds, allowed_preds))
+        ec = '''{} is not a subset of the allowed predicates set
+                for a valueMap record
+                {}'''
+        ec = ec.format(preds, allowed_preds)
+        raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/valueMap'
     search_string = ''
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
             if pred == 'mr:format' and len(po_dict[pred]) != 1:
-                raise ValueError('get_format_concept only accepts 1 mr:format statement %s' % str(po_dict))
+                ec = 'get_format_concept only accepts 1 mr:format statement }'
+                ec = ec.format(po_dict)
+                raise ValueError(ec)
             else:
                 for obj in po_dict[pred]:
                     search_string += '''
@@ -325,10 +468,10 @@ def get_value_map(fuseki_process, po_dict, debug=False):
             search_string += '''
             %s %s ;''' % (pred, po_dict[pred])
     if search_string != '':
-        qstr = '''SELECT ?valuemap 
+        qstr = '''SELECT ?valueMap 
         WHERE{
         GRAPH <http://metarelate.net/concepts.ttl> {
-        ?valuemap
+        ?valueMap
                %s .
         }
         }
@@ -344,12 +487,40 @@ def get_value_map(fuseki_process, po_dict, debug=False):
             }
             }
             ''' % (subj_pref, sha1, search_string)
-            insert_results = fuseki_process.run_query(instr, update=True, debug=debug)
+            insert_results = fuseki_process.run_query(instr, update=True,
+                                                      debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
     else:
         results = []
     return results
 
+def retrieve_valuemap(fuseki_process, vmId, debug=False):
+    """
+    return a valueMap record from the provided id
+    or None if one does not exist
+    """
+    qstr = '''SELECT ?valueMap ?sourceVal ?targetVal
+    (GROUP_CONCAT(?sourcefc; SEPARATOR='&') AS ?sourceFC)
+    (GROUP_CONCAT(?targetfc; SEPARATOR='&') AS ?targetFC)
+    WHERE {
+    GRAPH <http://metarelate.net/concepts.ttl> {
+        ?formatConcept mr:sourceFC ?sourcefc ;
+                       mr:sourceVal ?sourceVal ;
+                       mr:targetFC ?targetfc ;
+                       mr:targetVal ?targetVal ;
+        FILTER(?formatConcept = %s)
+        }
+    }
+    GROUP BY ?valueMap ?sourceVal ?targetVal
+    ''' % vmId
+    results = fuseki_process.run_query(qstr, debug=debug)
+    if len(results) == 0:
+        valuemap = None
+    elif len(results) >1:
+        raise ValueError('{} is a malformed valueMap'.format(results))
+    else:
+        valuemap = results[0]
+    return valuemap
 
 
 
@@ -359,12 +530,18 @@ def get_contact(fuseki_process, subject, po_dict, debug=False):
     allowed_prefixes = set(('skos:inScheme', 'dc:dateAccepted'))
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_prefixes):
-        raise ValueError('%s is not a subset of the allowed predicates set for a contact record %s' % (preds, allowed_preds))
+        ec = '''{}
+            is not a subset of the allowed predicates set for a contact record
+            {}'''
+        ec = ec.format(preds, allowed_preds)
+        raise ValueError(ec)
     search_string = ''
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) == 1:
-                raise ValueError('get_format_concept only accepts 1 statement per predicate %s' % str(po_dict))
+                ec = 'get_format_concept accepts 1 statement per predicate {}'
+                ec = ec.format(str(po_dict))
+                raise ValueError(ec)
             else:
                 for obj in po_dict[pred]:
                     search_string += '''
@@ -391,7 +568,8 @@ def get_contact(fuseki_process, subject, po_dict, debug=False):
             }
             }
             ''' % (subject, search_string)
-            insert_results = fuseki_process.run_query(instr, update=True, debug=debug)
+            insert_results = fuseki_process.run_query(instr, update=True,
+                                                      debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
     else:
         results = []
@@ -403,25 +581,36 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     """create a new mapping record using the po_dict
     """
     subj_pref = 'http://metarelate.net/metocean/mapping'
-    allowed_prefixes = set(('mr:source', 'mr:target', 'mr:invertible', 'dc:replaces',
-                            'mr:valueMap', 'mr:status', 'skos:note', 'mr:reason',
-                            'dc:date', 'dc:creator', 'mr:owner', 'mr:watcher'))
+    allowed_prefixes = set(('mr:source', 'mr:target', 'mr:invertible',
+                            'dc:replaces', 'mr:valueMap', 'mr:status',
+                            'skos:note', 'mr:reason', 'dc:date', 'dc:creator',
+                            'mr:owner', 'mr:watcher'))
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_prefixes):
-        raise ValueError('%s is not a subset of the allowed predicates set for a mapping record %s' % (preds, allowed_preds))
+        ec = '''{}
+        is not a subset of the allowed predicates set for a mapping record
+        {}'''
+        ec = ec.format(preds, allowed_preds)
+        raise ValueError(ec)
     mandated_prefixes = set(('mr:source', 'mr:target', 'mr:invertible', 
                             'mr:status',  'mr:reason',
                             'dc:date', 'dc:creator'))
     if not preds.issuperset(mandated_prefixes):
-        raise ValueError('%s is not a superset of the mandated predicates set for a mapping record %s' % (preds, mandated_prefixes))
-    singular_prefixes = set(('mr:source', 'mr:target', 'mr:invertible', 'dc:replaces',
-                            'mr:status', 'skos:note', 'mr:reason',
-                            'dc:date', 'dc:creator'))
+        ec = '''{}
+        is not a superset of the mandated predicates set for a mapping record
+        {}'''
+        ec = ec.format(preds, mandated_prefixes)
+        raise ValueError(ec)
+    singular_prefixes = set(('mr:source', 'mr:target', 'mr:invertible',
+                             'dc:replaces', 'mr:status', 'skos:note',
+                             'mr:reason', 'dc:date', 'dc:creator'))
     search_string = ''
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
             if pred in singular_prefixes and len(po_dict[pred]) != 1:
-                raise ValueError('create_mapping limits this predicate (%s) to one statement per record %s' % pred)
+                ec = 'create_mapping limits {} to one statement per record '
+                ec = ec.format(pred)
+                raise ValueError(ec)
             else:
                 for obj in po_dict[pred]:
                     search_string += '''
@@ -448,7 +637,8 @@ def create_mapping(fuseki_process, po_dict, debug=False):
         }
         }
         ''' % (mapping, search_string)
-        insert_results = fuseki_process.run_query(instr, update=True, debug=debug)
+        insert_results = fuseki_process.run_query(instr, update=True,
+                                                  debug=debug)
     return [{'map':mapping}]
 
 
@@ -456,7 +646,8 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
     """
     return a mapping record if one exists, from the provided id
     """
-    qstr = '''SELECT ?mapping ?source ?target ?invertible ?replaces ?status ?note ?reason ?date ?creator
+    qstr = '''SELECT ?mapping ?source ?target ?invertible ?replaces ?status
+                     ?note ?reason ?date ?creator
     (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = '&') AS ?owners)
     (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = '&') AS ?watchers)
     (GROUP_CONCAT(DISTINCT(?valueMap); SEPARATOR = '&') AS ?valueMaps)
@@ -474,10 +665,11 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
     OPTIONAL {?mapping mr:valueMap ?valueMap .}
     OPTIONAL {?mapping mr:owner ?owner .}
     OPTIONAL {?mapping mr:watcher ?watcher .}
-    FILTER(?mapping = <%s>)
+    FILTER(?mapping = %s)
     }
     }
-    GROUP BY ?mapping ?source ?target ?invertible ?replaces ?status ?note ?reason ?date ?creator
+    GROUP BY ?mapping ?source ?target ?invertible ?replaces
+             ?status ?note ?reason ?date ?creator
     ''' % str(map_id)
     result = fuseki_process.run_query(qstr, debug=debug)
     if result == []:
@@ -490,6 +682,58 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
     return result
 
 
+
+
+
+###validation rules
+
+def multiple_mappings(fuseki_process, debug=False):
+    """
+    returns all the mappings which map the same source to a different target
+    """
+    qstr = '''SELECT ?amap ?asource ?atarget ?bmap ?bsource ?btarget
+    WHERE {
+    GRAPH <http://metarelate.net/mappings.ttl> { {
+    ?amap mr:status ?astatus ;
+         mr:source ?asource ;
+         mr:target ?atarget . } 
+    UNION 
+        { 
+    ?amap mr:invertible "True" ;
+         mr:status ?astatus ;
+         mr:target ?asource ;
+         mr:source ?atarget . } 
+    FILTER (?astatus NOT IN ("Deprecated", "Broken"))
+    MINUS {?amap ^dc:replaces+ ?anothermap}
+    } 
+    GRAPH <http://metarelate.net/mappings.ttl> { {
+    ?bmap mr:status ?bstatus ;
+         mr:source ?bsource ;
+         mr:target ?btarget . } 
+    UNION  
+        { 
+    ?bmap mr:invertible "True" ;
+         mr:status ?bstatus ;
+         mr:target ?bsource ;
+         mr:source ?btarget . } 
+    FILTER (?bstatus NOT IN ("Deprecated", "Broken"))
+    MINUS {?bmap ^dc:replaces+ ?bnothermap}
+    filter (?bmap != ?amap)
+    filter (?bsource = ?asource)
+    filter (?btarget != ?atarget)
+    } 
+    GRAPH <http://metarelate.net/concepts.ttl> {
+    ?asource mr:format ?asourceformat .
+    ?bsource mr:format ?bsourceformat .
+    ?atarget mr:format ?atargetformat .
+    ?btarget mr:format ?btargetformat .
+    }
+    filter (?btargetformat = ?atargetformat)
+    }
+    ORDER BY ?asource
+    '''
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
 
 
 
@@ -513,7 +757,8 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
 
 
 ##### legacy ###
-
+######  not functional, not for review #######
+######  to end ###########
 def current_mappings(fuseki_process, debug=False):
     """
     return all triples currently valid in the mappings graph
@@ -539,151 +784,6 @@ def current_mappings(fuseki_process, debug=False):
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
 
-# def mapping_by_link(fuseki_process, paramlist=False,debug=False):
-#     """
-#     return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
-#     or all mappings if linklist is left as False 
-#     """
-#     linkpattern = ''
-#     if paramlist:
-#         linkpattern = '''          ?link '''
-#         for param in paramlist:
-#             linkpattern += '''
-#                     mr:%slink <%s> ;
-#             ''' % (param[0].upper(),param[1])
-#         linkpattern.rstrip(';')
-#         linkpattern += ' .'
-#     qstr = '''
-#     SELECT ?map
-#        (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
-#        (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
-#        ?creator 
-#        ?creation 
-#        ?status 
-#        ?replaces
-#        ?comment
-#        ?reason
-#        ?link
-#        (GROUP_CONCAT(DISTINCT(?cfitem); SEPARATOR = "&") AS ?cfelems) 
-#        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
-#        ?cfim ?cfex 
-#        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
-#        ?umim ?umex 
-#        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-#        ?gribim ?gribex
-#        WHERE
-#        {
-#               GRAPH <http://metocean/cflinks.ttl> {
-#               ?cflink ?cfp ?cfo .
-#               BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?cfitem)
-#               }
-#        { SELECT ?map ?owner ?watcher ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cflink ?umlink ?griblink
-
-#        WHERE { GRAPH <http://metocean/mappings.ttl> {
-#            ?map mr:owner ?owner ;
-#                 mr:watcher ?watcher ;
-#                 mr:creator ?creator ;
-#                 mr:creation ?creation ;
-#                 mr:status ?status ;
-#                 dc:replaces ?replaces ;
-#                 mr:comment ?comment ;
-#                 mr:reason ?reason ;
-#                 mr:linkage ?link .
-
-#        FILTER (?status NOT IN ("Deprecated", "Broken"))
-#        MINUS {?map ^dc:replaces+ ?map}
-#        } GRAPH <http://metocean/linkages.ttl> {
-# %s
-#        OPTIONAL
-#            {?link mr:CFlink ?cflink ;
-#                   mr:CFimport ?cfim ;
-#                   mr:CFexport ?cfex . }
-#        OPTIONAL
-#            {?link mr:UMlink ?umlink ;
-#                   mr:UMimport ?umim ;
-#                   mr:UMexport ?umex . }
-#        OPTIONAL
-#            {?link mr:GRIBlink ?griblink ;
-#                   mr:GRIBimport ?gribim ;
-#                   mr:GRIBexport ?gribex .}
-              
-
-#     } } } }
-#     GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
-#     ''' % (linkpattern)
-#     results = fuseki_process.run_query(qstr, debug=debug)
-#     return results
-
-# def fast_mapping_by_link(fuseki_process, dataformat,linklist=False,debug=False):
-#     """
-#     return all the valid mappings, with linkage and cf elements for a given data format and linklist, 
-#     or all mappings if linklist is left as False 
-#     """
-#     linkpattern = ''
-#     if linklist:
-#         linkpattern = '''          ?link '''
-#         for link in linklist:
-#             linkpattern += '''
-#                     mr:%slink <%s> ;
-#             ''' % (dataformat.upper(),link)
-#         linkpattern.rstrip(';')
-#         linkpattern += ' .'
-#     qstr = '''
-#     SELECT ?map
-#        (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
-#        (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers) 
-#        ?creator 
-#        ?creation 
-#        ?status 
-#        ?replaces
-#        ?comment
-#        ?reason
-#        ?link
-#        (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks)
-#        ?cfim ?cfex 
-#        (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
-#        ?umim ?umex
-#        (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-#        ?gribim ?gribex
-
-#     WHERE
-      
-#  { GRAPH <http://metocean/mappings.ttl> {
-#            ?map mr:owner ?owner ;
-#                 mr:watcher ?watcher ;
-#                 mr:creator ?creator ;
-#                 mr:creation ?creation ;
-#                 mr:status ?status ;
-#                 dc:replaces ?replaces ;
-#                 mr:comment ?comment ;
-#                 mr:reason ?reason ;
-#                 mr:linkage ?link .
-# %s
-#        FILTER (?status NOT IN ("Deprecated", "Broken"))
-#        MINUS {?map ^dc:replaces+ ?map}
-#            }
-# GRAPH <http://metocean/linkages.ttl> {
-#        OPTIONAL
-#            {?link mr:CFlink ?cflink ;
-#                   mr:CFimport ?cfim ;
-#                   mr:CFexport ?cfex . }
-#        OPTIONAL
-#            {?link mr:UMlink ?umlink ;
-#                   mr:UMimport ?umim ;
-#                   mr:UMexport ?umex . }
-#        OPTIONAL
-#            {?link mr:GRIBlink ?griblink ;
-#                   mr:GRIBimport ?gribim ;
-#                   mr:GRIBexport ?gribex .}
-       
-
-#     }}
-#     GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?link ?cfim ?cfex ?umim ?umex ?gribim ?gribex
-#     ''' % (linkpattern)
-#     results = fuseki_process.run_query(qstr, debug=debug)
-#     return results
-
-
 
 
 def select_graph(fuseki_process, graph, debug=False):
@@ -701,41 +801,6 @@ def select_graph(fuseki_process, graph, debug=False):
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
-
-# def counts_by_graph(fuseki_process, graph, debug=False):
-#     """This query relies on a feature of Jena that is not yet in the official
-#     SPARQL v1.1 standard insofar as 'GRAPH ?g' has undetermined behaviour
-#     under the standard but Jena interprets and treats the '?g' 
-#     just like any other variable.
-#     """
-#     qstr = '''
-#         SELECT ?g (COUNT(DISTINCT ?s) as ?count)
-#         WHERE {
-#             GRAPH ?g { ?s ?p ?o } .
-#             FILTER( REGEX(str(?g), '%s') ) .
-#         }
-#         GROUP by ?g
-#         ORDER by ?g
-#     ''' % graph
-#     results = fuseki_process.run_query(qstr)
-#     return results
-
-# def count_by_graph(fuseki_process, debug=False):
-#     '''This query relies on a feature of Jena that is not yet in the official
-#     SPARQL v1.1 standard insofar as 'GRAPH ?g' has undetermined behaviour
-#     under the standard but Jena interprets and treats the '?g' 
-#     just like any other variable.
-#     '''
-#     qstr = '''
-#         SELECT ?g (COUNT(DISTINCT ?s) as ?count)
-#         WHERE {
-#             GRAPH ?g { ?s ?p ?o } .
-#         }
-#         GROUP by ?g
-#         ORDER by ?g
-#     '''
-#     results = fuseki_process.run_query(qstr)
-#     return results
 
 
 
@@ -773,148 +838,6 @@ def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
     return results
 
 
-# def get_cflink_by_id(fuseki_process, cflink, debug=False):
-#     """
-#     return a cflink record, if one exists, using the MD5 ID
-#     """
-#     qstr = '''
-#     SELECT ?type ?standard_name ?units ?long_name
-#     WHERE
-#     { GRAPH <http://metocean/cflinks.ttl> {
-#     ?s mrcf:type ?type .
-#     OPTIONAL
-#     { ?s mrcf:standard_name ?standard_name .}
-#     OPTIONAL
-#     { ?s mrcf:units ?units . }
-#     OPTIONAL
-#     { ?s mrcf:long_name ?long_name . }
-#     FILTER (?s = <%s>)
-#     }
-#     }
-#     ''' % cflink
-#     results = fuseki_process.run_query(qstr, debug=debug)
-
-#     return results
-
-# def get_cflinks(fuseki_process, pred_obj=None, debug=False):
-#     """
-#     return cflink records matching the predicate object dictionary items
-#     """
-#     filterstr = ''
-#     if pred_obj:
-#         for key in pred_obj.keys():
-#             filterstr += '''FILTER (bound(?{key}))
-#             FILTER (STRSTARTS(str(?{key}), str({val})))
-#             FILTER (STRENDS(str(?{key}), str({val})))
-#             FILTER (STRLEN(str(?{key})) = STRLEN(str({val})))
-#             '''.format(key=key.split(':')[1], val=pred_obj[key])
-#     qstr  = '''
-#     SELECT ?s ?type ?standard_name ?units ?long_name
-#     WHERE
-#     { GRAPH <http://metarelate.net/cflinks.ttl> {
-#     ?s mrcf:type ?type .
-#     OPTIONAL
-#     { ?s mrcf:standard_name ?standard_name .}
-#     OPTIONAL
-#     { ?s mrcf:units ?units . }
-#     OPTIONAL
-#     { ?s mrcf:long_name ?long_name . }
-#     %s
-#     } }
-#     ''' % filterstr 
-#     results = fuseki_process.run_query(qstr, debug=debug)
-
-#     return results
-
-
-
-
-# def create_cflink(fuseki_process, po_dict, subj_pref, debug=False):
-#     """
-#     create a new link, using the provided predicates:objectsList dictionary, if one does not already exists.
-#     if one already exists, use this in preference
-#     subj_pref is the prefix for the subject, e.g. http://www.metarelate.net/metocean/cf, http://www.metarelate.net/metocean/linkage
-#     """
-#     md5 = make_hash(po_dict)
-
-#     current_link = get_cflinks(fuseki_process, po_dict)
-#     if len(current_link) == 0:
-#         pred_obj = ''
-#         for pred in po_dict.keys():
-#             pattern_string = ''' %s %s ;
-#             ''' % (pred, po_dict[pred])
-#             pred_obj += pattern_string
-#         qstr = '''
-#         INSERT DATA
-#         { GRAPH <http://metarelate.net/cflinks.ttl>
-#         { <%s/%s> %s
-#         mr:saveCache "True" .
-#         }
-#         }
-#         ''' % (subj_pref, md5, pred_obj)
-#         results = fuseki_process.run_query(qstr, update=True, debug=debug)
-#         current_link = get_cflinks(fuseki_process, po_dict)
-#     return current_link
-
-
-# def get_linkage(fuseki_process, fso_dict, debug=False):
-#     """
-#     return a linkage if one exists, using the full record:
-#         a dictionary of format strings and lists of objects.
-#     if one does not exist, create it
-#     """
-#     subj_pref = 'http://www.metarelate.net/metOcean/linkage'
-#     search_string = ''
-#     for fstring in fso_dict.keys():
-#         if isinstance(fso_dict[fstring], list):
-#             for obj in fso_dict[fstring]:
-#                 search_string += '''
-#                 %s %s ;''' % (fstring, obj)
-#         else:
-#             search_string += '''
-#             %s %s ;''' % (fstring, fso_dict[fstring])
-#     if search_string != '':
-#         search_string += '.'
-#         qstr = '''
-#         SELECT ?linkage
-#             (GROUP_CONCAT(DISTINCT(?cflink); SEPARATOR = "&") AS ?cflinks) 
-#             (GROUP_CONCAT(DISTINCT(?umlink); SEPARATOR = "&") AS ?umlinks)
-#             (GROUP_CONCAT(DISTINCT(?griblink); SEPARATOR = "&") AS ?griblinks)
-
-#         WHERE
-#         { GRAPH <http://metocean/linkages.ttl>{
-#             ?linkage %s
-#        OPTIONAL
-#            {?linkage mr:CFlink ?cflink . }
-#        OPTIONAL
-#            {?linkage mr:UMlink ?umlink . }
-#        OPTIONAL
-#            {?linkage mr:GRIBlink ?griblink .}
-#             FILTER (regex(str(?linkage),"%s", "i"))
-#             }
-#         }
-#         GROUP BY ?linkage
-#         ''' % (search_string, subj_pref)
-
-#         results = fuseki_process.run_query(qstr, debug=debug)
-#         if len(results) == 1 and results[0] == {}:
-#             pre = prefixes.Prefixes()
-#             md5 = make_hash(fso_dict)
-
-#             inststr = '''
-#             INSERT DATA
-#             { GRAPH <http://metocean/linkages.ttl>
-#             { <%s/%s> %s
-#             mr:saveCache "True" .
-#             }
-#             }
-#             ''' % (subj_pref, md5, search_string.rstrip('.'))
-#             insert_results = fuseki_process.run_query(inststr, update=True, debug=debug)
- #             results = fuseki_process.run_query(qstr, debug=debug)
-#     else:
-#         results = []
-
-#     return results
 
 # def concept_components(fuseki_process, concepts, debug=False):
 #     """
@@ -1117,155 +1040,4 @@ def mappings_by_concept(fuseki_process, concepts, debug=False):
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
-# def create_mapping(fuseki_process, po_dict, debug=False):
-#     """
-#     create a new mapping record from a dictionary of predicates and lists of objects
-#     """
-#     subj_pref = 'http://www.metarelate.net/metocean/mapping'
-#     results = None
-#     pre = prefixes.Prefixes()
-
-#     md5 = make_hash(po_dict, ['mr:creation'])
-
-#     pred_obj = ''
-#     for pred,objects in po_dict.iteritems():
-#         if isinstance(objects, list):
-#             for obj in objects:
-#                 pattern_string = ''' %s %s ;
-#                 ''' % (pred, obj)
-#                 pred_obj += pattern_string
-#         else:
-#             pattern_string = ''' %s %s ;
-#             ''' % (pred, objects)
-#             pred_obj += pattern_string
-#     # check if we already have one:
-#     result = subject_graph_pattern(fuseki_process, 'http://metarelate.net/mappings.ttl',
-#             'http://www.metarelate.net/metocean/mapping/%s' % md5)
-#     if len(result) == 0:
-#         qstr = '''
-#         INSERT DATA
-#         { GRAPH <http://metarelate.net/mappings.ttl>
-#         { <%s/%s> %s
-#         mr:saveCache "True" .
-#         }
-#         }
-#         ''' % (subj_pref, md5, pred_obj)
-#         results = fuseki_process.run_query(qstr, update=True, debug=debug)
-#     return subj_pref + '/' + md5
-
-# def mapping_by_id(fuseki_process, mappings=None, debug=False):
-#     """
-#     returns a list of fully expanded mappings for a provided list of mapping IDs
-#     """
-#     search_string = ''
-#     if mappings:
-#         map_string = ', '.join(['<%s>' % mapping for mapping in mappings])
-#         search_string = '\tfilter (?map in (%s))' % map_string
-#     qstr = '''SELECT ?map
-#        (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = ",") AS ?owners)
-#        (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = ",") AS ?watchers)
-#        ?creator 
-#        ?creation 
-#        ?status 
-#        ?replaces
-#        ?comment
-#        ?reason
-#        ?source
-#        ?source_format
-#        (GROUP_CONCAT(DISTINCT(?source_comp); SEPARATOR = "&") AS ?source_comps)
-#        (GROUP_CONCAT(DISTINCT(?sourcecfitems); SEPARATOR = "&") AS ?source_cfitems)
-#        ?target
-#        ?target_format
-#        (GROUP_CONCAT(DISTINCT(?target_comp); SEPARATOR = "&") AS ?target_comps)
-#        (GROUP_CONCAT(DISTINCT(?targetcfitems); SEPARATOR = "&") AS ?target_cfitems)
-#        WHERE
-#        { GRAPH <http://metarelate.net/mappings.ttl> {
-#            ?map mr:creator ?creator ;
-#                 mr:creation ?creation ;
-#                 mr:status ?status ;
-#                 mr:reason ?reason ;
-#                 mr:source ?source ;
-#                 mr:target ?target .
-#            OPTIONAL {?map mr:owner ?owner .}
-#            OPTIONAL {?map mr:watcher ?watcher .}
-#            OPTIONAL {?map dc:replaces ?replaces .}
-#            OPTIONAL {?map mr:comment ?comment .}
-#            %s
-#            FILTER (?status NOT IN ("Deprecated", "Broken"))
-#            MINUS {?map ^dc:replaces+ ?anothermap} 
-#            }
-#            GRAPH <http://metarelate.net/concepts.ttl>{
-#            ?source mr:component ?source_comp ;
-#                    mr:format ?source_format .
-#            ?target mr:component ?target_comp ;
-#                    mr:format ?target_format .
-#            }
-#            OPTIONAL { SELECT ?source_comp (GROUP_CONCAT(?sourcecfitem; SEPARATOR = "|") as ?sourcecfitems ) 
-#            WHERE { GRAPH <http://metarelate.net/cflinks.ttl> {
-#            ?source_comp ?cfp ?cfo .
-#            BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?sourcecfitem) } }
-#            GROUP BY ?source_comp }
-#            OPTIONAL { SELECT ?target_comp (GROUP_CONCAT(?targetcfitem; SEPARATOR = "|") as ?targetcfitems ) 
-#            WHERE { GRAPH <http://metarelate.net/cflinks.ttl> {
-#            ?target_comp ?cfp ?cfo .
-#            BIND(CONCAT(STR(?cfp), ";", STR(?cfo)) AS ?targetcfitem) } }
-#            GROUP BY ?target_comp }
-#            }
-#         GROUP BY ?map ?creator ?creation ?status ?replaces ?comment ?reason ?source ?source_format ?target ?target_format
-#     ''' % (search_string)
-#     results = fuseki_process.run_query(qstr, debug=debug)
-#     return results
-
-
-###validation rules
-
-def multiple_mappings(fuseki_process, debug=False):
-    """returns all the mappings which map the same source to a different target"""
-    qstr = '''SELECT ?amap ?asource ?atarget ?bmap ?bsource ?btarget
-    WHERE {
-    GRAPH <http://metarelate.net/mappings.ttl> {
-    ?amap mr:status ?astatus ;
-         mr:source ?asource ;
-         mr:target ?atarget .
-    FILTER (?astatus NOT IN ("Deprecated", "Broken"))
-    MINUS {?amap ^dc:replaces+ ?anothermap}
-    }
-    GRAPH <http://metarelate.net/mappings.ttl> {
-    ?bmap mr:status ?bstatus ;
-         mr:source ?bsource ;
-         mr:target ?btarget .
-    FILTER (?bstatus NOT IN ("Deprecated", "Broken"))
-    MINUS {?bmap ^dc:replaces+ ?anothermap}
-    filter (?bmap != ?amap)
-    filter (?bsource = ?asource)
-    filter (?btarget != ?atarget)
-    }
-    GRAPH <http://metarelate.net/concepts.ttl> {
-    ?asource mr:format ?asourceformat .
-    ?bsource mr:format ?bsourceformat .
-    ?atarget mr:format ?atargetformat .
-    ?btarget mr:format ?btargetformat .
-    }
-    filter (?btargetformat = ?atargetformat)
-    }
-    ORDER BY ?asource
-    '''
-    results = fuseki_process.run_query(qstr, debug=debug)
-    return results
-
-
-def print_records(res):
-    """ helper for command line query interpretation"""
-    print_string = ''
-    for r in res:
-        if len(r.keys()) == 3 and r.has_key('s') and r.has_key('p') and r.has_key('o'):
-            print_string += '%s\n' % r['s']
-            print_string += '\t%s\n' % r['p']
-            print_string += '\t\t%s\n' % r['o']
-            print_string += '\n'
-        else:
-            for k,v in r.iteritems():
-                print_string += '%s %s\n' (k, v)
-            print_string += '\n'
-    return print_string
 

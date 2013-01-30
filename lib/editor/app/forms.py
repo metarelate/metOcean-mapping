@@ -33,7 +33,11 @@ from settings import READ_ONLY
 from settings import fuseki_process
 
 def get_states():
-
+    """
+    helper method to return valid states
+    (consider storing these in the triple store and
+    providing access via a query)
+    """
     STATES = (
         'Draft',
         'Proposed',
@@ -44,7 +48,11 @@ def get_states():
     return STATES
 
 def get_reasons():
-
+    """
+    helper method to return valid reasons
+    (consider storing these in the triple store and
+    providing access via a query)
+    """
     REASONS = (
         'new mapping',
         'added metadata',
@@ -57,7 +65,9 @@ def get_reasons():
 
 
 def formats():
-    """temporary, returns formats"""
+    """temporary, returns formats
+    These should be stored in the triple store and
+    provided by a query"""
     format_choices = [('http://metarelate.net/metocean/format/grib', 'GRIB'),
                ('http://metarelate.net/metocean/format/um', 'UM'),
                ('http://metarelate.net/metocean/format/cf', 'CF')]
@@ -65,23 +75,44 @@ def formats():
 
 class MappingFormats(forms.Form):
     """
+    form to define the file format of the source and target
+    for a mapping
     """
     source_format = forms.ChoiceField(choices=formats())
     target_format = forms.ChoiceField(choices=formats())
     def clean(self):
-        if self.cleaned_data['source_format'] == self.cleaned_data['target_format']:
-            raise forms.ValidationError('The source and target formats must be different')
+        data = self.cleaned_data
+        if data['source_format'] == data['target_format']:
+            raise forms.ValidationError(
+                'The source and target formats must be different')
         return self.cleaned_data
 
 
+class Mediator(forms.Form):
+    """
+    form to select a mediator from the list of mediators
+    """
+    mediator = forms.ChoiceField()
+    def __init__(self, *args, **kwargs):
+        fformat = kwargs.pop('fformat')
+        super(Mediator, self).__init__(*args, **kwargs)
+        #meds = moq.get_mediators(fuseki_process, fformat)['med']
+        meds = [('<http://www.metarelate.net/metocean/mediates/cf/calendar>',
+                 'calendar')]
+        self.fields['mediator'].choices = meds
+
 class MappingConcept(forms.Form):
     """
+    form to define the concepts for a mapping
+    the work of the form is handled by the json
+    in the referrer, not the form class
     """
     def clean(self):
         return self.cleaned_data
 
 class Value(forms.Form):
     """
+    form to define a value for use in a concept
     """
     #vproperty =  forms.ChoiceField()
     vproperty =  forms.CharField()
@@ -90,33 +121,45 @@ class Value(forms.Form):
         fformat = kwargs.pop('fformat')
         super(Value, self).__init__(*args, **kwargs)
         if fformat == 'um':
-            self.fields['vproperty'].initial = '<http://reference.metoffice.gov.uk/def/um/umdp/F3/>'
-            # umRes = moq.subject_by_graph(fuseki_process, 'http://um/umdpF3.ttl')
-            # choices = [(um['subject'], um['subject'].split('/')[-1]) for um in umRes]
+            F3 = '<http://reference.metoffice.gov.uk/def/um/umdp/F3/>'
+            self.fields['vproperty'].initial = F3
+            # umRes = moq.subject_by_graph(fuseki_process,
+                                         # 'http://um/umdpF3.ttl')
+            # choices = [(um['subject'], um['subject'].split('/')[-1]) for
+                                                             # um in umRes]
             # self.fields['vproperty'].choices = choices
         elif fformat == 'cf':
-            self.fields['vproperty'].initial = '<http://def.cfconventions.org/data_model/>'
-            # cfRes = moq.subject_by_graph(fuseki_process, 'http://CF/cfmodel.ttl')
-            # choices = [(cf['subject'], cf['subject'].split('/')[-1]) for cf in cfRes]
+            CF = '<http://def.cfconventions.org/data_model/>'
+            self.fields['vproperty'].initial = CF
+            # cfRes = moq.subject_by_graph(fuseki_process,
+                                         # 'http://CF/cfmodel.ttl')
+            # choices = [(cf['subject'], cf['subject'].split('/')[-1]) for
+                                                             # cf in cfRes]
             # self.fields['vproperty'].choices = choices
         elif fformat == 'grib':
-            self.fields['vproperty'].initial = '<http://def.ecmwf.int/api/grib/keys/>'
-            # gribRes = moq.subject_by_graph(fuseki_process, 'http://grib/gribapi.ttl')
-            # choices = [(grib['subject'], grib['subject'].split('/')[-1]) for grib in gribRes]
+            GRIB = '<http://def.ecmwf.int/api/grib/keys/>'
+            self.fields['vproperty'].initial = GRIB
+            # gribRes = moq.subject_by_graph(fuseki_process,
+                                           # 'http://grib/gribapi.ttl')
+            # choices = [(grib['subject'], grib['subject'].split('/')[-1]) for
+                                                             # grib in gribRes]
             # self.fields['vproperty'].choices = choices
     def clean(self):
         try:
             int(self.cleaned_data['vliteral'])
         except ValueError:
             if self.cleaned_data['vliteral'].startswith('http'):
-                self.cleaned_data['vliteral'] = '<%s>' % self.cleaned_data['vliteral']
+                self.cleaned_data['vliteral'] = '<{}>'.format(
+                                                self.cleaned_data['vliteral'])
             else:
-                self.cleaned_data['vliteral'] = '"%s"' % self.cleaned_data['vliteral']
+                self.cleaned_data['vliteral'] = '"{}"'.format(
+                                                self.cleaned_data['vliteral'])
         return self.cleaned_data
 
 
 class ValueMap(forms.Form):
     """
+    form to define a value map
     """
     source_value = forms.ChoiceField()
     target_value = forms.ChoiceField()
@@ -131,6 +174,8 @@ class ValueMap(forms.Form):
     
 class MappingMeta(forms.Form):
     """
+    form to define the metadata for a mapping
+    pne the source, target and value maps are defined
     """
     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
     mapping = forms.CharField(max_length=200, required=False,
@@ -138,15 +183,22 @@ class MappingMeta(forms.Form):
     last_edit = forms.CharField(max_length=50, required=False,
                                 widget=forms.TextInput(attrs={'readonly':True}))
     last_editor = forms.CharField(max_length=50, required=False,
-                                  widget=forms.TextInput(attrs={'readonly':True}))
-    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts(fuseki_process, 'people')], required=False)
-#    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')], widget=SelectWithPopUp)
+                                  widget=forms.TextInput(
+                                      attrs={'readonly':True}))
+    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for
+                                r in moq.get_contacts(fuseki_process, 'people')]
+                                , required=False)
+#    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for
+                                # r in moq.get_contacts('people')],
+                                # widget=SelectWithPopUp)
     note = forms.CharField(max_length=200, required=False,
-                                   widget=forms.Textarea(attrs={'readonly':True}))
-    comment = forms.CharField(max_length=200,required=False, widget=forms.Textarea)
+                           widget=forms.Textarea(attrs={'readonly':True}))
+    comment = forms.CharField(max_length=200,required=False,
+                              widget=forms.Textarea)
     reason = forms.CharField(max_length=50, required=False,
-                                  widget=forms.TextInput(attrs={'readonly':True}))
-    next_reason = forms.ChoiceField(choices=[(x,x) for x in get_reasons()], required=False)
+                             widget=forms.TextInput(attrs={'readonly':True}))
+    next_reason = forms.ChoiceField(choices=[(x,x) for x in get_reasons()],
+                                    required=False)
     owners = forms.CharField(max_length=200, required=False,
                              widget=forms.TextInput(attrs={'readonly':True}))
     add_owners = forms.CharField(max_length=200, required=False)
@@ -158,8 +210,9 @@ class MappingMeta(forms.Form):
     replaces = forms.CharField(max_length=128, required=False,
                                widget=forms.TextInput(attrs={'readonly':True}))
     status = forms.CharField(max_length=15, required=False,
-                                     widget=forms.TextInput(attrs={'readonly':True}))
-    next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()], required=False)
+                             widget=forms.TextInput(attrs={'readonly':True}))
+    next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()],
+                                    required=False)
     invertible = forms.BooleanField(widget=forms.NullBooleanSelect)
     source = forms.CharField(max_length=200, 
                               widget=forms.TextInput(attrs={'hidden':True}))
@@ -169,48 +222,6 @@ class MappingMeta(forms.Form):
                               widget=forms.TextInput(attrs={'hidden':True}))
 
     
-
-
-# def cfitems_str(cfitems):
-#     """returns the collection of cfitems as a single string,
-#     removing all url encoding from the elements,
-#     for viewing on screen"""
-#     print 'cfitems: ', cfitems
-#     items = cfitems.split('&')
-#     items = [i.split('|') for i in items]
-#     items = [[j.split(';')[0].split('#')[-1] +';' + j.split(';')[1].split('/')[-1] for j in i] for i in items]
-#     cfi = '&'.join(['|'.join(elem) for elem in items])
-#     return cfi
-
-
-# def gribitems_str(gribitems):
-#     """returns the collection of grib items as a single string,
-#     removing all url encoding from the elements,
-#     for viewing on screen
-#     """
-#     return None
-
-# def fcitems_str(gribitems):
-#     """returns the collection of fieldcode items as a single string,
-#     removing all url encoding from the elements,
-#     for viewing on screen
-#     """
-#     return None
-    
-# def stashitems_str(gribitems):
-#     """returns the collection of stash items as a single string,
-#     removing all url encoding from the elements,
-#     for viewing on screen
-#     """
-#     return None
-
-# def umitems_str(umitems):
-#     """
-#     """
-#     #check for field code or stash concept
-#     return None
-
-
 
 
 class URLwidget(forms.TextInput):
@@ -232,14 +243,15 @@ class HomeForm(forms.Form):
     """
     cache_status = forms.CharField(max_length=200, 
                                    widget=forms.TextInput(attrs={'size':'100',
-                                                                 'readonly':True}))
+                                                                 'readonly':True
+                                                                 }))
     cache_state = forms.CharField(required=False,
                                   widget=forms.Textarea(attrs={'cols':100,
                                                                'rows':50,
-                                                               'readonly':True}))
+                                                               'readonly':True
+                                                               }))
 
     def clean(self):
-        #print 'home submitted'
         if self.data.has_key('load'):
             print 'data loaded'
             fuseki_process.load()
@@ -252,7 +264,6 @@ class HomeForm(forms.Form):
         elif self.data.has_key('validate'):
             print 'validate triplestore'
             self.cleaned_data['validation'] = fuseki_process.validate()
-        #print self.cleaned_data
         return self.cleaned_data
 
 
@@ -268,12 +279,8 @@ class SearchParam(forms.Form):
                    ('http://i.am.a/cheetah', 'cheetah'),
                    ('http://i.am.a/dugong', 'dugong'),
                    ('http://i.am.a/emu', 'emu'))
-        #define choices
-        #if dataFormat == 'um' and qualifier:
-        #print self.fields
         self.fields['parameter'].choices = choices
-    # def clean(self):
-    #     return self.cleaned_data
+
 
 class UMSTASHParam(forms.Form):
     '''A django form for adding UM STASH elements to a linkage search path
@@ -281,9 +288,11 @@ class UMSTASHParam(forms.Form):
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
         super(UMSTASHParam, self).__init__(*args, **kwargs)
-        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/stashconcepts.ttl')
+        stashRes = moq.subject_by_graph(fuseki_process,
+                                        'http://um/stashconcepts.ttl')
         #define choices
-        choices = [(stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
+        choices = [(stash['subject'], stash['subject'].split('/')[-1]) for
+                   stash in stashRes]
         
 
         self.fields['parameter'].choices = choices
@@ -294,9 +303,10 @@ class UMFCParam(forms.Form):
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
         super(UMFCParam, self).__init__(*args, **kwargs)
-        stashRes = moq.subject_by_graph(fuseki_process, 'http://um/fieldcode.ttl')
+        fcRs = moq.subject_by_graph(fuseki_process,
+                                        'http://um/fieldcode.ttl')
         #define choices
-        choices = [(stash['subject'], stash['subject'].split('/')[-1]) for stash in stashRes]
+        choices = [(fc['subject'], fc['subject'].split('/')[-1]) for fc in fcRs]
         
 
         self.fields['parameter'].choices = choices
@@ -308,11 +318,11 @@ class GRIBParam(forms.Form):
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
         super(GRIBParam, self).__init__(*args, **kwargs)
-        gribRes = moq.subject_by_graph(fuseki_process, 'http://grib/codesflags.ttl')
+        gribRes = moq.subject_by_graph(fuseki_process,
+                                       'http://grib/codesflags.ttl')
         #define choices
         choices = [(grib['subject'], grib['subject']) for grib in gribRes]
         
-
         self.fields['parameter'].choices = choices
 
             
@@ -327,9 +337,11 @@ class CFParam(forms.Form):
     
     def __init__(self,  *args, **kwargs):
         super(CFParam, self).__init__(*args, **kwargs)
-        snRes = moq.subject_by_graph(fuseki_process, 'http://CF/cf-standard-name-table.ttl')
+        snRes = moq.subject_by_graph(fuseki_process,
+                                     'http://CF/cf-standard-name-table.ttl')
         #define choices
-        choices = [(name['subject'],name['subject'].split('/')[-1]) for name in snRes]
+        choices = [(name['subject'],name['subject'].split('/')[-1]) for
+                                                              name in snRes]
 
         self.fields['standard_name'].choices = choices
         self.fields['parameter'].widget = forms.HiddenInput()
@@ -338,8 +350,10 @@ class CFParam(forms.Form):
         cleaned_data = super(CFParam, self).clean()
         pred_obj = {}
         pred_obj['mrcf:type'] = '"%s"' % cleaned_data.get('cf_type')
-        if cleaned_data.get('standard_name') != 'http://cf-pcmdi.llnl.gov/documents/':
-            pred_obj['mrcf:standard_name'] = '<%s>' % cleaned_data.get('standard_name')
+        if cleaned_data.get('standard_name') != \
+                                        'http://cf-pcmdi.llnl.gov/documents/':
+            pred_obj['mrcf:standard_name'] = '<{}>'.format(
+                                             cleaned_data.get('standard_name'))
         if cleaned_data.get('long_name') != '':
             pred_obj['mrcf:long_name'] = '"%s"' % cleaned_data.get('long_name')
         if cleaned_data.get('units') != '':
@@ -348,8 +362,10 @@ class CFParam(forms.Form):
         cfres = moq.get_cflinks(fuseki_process, pred_obj)
         # print 'cfres: ', cfres
         if not cfres:
-            #if there is no result returned from the query, then create the record and rerun the query
-            cfres = moq.create_cflink(fuseki_process, pred_obj, 'http://www.metarelate.net/metocean/cf')
+            # if there is no result returned from the query, then
+            # create the record and rerun the query
+            cfres = moq.create_cflink(fuseki_process, pred_obj,
+                                      'http://www.metarelate.net/metocean/cf')
             #cfres = moq.get_cflinks(fuseki_process, pred_obj)
         # print len(cfres)
         # print 'cfres: ', cfres
@@ -371,7 +387,10 @@ class ContactForm(forms.Form):
     error_css_class = 'error'
     isoformat = ("%Y-%m-%dT%H:%M:%S.%f",)
     github_name = forms.CharField(max_length=50)
-    register = forms.ChoiceField(choices=(('http://www.metarelate.net/metOcean/people','people'),('http://www.metarelate.net/metOcean/organisations','organisations')))
+    types = (('http://www.metarelate.net/metOcean/people','people'),
+             ('http://www.metarelate.net/metOcean/organisations',
+                                                   'organisations'))
+    register = forms.ChoiceField(choices=types)
 
 
     def clean(self):
@@ -381,112 +400,6 @@ class ContactForm(forms.Form):
             return self.cleaned_data
 
 
-
-
-# class MappingEditForm(forms.Form):
-#     required_css_class = 'required'
-#     error_css_class = 'error'
-#     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
-#     mapping = forms.CharField(max_length=200)
-# #    linkage = forms.CharField(max_length=200)
-#     last_edit = forms.CharField(max_length=50, required=False)
-#     last_editor = forms.CharField(max_length=50)
-#     #editor = forms.CharField(max_length=50, required=False)
-#     editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts(fuseki_process, 'people')])
-# #    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for r in moq.get_contacts('people')], widget=SelectWithPopUp)
-#     last_comment = forms.CharField(max_length=200)
-#     comment = forms.CharField(max_length=200,required=False)
-#     last_reason = forms.CharField(max_length=50)
-#     reason = forms.ChoiceField(choices=[(x,x) for x in get_reasons()])
-#     owners = forms.CharField(max_length=200, required=False)
-#     add_owners = forms.CharField(max_length=200, required=False)
-#     remove_owners = forms.CharField(max_length=200, required=False)
-#     watchers = forms.CharField(max_length=200, required=False)
-#     add_watchers = forms.CharField(max_length=200, required=False)
-#     remove_watchers = forms.CharField(max_length=200, required=False)
-#     replaces = forms.CharField(max_length=128, required=False)
-#     current_status = forms.CharField(max_length=15)
-#     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()])
-#     sources = forms.CharField(max_length=1000, required=False)
-#     sources_view = forms.CharField(max_length=1000, required=False)
-#     targets  = forms.CharField(max_length=1000, required=False)
-#     targets_view = forms.CharField(max_length=1000, required=False)
-
-#     def __init__(self, *args, **kwargs):
-#         super(MappingEditForm, self).__init__(*args, **kwargs)
-#         #pre = prefixes.Prefixes()
-#         self.fields['current_status'].widget.attrs['readonly'] = True
-#         self.fields['owners'].widget.attrs['readonly'] = True
-#         self.fields['watchers'].widget.attrs['readonly'] = True
-#         self.fields['last_edit'].widget.attrs['readonly'] = True
-#         self.fields['last_editor'].widget.attrs['readonly'] = True
-#         self.fields['last_comment'].widget.attrs['readonly'] = True
-#         self.fields['last_reason'].widget.attrs['readonly'] = True
-#         #self.fields['replaces'].widget = URLwidget()
-#         self.fields['replaces'].widget.attrs['readonly'] = True
-#         self.fields['mapping'].widget.attrs['readonly'] = True
-#         self.fields['sources'].widget.attrs['readonly'] = True
-#         self.fields['targets'].widget.attrs['readonly'] = True
-#         self.fields['sources'].widget = forms.HiddenInput()
-#         self.fields['targets'].widget = forms.HiddenInput()
-
-
-#     def clean(self):
-#         if READ_ONLY:
-#             raise ValidationError('System in Read-Only mode') 
-#         else:
-#             return self.cleaned_data
-
-
-#     def expand_links(self, kwargs, name):
-#         links = None
-#         if kwargs['initial'].has_key(name):
-#             links = kwargs['initial'][name]
-#         name = name.rstrip('s')
-#         if links:
-#             for i, link in enumerate(links.split('&')):
-#                 if name == 'cflink':
-#                     for k,v in moq.get_cflink_by_id(fuseki_process, link)[0].iteritems():
-#                         self.fields['%s%i_%s' % (name, i, k)] = forms.URLField(initial=v)
-#                         self.fields['%s%i_%s' % (name, i, k)].widget.attrs['readonly'] = True
-#                         self.fields['%s%i_%s' % (name, i, k)].widget.attrs['size'] = 50
-#                 else:
-#                     self.fields['%s%i' % (name, i)] = forms.URLField(initial=link)
-#                     self.fields['%s%i' % (name, i)].widget.attrs['readonly'] = True
-#                     self.fields['%s%i' % (name, i)].widget.attrs['size'] = 50
-
-
-
-# class MappingNewForm(MappingEditForm):
-#     reason = forms.CharField(max_length=15, initial='new mapping')
-#     next_status = forms.CharField(max_length=15, initial='Draft')
-
-#     def __init__(self, *args, **kwargs):
-#         super(MappingNewForm, self).__init__(*args, **kwargs)
-#         self.fields['mapping'].required = False
-#         self.fields['mapping'].widget = forms.HiddenInput()
-#         self.fields['last_edit'].widget = forms.HiddenInput()
-#         self.fields['last_edit'].required = False
-#         self.fields['last_editor'].widget = forms.HiddenInput()
-#         self.fields['last_editor'].required = False
-#         self.fields['last_comment'].widget = forms.HiddenInput()
-#         self.fields['last_comment'].required = False
-#         self.fields['last_reason'].widget = forms.HiddenInput()
-#         self.fields['last_reason'].required = False
-#         self.fields['owners'].widget = forms.HiddenInput()
-#         self.fields['owners'].required = False
-#         self.fields['remove_owners'].widget = forms.HiddenInput()
-#         self.fields['watchers'].widget = forms.HiddenInput()
-#         self.fields['watchers'].required = False
-#         self.fields['remove_watchers'].widget = forms.HiddenInput()
-#         self.fields['current_status'].widget = forms.HiddenInput()
-#         self.fields['current_status'].required = False
-#         self.fields['reason'].widget.attrs['readonly'] = True
-#         self.fields['next_status'].widget.attrs['readonly'] = True
-#         #if kwargs.has_key('initial'):
-#         #    self.expand_links(kwargs, 'cflinks')
-#         #    self.expand_links(kwargs, 'umlinks')
-#         #    self.expand_links(kwargs, 'griblinks')
 
 
 class ConceptForm(forms.Form):

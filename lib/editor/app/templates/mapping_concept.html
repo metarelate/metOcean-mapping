@@ -62,6 +62,35 @@
     <h4>Format</h4>
     {% multi_key mapping "mr:source,mr:format" %}
     </td></tr>
+    {% if mapping|multi_key:"mr:source,dc:requires" %}
+    <tr><td>
+    <h4>Mediators</h4>
+    <ul>
+    {% for elem in mapping|multi_key:"mr:source,dc:requires" %}
+      {% if elem.url %}
+        <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
+          </li>
+      {% else %}
+        <li>dc:requires</li>
+        <ul>
+        <li>{{ elem }}</li>
+        </ul>
+      {% endif %}
+    {% endfor %}
+    {% for elem in mapping|multi_key:"mr:source,dc:mediates" %}
+      {% if elem.url %}
+        <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
+          </li>
+      {% else %}
+        <li>dc:mediates</li>
+        <ul>
+        <li>{{ elem }}</li>
+        </ul>
+      {% endif %}
+    {% endfor %}
+    </ul>
+    </td></tr>
+    {% endif %}
     <tr><td>
     <h4>Definition</h4>
     <ul>
@@ -142,6 +171,35 @@
     <h4>Format</h4>
     {% multi_key mapping "mr:target,mr:format" %}
     </td></tr>
+    {% if mapping|multi_key:"mr:target,dc:requires" %}
+    <tr><td>
+    <h4>Mediators</h4>
+    <ul>
+    {% for elem in mapping|multi_key:"mr:target,dc:requires" %}
+      {% if elem.url %}
+        <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
+          </li>
+      {% else %}
+        <li>dc:requires</li>
+        <ul>
+        <li>{{ elem }}</li>
+        </ul>
+      {% endif %}
+    {% endfor %}
+    {% for elem in mapping|multi_key:"mr:target,dc:mediates" %}
+      {% if elem.url %}
+        <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
+          </li>
+      {% else %}
+        <li>dc:mediates</li>
+        <ul>
+        <li>{{ elem }}</li>
+        </ul>
+      {% endif %}
+    {% endfor %}
+    </ul>
+    </td></tr>
+    {% endif %}
     <tr><td>
     <h4>Definition</h4>
     <ul>

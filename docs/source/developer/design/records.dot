@@ -15,11 +15,15 @@ digraph records {
 ## class definitions
 
    	value [
-	label = "<title> value ID(sha-1) |<prop> rdf:property | rdfs:literal"
+	label = "<title> value ID(sha-1) |<prop> rdf:Property | rdfs:literal"
 	];
 
    	formatconcept [
-	label = "<title> mr:formatConcept ID(sha-1) |<format> mr:format |<component> skos:member +"
+	label = "<title> mr:formatConcept ID(sha-1) |<format> mr:format |<component> skos:member +|<req> dc:requires +|<med> dc:mediator"
+	];
+
+        mediator [
+	label = "<title> mediator/label |<format> mr:format|<label> skos:label  "
 	];
 
 	valuemap [
@@ -67,6 +71,9 @@ digraph records {
 	formatconcept:component -> formatconcept:title
 
 	formatconcept:component -> value:title
+
+	formatconcept:med -> mediator:title
+	formatconcept:req -> mediator:title
 
 	mapping:valmap -> valuemap:title
 

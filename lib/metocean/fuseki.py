@@ -215,9 +215,12 @@ class FusekiServer(object):
         urllib2.install_opener(opener)
         pre = prefixes.Prefixes()
         if debug == True:
-            print pre.sparql
+            k=0
+            for j, line in enumerate(pre.sparql.split('\n')):
+                print j,line
+                k+=1
             for i, line in enumerate(query_string.split('\n')):
-                print i, line
+                print i+k, line
         if update:
             action = 'update'
             qstr = urllib.urlencode([

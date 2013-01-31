@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% load dict_keys %}
 <!--
@@ -77,6 +78,8 @@
         </ul>
       {% endif %}
     {% endfor %}
+    {% endif %}
+    {% if mapping|multi_key:"mr:source,dc:mediates" %}
     {% for elem in mapping|multi_key:"mr:source,dc:mediates" %}
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
@@ -186,6 +189,8 @@
         </ul>
       {% endif %}
     {% endfor %}
+    {% endif %}
+    {% if mapping|multi_key:"mr:target,dc:mediates" %}
     {% for elem in mapping|multi_key:"mr:target,dc:mediates" %}
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>

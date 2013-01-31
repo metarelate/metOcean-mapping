@@ -139,7 +139,7 @@ def _create_concepts(key, request_search, new_map, concepts):
                 val_ids, members = _val_id(member.get('skos:member'))
                 sub_concept_dict = {
                     'mr:format': '<%s>' % request_search[key]['mr:format'],
-                    'skos:member':val_ids}
+                    'skos:member':val_ids}                    
                 sub_concept = moq.get_format_concept(fuseki_process,
                                                      sub_concept_dict)
                 subc_ids.append('%s' % sub_concept[0]['formatConcept'])
@@ -148,9 +148,16 @@ def _create_concepts(key, request_search, new_map, concepts):
         val_ids, members = _val_id(request_search[key]['skos:member'])
         concept_dict = {'mr:format':'<%s>' % request_search[key]['mr:format'],
                                     'skos:member':val_ids+subc_ids}
+        if request_search[key].get('dc:mediates'):
+            concept_dict['dc:mediates'] = request_search[key]['dc:mediates']
+        if request_search[key].get('dc:requires'):
+            concept_dict['dc:requires'] = request_search[key]['dc:requires']
         concept = moq.get_format_concept(fuseki_process, concept_dict)
         if len(concept) == 1:
             concepts[key] = concept[0]['formatConcept']
+        else:
+            ec = 'formatConcept get did not return 1 id {}'.format(concept)
+            raise ValueError(ec)
     return new_map, concepts
 
 def _concept_links(key, request_search, amended_dict):
@@ -230,7 +237,6 @@ def mapping_concepts(request):
     if request_search_path == '':
         request_search_path = '{}'
     request_search = json.loads(request_search_path)
-    print 'request_search: ', request_search
     amended_dict = copy.deepcopy(request_search)
     if request.method == 'POST':
         ## get the formatConcepts for source and target
@@ -247,11 +253,10 @@ def mapping_concepts(request):
                 new_map[key]['formatConcept'] = '%s' % concepts[key]
             else:
                 raise ValueError('The source and target are not both defined')
-            ref = json.dumps(new_map)
-#            print ref
-            url = url_with_querystring(reverse('value_maps'),ref=ref)
-            return HttpResponseRedirect(url)
-                    
+        ref = json.dumps(new_map)
+        url = url_with_querystring(reverse('value_maps'),ref=ref)
+        return HttpResponseRedirect(url)
+
     else:
         form = forms.MappingConcept()
         for key in ['mr:source','mr:target']:
@@ -306,7 +311,7 @@ def value_maps(request):
         ## then pass the json of {source:{},target:{},valueMaps[{}]
         ## to mapping_edit for creation
         form = forms.MappingConcept(request.POST)
-        for valmap in request_search['mr:valueMap']:
+        for valmap in request_search.get('mr:valueMap',[]):
             vmap = moq.get_value_map(fuseki_process, valmap)
             vmap_id = vmap[0]['valueMap']
             valmap['valueMap'] = vmap_id
@@ -454,6 +459,7 @@ def mapping_edit(request):
                                                                [])])
                   }
         map_id = request_search.get('mapping')
+        print map_id
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id)
             print 'mapping:', mapping
@@ -496,18 +502,19 @@ def process_form(form, request_search_path):
         #if len(mapping_p_o['mr:%s' % label]) == 0:
         #    mapping_p_o['mr:%s' % label] = ['"None"']
 
-    mapping_p_o['dc:creator'] = ['<%s>' % data['editor']]
+    mapping_p_o['dc:creator'] = ['%s' % data['editor']]
     mapping_p_o['dc:date'] = ['"%s"^^xsd:dateTime' % globalDateTime]
     mapping_p_o['mr:status'] = ['"%s"' % data['next_status']]
     if data['mapping'] != "":
-        mapping_p_o['dc:replaces'] = ['<%s>' % data['mapping']]
+        mapping_p_o['dc:replaces'] = ['%s' % data['mapping']]
     if data['comment'] != '':
         mapping_p_o['skos:note'] = ['"%s"' % data['comment']]
     mapping_p_o['mr:reason'] = ['"%s"' % data['next_reason']]
     mapping_p_o['mr:source'] = ['%s' % data['source']]
     mapping_p_o['mr:target'] = ['%s' % data['target']]
     mapping_p_o['mr:invertible'] = ['"%s"' % data['invertible']]
-    mapping_p_o['mr:valueMap'] = ['<%s>' % vm for vm in
+    if data['valueMaps']:
+        mapping_p_o['mr:valueMap'] = ['<%s>' % vm for vm in
                                   data['valueMaps'].split('&')]
 
     # #check to see if the updated mapping record is simply the last one
@@ -547,7 +554,7 @@ def process_form(form, request_search_path):
     #     print 'target: changed = True'
 
     mapping = mapping_p_o
-    mapping = moq.create_mapping(fuseki_process, mapping_p_o)
+    mapping = moq.create_mapping(fuseki_process, mapping_p_o,True)
     map_id = mapping[0]['map']
 
     return map_id

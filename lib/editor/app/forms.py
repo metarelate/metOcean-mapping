@@ -218,7 +218,7 @@ class MappingMeta(forms.Form):
                               widget=forms.TextInput(attrs={'hidden':True}))
     target = forms.CharField(max_length=200, 
                               widget=forms.TextInput(attrs={'hidden':True}))
-    valueMaps = forms.CharField(max_length=1000, 
+    valueMaps = forms.CharField(max_length=1000, required=False, 
                               widget=forms.TextInput(attrs={'hidden':True}))
 
     

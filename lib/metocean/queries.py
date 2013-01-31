@@ -333,12 +333,12 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
     pred_obj dictionary
     create one if it does not exist"""
     allowed_prefixes = set(('mr:format','skos:member', 'dc:requires',
-                            'dc:mediator'))
+                            'dc:mediates'))
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_prefixes):
         ec = '''{} is not a subset of the allowed predicates set for
                 a formatConcept record {}'''
-        ec = ec.format(preds, allowed_preds)
+        ec = ec.format(preds, allowed_prefixes)
         raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/formatConcept'
     search_string = ''
@@ -352,7 +352,7 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
                         {} '''
                 ec = ec.format(str(po_dict))
                 raise ValueError(ec)
-            elif pred == 'dc:mediator' and len(po_dict[pred]) != 1:
+            elif pred == 'dc:mediates' and len(po_dict[pred]) != 1:
                 ec = '''get_format_concept only accepts 1 dc:mediator statement
                         The po_dict in this case is not valid
                         {} '''
@@ -368,31 +368,33 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
                     search_string += '''
                     %s %s ;''' % (pred, obj)
                     n_members +=1
+            else:
+                for obj in po_dict[pred]:
+                    search_string += '''
+                    %s %s ;''' % (pred, obj)
         else:
             search_string += '''
             %s %s ;''' % (pred, po_dict[pred])
             if pred == 'skos:member':
                 n_members =1
-    if n_reqs != 0:
-        n_members = n_members * n_reqs
     if search_string != '':
-        qstr = '''SELECT ?formatConcept ?format 
+        qstr = '''SELECT ?formatConcept ?format
         WHERE { {
-        SELECT ?formatConcept ?format (COUNT(
-            CONCAT(str(?member),str(?requires))) AS ?members)
+        SELECT ?formatConcept ?format (COUNT(?member) AS ?members) (COUNT(?requires) AS ?requireses)        
         WHERE{
         GRAPH <http://metarelate.net/concepts.ttl> {
         ?formatConcept mr:format ?format ;
                        skos:member ?member ;
                %s .
         OPTIONAL{?formatConcept dc:requires ?requires .}
-        OPTIONAL{?formatConcept dc:mediator ?mediator .}
+        OPTIONAL{?formatConcept dc:mediates ?mediates .}
+        } }
+        GROUP BY ?formatConcept ?format 
         }
+        FILTER(?members = %i)
+        FILTER(?requireses = %i)
         }
-        GROUP BY ?formatConcept ?format ?mediator
-        }
-        FILTER(?members = %i)}
-        ''' % (search_string, n_members)
+        ''' % (search_string, n_members, n_reqs)
         results = fuseki_process.run_query(qstr, debug=debug)
         if len(results) == 0:
             sha1 = make_hash(po_dict)
@@ -639,7 +641,7 @@ def create_mapping(fuseki_process, po_dict, debug=False):
         ''' % (mapping, search_string)
         insert_results = fuseki_process.run_query(instr, update=True,
                                                   debug=debug)
-    return [{'map':mapping}]
+    return [{'map':'<{}>'.format(mapping)}]
 
 
 def get_mapping_by_id(fuseki_process, map_id, debug=False):

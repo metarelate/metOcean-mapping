@@ -115,8 +115,17 @@ class Value(forms.Form):
     form to define a value for use in a concept
     """
     #vproperty =  forms.ChoiceField()
-    vproperty =  forms.CharField()
-    vliteral = forms.CharField(required=False)
+    vproperty =  forms.CharField(required=False,
+                                 widget=forms.TextInput(attrs={'size':'100'}))
+    literal = forms.CharField(required=False)
+    length = forms.CharField(required=False)
+    operator = forms.CharField(required=False)
+    operand_1 = forms.CharField(required=False)
+    operand_2 = forms.CharField(required=False)
+    operand_3 = forms.CharField(required=False)
+    sub_operand = forms.CharField(required=False)
+    obj_operand = forms.CharField(required=False)
+    
     def __init__(self, *args, **kwargs):
         fformat = kwargs.pop('fformat')
         super(Value, self).__init__(*args, **kwargs)
@@ -146,14 +155,14 @@ class Value(forms.Form):
             # self.fields['vproperty'].choices = choices
     def clean(self):
         try:
-            int(self.cleaned_data['vliteral'])
+            int(self.cleaned_data['literal'])
         except ValueError:
-            if self.cleaned_data['vliteral'].startswith('http'):
-                self.cleaned_data['vliteral'] = '<{}>'.format(
-                                                self.cleaned_data['vliteral'])
+            if self.cleaned_data['literal'].startswith('http'):
+                self.cleaned_data['literal'] = '<{}>'.format(
+                                                self.cleaned_data['literal'])
             else:
-                self.cleaned_data['vliteral'] = '"{}"'.format(
-                                                self.cleaned_data['vliteral'])
+                self.cleaned_data['literal'] = '"{}"'.format(
+                                                self.cleaned_data['literal'])
         return self.cleaned_data
 
 
@@ -178,6 +187,10 @@ class MappingMeta(forms.Form):
     pne the source, target and value maps are defined
     """
     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
+    invertible = forms.BooleanField(widget=forms.NullBooleanSelect,
+                                    required=False)
+    ## i cannot believe that an answer of false to this
+    ## type hits the 'required validatio step!!!
     mapping = forms.CharField(max_length=200, required=False,
                               widget=forms.TextInput(attrs={'readonly':True}))
     last_edit = forms.CharField(max_length=50, required=False,
@@ -213,7 +226,6 @@ class MappingMeta(forms.Form):
                              widget=forms.TextInput(attrs={'readonly':True}))
     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()],
                                     required=False)
-    invertible = forms.BooleanField(widget=forms.NullBooleanSelect)
     source = forms.CharField(max_length=200, 
                               widget=forms.TextInput(attrs={'hidden':True}))
     target = forms.CharField(max_length=200, 
@@ -221,7 +233,9 @@ class MappingMeta(forms.Form):
     valueMaps = forms.CharField(max_length=1000, required=False, 
                               widget=forms.TextInput(attrs={'hidden':True}))
 
-    
+    # def clean(self):
+    #     print self.data['invertible']
+    #     return self.cleaned_data
 
 
 class URLwidget(forms.TextInput):

@@ -15,11 +15,11 @@ digraph records {
 ## class definitions
 
    	value [
-	label = "<title> value ID(sha-1) |<prop> rdf:Property | rdfs:literal"
+	label = "<title> value ID(sha-1) |<prop> rdf:Property | rdfs:literal| mr:length|<o> mr:operator |<op> mr:operand +|<sub> mr:subjectOperand |<ob> mr:objectOperand"
 	];
 
    	formatconcept [
-	label = "<title> mr:formatConcept ID(sha-1) |<format> mr:format |<component> skos:member +|<req> dc:requires +|<med> dc:mediator"
+	label = "<title> mr:formatConcept ID(sha-1) |<format> mr:format |<req> dc:requires +|<med> dc:mediator|<component> skos:member +"
 	];
 
         mediator [
@@ -27,7 +27,11 @@ digraph records {
 	];
 
 	valuemap [
-	label = "<title> valueMap ID(sha-1) |<sourcefc> mr:sourceFC +|<targetfc> mr:targetFC +|<sourceval> mr:sourceVal |<targetval> mr:targetVal "
+	label = "<title> valueMap ID(sha-1) |<source> mr:source |<target> mr:target" 
+	];
+
+	mappedvalue [
+	label = "<title> MappedValue ID(sha-1) |<scope> mr:scope +|<val> mr:value"
 	];
 
 	mapping [
@@ -77,10 +81,11 @@ digraph records {
 
 	mapping:valmap -> valuemap:title
 
-	valuemap:sourceval -> value:title
-	valuemap:sourcefc -> formatconcept:title
-	valuemap:targetval -> value:title
-	valuemap:targetfc -> formatconcept:title
+	valuemap:source -> mappedvalue:title
+	valuemap:target -> mappedvalue:title
+
+	mappedvalue:scope -> formatconcept:title
+	mappedvalue:val -> value:title
 
 	value:prop -> um
 	value:prop -> grib
@@ -90,5 +95,9 @@ digraph records {
 	mapping:c -> contact
 	mapping:o -> contact
 	mapping:w -> contact
+
+	value:op -> value:title
+	value:sub -> value:title
+	value:ob -> value:title
 
 }

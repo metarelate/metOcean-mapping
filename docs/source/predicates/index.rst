@@ -27,14 +27,6 @@ Definition: a github user and metarelate collaborator who monitors a mapping
 Label:  watcher
 
 
-creator
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#creator
-
-Definition: a github user and metarelate collaborator who authored a mapping
-
-Label:  creator
 
 status 
 ---------
@@ -46,23 +38,6 @@ Definition: the status of a mapping: 'Approved', 'Proposed', 'Draft', 'Broken', 
 Label:  status
 
 
-creation
------------
-
-URI:  http://www.metarelate.net/predicates/index.html#creation
-
-Definition: A date and time when a mapping was created
-
-Label:  creation
-
-comment
-----------
-
-URI:  http://www.metarelate.net/predicates/index.html#comment
-
-Definition: A free text comment about the mapping 
-
-Label:  comment
 
 reason
 ---------
@@ -73,21 +48,13 @@ Definition:
 
 Label:  reason
 
-relates
---------
-
-URI:  http://www.metarelate.net/predicates/index.html#relates
-
-Definition: a metarelate concept which is the source of this mapping
-
-Label:  relates
 
 target
 --------
 
 URI:  http://www.metarelate.net/predicates/index.html#target
 
-Definition: a metarelate concept which this mapping relates to
+Definition: a metarelate concept which this mapping translates to
 
 Label:  target
 
@@ -96,9 +63,19 @@ source
 
 URI:  http://www.metarelate.net/predicates/index.html#source
 
-Definition: a metarelate concept which this mapping relates from 
+Definition: a metarelate concept which this mapping translates from 
 
 Label:  source
+
+invertible
+-----------
+
+URI:  http://www.metarelate.net/predicates/index.html#invertible
+
+Definition: a boolean flag to indicate if the reciprocal relationship (target => source) is valid
+
+Label:  invertible
+
 
 format
 ------
@@ -109,14 +86,6 @@ Definition: a data format which metarelate supports
 
 Label: format
 
-component
----------
-
-URI: http://www.metarelate.net/predicates/index.html#component
-
-Definition: a format specific metadata definition which is part of the definition of a metarelate concept 
-
-Label: component
 
 saveCache
 ----------
@@ -157,15 +126,40 @@ Definition: A datetime stamp for a contact who is defined no longer active.
 Label: retired
 
 
+sourceFC
+---------
 
-MetaRelate Formats
-==================
+URI:  http://www.metarelate.net/predicates/index.html#sourceFC
 
-MetaRelate defines a number of format specific predicates enabling the definition of structured collections within metarelate.
+Definition: A source format concept for a valueMap
 
+Label:  sourceFC
 
-.. toctree::
-   :maxdepth: 1
+sourceVal
+----------
 
-   CF
+URI:  http://www.metarelate.net/predicates/index.html#sourceVal
+
+Definition: a source value for a valueMap
+
+Label:  sourceVal
+
+targetFC
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#targetFC
+
+Definition: A target format concept for a valueMap
+
+Label:  targetFC
+
+targetVal
+----------
+
+URI:  http://www.metarelate.net/predicates/index.html#targetVal
+
+Definition: a target value for a valueMap
+
+Label:  targetVal
+
 

@@ -217,7 +217,7 @@ def get_mediators(fuseki_process, debug=False):
     WHERE
     { GRAPH <http://metarelate.net/contacts.ttl> {
         ?mediator mr:format ?format ;
-                  skos:label ?label
+                  skos:label ?label .
     FILTER(regex(str(?mediator),"http://www.metarelate.net/metocean/mediates/"))
     }
     ''' 
@@ -246,44 +246,67 @@ def print_records(res):
 
 ### blank node queries #####
 
-def get_value(fuseki_process, po_dict, debug=False):
+def get_value(fuseki_process, po_dict, debug=True):
     """return a value record, matching the pred_obj dictionary
     create one if it does not exist"""
-    allowed_prefixes = set(('rdf:Property','rdfs:literal'))
-    optional_prefixes = set(('rdfs:literal'))
+    allowed_predicates = set(('rdf:Property','rdfs:literal',
+                            'mr:length', 'mr:operator',
+                            'mr:operand', 'mr:subjectOperand',
+                            'mr:objectOperand'))
+    single_predicates = allowed_predicates.copy().remove('mr:operand')
     preds = set(po_dict.keys())
-    if not preds.issubset(allowed_prefixes):
+    if not preds.issubset(allowed_predicates):
         ec = '''{} is not a subset of the allowed predicates set
                 for a value record {}'''.format(preds, allowed_preds)
         raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/value'
-    assign_string = '?value '
+    count_string = ''
     search_string = ''
+    filter_string = ''
+    assign_string = ''
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
-            if len(po_dict[pred]) == 1:
+            if len(po_dict[pred]) != 1 and pred in single_predicates:
                 ec = '''get_value only accepts 1 statement per predicate {}'''
                 ec = ec.format(str(po_dict))
                 raise ValueError(ec)
             else:
+                counter = 0
                 for obj in po_dict[pred]:
-                    assign_string += ''' %s ?%s ;
-                    '''  % (pred, pred.split(':')[-1])
                     search_string += '''
-                    %s %s ;''' % (pred,obj)
+                    %s %s ;''' % (pred, obj)
+                    counter +=1
+                assign_string += '''
+                %s ?%s ;''' % (pred, pred.split(':')[-1])
+                count_string += '''COUNT(DISTINCT(?%(p)s)) AS ?%(p)ss
+                ''' % {'p':pred.split(':')[-1]}
+                filter_string += '''
+                FILTER(?%ss = %i)''' % (pred.split(':')[-1], counter)
         else:
             search_string += '''
             %s %s ;''' % (pred, po_dict[pred])
+            assign_string += '''
+            %s ?%s ;''' % (pred, pred.split(':')[-1])
+            count_string += '''(COUNT(DISTINCT(?%(p)s)) AS ?%(p)ss)
+            ''' % {'p':pred.split(':')[-1]}
+            filter_string += '''
+            FILTER(?%ss = %i)''' % (pred.split(':')[-1], 1)
     if search_string != '':
-        qstr = '''SELECT ?value ?Property ?literal ?foo
+        qstr = '''SELECT ?value
+        WHERE { {
+        SELECT ?value        
+        %(count)s
         WHERE{
         GRAPH <http://metarelate.net/concepts.ttl> {
-        %s
-        %s
+        ?value %(assign)s %(search)s
         .
+        } }
+        GROUP BY ?value
         }
+        %(filter)s
         }
-        ''' % (assign_string, search_string)
+        ''' % {'count':count_string,'assign':assign_string,
+               'search':search_string, 'filter':filter_string}
         results = fuseki_process.run_query(qstr, debug=debug)
         if len(results) == 0:
             sha1 = make_hash(po_dict)
@@ -353,7 +376,7 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
                 ec = ec.format(str(po_dict))
                 raise ValueError(ec)
             elif pred == 'dc:mediates' and len(po_dict[pred]) != 1:
-                ec = '''get_format_concept only accepts 1 dc:mediator statement
+                ec = '''get_format_concept only accepts 1 dc:mediates statement
                         The po_dict in this case is not valid
                         {} '''
                 ec = ec.format(str(po_dict))
@@ -380,7 +403,9 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
     if search_string != '':
         qstr = '''SELECT ?formatConcept ?format
         WHERE { {
-        SELECT ?formatConcept ?format (COUNT(?member) AS ?members) (COUNT(?requires) AS ?requireses)        
+        SELECT ?formatConcept ?format
+        (COUNT(DISTINCT(?member)) AS ?members)
+        (COUNT(DISTINCT(?requires)) AS ?requireses)        
         WHERE{
         GRAPH <http://metarelate.net/concepts.ttl> {
         ?formatConcept mr:format ?format ;
@@ -419,7 +444,7 @@ def retrieve_format_concept(fuseki_process, fcId, debug=False):
     return a formatConcept record from the provided id
     or None if one does not exist
     """
-    qstr = '''SELECT ?formatConcept ?format ?requires ?mediator
+    qstr = '''SELECT ?formatConcept ?format ?mediates 
     (GROUP_CONCAT(?amember; SEPARATOR='&') AS ?member)
     (GROUP_CONCAT(?arequires; SEPARATOR='&') AS ?requires)
     WHERE {
@@ -427,11 +452,11 @@ def retrieve_format_concept(fuseki_process, fcId, debug=False):
         ?formatConcept mr:format ?format ;
                        skos:member ?amember ;.
         OPTIONAL{?formatConcept dc:requires ?arequires .}
-        OPTIONAL{?formatConcept dc:mediator ?mediator .}
+        OPTIONAL{?formatConcept dc:mediates ?mediates .}
         FILTER(?formatConcept = %s)
         }
     }
-    GROUP BY ?formatConcept ?format
+    GROUP BY ?formatConcept ?format ?mediates
     ''' % fcId
     results = fuseki_process.run_query(qstr, debug=debug)
     if len(results) == 0:

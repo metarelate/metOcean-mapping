@@ -113,11 +113,14 @@ def _val_id(members):
     value_list = []
     val_ids = []
     for mem in members:
-        if mem.get('rdf:Property'):
+        print 'mem:\n', mem
+#        if mem.get('rdf:Property'):
+        if not mem.get('skos:Concept'):
             res = moq.get_value(fuseki_process, mem)
             vid = '%s' % res[0]['value']
             mem['value'] = '%s' % vid
             val_ids.append(vid)
+    print 'val_ids:\n', val_ids
     return val_ids, members
 
 def url_with_querystring(path, **kwargs):
@@ -352,18 +355,18 @@ def define_valuemap(request):
     choices = [('mr:source', source_list),('mr:target', target_list)]
     for ch in choices:
         for elem in request_search[ch[0]]['skos:member']:
-            if elem.has_key('rdf:Property'):
+            if not elem.has_key('rdfs:literal'):
                 ch[1].append(('%s||%s' % (request_search[ch[0]]['formatConcept']
-                                          , elem['rdf:Property']),
-                              elem['rdf:Property'].split('/')[-1]))
+                                          , elem.get('rdf:Property')),
+                              elem.get('rdf:Property', '').split('/')[-1]))
         for elem in request_search[ch[0]]['skos:member']:
             if elem.has_key('skos:member'):
                 for selem in elem['skos:member']:
-                    if selem.has_key('rdf:Property'):
+                    if not selem.has_key('rdfs:literal'):
                         ch[1].append(('%s||%s' % (elem['formatConcept'],
-                                                  selem['rdf:Property']),
+                                                  selem.get('rdf:Property')),
                                       '  - %s' %
-                                      selem['rdf:Property'].split('/')[-1]))
+                                selem.get('rdf:Property', '').split('/')[-1]))
 
     if request.method == 'POST':
         form = forms.ValueMap(request.POST, sc=source_list, tc=target_list)
@@ -393,9 +396,11 @@ def define_value(request, fformat):
     if request.method == 'POST':
         form = forms.Value(request.POST, fformat=fformat)
         if form.is_valid():
-            new_value = {'rdf:Property' : form.cleaned_data['vproperty']}
-            if form.cleaned_data['vliteral'] != '""':
-                new_value['rdfs:literal'] =  form.cleaned_data['vliteral']
+            new_value = {}
+            if form.cleaned_data['vproperty']:
+                new_value['rdf:Property'] = form.cleaned_data['vproperty']
+            if form.cleaned_data['literal'] != '""':
+                new_value['rdfs:literal'] =  form.cleaned_data['literal']
             newv = json.dumps(new_value)
             request_search_path = request_search_path.replace('"&&&&"', newv)
             url = url_with_querystring(reverse('mapping_concepts'),
@@ -514,7 +519,7 @@ def process_form(form, request_search_path):
     mapping_p_o['mr:target'] = ['%s' % data['target']]
     mapping_p_o['mr:invertible'] = ['"%s"' % data['invertible']]
     if data['valueMaps']:
-        mapping_p_o['mr:valueMap'] = ['<%s>' % vm for vm in
+        mapping_p_o['mr:valueMap'] = ['%s' % vm for vm in
                                   data['valueMaps'].split('&')]
 
     # #check to see if the updated mapping record is simply the last one

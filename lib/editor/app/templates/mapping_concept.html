@@ -104,18 +104,6 @@
           </li>
         {% endif %}
       
-        {% if member|multi_key:"rdf:Property" %}
-          <li>{{ member|multi_key:"rdf:Property" }}</li>
-          
-          <ul>
-          {% if member|multi_key:"rdfs:literal" %}
-            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
-          {% endif %}
-          {% if member|multi_key:"remove" %}
-            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
-          {% endif %}
-          </ul>
-        {% endif %}
 
         {% if member|multi_key:"skos:member" %}
 
@@ -151,6 +139,21 @@
 
           {% endfor %}
           </ul>
+
+        {% else %}
+          {% if member|multi_key:"rdf:Property" %}
+            <li>{{ member|multi_key:"rdf:Property" }}</li>
+          {% endif %}
+          <ul>
+          {% if member|multi_key:"rdfs:literal" %}
+            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
+          {% endif %}
+          {% if member|multi_key:"remove" %}
+            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
+          {% endif %}
+          </ul>
+
+
         {% endif %}
 
 
@@ -215,19 +218,6 @@
           </li>
         {% endif %}
       
-        {% if member|multi_key:"rdf:Property" %}
-          <li>{{ member|multi_key:"rdf:Property" }}</li>
-          
-          <ul>
-          {% if member|multi_key:"rdfs:literal" %}
-            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
-          {% endif %}
-          {% if member|multi_key:"remove" %}
-            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
-          {% endif %}
-          </ul>
-        {% endif %}
-
         {% if member|multi_key:"skos:member" %}
 
           <li>Sub Component </li>
@@ -261,6 +251,23 @@
             
           {% endfor %}
            </ul>
+
+        {% else %}
+          {% if member|multi_key:"rdf:Property" %}
+            <li>{{ member|multi_key:"rdf:Property" }}</li>
+          {% endif %}
+          
+          <ul>
+          {% if member|multi_key:"rdfs:literal" %}
+            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
+          {% endif %}
+          {% if member|multi_key:"remove" %}
+            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
+          {% endif %}
+          </ul>
+
+
+
         {% endif %}
 
 

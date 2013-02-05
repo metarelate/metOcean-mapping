@@ -123,9 +123,9 @@
               </li>
             {% endif %}
 
-            {% if sub_member|multi_key:"rdf:Property" %}
+            {% if sub_member|multi_key:"mr:name" %}
 
-              <li>{{ sub_member|multi_key:"rdf:Property" }}</li>
+              <li>{{ sub_member|multi_key:"mr:name" }}</li>
 
               <ul>
               {% if sub_member|multi_key:"rdfs:literal" %}
@@ -141,8 +141,8 @@
           </ul>
 
         {% else %}
-          {% if member|multi_key:"rdf:Property" %}
-            <li>{{ member|multi_key:"rdf:Property" }}</li>
+          {% if member|multi_key:"mr:name" %}
+            <li>{{ member|multi_key:"mr:name" }}</li>
           {% endif %}
           <ul>
           {% if member|multi_key:"rdfs:literal" %}
@@ -235,9 +235,9 @@
               </li>
             {% endif %}
 
-            {% if sub_member|multi_key:"rdf:Property" %}
+            {% if sub_member|multi_key:"mr:name" %}
 
-              <li>{{ sub_member|multi_key:"rdf:Property" }}</li>
+              <li>{{ sub_member|multi_key:"mr:name" }}</li>
 
               <ul>
               {% if sub_member|multi_key:"rdfs:literal" %}
@@ -253,8 +253,8 @@
            </ul>
 
         {% else %}
-          {% if member|multi_key:"rdf:Property" %}
-            <li>{{ member|multi_key:"rdf:Property" }}</li>
+          {% if member|multi_key:"mr:name" %}
+            <li>{{ member|multi_key:"mr:name" }}</li>
           {% endif %}
           
           <ul>
@@ -296,17 +296,21 @@
 {% for valuemap in mapping|multi_key:"mr:valueMap" %}
 <tr><td>
 <p>
-{{ valuemap|multi_key:"mr:sourceFC" }}
+{{ valuemap|multi_key:"mr:source,mr:subject,mr:scope" }}
 
 <ul>
-<li> {{ valuemap|multi_key:"mr:sourceVal" }}</li>
+{% if valuemap|multi_key:"mr:source,mr:subject,mr:property,mr:name" %}
+<li> {{ valuemap|multi_key:"mr:source,mr:subject,mr:property,mr:name" }}</li>
+{% endif %}
 </ul>
 </td><td>
 <p>
-{{ valuemap|multi_key:"mr:targetFC" }}
+{{ valuemap|multi_key:"mr:target,mr:subject,mr:scope" }}
 
 <ul>
-<li> {{ valuemap|multi_key:"mr:targetVal" }}</li>
+{% if valuemap|multi_key:"mr:target,mr:subject,mr:property,mr:name" %}
+<li> {{ valuemap|multi_key:"mr:target,mr:subject,mr:property,mr:name" }}</li>
+{% endif %}
 </ul>
 </td>
 </td></tr>

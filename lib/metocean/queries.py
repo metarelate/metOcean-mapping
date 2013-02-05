@@ -246,20 +246,18 @@ def print_records(res):
 
 ### blank node queries #####
 
-def get_value(fuseki_process, po_dict, debug=True):
-    """return a value record, matching the pred_obj dictionary
+def get_property(fuseki_process, po_dict, debug=False):
+    """return one property record, matching the pred_obj dictionary
     create one if it does not exist"""
-    allowed_predicates = set(('rdf:Property','rdfs:literal',
-                            'mr:length', 'mr:operator',
-                            'mr:operand', 'mr:subjectOperand',
-                            'mr:objectOperand'))
-    single_predicates = allowed_predicates.copy().remove('mr:operand')
+    allowed_predicates = set(('mr:name','rdfs:literal',
+                            'mr:length'))
+    single_predicates = allowed_predicates
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_predicates):
         ec = '''{} is not a subset of the allowed predicates set
                 for a value record {}'''.format(preds, allowed_preds)
         raise ValueError(ec)
-    subj_pref = 'http://www.metarelate.net/metOcean/value'
+    subj_pref = 'http://www.metarelate.net/metOcean/property'
     count_string = ''
     search_string = ''
     filter_string = ''
@@ -267,7 +265,7 @@ def get_value(fuseki_process, po_dict, debug=True):
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) != 1 and pred in single_predicates:
-                ec = '''get_value only accepts 1 statement per predicate {}'''
+                ec = 'get_property only accepts 1 statement per predicate {}'
                 ec = ec.format(str(po_dict))
                 raise ValueError(ec)
             else:
@@ -292,16 +290,16 @@ def get_value(fuseki_process, po_dict, debug=True):
             filter_string += '''
             FILTER(?%ss = %i)''' % (pred.split(':')[-1], 1)
     if search_string != '':
-        qstr = '''SELECT ?value
+        qstr = '''SELECT ?property
         WHERE { {
-        SELECT ?value        
+        SELECT ?property        
         %(count)s
         WHERE{
         GRAPH <http://metarelate.net/concepts.ttl> {
-        ?value %(assign)s %(search)s
+        ?property %(assign)s %(search)s
         .
         } }
-        GROUP BY ?value
+        GROUP BY ?property
         }
         %(filter)s
         }
@@ -321,31 +319,40 @@ def get_value(fuseki_process, po_dict, debug=True):
             insert_results = fuseki_process.run_query(instr, update=True,
                                                       debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 1:
+            results = results[0]
+        elif len(results) == 0:
+            results = None
+        else:
+            raise ValueError('''multiple results returned from get_property,
+            only one allowed
+            {}'''.format(str(results)))
     else:
-        results = []
+        results = None
     return results
 
-def retrieve_value(fuseki_process, val_id, debug=False):
+def retrieve_property(fuseki_process, prop_id, debug=False):
     """
-    retrieve a value record from it's id
+    retrieve a property record from it's id
     or None if one does not exist
     """
-    qstr = '''SELECT ?value ?Property ?literal
+    qstr = '''SELECT ?property ?name ?literal ?length
     WHERE {
     GRAPH <http://metarelate.net/concepts.ttl> {
-        ?value rdf:Property ?Property ;
-               rdfs:literal ?literal .
+        ?property mr:name ?name ;
+                  rdfs:literal ?literal ;
+                  mr:length ?length .
         FILTER(?value = %s)
         }
     }
-    ''' % val_id
+    ''' % prop_id
     results = fuseki_process.run_query(qstr, debug=debug)
     if len(results) == 0:
-        val = None
+        prop = None
     elif len(results) >1:
         raise ValueError('{} is a malformed value'.format(results))
     else:
-        val = results[0]
+        prop = results[0]
     return val
 
     
@@ -435,8 +442,14 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
             insert_results = fuseki_process.run_query(instr, update=True,
                                                       debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 1:
+            results = results[0]
+        else:
+            raise ValueError('''multiple results returned from
+            get_format_concept, only one allowed
+            {}'''.format(str(results)))
     else:
-        results = []
+        results = None
     return results
 
 def retrieve_format_concept(fuseki_process, fcId, debug=False):
@@ -470,10 +483,9 @@ def retrieve_format_concept(fuseki_process, fcId, debug=False):
 def get_value_map(fuseki_process, po_dict, debug=False):
     """return a valueMap record ID, matching the pred_obj dictionary
     create one if it does not exist"""
-    allowed_prefixes = set(('mr:sourceFC', 'mr:sourceVal',
-                            'mr:targetFC', 'mr:targetVal'))
+    allowed_preds = set(('mr:source','mr:target'))
     preds = set(po_dict.keys())
-    if not preds.issubset(allowed_prefixes):
+    if not preds == allowed_preds:
         ec = '''{} is not a subset of the allowed predicates set
                 for a valueMap record
                 {}'''
@@ -483,7 +495,7 @@ def get_value_map(fuseki_process, po_dict, debug=False):
     search_string = ''
     for pred in po_dict.keys():
         if isinstance(po_dict[pred], list):
-            if pred == 'mr:format' and len(po_dict[pred]) != 1:
+            if len(po_dict[pred]) != 1:
                 ec = 'get_format_concept only accepts 1 mr:format statement }'
                 ec = ec.format(po_dict)
                 raise ValueError(ec)
@@ -517,37 +529,170 @@ def get_value_map(fuseki_process, po_dict, debug=False):
             insert_results = fuseki_process.run_query(instr, update=True,
                                                       debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 1:
+            results = results[0]
+        else:
+            raise ValueError('''multiple results returned from
+            get_calue_map, only one allowed
+            {}'''.format(str(results)))
     else:
-        results = []
+        results = None
     return results
 
-def retrieve_valuemap(fuseki_process, vmId, debug=False):
-    """
-    return a valueMap record from the provided id
-    or None if one does not exist
-    """
-    qstr = '''SELECT ?valueMap ?sourceVal ?targetVal
-    (GROUP_CONCAT(?sourcefc; SEPARATOR='&') AS ?sourceFC)
-    (GROUP_CONCAT(?targetfc; SEPARATOR='&') AS ?targetFC)
-    WHERE {
-    GRAPH <http://metarelate.net/concepts.ttl> {
-        ?formatConcept mr:sourceFC ?sourcefc ;
-                       mr:sourceVal ?sourceVal ;
-                       mr:targetFC ?targetfc ;
-                       mr:targetVal ?targetVal ;
-        FILTER(?formatConcept = %s)
+def get_value(fuseki_process, po_dict, debug=False):
+    """return a value record ID, matching the pred_obj dictionary
+    create one if it does not exist"""
+    allowed_preds = set(('mr:operator','mr:subject', 'mr:object'))
+    preds = set(po_dict.keys())
+    if not preds.issubset(allowed_preds):
+        ec = '''{} is not a subset of the allowed predicates set
+                for a value record
+                {}'''
+        ec = ec.format(preds, allowed_preds)
+        raise ValueError(ec)
+    subj_pref = 'http://www.metarelate.net/metOcean/value'
+    search_string = ''
+    for pred in po_dict.keys():
+        if isinstance(po_dict[pred], list):
+            if len(po_dict[pred]) != 1:
+                ec = 'get_value only accepts 1 mr:format statement }'
+                ec = ec.format(po_dict)
+                raise ValueError(ec)
+            else:
+                for obj in po_dict[pred]:
+                    search_string += '''
+                    %s %s ;''' % (pred, obj)
+        else:
+            search_string += '''
+            %s %s ;''' % (pred, po_dict[pred])
+    if search_string != '':
+        qstr = '''SELECT ?value
+        WHERE{
+        GRAPH <http://metarelate.net/concepts.ttl> {
+        ?value
+               %s .
         }
-    }
-    GROUP BY ?valueMap ?sourceVal ?targetVal
-    ''' % vmId
-    results = fuseki_process.run_query(qstr, debug=debug)
-    if len(results) == 0:
-        valuemap = None
-    elif len(results) >1:
-        raise ValueError('{} is a malformed valueMap'.format(results))
+        }
+        ''' % (search_string)
+        results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 0:
+            sha1 = make_hash(po_dict)
+            instr = '''INSERT DATA {
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> rdf:type skos:Concept ;
+                    %s
+                    mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, sha1, search_string)
+            insert_results = fuseki_process.run_query(instr, update=True,
+                                                      debug=debug)
+            results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 1:
+            results = results[0]
+        else:
+            raise ValueError('''multiple results returned from
+            get_value, only one allowed
+            {}'''.format(str(results)))
     else:
-        valuemap = results[0]
-    return valuemap
+        results = None
+    return results
+
+def get_scoped_property(fuseki_process, po_dict, debug=False):
+    """return a scopedProperty record ID, matching the pred_obj dictionary
+    create one if it does not exist"""
+    allowed_preds = set(('mr:scope','mr:property'))
+    preds = set(po_dict.keys())
+    if not preds == allowed_preds:
+        ec = '''{} is not a subset of the allowed predicates set
+                for a scopedProperty record
+                {}'''
+        ec = ec.format(preds, allowed_preds)
+        raise ValueError(ec)
+    subj_pref = 'http://www.metarelate.net/metOcean/scopedProperty'
+    search_string = ''
+    for pred in po_dict.keys():
+        if isinstance(po_dict[pred], list):
+            if len(po_dict[pred]) != 1:
+                ec = 'get_scopedProperty only accepts 1 mr:format statement }'
+                ec = ec.format(po_dict)
+                raise ValueError(ec)
+            else:
+                for obj in po_dict[pred]:
+                    search_string += '''
+                    %s %s ;''' % (pred, obj)
+        else:
+            search_string += '''
+            %s %s ;''' % (pred, po_dict[pred])
+    if search_string != '':
+        qstr = '''SELECT ?scopedProperty
+        WHERE{
+        GRAPH <http://metarelate.net/concepts.ttl> {
+        ?scopedProperty
+               %s .
+        }
+        }
+        ''' % (search_string)
+        results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 0:
+            sha1 = make_hash(po_dict)
+            instr = '''INSERT DATA {
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> rdf:type skos:Concept ;
+                    %s
+                    mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, sha1, search_string)
+            insert_results = fuseki_process.run_query(instr, update=True,
+                                                      debug=debug)
+            results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 1:
+            results = results[0]
+        else:
+            raise ValueError('''multiple results returned from
+            get_scopedProperty, only one allowed
+            {}'''.format(str(results)))
+    else:
+        results = None
+    return results
+
+
+# def retrieve_valuemap(fuseki_process, vmId, debug=False):
+#     """
+#     return a valueMap record from the provided id
+#     or None if one does not exist
+#     """
+#     qstr = '''SELECT ?valueMap ?source ?target
+#     ?sourceScope
+#     ?sourceValue ?sourceProperty
+#     ?targetScope
+#     ?targetValue ?targetProperty
+#     WHERE {
+#     GRAPH <http://metarelate.net/concepts.ttl> {
+#         ?valueMap mr:source ?source ;
+#                   mr:target ?target .
+#         ?source mr:scope ?asourceScope ;
+#                 mr:value ?sourceValue .
+#         OPTIONAL{?sourceValue rdf:Property ?sourceProperty .}
+#         ?target mr:scope ?atargetScope ;
+#                 mr:value ?targetValue .
+#         OPTIONAL{?targetValue rdf:Property ?targetProperty .}
+#         FILTER(?valueMap = %s)
+#         }
+#     }
+#     GROUP BY ?valueMap ?source ?target
+#     ?sourceValue ?sourceProperty
+#     ?targetValue ?targetProperty
+#     ''' % vmId
+#     results = fuseki_process.run_query(qstr, debug=debug)
+#     if len(results) == 0:
+#         valuemap = None
+#     elif len(results) >1:
+#         raise ValueError('{} is a malformed valueMap'.format(results))
+#     else:
+#         valuemap = results[0]
+#     return valuemap
 
 
 
@@ -598,8 +743,14 @@ def get_contact(fuseki_process, subject, po_dict, debug=False):
             insert_results = fuseki_process.run_query(instr, update=True,
                                                       debug=debug)
             results = fuseki_process.run_query(qstr, debug=debug)
+        if len(results) == 1:
+            results = results[0]
+        else:
+            raise ValueError('''multiple results returned from
+            get_contact, only one allowed
+            {}'''.format(str(results)))
     else:
-        results = []
+        results = None
     return results
 
 

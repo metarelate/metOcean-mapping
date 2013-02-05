@@ -104,24 +104,21 @@ def mapping_formats(request):
     context = RequestContext(request, {'form':form})
     return render_to_response('simpleform.html', context)
 
-def _val_id(members):
+def _prop_id(members):
     """
     helper method
     returns the value_ids from a list of value records
     in the triple store
     """
-    value_list = []
-    val_ids = []
+    property_list = []
+    prop_ids = []
     for mem in members:
-        print 'mem:\n', mem
-#        if mem.get('rdf:Property'):
         if not mem.get('skos:Concept'):
-            res = moq.get_value(fuseki_process, mem)
-            vid = '%s' % res[0]['value']
-            mem['value'] = '%s' % vid
-            val_ids.append(vid)
-    print 'val_ids:\n', val_ids
-    return val_ids, members
+            res = moq.get_property(fuseki_process, mem)
+            pid = '%s' % res['property']
+            mem['property'] = '%s' % pid
+            prop_ids.append(pid)
+    return prop_ids, members
 
 def url_with_querystring(path, **kwargs):
     '''
@@ -139,25 +136,25 @@ def _create_concepts(key, request_search, new_map, concepts):
         subc_ids = []
         for i,member in enumerate(request_search[key]['skos:member']):
             if member.get('skos:member') is not None:
-                val_ids, members = _val_id(member.get('skos:member'))
+                prop_ids, members = _prop_id(member.get('skos:member'))
                 sub_concept_dict = {
                     'mr:format': '<%s>' % request_search[key]['mr:format'],
-                    'skos:member':val_ids}                    
+                    'skos:member':prop_ids}                    
                 sub_concept = moq.get_format_concept(fuseki_process,
                                                      sub_concept_dict)
-                subc_ids.append('%s' % sub_concept[0]['formatConcept'])
+                subc_ids.append('%s' % sub_concept['formatConcept'])
                 new_map[key]['skos:member'][i]['formatConcept'] = \
-                                '%s' % sub_concept[0]['formatConcept']
-        val_ids, members = _val_id(request_search[key]['skos:member'])
+                                '%s' % sub_concept['formatConcept']
+        prop_ids, members = _prop_id(request_search[key]['skos:member'])
         concept_dict = {'mr:format':'<%s>' % request_search[key]['mr:format'],
-                                    'skos:member':val_ids+subc_ids}
+                                    'skos:member':prop_ids+subc_ids}
         if request_search[key].get('dc:mediates'):
             concept_dict['dc:mediates'] = request_search[key]['dc:mediates']
         if request_search[key].get('dc:requires'):
             concept_dict['dc:requires'] = request_search[key]['dc:requires']
         concept = moq.get_format_concept(fuseki_process, concept_dict)
-        if len(concept) == 1:
-            concepts[key] = concept[0]['formatConcept']
+        if concept:
+            concepts[key] = concept['formatConcept']
         else:
             ec = 'formatConcept get did not return 1 id {}'.format(concept)
             raise ValueError(ec)
@@ -178,7 +175,7 @@ def _concept_links(key, request_search, amended_dict):
         new_term = copy.deepcopy(request_search)
         new_term[key]['skos:member'].append('&&&&')
         amended_dict[key]['skos:member'].append({'url':url_with_querystring(
-            reverse('define_value', kwargs={
+            reverse('define_property', kwargs={
                 'fformat':new_term[key]['mr:format'].split('/')[-1]}),
                 ref=json.dumps(new_term)), 'label':'add a value definition'})
         for i, element in enumerate(request_search[key]['skos:member']):
@@ -191,7 +188,7 @@ def _concept_links(key, request_search, amended_dict):
             if element.get('skos:member') is not None:
                 addition = copy.deepcopy(request_search)
                 addition[key]['skos:member'][i]["skos:member"].append('&&&&')
-                url = url_with_querystring(reverse('define_value', kwargs={
+                url = url_with_querystring(reverse('define_property', kwargs={
                     'fformat':addition[key]['mr:format'].split('/')[-1]}),
                     ref=json.dumps(addition))
                 amended_dict[key]['skos:member'][i]["skos:member"].append({
@@ -295,6 +292,23 @@ def define_mediator(request, mediator, fformat):
     context = RequestContext(request, con_dict)
     return render_to_response('simpleform.html', context)
 
+def _get_value(value):
+    """
+    returns a value id for a given json input
+    """
+    id_value = copy.deepcopy(value)
+    #fragile, doesn't work for nested values
+    prop = moq.get_property(fuseki_process,
+                               value['mr:subject']['mr:property'])
+    sc_prop = moq.get_scoped_property(fuseki_process,
+                                      {'mr:property':prop['property'],
+                                    'mr:scope':value['mr:subject']['mr:scope']})
+    value =  moq.get_value(fuseki_process, {'mr:operator':value['mr:operator'],
+                                    'mr:subject':sc_prop['scopedProperty']})
+    v_id = value['value']
+    return v_id
+        
+
 def value_maps(request):
     """
     returns a view to define value mappings for a defined
@@ -314,10 +328,13 @@ def value_maps(request):
         ## then pass the json of {source:{},target:{},valueMaps[{}]
         ## to mapping_edit for creation
         form = forms.MappingConcept(request.POST)
-        for valmap in request_search.get('mr:valueMap',[]):
-            vmap = moq.get_value_map(fuseki_process, valmap)
-            vmap_id = vmap[0]['valueMap']
-            valmap['valueMap'] = vmap_id
+        for valuemap in request_search.get('mr:valueMap',[]):
+            # vmap = moq.get_value_map(fuseki_process, valmap)
+            vmap_dict = {'mr:source':_get_value(valuemap['mr:source']),
+                         'mr:target':_get_value(valuemap['mr:target'])}
+            vmap = moq.get_value_map(fuseki_process, vmap_dict)
+            valuemap['valueMap'] = vmap['valueMap']
+            #value['value'] = val_id
         url = url_with_querystring(reverse('mapping_edit'),
                                    ref = json.dumps(request_search))
         return HttpResponseRedirect(url)
@@ -357,26 +374,35 @@ def define_valuemap(request):
         for elem in request_search[ch[0]]['skos:member']:
             if not elem.has_key('rdfs:literal'):
                 ch[1].append(('%s||%s' % (request_search[ch[0]]['formatConcept']
-                                          , elem.get('rdf:Property')),
-                              elem.get('rdf:Property', '').split('/')[-1]))
+                                          , elem.get('mr:name')),
+                              elem.get('mr:name', '').split('/')[-1]))
         for elem in request_search[ch[0]]['skos:member']:
             if elem.has_key('skos:member'):
                 for selem in elem['skos:member']:
                     if not selem.has_key('rdfs:literal'):
                         ch[1].append(('%s||%s' % (elem['formatConcept'],
-                                                  selem.get('rdf:Property')),
+                                                  selem.get('mr:name')),
                                       '  - %s' %
-                                selem.get('rdf:Property', '').split('/')[-1]))
+                                selem.get('mr:name', '').split('/')[-1]))
 
     if request.method == 'POST':
         form = forms.ValueMap(request.POST, sc=source_list, tc=target_list)
         if form.is_valid():
             source = form.cleaned_data['source_value'].split('||')
             target = form.cleaned_data['target_value'].split('||')
-            request_search['mr:valueMap'].append({'mr:sourceFC':source[0],
-                                                  'mr:sourceVal':source[1],
-                                                  'mr:targetFC':target[0],
-                                                  'mr:targetVal':target[1]})
+            new_vmap = {'mr:source':{'mr:operator':
+                        '''<http://www.openmath.org/cd/arith1.xhtml#plus>''',
+                                     'mr:subject':{'mr:scope':source[0],
+                                     'mr:property':{'mr:name':source[1]}}},
+                        'mr:target':{'mr:operator':
+                        '''<http://www.openmath.org/cd/arith1.xhtml#plus>''',
+                                     'mr:subject':{'mr:scope':target[0],
+                                     'mr:property':{'mr:name':target[1]}}}}
+            request_search['mr:valueMap'].append(new_vmap)
+                # {'mr:sourceFC':source[0],
+                #                                   'mr:sourceVal':source[1],
+                #                                   'mr:targetFC':target[0],
+                #                                   'mr:targetVal':target[1]})
             request_search_path = json.dumps(request_search)
             url = url_with_querystring(reverse('value_maps'),
                                        ref=request_search_path)
@@ -387,9 +413,9 @@ def define_valuemap(request):
     context = RequestContext(request, con_dict)
     return render_to_response('simpleform.html', context)
 
-def define_value(request, fformat):
+def define_property(request, fformat):
     """
-    returns a view to define an individual value
+    returns a view to define an individual property
     """
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
@@ -397,10 +423,12 @@ def define_value(request, fformat):
         form = forms.Value(request.POST, fformat=fformat)
         if form.is_valid():
             new_value = {}
-            if form.cleaned_data['vproperty']:
-                new_value['rdf:Property'] = form.cleaned_data['vproperty']
+            if form.cleaned_data.get('name'):
+                new_value['mr:name'] = form.cleaned_data['name']
             if form.cleaned_data['literal'] != '""':
                 new_value['rdfs:literal'] =  form.cleaned_data['literal']
+            if form.cleaned_data.get('length'):
+                new_value['mr:length'] = form.cleaned_data['length']
             newv = json.dumps(new_value)
             request_search_path = request_search_path.replace('"&&&&"', newv)
             url = url_with_querystring(reverse('mapping_concepts'),

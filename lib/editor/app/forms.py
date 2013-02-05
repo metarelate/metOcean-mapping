@@ -115,23 +115,17 @@ class Value(forms.Form):
     form to define a value for use in a concept
     """
     #vproperty =  forms.ChoiceField()
-    vproperty =  forms.CharField(required=False,
+    name =  forms.CharField(required=False,
                                  widget=forms.TextInput(attrs={'size':'100'}))
     literal = forms.CharField(required=False)
     length = forms.CharField(required=False)
-    operator = forms.CharField(required=False)
-    operand_1 = forms.CharField(required=False)
-    operand_2 = forms.CharField(required=False)
-    operand_3 = forms.CharField(required=False)
-    sub_operand = forms.CharField(required=False)
-    obj_operand = forms.CharField(required=False)
     
     def __init__(self, *args, **kwargs):
         fformat = kwargs.pop('fformat')
         super(Value, self).__init__(*args, **kwargs)
         if fformat == 'um':
             F3 = '<http://reference.metoffice.gov.uk/def/um/umdp/F3/>'
-            self.fields['vproperty'].initial = F3
+            self.fields['name'].initial = F3
             # umRes = moq.subject_by_graph(fuseki_process,
                                          # 'http://um/umdpF3.ttl')
             # choices = [(um['subject'], um['subject'].split('/')[-1]) for
@@ -139,7 +133,7 @@ class Value(forms.Form):
             # self.fields['vproperty'].choices = choices
         elif fformat == 'cf':
             CF = '<http://def.cfconventions.org/data_model/>'
-            self.fields['vproperty'].initial = CF
+            self.fields['name'].initial = CF
             # cfRes = moq.subject_by_graph(fuseki_process,
                                          # 'http://CF/cfmodel.ttl')
             # choices = [(cf['subject'], cf['subject'].split('/')[-1]) for
@@ -147,7 +141,7 @@ class Value(forms.Form):
             # self.fields['vproperty'].choices = choices
         elif fformat == 'grib':
             GRIB = '<http://def.ecmwf.int/api/grib/keys/>'
-            self.fields['vproperty'].initial = GRIB
+            self.fields['name'].initial = GRIB
             # gribRes = moq.subject_by_graph(fuseki_process,
                                            # 'http://grib/gribapi.ttl')
             # choices = [(grib['subject'], grib['subject'].split('/')[-1]) for

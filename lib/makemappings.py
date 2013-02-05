@@ -55,14 +55,14 @@ fcuri = 'http://reference.metoffice.gov.uk/def/um/fieldcode/'
 for fc,cf in umcf.LBFC_TO_CF.iteritems():
     adict = {}
     adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
-                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
-                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
-                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+                       'skos:member':[{'mr:name':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+                    {'mr:name':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+                    {'mr:name':'mrcf:type', 'rdfs:literal':'"Field"'}]}
     if umcf.CF_TO_LBFC.has_key(cf) and umcf.CF_TO_LBFC[cf] == fc:
         adict['mr:invertible'] = '"True"'
     else:
         adict['mr:invertible'] = '"False"'
-    adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:lbfc', 'rdfs:literal':'mofc:%i' % fc}],
+    adict['mr:source'] = {'skos:member':[{'mr:name':'moumdpF3:lbfc', 'rdfs:literal':'mofc:%i' % fc}],
                        'mr:format':['<http://metarelate.net/metocean/format/um>']}
     linkages.append(adict)
 
@@ -70,10 +70,10 @@ for cf,fc in umcf.CF_TO_LBFC.iteritems():
     if not (umcf.LBFC_TO_CF.has_key(fc) and umcf.LBFC_TO_CF[fc] == cf):
         adict = {}
         adict['mr:source'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
-                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
-                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
-                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
-        adict['mr:target'] = {'skos:member':[{'rdf:Property':'moumdpF3:lbfc', 'rdfs:literal':'mofc:%i' % fc}],
+                       'skos:member':[{'mr:name':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+                    {'mr:name':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+                    {'mr:name':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+        adict['mr:target'] = {'skos:member':[{'mr:name':'moumdpF3:lbfc', 'rdfs:literal':'mofc:%i' % fc}],
                            'mr:format':['<http://metarelate.net/metocean/format/um>']}
         adict['mr:invertible'] = '"False"'
         linkages.append(adict)
@@ -83,11 +83,11 @@ for cf,fc in umcf.CF_TO_LBFC.iteritems():
 for stash,cf in umcfdict.iteritems():
     adict = {}
     adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
-                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
-                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
-                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+                       'skos:member':[{'mr:name':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+                    {'mr:name':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+                    {'mr:name':'mrcf:type', 'rdfs:literal':'"Field"'}]}
     adict['mr:invertible'] = '"False"'
-    adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % stash}],
+    adict['mr:source'] = {'skos:member':[{'mr:name':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % stash}],
                        'mr:format':['<http://metarelate.net/metocean/format/um>']}
     linkages.append(adict)
 
@@ -96,34 +96,34 @@ for stash,cf in umcfdict.iteritems():
 for sn,gribcf in gribParams.iteritems():
     adict = {}
     adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
-                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % gribcf['standard_name']},
-                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % gribcf['units']},
-                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+                       'skos:member':[{'mr:name':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % gribcf['standard_name']},
+                    {'mr:name':'mrcf:units', 'rdfs:literal':'"%s"' % gribcf['units']},
+                    {'mr:name':'mrcf:type', 'rdfs:literal':'"Field"'}]}
     adict['mr:invertible'] = '"True"'
-    adict['mr:source'] = {'skos:member':[{'rdf:Property':'gribapi:edition', 'rdfs:literal':'2'},
-                                         {'rdf:Property':'gribapi:discipline', 'rdfs:literal':'%s' % gribcf['discipline']},
-                                         {'rdf:Property':'gribapi:parameterCategory', 'rdfs:literal':'%s' % gribcf['parameterCategory']},
-                                         {'rdf:Property':'gribapi:parameterNumber', 'rdfs:literal':'%s' % gribcf['parameterNumber']}],
+    adict['mr:source'] = {'skos:member':[{'mr:name':'gribapi:edition', 'rdfs:literal':'2'},
+                                         {'mr:name':'gribapi:discipline', 'rdfs:literal':'%s' % gribcf['discipline']},
+                                         {'mr:name':'gribapi:parameterCategory', 'rdfs:literal':'%s' % gribcf['parameterCategory']},
+                                         {'mr:name':'gribapi:parameterNumber', 'rdfs:literal':'%s' % gribcf['parameterNumber']}],
                        'mr:format':['<http://metarelate.net/metocean/format/grib>']}
     linkages.append(adict)
     
 
 adict = {}
 adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
-                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % 'eastward_wind'},
-                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % 'm s-1'},
-                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
-adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % 'm01s00i002'}],
+                       'skos:member':[{'mr:name':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % 'eastward_wind'},
+                    {'mr:name':'mrcf:units', 'rdfs:literal':'"%s"' % 'm s-1'},
+                    {'mr:name':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+adict['mr:source'] = {'skos:member':[{'mr:name':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % 'm01s00i002'}],
                        'mr:format':['<http://metarelate.net/metocean/format/um>']}
 adict['mr:invertible'] = '"False"'
 linkages.append(adict)
 
 adict = {}
 adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
-                       'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % 'northward_wind'},
-                    {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % 'm s-1'},
-                    {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
-adict['mr:source'] = {'skos:member':[{'rdf:Property':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % 'm01s00i003'}],
+                       'skos:member':[{'mr:name':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % 'northward_wind'},
+                    {'mr:name':'mrcf:units', 'rdfs:literal':'"%s"' % 'm s-1'},
+                    {'mr:name':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+adict['mr:source'] = {'skos:member':[{'mr:name':'moumdpF3:stash', 'rdfs:literal':'moStCon:%s' % 'm01s00i003'}],
                        'mr:format':['<http://metarelate.net/metocean/format/um>']}
 adict['mr:invertible'] = '"False"'
 linkages.append(adict)
@@ -163,9 +163,9 @@ mapping_p_o['mr:reason'] = ['"new mapping"']
 
 
     # adict['mr:target'] = {'mr:format':['<http://metarelate.net/metocean/format/cf>'],
-    #                    'skos:member':[{'rdf:Property':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
-    #                 {'rdf:Property':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
-    #                 {'rdf:Property':'mrcf:type', 'rdfs:literal':'"Field"'}]}
+    #                    'skos:member':[{'mr:name':'mrcf:standard_name', 'rdfs:literal':'cfsn:%s' % cf[0]},
+    #                 {'mr:name':'mrcf:units', 'rdfs:literal':'"%s"' % cf[1]},
+    #                 {'mr:name':'mrcf:type', 'rdfs:literal':'"Field"'}]}
 
 with fu.FusekiServer(3131) as fu_p:
     fu_p.load()
@@ -178,17 +178,17 @@ with fu.FusekiServer(3131) as fu_p:
             members = newlink[pref]['skos:member']
             memberids = []
             for v_dict in members:
-                val_res = moq.get_value(fu_p, v_dict)
-                if len(val_res) == 1:
-                    valID = '%s' % val_res[0]['value']
+                prop_res = moq.get_property(fu_p, v_dict)
+                if prop_res:
+                    prop_id = '%s' % prop_res['property']
                 else:
                     raise ValueError('%i results returned from get_value %s' % (len(val_res), str(val_res)))
-                memberids.append(valID)
+                memberids.append(prop_id)
             fc_dict = {'mr:format' : newlink[pref]['mr:format'],
                        'skos:member' : memberids}
             fc_res = moq.get_format_concept(fu_p, fc_dict)
-            if len(fc_res) == 1:
-                fcID = '%s' % fc_res[0]['formatConcept']
+            if fc_res:
+                fcID = '%s' % fc_res['formatConcept']
             else:
                 raise ValueError('%i results returned from get_format_concept %s' % (len(fc_res), str(fc_res)))
             map_dict[pref] = fcID

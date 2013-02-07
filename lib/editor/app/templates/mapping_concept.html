@@ -61,7 +61,7 @@
     <tr>
     <td>
     <h4>Format</h4>
-    {% multi_key mapping "mr:source,mr:format" %}
+    {{ mapping|multi_key:"mr:source,mr:format" }}
     </td></tr>
     {% if mapping|multi_key:"mr:source,dc:requires" %}
     <tr><td>
@@ -107,6 +107,7 @@
 
         {% if member|multi_key:"skos:member" %}
 
+
           <li>Sub Component </li>
           <ul>
             {% if member|multi_key:"remove" %}
@@ -128,8 +129,8 @@
               <li>{{ sub_member|multi_key:"mr:name" }}</li>
 
               <ul>
-              {% if sub_member|multi_key:"rdfs:literal" %}
-                <li>{{ sub_member|multi_key:"rdfs:literal" }}</li>
+              {% if sub_member|multi_key:"rdf:value" %}
+                <li>{{ sub_member|multi_key:"rdf:value" }}</li>
               {% endif %}
               {% if sub_member|multi_key:"remove" %}
                 <li><a href="{{ sub_member|multi_key:"remove,url" }}"> {{ sub_member|multi_key:"remove,label" }}</a></li>
@@ -141,12 +142,16 @@
           </ul>
 
         {% else %}
+
           {% if member|multi_key:"mr:name" %}
             <li>{{ member|multi_key:"mr:name" }}</li>
           {% endif %}
           <ul>
-          {% if member|multi_key:"rdfs:literal" %}
-            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
+          {% if member|multi_key:"rdf:value" %}
+            <li>{{ member|multi_key:"rdf:value" }}</li>
+          {% endif %}
+          {% if member|multi_key:"mr:operator" %}
+            <li>{{ member|multi_key:"mr:operator" }}</li>
           {% endif %}
           {% if member|multi_key:"remove" %}
             <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
@@ -175,7 +180,7 @@
     <tr>
     <td>
     <h4>Format</h4>
-    {% multi_key mapping "mr:target,mr:format" %}
+    {{ mapping|multi_key:"mr:target,mr:format" }}
     </td></tr>
     {% if mapping|multi_key:"mr:target,dc:requires" %}
     <tr><td>
@@ -240,8 +245,8 @@
               <li>{{ sub_member|multi_key:"mr:name" }}</li>
 
               <ul>
-              {% if sub_member|multi_key:"rdfs:literal" %}
-                <li>{{ sub_member|multi_key:"rdfs:literal" }}</li>
+              {% if sub_member|multi_key:"rdf:value" %}
+                <li>{{ sub_member|multi_key:"rdf:value" }}</li>
               {% endif %}
               {% if sub_member|multi_key:"remove" %}
                 <li><a href="{{ sub_member|multi_key:"remove,url" }}"> {{ sub_member|multi_key:"remove,label" }}</a></li>
@@ -253,13 +258,17 @@
            </ul>
 
         {% else %}
+
           {% if member|multi_key:"mr:name" %}
             <li>{{ member|multi_key:"mr:name" }}</li>
           {% endif %}
           
           <ul>
-          {% if member|multi_key:"rdfs:literal" %}
-            <li>Literal:  {{ member|multi_key:"rdfs:literal" }}</li>
+          {% if member|multi_key:"rdf:value" %}
+            <li>{{ member|multi_key:"rdf:value" }}</li>
+          {% endif %}
+          {% if member|multi_key:"mr:operator" %}
+            <li>{{ member|multi_key:"mr:operator" }}</li>
           {% endif %}
           {% if member|multi_key:"remove" %}
             <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>

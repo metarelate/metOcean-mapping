@@ -117,46 +117,45 @@ class Value(forms.Form):
     #vproperty =  forms.ChoiceField()
     name =  forms.CharField(required=False,
                                  widget=forms.TextInput(attrs={'size':'100'}))
-    literal = forms.CharField(required=False)
-    length = forms.CharField(required=False)
+    value = forms.CharField(required=False)
+    operator = forms.CharField(required=False)
     
     def __init__(self, *args, **kwargs):
         fformat = kwargs.pop('fformat')
         super(Value, self).__init__(*args, **kwargs)
+        op_url = '<http://www.openmath.org/cd/relation1.xhtml#eq>'
+        self.fields['operator'].initial = op_url
         if fformat == 'um':
             F3 = '<http://reference.metoffice.gov.uk/def/um/umdp/F3/>'
             self.fields['name'].initial = F3
-            # umRes = moq.subject_by_graph(fuseki_process,
+            # umRes = moq.subject_and_plabel(fuseki_process,
                                          # 'http://um/umdpF3.ttl')
-            # choices = [(um['subject'], um['subject'].split('/')[-1]) for
-                                                             # um in umRes]
+            # choices = [(um['subject'], um['prefLabel'] for um in umRes]
             # self.fields['vproperty'].choices = choices
         elif fformat == 'cf':
             CF = '<http://def.cfconventions.org/data_model/>'
             self.fields['name'].initial = CF
-            # cfRes = moq.subject_by_graph(fuseki_process,
+            # cfRes = moq.subject_and_plabel(fuseki_process,
                                          # 'http://CF/cfmodel.ttl')
-            # choices = [(cf['subject'], cf['subject'].split('/')[-1]) for
-                                                             # cf in cfRes]
+            # choices = [(cf['subject'], cf['prefLabel'] for cf in cfRes]
             # self.fields['vproperty'].choices = choices
         elif fformat == 'grib':
             GRIB = '<http://def.ecmwf.int/api/grib/keys/>'
             self.fields['name'].initial = GRIB
-            # gribRes = moq.subject_by_graph(fuseki_process,
+            # grRes = moq.subject_and_plabel(fuseki_process,
                                            # 'http://grib/gribapi.ttl')
-            # choices = [(grib['subject'], grib['subject'].split('/')[-1]) for
-                                                             # grib in gribRes]
+            # choices = [(grib['subject'], grib['prefLabel'] for grib in grRes]
             # self.fields['vproperty'].choices = choices
     def clean(self):
         try:
-            int(self.cleaned_data['literal'])
+            int(self.cleaned_data['value'])
         except ValueError:
-            if self.cleaned_data['literal'].startswith('http'):
-                self.cleaned_data['literal'] = '<{}>'.format(
-                                                self.cleaned_data['literal'])
+            if self.cleaned_data['value'].startswith('http'):
+                self.cleaned_data['value'] = '<{}>'.format(
+                                                self.cleaned_data['value'])
             else:
-                self.cleaned_data['literal'] = '"{}"'.format(
-                                                self.cleaned_data['literal'])
+                self.cleaned_data['value'] = '"{}"'.format(
+                                                self.cleaned_data['value'])
         return self.cleaned_data
 
 

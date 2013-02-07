@@ -372,14 +372,14 @@ def define_valuemap(request):
     choices = [('mr:source', source_list),('mr:target', target_list)]
     for ch in choices:
         for elem in request_search[ch[0]]['skos:member']:
-            if not elem.has_key('rdfs:literal'):
+            if not elem.has_key('rdf:value'):
                 ch[1].append(('%s||%s' % (request_search[ch[0]]['formatConcept']
                                           , elem.get('mr:name')),
                               elem.get('mr:name', '').split('/')[-1]))
         for elem in request_search[ch[0]]['skos:member']:
             if elem.has_key('skos:member'):
                 for selem in elem['skos:member']:
-                    if not selem.has_key('rdfs:literal'):
+                    if not selem.has_key('rdf:value'):
                         ch[1].append(('%s||%s' % (elem['formatConcept'],
                                                   selem.get('mr:name')),
                                       '  - %s' %
@@ -391,11 +391,11 @@ def define_valuemap(request):
             source = form.cleaned_data['source_value'].split('||')
             target = form.cleaned_data['target_value'].split('||')
             new_vmap = {'mr:source':{'mr:operator':
-                        '''<http://www.openmath.org/cd/arith1.xhtml#plus>''',
+                        '<http://www.openmath.org/cd/sts.xhtml#NumericalValue>',
                                      'mr:subject':{'mr:scope':source[0],
                                      'mr:property':{'mr:name':source[1]}}},
                         'mr:target':{'mr:operator':
-                        '''<http://www.openmath.org/cd/arith1.xhtml#plus>''',
+                        '<http://www.openmath.org/cd/sts.xhtml#NumericalValue>',
                                      'mr:subject':{'mr:scope':target[0],
                                      'mr:property':{'mr:name':target[1]}}}}
             request_search['mr:valueMap'].append(new_vmap)
@@ -425,10 +425,10 @@ def define_property(request, fformat):
             new_value = {}
             if form.cleaned_data.get('name'):
                 new_value['mr:name'] = form.cleaned_data['name']
-            if form.cleaned_data['literal'] != '""':
-                new_value['rdfs:literal'] =  form.cleaned_data['literal']
-            if form.cleaned_data.get('length'):
-                new_value['mr:length'] = form.cleaned_data['length']
+            if form.cleaned_data['value'] != '""':
+                new_value['rdf:value'] =  form.cleaned_data['value']
+            if form.cleaned_data.get('operator'):
+                new_value['mr:operator'] = form.cleaned_data['operator']
             newv = json.dumps(new_value)
             request_search_path = request_search_path.replace('"&&&&"', newv)
             url = url_with_querystring(reverse('mapping_concepts'),
@@ -492,10 +492,10 @@ def mapping_edit(request):
                                                                [])])
                   }
         map_id = request_search.get('mapping')
-        print map_id
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id)
-            print 'mapping:', mapping
+            # print 'mapping:', mapping
+            # print 'initial:', initial
             ts = initial['source'] == mapping['source']
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \
@@ -504,8 +504,6 @@ def mapping_edit(request):
                 initial = mapping                
             else:
                 raise ValueError('mismatch in referrer')
-            
-            
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = request_search
@@ -593,54 +591,6 @@ def process_form(form, request_search_path):
     return map_id
 
 
-def _retrieve_format_concept(fc_id):
-    """
-    recursive call to get all the formatConcept
-    information from a formatConcept
-    """
-    # fc_dict = {'formatConcept':'', 'mr:format': '', 'skos:member': []},
-    top_fc = moq.retrieve_format_concept(fuseki_process, fc_id)
-    print top_fc
-    if top_fc:
-        fc_dict = {'formatConcept':fc_id, 'mr:format': top_fc['format'],
-                   'skos:member':[]}
-        if isinstance(top_fc['member'], str):
-            top_fc['member'] = [top_fc['member']]
-        for member in top_fc['member']:
-            print 'member', member
-            if member.startswith('<http://www.metarelate.net/metOcean/value/'):
-                val_dict = moq.retrieve_value(fuseki_process, member)
-                fc_dict['skos:member'].append(val_dict)
-            elif member.startswith(
-                    '<http://www.metarelate.net/metOcean/formatConcept/'):
-                subfc_dict = _retrieve_format_concept(member)
-                fc_dict.append(subfc_dict)
-            else:
-                raise ValueError('{} a malformed formatConcept'.format(fc_id))
-    return fc_dict
-
-    
-
-def _mapping_json(mapping_id):
-    """
-    returns the json for a mapping, fully expanded
-    from the mapping Id
-    """
-    referrer = {'mapping': mapping_id,
-                'mr:source': {'formatConcept': ''},
-                'mr:target': {'formatConcept': ''},
-                'mr:valueMap': []}
-    mapping = moq.get_mapping_by_id(fuseki_process, mapping_id)
-    if mapping:
-        referrer['mr:source'] = _retrieve_format_concept(mapping['source'])
-        referrer['mr:target'] = _retrieve_format_concept(mapping['target'])
-        if mapping.get('valueMaps'):
-            for valmap in mapping['valueMaps'].split('&'):
-                referrer['mr:valueMap'].append(moq.retrieve_valuemap(valmap))
-        else:
-            referrer['mr:valueMap'] = []
-    return referrer
-
 
 
 
@@ -655,18 +605,19 @@ def invalid_mappings(request):
         request_search_path = '{}'
     request_search = json.loads(request_search_path)
     invalids = []
-    for key, mappings in request_search.iteritems():
+    for key, inv_mappings in request_search.iteritems():
         invalid = {'label':key, 'mappings':[]}
-        for mapping in mappings:
-            map_json = _mapping_json(mapping['amap'])
+        for inv_map in inv_mappings:
+            mapping = moq.get_mapping_by_id(fuseki_process, inv_map['amap'])
+            referrer = fuseki_process.structured_mapping(mapping)
+            map_json = json.dumps(referrer)
             url = url_with_querystring(reverse('mapping_edit'),
-                                           ref=json.dumps(map_json))
+                                           ref=map_json)
             label = 'mapping'
             
             invalid['mappings'].append({'url':url,
                                         'label':label})
         invalids.append(invalid)
-    print invalids
     context_dict = {'invalid': invalids}
     context = RequestContext(request, context_dict)
     return render_to_response('select_list.html', context)

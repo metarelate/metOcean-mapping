@@ -24,12 +24,13 @@ class Prefixes(dict):
         'moStCon'  : 'http://reference.metoffice.gov.uk/def/um/stash/concept/' ,
         'moStND'   : 'http://reference.metoffice.gov.uk/def/um/stash/new_dynamics/' ,
         'moStEG'   : 'http://reference.metoffice.gov.uk/def/um/stash/endgame/' ,
-        'mofc'      : 'http://reference.metoffice.gov.uk/def/um/fieldcode/',
+        'mofc'     : 'http://reference.metoffice.gov.uk/def/um/fieldcode/',
         'moumdpF3' : 'http://reference.metoffice.gov.uk/def/um/umdp/F3/',
         'moumdpC4' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/',
         'moumdpC4Pseud' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/',
         'momet08'  : 'http://reference.metoffice.gov.uk/def/um/met08/',
-        'cfsn'     : 'http://def.cfconventions.org/standard_name/' ,
+        'cfsn'     : 'http://def.cfconventions.org/standard_names/' ,
+        'cfm'      : 'http://def.cfconventions.org/datamodel/' ,
         'gribapi'  : 'http://def.ecmwf.int/api/grib/keys',
         }
         self.update(prefixd)

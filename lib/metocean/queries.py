@@ -208,9 +208,10 @@ def create_mediator(fuseki_process, label, fformat, debug=False):
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
 
-def get_mediators(fuseki_process, debug=False):
+def get_mediators(fuseki_process, fformat='', debug=False):
     """
     return all mediators from the triple store
+    fformat limits the mediators to one format
     """
     qstr = '''
     SELECT ?mediator ?format ?label
@@ -218,13 +219,13 @@ def get_mediators(fuseki_process, debug=False):
     { GRAPH <http://metarelate.net/contacts.ttl> {
         ?mediator mr:format ?format ;
                   skos:label ?label .
-    FILTER(regex(str(?mediator),"http://www.metarelate.net/metocean/mediates/"))
+    FILTER(regex(str(?mediator),
+        "http://www.metarelate.net/metocean/mediates/%s"))
     }
-    ''' 
+    ''' % fformat
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
     
-
 
 def print_records(res):
     """ helper for command line query interpretation"""
@@ -242,6 +243,112 @@ def print_records(res):
             print_string += '\n'
     return print_string
 
+def get_label(fuseki_process, subject, debug=False):
+    """
+    return the skos:prefLabel for a subject, if it exists
+    """
+    subject = str(subject)
+    if not subject.startswith('<') and not subject.startswith('"'):
+        subj_str = '"{}"'.format(subject)
+    else:
+        subj_str = subject
+    qstr = ''' SELECT ?prefLabel
+    WHERE {
+    OPTIONAL { GRAPH <http://grib/apikeys.ttl> {
+    %(sub)s skos:prefLabel ?prefLabel . } }
+    OPTIONAL { GRAPH <http://CF/cf-standard-name-table.ttl> {
+    %(sub)s skos:prefLabel ?prefLabel . } }
+    OPTIONAL { GRAPH <http://CF/cfmodel.ttl> {
+    %(sub)s skos:prefLabel ?prefLabel . } }
+    OPTIONAL { GRAPH <http://um/fieldcode.ttl> {
+    %(sub)s skos:prefLabel ?prefLabel . } }
+    OPTIONAL { GRAPH <http://um/stashconcepts.ttl> {
+    %(sub)s skos:prefLabel ?prefLabel . } }
+    }
+    ''' % {'sub':subj_str}
+    results = fuseki_process.run_query(qstr, debug=debug)
+    if len(results) == 0:
+        label = subject
+    elif len(results) >1:
+        raise ValueError('{} returns multiple prefLabels'.format(subject))
+    else:
+        label = results[0]['prefLabel']
+    return label
+
+
+def subject_and_plabel(fuseki_process, graph, debug=False):
+    """
+    selects subject and prefLabel from a particular graph
+    """
+    qstr = '''
+        SELECT ?subject ?prefLabel 
+        WHERE {
+            GRAPH <%s> { ?subject skos:prefLabel ?prefLabel } .
+        }
+        ORDER BY ?subject
+    ''' % graph
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
+
+
+# GRAPH <http://metarelate.net/mappings.ttl> { {
+#     ?amap mr:status ?astatus ;
+#          mr:source ?asource ;
+#          mr:target ?atarget . } 
+#     UNION 
+#         { 
+#     ?amap mr:invertible "True" ;
+#          mr:status ?astatus ;
+#          mr:target ?asource ;
+#          mr:source ?atarget . } 
+#     FILTER (?astatus NOT IN ("Deprecated", "Broken"))
+#     MINUS {?amap ^dc:replaces+ ?anothermap}
+#     } 
+    
+
+def valid_ordered_mappings(fuseki_process, s_format, t_format, debug=False):
+    """
+    returns all the ordered mappings for a particular
+    source and target format
+    """
+    qstr = '''
+    SELECT ?mapping ?source ?sourceFormat ?target ?targetFormat ?inverted
+    (GROUP_CONCAT(DISTINCT(?valuemap); SEPARATOR = '&') AS ?valueMaps)
+    WHERE { 
+    GRAPH <http://metarelate.net/mappings.ttl> { {
+    ?mapping mr:source ?source ;
+             mr:target ?target ;
+             mr:status ?status .
+    BIND("False" AS ?inverted)
+    OPTIONAL {?mapping mr:valueMap ?valueMap . }
+    FILTER (?status NOT IN ("Deprecated", "Broken"))
+    MINUS {?mapping ^dc:replaces+ ?anothermap}
+    }
+    UNION {
+    ?mapping mr:source ?target ;
+             mr:target ?source ;
+             mr:status ?status ;
+             mr:invertible "True" .
+    BIND("True" AS ?inverted)
+    OPTIONAL {?mapping mr:valueMap ?valueMap . }
+    FILTER (?status NOT IN ("Deprecated", "Broken"))
+    MINUS {?mapping ^dc:replaces+ ?anothermap}
+    } }
+    GRAPH <http://metarelate.net/concepts.ttl> { 
+    ?source mr:format ?sourceFormat .
+    ?target mr:format ?targetFormat .
+    }
+    FILTER(?sourceFormat = %s)
+    FILTER(?targetFormat = %s)
+    }
+    GROUP BY ?mapping ?source ?sourceFormat ?target ?targetFormat ?inverted
+    ORDER BY ?mapping
+    
+    ''' % (s_format, t_format)
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
 
 
 ### blank node queries #####
@@ -249,8 +356,8 @@ def print_records(res):
 def get_property(fuseki_process, po_dict, debug=False):
     """return one property record, matching the pred_obj dictionary
     create one if it does not exist"""
-    allowed_predicates = set(('mr:name','rdfs:literal',
-                            'mr:length'))
+    allowed_predicates = set(('mr:name','rdf:value',
+                            'mr:operator'))
     single_predicates = allowed_predicates
     preds = set(po_dict.keys())
     if not preds.issubset(allowed_predicates):
@@ -336,15 +443,17 @@ def retrieve_property(fuseki_process, prop_id, debug=False):
     retrieve a property record from it's id
     or None if one does not exist
     """
-    qstr = '''SELECT ?property ?name ?literal ?length
+    qstr = '''SELECT ?property ?name ?operator
+    (GROUP_CONCAT(?avalue; SEPARATOR='&') AS ?value)
     WHERE {
     GRAPH <http://metarelate.net/concepts.ttl> {
         ?property mr:name ?name ;
-                  rdfs:literal ?literal ;
-                  mr:length ?length .
-        FILTER(?value = %s)
+                  rdf:value ?avalue ;
+                  mr:operator ?operator .
+        FILTER(?property = %s)
         }
     }
+    GROUP BY ?property ?name ?operator
     ''' % prop_id
     results = fuseki_process.run_query(qstr, debug=debug)
     if len(results) == 0:
@@ -353,7 +462,7 @@ def retrieve_property(fuseki_process, prop_id, debug=False):
         raise ValueError('{} is a malformed value'.format(results))
     else:
         prop = results[0]
-    return val
+    return prop
 
     
     
@@ -658,41 +767,77 @@ def get_scoped_property(fuseki_process, po_dict, debug=False):
     return results
 
 
-# def retrieve_valuemap(fuseki_process, vmId, debug=False):
-#     """
-#     return a valueMap record from the provided id
-#     or None if one does not exist
-#     """
-#     qstr = '''SELECT ?valueMap ?source ?target
-#     ?sourceScope
-#     ?sourceValue ?sourceProperty
-#     ?targetScope
-#     ?targetValue ?targetProperty
-#     WHERE {
-#     GRAPH <http://metarelate.net/concepts.ttl> {
-#         ?valueMap mr:source ?source ;
-#                   mr:target ?target .
-#         ?source mr:scope ?asourceScope ;
-#                 mr:value ?sourceValue .
-#         OPTIONAL{?sourceValue rdf:Property ?sourceProperty .}
-#         ?target mr:scope ?atargetScope ;
-#                 mr:value ?targetValue .
-#         OPTIONAL{?targetValue rdf:Property ?targetProperty .}
-#         FILTER(?valueMap = %s)
-#         }
-#     }
-#     GROUP BY ?valueMap ?source ?target
-#     ?sourceValue ?sourceProperty
-#     ?targetValue ?targetProperty
-#     ''' % vmId
-#     results = fuseki_process.run_query(qstr, debug=debug)
-#     if len(results) == 0:
-#         valuemap = None
-#     elif len(results) >1:
-#         raise ValueError('{} is a malformed valueMap'.format(results))
-#     else:
-#         valuemap = results[0]
-#     return valuemap
+def retrieve_valuemap(fuseki_process, vmId, debug=False):
+    """
+    return a valueMap record from the provided id
+    or None if one does not exist
+    """
+    qstr = '''SELECT ?valueMap ?source ?target
+    WHERE {
+    GRAPH <http://metarelate.net/concepts.ttl> {
+        ?valueMap mr:source ?source ;
+                  mr:target ?target .
+        FILTER(?valueMap = %s)
+        }
+    }
+    ''' % vmId
+    results = fuseki_process.run_query(qstr, debug=debug)
+    if len(results) == 0:
+        valuemap = None
+    elif len(results) >1:
+        raise ValueError('{} is a malformed valueMap'.format(results))
+    else:
+        valuemap = results[0]
+    return valuemap
+
+
+def retrieve_value(fuseki_process, vId, debug=False):
+    """
+    return a value record from the provided id
+    or None if one does not exist
+    """
+    qstr = '''SELECT ?value ?operator ?subject ?object
+    WHERE {
+    GRAPH <http://metarelate.net/concepts.ttl> {
+        ?value mr:operator ?operator ;
+                  mr:subject ?subject .
+        OPTIONAL {?value mr:object ?object . }
+        FILTER(?value = %s)
+        }
+    }
+    ''' % vId
+    results = fuseki_process.run_query(qstr, debug=debug)
+    if len(results) == 0:
+        result = None
+    elif len(results) >1:
+        raise ValueError('{} is a malformed value'.format(results))
+    else:
+        result = results[0]
+    return result
+
+
+def retrieve_scoped_property(fuseki_process, spId, debug=False):
+    """
+    return a value record from the provided id
+    or None if one does not exist
+    """
+    qstr = '''SELECT ?scopedProperty ?scope ?property
+    WHERE {
+    GRAPH <http://metarelate.net/concepts.ttl> {
+        ?scopedProperty mr:scope ?scope ;
+                  mr:property ?property .
+        FILTER(?value = %s)
+        }
+    }
+    ''' % spId
+    results = fuseki_process.run_query(qstr, debug=debug)
+    if len(results) == 0:
+        result = None
+    elif len(results) >1:
+        raise ValueError('{} is a malformed value'.format(results))
+    else:
+        result = results[0]
+    return result
 
 
 
@@ -825,7 +970,7 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
     return a mapping record if one exists, from the provided id
     """
     qstr = '''SELECT ?mapping ?source ?target ?invertible ?replaces ?status
-                     ?note ?reason ?date ?creator
+                     ?note ?reason ?date ?creator ?inverted
     (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = '&') AS ?owners)
     (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = '&') AS ?watchers)
     (GROUP_CONCAT(DISTINCT(?valueMap); SEPARATOR = '&') AS ?valueMaps)
@@ -838,6 +983,7 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
          mr:reason ?reason ;
          dc:date ?date ;
          dc:creator ?creator .
+    BIND("False" AS ?inverted)
     OPTIONAL {?mapping dc:replaces ?replaces .}
     OPTIONAL {?mapping skos:note ?note .}
     OPTIONAL {?mapping mr:valueMap ?valueMap .}
@@ -847,7 +993,7 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
     }
     }
     GROUP BY ?mapping ?source ?target ?invertible ?replaces
-             ?status ?note ?reason ?date ?creator
+             ?status ?note ?reason ?date ?creator ?inverted
     ''' % str(map_id)
     result = fuseki_process.run_query(qstr, debug=debug)
     if result == []:
@@ -957,7 +1103,7 @@ def current_mappings(fuseki_process, debug=False):
            MINUS {?map ^dc:replaces+ ?map}
            }
         }
-    }
+}
     '''
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
@@ -987,7 +1133,7 @@ def subject_by_graph(fuseki_process, graph, debug=False):
     selects distinct subject from a particular graph
     """
     qstr = '''
-        SELECT DISTINCT ?subject
+        SELECT DISTINCT ?subject 
         WHERE {
             GRAPH <%s> { ?subject ?p ?o } .
         }

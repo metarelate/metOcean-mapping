@@ -1,0 +1,865 @@
+#(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping.
+#metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the
+#GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License,
+#or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#See the GNU Lesser General Public License for more details. You should have received a copy of the
+#GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/."
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix gribapi: <http://def.ecmwf.int/api/grib/keys> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://def.ecmwf.int/api/grib/keys/parametersVersion> a skos:concept ;
+            skos:prefLabel "parametersVersion" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/definitionFilesVersion> a skos:concept ;
+            skos:prefLabel "definitionFilesVersion" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/truncateDegrees> a skos:concept ;
+            skos:prefLabel "truncateDegrees" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/thousand> a skos:concept ;
+            skos:prefLabel "thousand" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/offset> a skos:concept ;
+            skos:prefLabel "offset" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/count> a skos:concept ;
+            skos:prefLabel "count" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/countTotal> a skos:concept ;
+            skos:prefLabel "countTotal" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/file> a skos:concept ;
+            skos:prefLabel "file" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/unitsFactor> a skos:concept ;
+            skos:prefLabel "unitsFactor" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/unitsBias> a skos:concept ;
+            skos:prefLabel "unitsBias" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/globalDomain> a skos:concept ;
+            skos:prefLabel "globalDomain" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/libraryVersion> a skos:concept ;
+            skos:prefLabel "libraryVersion" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/kindOfProduct> a skos:concept ;
+            skos:prefLabel "kindOfProduct" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/GRIBEditionNumber> a skos:concept ;
+            skos:prefLabel "GRIBEditionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/grib2divider> a skos:concept ;
+            skos:prefLabel "grib2divider" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/missingValue> a skos:concept ;
+            skos:prefLabel "missingValue" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/ieeeFloats> a skos:concept ;
+            skos:prefLabel "ieeeFloats" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section0Length> a skos:concept ;
+            skos:prefLabel "section0Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/identifier> a skos:concept ;
+            skos:prefLabel "identifier" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/discipline> a skos:concept ;
+            skos:prefLabel "discipline" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/editionNumber> a skos:concept ;
+            skos:prefLabel "editionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/totalLength> a skos:concept ;
+            skos:prefLabel "totalLength" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sectionNumber> a skos:concept ;
+            skos:prefLabel "sectionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section1Length> a skos:concept ;
+            skos:prefLabel "section1Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfSection> a skos:concept ;
+            skos:prefLabel "numberOfSection" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/centre> a skos:concept ;
+            skos:prefLabel "centre" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/subCentre> a skos:concept ;
+            skos:prefLabel "subCentre" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/tablesVersion> a skos:concept ;
+            skos:prefLabel "tablesVersion" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/masterDir> a skos:concept ;
+            skos:prefLabel "masterDir" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/localTablesVersion> a skos:concept ;
+            skos:prefLabel "localTablesVersion" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/localDir> a skos:concept ;
+            skos:prefLabel "localDir" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/significanceOfReferenceTime> a skos:concept ;
+            skos:prefLabel "significanceOfReferenceTime" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/year> a skos:concept ;
+            skos:prefLabel "year" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/month> a skos:concept ;
+            skos:prefLabel "month" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/day> a skos:concept ;
+            skos:prefLabel "day" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/hour> a skos:concept ;
+            skos:prefLabel "hour" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/minute> a skos:concept ;
+            skos:prefLabel "minute" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/second> a skos:concept ;
+            skos:prefLabel "second" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/dataDate> a skos:concept ;
+            skos:prefLabel "dataDate" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/julianDay> a skos:concept ;
+            skos:prefLabel "julianDay" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/dataTime> a skos:concept ;
+            skos:prefLabel "dataTime" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/productionStatusOfProcessedData> a skos:concept ;
+            skos:prefLabel "productionStatusOfProcessedData" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/typeOfProcessedData> a skos:concept ;
+            skos:prefLabel "typeOfProcessedData" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/md5Section1> a skos:concept ;
+            skos:prefLabel "md5Section1" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/selectStepTemplateInterval> a skos:concept ;
+            skos:prefLabel "selectStepTemplateInterval" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/selectStepTemplateInstant> a skos:concept ;
+            skos:prefLabel "selectStepTemplateInstant" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/stepType> a skos:concept ;
+            skos:prefLabel "stepType" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sectionNumber> a skos:concept ;
+            skos:prefLabel "sectionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/grib2LocalSectionPresent> a skos:concept ;
+            skos:prefLabel "grib2LocalSectionPresent" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section2Length> a skos:concept ;
+            skos:prefLabel "section2Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfSection> a skos:concept ;
+            skos:prefLabel "numberOfSection" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sectionNumber> a skos:concept ;
+            skos:prefLabel "sectionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/gridDescriptionSectionPresent> a skos:concept ;
+            skos:prefLabel "gridDescriptionSectionPresent" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section3Length> a skos:concept ;
+            skos:prefLabel "section3Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfSection> a skos:concept ;
+            skos:prefLabel "numberOfSection" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sourceOfGridDefinition> a skos:concept ;
+            skos:prefLabel "sourceOfGridDefinition" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfDataPoints> a skos:concept ;
+            skos:prefLabel "numberOfDataPoints" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfOctectsForNumberOfPoints> a skos:concept ;
+            skos:prefLabel "numberOfOctectsForNumberOfPoints" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/interpretationOfNumberOfPoints> a skos:concept ;
+            skos:prefLabel "interpretationOfNumberOfPoints" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/PLPresent> a skos:concept ;
+            skos:prefLabel "PLPresent" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/gridDefinitionTemplateNumber> a skos:concept ;
+            skos:prefLabel "gridDefinitionTemplateNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/shapeOfTheEarth> a skos:concept ;
+            skos:prefLabel "shapeOfTheEarth" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaleFactorOfRadiusOfSphericalEarth> a skos:concept ;
+            skos:prefLabel "scaleFactorOfRadiusOfSphericalEarth" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaledValueOfRadiusOfSphericalEarth> a skos:concept ;
+            skos:prefLabel "scaledValueOfRadiusOfSphericalEarth" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaleFactorOfEarthMajorAxis> a skos:concept ;
+            skos:prefLabel "scaleFactorOfEarthMajorAxis" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaledValueOfEarthMajorAxis> a skos:concept ;
+            skos:prefLabel "scaledValueOfEarthMajorAxis" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaleFactorOfEarthMinorAxis> a skos:concept ;
+            skos:prefLabel "scaleFactorOfEarthMinorAxis" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaledValueOfEarthMinorAxis> a skos:concept ;
+            skos:prefLabel "scaledValueOfEarthMinorAxis" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/radius> a skos:concept ;
+            skos:prefLabel "radius" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/Ni> a skos:concept ;
+            skos:prefLabel "Ni" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/Nj> a skos:concept ;
+            skos:prefLabel "Nj" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/basicAngleOfTheInitialProductionDomain> a skos:concept ;
+            skos:prefLabel "basicAngleOfTheInitialProductionDomain" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/mBasicAngle> a skos:concept ;
+            skos:prefLabel "mBasicAngle" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/angleMultiplier> a skos:concept ;
+            skos:prefLabel "angleMultiplier" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/mAngleMultiplier> a skos:concept ;
+            skos:prefLabel "mAngleMultiplier" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/subdivisionsOfBasicAngle> a skos:concept ;
+            skos:prefLabel "subdivisionsOfBasicAngle" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/angleDivisor> a skos:concept ;
+            skos:prefLabel "angleDivisor" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/latitudeOfFirstGridPoint> a skos:concept ;
+            skos:prefLabel "latitudeOfFirstGridPoint" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/longitudeOfFirstGridPoint> a skos:concept ;
+            skos:prefLabel "longitudeOfFirstGridPoint" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/resolutionAndComponentFlags> a skos:concept ;
+            skos:prefLabel "resolutionAndComponentFlags" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/resolutionAndComponentFlags1> a skos:concept ;
+            skos:prefLabel "resolutionAndComponentFlags1" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/resolutionAndComponentFlags2> a skos:concept ;
+            skos:prefLabel "resolutionAndComponentFlags2" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/iDirectionIncrementGiven> a skos:concept ;
+            skos:prefLabel "iDirectionIncrementGiven" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/jDirectionIncrementGiven> a skos:concept ;
+            skos:prefLabel "jDirectionIncrementGiven" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/uvRelativeToGrid> a skos:concept ;
+            skos:prefLabel "uvRelativeToGrid" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/resolutionAndComponentFlags6> a skos:concept ;
+            skos:prefLabel "resolutionAndComponentFlags6" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/resolutionAndComponentFlags7> a skos:concept ;
+            skos:prefLabel "resolutionAndComponentFlags7" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/resolutionAndComponentFlags8> a skos:concept ;
+            skos:prefLabel "resolutionAndComponentFlags8" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/ijDirectionIncrementGiven> a skos:concept ;
+            skos:prefLabel "ijDirectionIncrementGiven" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/latitudeOfLastGridPoint> a skos:concept ;
+            skos:prefLabel "latitudeOfLastGridPoint" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/longitudeOfLastGridPoint> a skos:concept ;
+            skos:prefLabel "longitudeOfLastGridPoint" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/iDirectionIncrement> a skos:concept ;
+            skos:prefLabel "iDirectionIncrement" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/jDirectionIncrement> a skos:concept ;
+            skos:prefLabel "jDirectionIncrement" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scanningMode> a skos:concept ;
+            skos:prefLabel "scanningMode" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/iScansNegatively> a skos:concept ;
+            skos:prefLabel "iScansNegatively" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/jScansPositively> a skos:concept ;
+            skos:prefLabel "jScansPositively" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/jPointsAreConsecutive> a skos:concept ;
+            skos:prefLabel "jPointsAreConsecutive" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/alternativeRowScanning> a skos:concept ;
+            skos:prefLabel "alternativeRowScanning" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/iScansPositively> a skos:concept ;
+            skos:prefLabel "iScansPositively" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scanningMode5> a skos:concept ;
+            skos:prefLabel "scanningMode5" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scanningMode6> a skos:concept ;
+            skos:prefLabel "scanningMode6" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scanningMode7> a skos:concept ;
+            skos:prefLabel "scanningMode7" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scanningMode8> a skos:concept ;
+            skos:prefLabel "scanningMode8" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/g2grid> a skos:concept ;
+            skos:prefLabel "g2grid" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/latitudeOfFirstGridPointInDegrees> a skos:concept ;
+            skos:prefLabel "latitudeOfFirstGridPointInDegrees" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/longitudeOfFirstGridPointInDegrees> a skos:concept ;
+            skos:prefLabel "longitudeOfFirstGridPointInDegrees" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/latitudeOfLastGridPointInDegrees> a skos:concept ;
+            skos:prefLabel "latitudeOfLastGridPointInDegrees" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/longitudeOfLastGridPointInDegrees> a skos:concept ;
+            skos:prefLabel "longitudeOfLastGridPointInDegrees" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/iDirectionIncrementInDegrees> a skos:concept ;
+            skos:prefLabel "iDirectionIncrementInDegrees" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/jDirectionIncrementInDegrees> a skos:concept ;
+            skos:prefLabel "jDirectionIncrementInDegrees" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/latLonValues> a skos:concept ;
+            skos:prefLabel "latLonValues" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/latitudes> a skos:concept ;
+            skos:prefLabel "latitudes" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/longitudes> a skos:concept ;
+            skos:prefLabel "longitudes" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/distinctLatitudes> a skos:concept ;
+            skos:prefLabel "distinctLatitudes" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/distinctLongitudes> a skos:concept ;
+            skos:prefLabel "distinctLongitudes" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/gridType> a skos:concept ;
+            skos:prefLabel "gridType" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/md5Section3> a skos:concept ;
+            skos:prefLabel "md5Section3" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sectionNumber> a skos:concept ;
+            skos:prefLabel "sectionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section4Length> a skos:concept ;
+            skos:prefLabel "section4Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfSection> a skos:concept ;
+            skos:prefLabel "numberOfSection" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/NV> a skos:concept ;
+            skos:prefLabel "NV" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/neitherPresent> a skos:concept ;
+            skos:prefLabel "neitherPresent" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/productDefinitionTemplateNumber> a skos:concept ;
+            skos:prefLabel "productDefinitionTemplateNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/parameterCategory> a skos:concept ;
+            skos:prefLabel "parameterCategory" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/parameterNumber> a skos:concept ;
+            skos:prefLabel "parameterNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/parameterUnits> a skos:concept ;
+            skos:prefLabel "parameterUnits" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/parameterName> a skos:concept ;
+            skos:prefLabel "parameterName" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/typeOfGeneratingProcess> a skos:concept ;
+            skos:prefLabel "typeOfGeneratingProcess" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/backgroundProcess> a skos:concept ;
+            skos:prefLabel "backgroundProcess" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/generatingProcessIdentifier> a skos:concept ;
+            skos:prefLabel "generatingProcessIdentifier" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/hoursAfterDataCutoff> a skos:concept ;
+            skos:prefLabel "hoursAfterDataCutoff" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/minutesAfterDataCutoff> a skos:concept ;
+            skos:prefLabel "minutesAfterDataCutoff" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/indicatorOfUnitOfTimeRange> a skos:concept ;
+            skos:prefLabel "indicatorOfUnitOfTimeRange" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/stepUnits> a skos:concept ;
+            skos:prefLabel "stepUnits" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/forecastTime> a skos:concept ;
+            skos:prefLabel "forecastTime" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/startStep> a skos:concept ;
+            skos:prefLabel "startStep" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/endStep> a skos:concept ;
+            skos:prefLabel "endStep" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/stepRange> a skos:concept ;
+            skos:prefLabel "stepRange" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/stepTypeInternal> a skos:concept ;
+            skos:prefLabel "stepTypeInternal" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/validityDate> a skos:concept ;
+            skos:prefLabel "validityDate" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/validityTime> a skos:concept ;
+            skos:prefLabel "validityTime" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/typeOfFirstFixedSurface> a skos:concept ;
+            skos:prefLabel "typeOfFirstFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/unitsOfFirstFixedSurface> a skos:concept ;
+            skos:prefLabel "unitsOfFirstFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/nameOfFirstFixedSurface> a skos:concept ;
+            skos:prefLabel "nameOfFirstFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaleFactorOfFirstFixedSurface> a skos:concept ;
+            skos:prefLabel "scaleFactorOfFirstFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaledValueOfFirstFixedSurface> a skos:concept ;
+            skos:prefLabel "scaledValueOfFirstFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/typeOfSecondFixedSurface> a skos:concept ;
+            skos:prefLabel "typeOfSecondFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/unitsOfSecondFixedSurface> a skos:concept ;
+            skos:prefLabel "unitsOfSecondFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/nameOfSecondFixedSurface> a skos:concept ;
+            skos:prefLabel "nameOfSecondFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaleFactorOfSecondFixedSurface> a skos:concept ;
+            skos:prefLabel "scaleFactorOfSecondFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaledValueOfSecondFixedSurface> a skos:concept ;
+            skos:prefLabel "scaledValueOfSecondFixedSurface" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/pressureUnits> a skos:concept ;
+            skos:prefLabel "pressureUnits" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/typeOfLevel> a skos:concept ;
+            skos:prefLabel "typeOfLevel" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/level> a skos:concept ;
+            skos:prefLabel "level" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/bottomLevel> a skos:concept ;
+            skos:prefLabel "bottomLevel" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/topLevel> a skos:concept ;
+            skos:prefLabel "topLevel" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/paramIdECMF> a skos:concept ;
+            skos:prefLabel "paramIdECMF" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/paramId> a skos:concept ;
+            skos:prefLabel "paramId" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/shortNameECMF> a skos:concept ;
+            skos:prefLabel "shortNameECMF" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/shortName> a skos:concept ;
+            skos:prefLabel "shortName" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/unitsECMF> a skos:concept ;
+            skos:prefLabel "unitsECMF" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/units> a skos:concept ;
+            skos:prefLabel "units" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/nameECMF> a skos:concept ;
+            skos:prefLabel "nameECMF" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/name> a skos:concept ;
+            skos:prefLabel "name" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/ifsParam> a skos:concept ;
+            skos:prefLabel "ifsParam" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/PVPresent> a skos:concept ;
+            skos:prefLabel "PVPresent" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/md5Section4> a skos:concept ;
+            skos:prefLabel "md5Section4" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sectionNumber> a skos:concept ;
+            skos:prefLabel "sectionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section5Length> a skos:concept ;
+            skos:prefLabel "section5Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfSection> a skos:concept ;
+            skos:prefLabel "numberOfSection" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfValues> a skos:concept ;
+            skos:prefLabel "numberOfValues" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/dataRepresentationTemplateNumber> a skos:concept ;
+            skos:prefLabel "dataRepresentationTemplateNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/packingType> a skos:concept ;
+            skos:prefLabel "packingType" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/referenceValue> a skos:concept ;
+            skos:prefLabel "referenceValue" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/referenceValueError> a skos:concept ;
+            skos:prefLabel "referenceValueError" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/binaryScaleFactor> a skos:concept ;
+            skos:prefLabel "binaryScaleFactor" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/decimalScaleFactor> a skos:concept ;
+            skos:prefLabel "decimalScaleFactor" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/bitsPerValue> a skos:concept ;
+            skos:prefLabel "bitsPerValue" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/typeOfOriginalFieldValues> a skos:concept ;
+            skos:prefLabel "typeOfOriginalFieldValues" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/md5Section5> a skos:concept ;
+            skos:prefLabel "md5Section5" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/lengthOfHeaders> a skos:concept ;
+            skos:prefLabel "lengthOfHeaders" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/md5Headers> a skos:concept ;
+            skos:prefLabel "md5Headers" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sectionNumber> a skos:concept ;
+            skos:prefLabel "sectionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section6Length> a skos:concept ;
+            skos:prefLabel "section6Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfSection> a skos:concept ;
+            skos:prefLabel "numberOfSection" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/bitMapIndicator> a skos:concept ;
+            skos:prefLabel "bitMapIndicator" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/bitmapPresent> a skos:concept ;
+            skos:prefLabel "bitmapPresent" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/md5Section6> a skos:concept ;
+            skos:prefLabel "md5Section6" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/sectionNumber> a skos:concept ;
+            skos:prefLabel "sectionNumber" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section7Length> a skos:concept ;
+            skos:prefLabel "section7Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfSection> a skos:concept ;
+            skos:prefLabel "numberOfSection" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/codedValues> a skos:concept ;
+            skos:prefLabel "codedValues" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/values> a skos:concept ;
+            skos:prefLabel "values" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/packingError> a skos:concept ;
+            skos:prefLabel "packingError" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/unpackedError> a skos:concept ;
+            skos:prefLabel "unpackedError" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/maximum> a skos:concept ;
+            skos:prefLabel "maximum" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/minimum> a skos:concept ;
+            skos:prefLabel "minimum" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/average> a skos:concept ;
+            skos:prefLabel "average" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/numberOfMissing> a skos:concept ;
+            skos:prefLabel "numberOfMissing" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/standardDeviation> a skos:concept ;
+            skos:prefLabel "standardDeviation" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/skewness> a skos:concept ;
+            skos:prefLabel "skewness" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/kurtosis> a skos:concept ;
+            skos:prefLabel "kurtosis" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/isConstant> a skos:concept ;
+            skos:prefLabel "isConstant" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/changeDecimalPrecision> a skos:concept ;
+            skos:prefLabel "changeDecimalPrecision" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/decimalPrecision> a skos:concept ;
+            skos:prefLabel "decimalPrecision" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/setBitsPerValue> a skos:concept ;
+            skos:prefLabel "setBitsPerValue" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/getNumberOfValues> a skos:concept ;
+            skos:prefLabel "getNumberOfValues" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/scaleValuesBy> a skos:concept ;
+            skos:prefLabel "scaleValuesBy" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/offsetValuesBy> a skos:concept ;
+            skos:prefLabel "offsetValuesBy" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/productType> a skos:concept ;
+            skos:prefLabel "productType" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/md5Section7> a skos:concept ;
+            skos:prefLabel "md5Section7" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/section8Length> a skos:concept ;
+            skos:prefLabel "section8Length" ;
+            .
+            
+            <http://def.ecmwf.int/api/grib/keys/7777> a skos:concept ;
+            skos:prefLabel "7777" ;
+            .
+            
+            

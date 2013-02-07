@@ -15,7 +15,7 @@ digraph records {
 ## class definitions
 
    	property [
-	label = "<title> Property ID(sha-1) |<prop> mr:name | rdfs:literal| mr:length"
+	label = "<title> Property ID(sha-1) |<prop> mr:name | rdf:value| mr:operator "
 	];
 
    	formatconcept [

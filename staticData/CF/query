@@ -9,7 +9,7 @@ PREFIX dc: <http://purl.org/dc/terms/>
 CONSTRUCT{
 ?uri rdf:type skos:Concept ;
      dc:source ?nercID ;
-     skos:PrefLabel ?name ;
+     skos:prefLabel ?name ;
      skos:definition ?def ;
      skos:note ?canon .
 }

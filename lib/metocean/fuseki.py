@@ -73,6 +73,8 @@ class FusekiServer(object):
         using the created TDB in root_path/metocean.
         returns a popen instance, the running fuseki server process
         '''
+        # import pdb
+        # pdb.set_trace()
         if not self._check_port():
             self._process = subprocess.Popen(['nohup',
                                        FUSEKIROOT +
@@ -97,7 +99,10 @@ class FusekiServer(object):
         if save:
             self.save_cache()
         if self._process:
+            print 'stopping'
             self._process.terminate()
+            self._process = None
+            print 'stop', self._process
 
     def status(self):
         return self._check_port()
@@ -121,8 +126,10 @@ class FusekiServer(object):
         '''
         remove all of the files supporting the tbd instance
         '''
-        if self._process:
-            self.stop()
+        print 'cleaning'
+        print self._process
+#        if self._process:
+        self.stop()
         for TDBfile in glob.glob("%s*"% TDB):
             os.remove(TDBfile)
         return glob.glob("%s*"% TDB)
@@ -180,7 +187,8 @@ class FusekiServer(object):
         '''
         load data from all the ttl files in the STATICDATA folder into a new TDB
         '''
-        print 'clean:', self.clean()
+        print 'clean:'
+        self.clean()
         for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             graph = ingraph.split('/')[-1] + '/'
             for infile in glob.glob(os.path.join(ingraph, '*.ttl')):
@@ -248,26 +256,105 @@ class FusekiServer(object):
             return data
 
 
-        ##### not updated or functional, not for review 
-    def retrieve_mappings(self, source_format, target_format, nsources=None,  ntargets=None, source_prefix=None, target_prefix=None):
+
+    def retrieve_mappings(self, s_format, t_format):
         """
         return the format specific mappings for a particular source
         and target format
-        query the use of this funcky function!!
         """
-        source_concepts = queries.get_concepts_by_format(self, source_format,
-                                                     source_prefix, nsources)
-        sc = ['<%s>' % sc['concept'] for sc in source_concepts]
-        target_concepts = queries.get_concepts_by_format(self, target_format,
-                                                     target_prefix, ntargets)
-        tc = ['<%s>' % tc['concept'] for tc in target_concepts]
-        st_mappings = queries.mappings_by_ordered_concept(self, sc, tc)
-        mappings = [st['map'] for st in st_mappings]
-        if len(mappings) == 0:
-            st_maps = []
+        mappings = queries.valid_ordered_mappings(self, s_format, t_format)
+        mapping_list = []
+        for mapping in mappings:
+            mapping_list.append(self.structured_mapping(mapping))
+        return mapping_list
+
+    def _retrieve_format_concept(self, fc_id):
+        """
+        returns a dictionary of formatConcept information
+        recursive call to get all the nested formatConcept
+        information from a formatConcept
+        """
+        # fc_dict = {'formatConcept':'', 'mr:format': '', 'skos:member': []},
+        top_fc = queries.retrieve_format_concept(self, fc_id)
+        if top_fc:
+            fc_dict = {'formatConcept':fc_id, 'mr:format': top_fc['format'],
+                       'skos:member':[]}
+            if isinstance(top_fc['member'], str):
+                top_fc['member'] = [top_fc['member']]
+            for member in top_fc['member']:
+                if member.startswith(
+                        '<http://www.metarelate.net/metOcean/property/'):
+                    prop_dict = queries.retrieve_property(self, member)
+                    pref_prop_dict = {}
+                    if prop_dict.get('name'):
+                        pref_prop_dict['mr:name'] = prop_dict['name']
+                    if prop_dict.get('operator'):
+                        pref_prop_dict['mr:operator'] = prop_dict['operator']
+                    if prop_dict.get('value'):
+                        pref_prop_dict['rdf:value'] = prop_dict['value']
+                    fc_dict['skos:member'].append(pref_prop_dict)
+                elif member.startswith(
+                        '<http://www.metarelate.net/metOcean/formatConcept/'):
+                    subfc_dict = self._retrieve_format_concept(member)
+                    fc_dict.append(subfc_dict)
+                else:
+                    raise ValueError('{} a malformed formatConcept'.format(
+                                                                        fc_id))
+        return fc_dict
+
+    def _retrieve_value_map(self, valmap_id, inv):
+        """
+        returns a dictionary of valueMap information
+        """
+        if inv == "False":
+            inv = False
+        elif inv == "True":
+            inv = True
         else:
-            st_maps = queries.mapping_by_id(self, mappings)
-        return st_maps
+            raise ValueError('inv = {}, not "True" or "False"'.format(inv))
+        value_map = {'valueMap':valmap_id, 'mr:source':{}, 'mr:target':{}}
+        vm_record = queries.retrieve_valuemap(self, valmap_id)
+        if inv:
+            value_map['mr:source']['source'] = vm_record['target']
+            value_map['mr:target']['target'] = vm_record['source']
+        else:
+            value_map['mr:source']['source'] = vm_record['source']
+            value_map['mr:target']['target'] = vm_record['target']
+        for role in ['source','target']:
+            val = queries.retrieve_value(self,
+                            value_map['mr:{}'.format(role)]['{}'.format(role)])
+            for key in val.keys():
+                value_map['mr:{}'.format(role)]['mr:{}'.format(key)] = val[key]
+            for sc_prop in ['mr:subject', 'mr:object']:
+                prop = queries.retrieve_scoped_property(self,
+                    value_map['mr:{}'.format(role)]['mr:{}'.format(sc_prop)])
+                for pkey in prop.keys():
+                    pv = prop[pkey]
+                    value_map['mr:{}'.format(role)]['mr:{}'.format(pkey)] = pv
+                        
+        return value_map
+
+
+    def structured_mapping(self, mapping):
+        """
+        returns the json for a mapping, fully expanded
+        from the mapping Id
+        """
+        referrer = {'mapping': mapping['mapping'],
+                    'mr:source': {'formatConcept': ''},
+                    'mr:target': {'formatConcept': ''},
+                    'mr:valueMap': []}
+        if mapping.get('source') and mapping.get('target'):
+            referrer['mr:source'] = self._retrieve_format_concept(mapping['source'])
+            referrer['mr:target'] = self._retrieve_format_concept(mapping['target'])
+            if mapping.get('valueMaps'):
+                if isinstance(mapping['valueMaps'], string):
+                    mapping['valueMaps'] = [mapping['valueMaps']]
+                for valmap in mapping['valueMaps']:#.split('&'):
+                    referrer['mr:valueMap'].append(self._retrieve_value_map(valmap,
+                                                        mapping['inverted']))
+        return referrer
+
 
 
 

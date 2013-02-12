@@ -64,7 +64,8 @@ class FusekiServer(object):
         self.start()
         return self
         
-    def __exit__(self,*args):
+    def __exit__(self, *args):
+        print 'exiting'
         self.stop(save=False)
         
     def start(self):
@@ -102,7 +103,13 @@ class FusekiServer(object):
             print 'stopping'
             self._process.terminate()
             self._process = None
-            print 'stop', self._process
+            i = 0
+            while self._check_port():
+                i += i
+                time.sleep(0.1)
+                if i > 1000:
+                    raise RuntimeError('Fuseki server not shut down correctly')
+            
 
     def status(self):
         return self._check_port()
@@ -216,6 +223,7 @@ class FusekiServer(object):
         '''run a query_string on the FusekiServer instance
         '''
         if not self.status():
+            self.stop()
             self.start()
         # use null ProxyHandler to ignore proxy for localhost access
         proxy_support = urllib2.ProxyHandler({})
@@ -247,7 +255,13 @@ class FusekiServer(object):
         except urllib2.URLError as err:
             ec = "Error connection to Fuseki server on {}.\n".format(BASEURL)
             ec += 'server returned {}'.format(err)
-            raise Exception(ec)
+            self.stop()
+            self.start()
+            try:
+                trydata = opener.open(urllib2.Request(BASEURL)).read()
+            except urllib2.URLError as err2:
+                ec += ec + '\n' + '{}'.format(err2)
+                raise RuntimeError(ec)
         if output == "json":
             return process_data(data)
         elif output == "text":

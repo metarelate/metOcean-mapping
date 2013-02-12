@@ -34,7 +34,10 @@
 
 <p>The time is {% current_time "%Y-%m-%d %I:%M %p" %}.</p>
 
+<table border="1" class="recordtable">
+<tr>
 {% if form %}
+<td>
 <form action="" method="post">
 <input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="Create this mapping"/>
 
@@ -43,8 +46,9 @@
 {{ form.as_table }}
 </table>
 </form>
+</td>
 {% endif %}
-
+<td>
 <table border="1" class="recordtable">
 
 
@@ -338,6 +342,8 @@
 
 {% endif %}
 </table>
-
+</td>
+</tr>
+</table>
 
 {% endblock %}

@@ -51,10 +51,11 @@ os.environ['FUSEKI_HOME'] = FUSEKIROOT
 
 
 class FusekiServer(object):
-    '''
+    """
     A class to represent an instance of a process managing
     a triple database and a Fuseki Server
-    '''
+    
+    """
     def __init__(self, port, host='localhost'):
         self._process = None
         self._port = port
@@ -68,11 +69,12 @@ class FusekiServer(object):
         self.stop(save=False)
         
     def start(self):
-        '''
+        """
         initialise the fuseki process, on the defined port,
         using the created TDB in root_path/metocean.
         returns a popen instance, the running fuseki server process
-        '''
+        
+        """
         if not self._check_port():
             self._process = subprocess.Popen(['nohup',
                                        FUSEKIROOT +
@@ -91,9 +93,9 @@ class FusekiServer(object):
 
 
     def stop(self, save=False):
-        '''
+        """
         stop the fuseki process
-        '''
+        """
         if save:
             self.save_cache()
         if self._process:
@@ -118,9 +120,9 @@ class FusekiServer(object):
 
 
     def clean(self):
-        '''
+        """
         remove all of the files supporting the tbd instance
-        '''
+        """
         if self._process:
             self.stop()
         for TDBfile in glob.glob("%s*"% TDB):
@@ -130,11 +132,12 @@ class FusekiServer(object):
 
 
     def save(self):
-        '''
+        """
         write out all saveCache flagged changes in the metocean graph,
         appending to the relevant ttl files
         remove saveCache flags after saving
-        '''
+        
+        """
         maingraph = 'metarelate.net'
         for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
             graph = 'http://%s/%s' % (maingraph, subgraph.split('/')[-1])
@@ -149,11 +152,12 @@ class FusekiServer(object):
 
 
     def revert(self):
-        '''
+        """
         identify all cached changes in the metocean graph
         and remove them, reverting the TDB to the same state
         as the saved ttl files
-        '''
+        
+        """
         maingraph = 'metarelate.net'
         for infile in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
             ingraph = infile.split('/')[-1]
@@ -177,9 +181,9 @@ class FusekiServer(object):
 
 
     def load(self):
-        '''
+        """
         load data from all the ttl files in the STATICDATA folder into a new TDB
-        '''
+        """
         print 'clean:', self.clean()
         for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             graph = ingraph.split('/')[-1] + '/'
@@ -194,10 +198,12 @@ class FusekiServer(object):
 
 
     def validate(self):
-        """run the validation queries"""
+        """
+        run the validation queries
+        """
         failures = {}
-        mm_string = 'The following mappings are ambiguous, providing multiple'
-        mm_string += ' targets in the same format for a particular source'
+        mm_string = '''The following mappings are ambiguous, providing multiple
+                       targets in the same format for a particular source'''
         failures[mm_string] = queries.multiple_mappings(self)
         return failures
 
@@ -205,8 +211,9 @@ class FusekiServer(object):
 
 
     def run_query(self, query_string, output='json', update=False, debug=False):
-        '''run a query_string on the FusekiServer instance
-        '''
+        """
+        run a query_string on the FusekiServer instance
+        """
         if not self.status():
             self.start()
         # use null ProxyHandler to ignore proxy for localhost access
@@ -254,6 +261,7 @@ class FusekiServer(object):
         return the format specific mappings for a particular source
         and target format
         query the use of this funcky function!!
+        
         """
         source_concepts = queries.get_concepts_by_format(self, source_format,
                                                      source_prefix, nsources)
@@ -273,7 +281,9 @@ class FusekiServer(object):
 
 
 def process_data(jsondata):
-    '''helper method to take JSON output from a query and return the results'''
+    """
+    helper method to take JSON output from a query and return the results
+    """
     resultslist = []
     try:
         jdata = json.loads(jsondata)

@@ -31,50 +31,88 @@
 
 {% block content %}
 
+
+{% if search %}
+<p>
+<a href="{{ search.url }}"> {{ search.label }} </a>
+<p>
+{% endif %}
+
+{% if create %}
+<p>
+<a href="{{ create.url }}"> {{ create.label }} </a>
+<p>
+{% endif %}
+
+
+{% if exact %}
+<a href="{{ exact.url }}"> {{ exact.label }} </a>
+<p>
+{% endif %}
+
+
+{% if form %}
+
+<h2>Control Panel</h2>
+<form action="" method="post">
+
+<p>
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} name="load" value="Load Data from Static Data to the local Triplestore"/>
+<p>
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} name="revert" value="Revert the Triplestore to the  Static Data State"/>
+<p>
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} name="save" value="Persist the Triplestore changes to the Static Data Store"/>
+<p>
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} name="validate" value="Validate the state of the Triplestore from Static Data"/>
+
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+
+
+</form>
+{% endif %}
+
 {% if itemlist %}
+<h2>Define Search Criteria</h2>
 {% for item in itemlist %}
 <li>{{ item }}</li>
 {% endfor %}
 {% endif %}
 
-{% if umitems %}
-{% for item in umitems %}
-<li>{{ item }}</li>
-{% endfor %}
+
+{% if add %}
+<li><a href="{{ add.url }}"> {{ add.label }} </a></li>
 {% endif %}
 
-{% if addum %}
-<li><a href="{{ addum.url }}"> {{ addum.label }} </a></li>
+{% if addstash %}
+<li><a href="{{ addstash.url }}"> {{ addstash.label }} </a></li>
 {% endif %}
 
-{% if cfitems %}
-{% for item in cfitems %}
-<li>{{ item }}</li>
-{% endfor %}
-{% endif %}
-
-{% if addcf %}
-<li><a href="{{ addcf.url }}"> {{ addcf.label }} </a></li>
-{% endif %}
-
-{% if gribitems %}
-{% for item in gribitems %}
-<li>{{ item }}</li>
-{% endfor %}
-{% endif %}
-
-{% if addgrib %}
-<li><a href="{{ addgrib.url }}"> {{ addgrib.label }} </a></li>
+{% if addfc %}
+<li><a href="{{ addfc.url }}"> {{ addfc.label }} </a></li>
 {% endif %}
 
 
-<p>
-{% if search %}
-<a href="{{ search.url }}"> {{ search.label }} </a>
-{% endif %}
+
 <p>
 {% if clear %}
 <a href="{{ clear.url }}"> {{ clear.label }} </a>
+{% endif %}
+
+<p>
+{% if um %}
+<a href="{{ um.url }}"> {{ um.label }} </a>
+{% endif %}
+<p>
+{% if cf %}
+<a href="{{ cf.url }}"> {{ cf.label }} </a>
+{% endif %}
+<p>
+{% if grib %}
+<a href="{{ grib.url }}"> {{ grib.label }} </a>
 {% endif %}
 
 

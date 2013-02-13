@@ -22,20 +22,20 @@ Github
 Managing Information Across a Distributed Group of Developers
 --------------------------------------------------------------
 
-The expectation for this project is that contributors will be working seperately on subsets of the translation relationships.  These contributors shold be able to work independently and trial their changes on different implementations.
+The expectation for this project is that contributors will be working separately on subsets of the translation relationships.  These contributors should be able to work independently and trial their changes on different implementations.
 
 Changes need to be managed to ensure that the information coherence is maintained; constraints are implemented as information validation rules.
 
-A workflow, external to the translation repository, is being developed involving additions being put up for inclusion and evaluated before they are included.
+A work flow, external to the translation repository, is being developed involving additions being put up for inclusion and evaluated before they are included.
 
 Additions to the repository are likely to come in sets, representing cases such as coherent scope extensions and point fixes.
 
-This thought process has lead the project to look at a distributed software development workflow to manage the information, treating the repository as a collection of source code.
+This thought process has lead the project to look at a distributed software development work flow to manage the information, treating the repository as a collection of source code.
 
 Human in the Loop
 -----------------
 
-The nature of updates to the repository and the project workflow requires there to be a human in the loop, accepting updates or pushing them back to controibutors for rework.
+The nature of updates to the repository and the project work flow requires there to be a human in the loop, accepting updates or pushing them back to contributors for rework.
 
 This particularly lends itself to a managed change involving a contributor and reviewer.
 
@@ -51,7 +51,7 @@ This approach puts a significant expectation on potential collaborators.  They m
  * manage change
  * merge
 
-* work with the github workflow, forking and submitting pull requests;
+* work with the Github work flow, forking and submitting pull requests;
 * use the metarelate API to export information from a local triple store.
 
 This is viewed as a significant barrier to adoption.
@@ -63,13 +63,13 @@ Alternative - A Centralised System
 
 A centralised system involving a live service which contributors log into is being considered, but it is currently deemed a reserve candidate.
 
-There is a significant overhead in maintaining a live service which supports user editing, includign authorisation and authentication, informaiton security, service availability and management of change processes.
+There is a significant overhead in maintaining a live service which supports user editing, including authorisation and authentication, information security, service availability and management of change processes.
 
 Race conditions on incompatible changes can be particularly challenging to manage.
 
 The proposed oversight prior to acceptance of a change puts a timeliness implication on a live system which is more manageable with a staged change system, such as a repository. 
 
-In particlar the human in the loop is in a particularly challengin position if they are required to manage concurrent changes being made to the system in its live state.
+In particular the human in the loop is in a particularly challenging position if they are required to manage concurrent changes being made to the system in its live state.
 
 
 Document Based Merging of Unordered Graphs
@@ -106,11 +106,11 @@ The output may be unordered but an enhanced merge process designed which is able
 Appending to File
 ^^^^^^^^^^^^^^^^^^
 
-If the constraint that triples are immutable is sound, then all additions may be appended to existant files.  
+If the constraint that triples are immutable is sound, then all additions may be appended to existent files.  
 
 Each file may be its own named graph, for example.
 
-This has the advantage that two independent developers may make somehwat overlapping but different sets of additions.  The first one to merge will add their new triples.  The second to merge will need to incorporate the changes from the first, which will be contained in a logical place in a file.  This fits reasonably with the git merge logic and is expected to deliver a manageable process.
+This has the advantage that two independent developers may make somewhat overlapping but different sets of additions.  The first one to merge will add their new triples.  The second to merge will need to incorporate the changes from the first, which will be contained in a logical place in a file.  This fits reasonably with the git merge logic and is expected to deliver a manageable process.
 
 As such this is the currently preferred solution.
 

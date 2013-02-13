@@ -16,7 +16,7 @@ class Prefixes(dict):
         'xsd'      : 'http://www.w3.org/2001/XMLSchema#',
         'dc'       : 'http://purl.org/dc/terms/',
         'map'      : 'http://www.metarelate.net/metOcean/mapping/',
-        'link'     : 'http://www.metarelate.net/metOcean/linkage/',
+        'cflink'   : 'http://www.metarelate.net/metOcean/cflink/',
         'mr'       : 'http://www.metarelate.net/predicates/index.html#',
         'mrcf'     : 'http://www.metarelate.net/predicates/CF.html#',
         'github'   : 'https://github.com/' ,
@@ -24,11 +24,13 @@ class Prefixes(dict):
         'moStCon'  : 'http://reference.metoffice.gov.uk/def/um/stash/concept/' ,
         'moStND'   : 'http://reference.metoffice.gov.uk/def/um/stash/new_dynamics/' ,
         'moStEG'   : 'http://reference.metoffice.gov.uk/def/um/stash/endgame/' ,
-        'mof'      : 'http://reference.metoffice.gov.uk/def/um/fieldcode/',
+        'mofc'      : 'http://reference.metoffice.gov.uk/def/um/fieldcode/',
+        'moumdpF3' : 'http://reference.metoffice.gov.uk/def/um/umdp/F3/',
         'moumdpC4' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/',
         'moumdpC4Pseud' : 'http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/',
         'momet08'  : 'http://reference.metoffice.gov.uk/def/um/met08/',
-        'cfsn'     : 'http://def.cfconventions.org/standard_names/' ,
+        'cfsn'     : 'http://def.cfconventions.org/standard_name/' ,
+        'gribapi'  : 'http://def.ecmwf.int/api/grib/keys',
         }
         self.update(prefixd)
 

@@ -19,6 +19,7 @@ Contents:
    exporting/index
    predicates/index
    developer/index
+   query/index
 
 
 Search

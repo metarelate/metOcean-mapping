@@ -1,4 +1,6 @@
+{% extends "base.html" %}
 
+<!--
 # (C) British Crown Copyright 2011 - 2012, Met Office
 #
 # This file is part of metOcean-mapping.
@@ -15,21 +17,40 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+{% block title %}: {{ title }}{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
+<script src="{{ ADMIN_MEDIA_PREFIX }}js/admin/RelatedObjectLookups.js"></script>
+
+{% endblock %}
 
 
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
 
-Replace this with more appropriate tests for your application.
-"""
-
-from django.test import TestCase
+{% block content %}
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+{% if form %}
+<form action="" method="post">
+
+{% csrf_token %}
+
+<table class="recordtable">
+{{ form.as_table }}
+</table>
+
+
+
+<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="define concept mapping" />
+
+</form>
+
+
+
+{% endif %} 
+
+
+
+{% endblock %}

@@ -12,7 +12,7 @@ owner
 
 URI:  http://www.metarelate.net/predicates/index.html#owner
 
-Definition:
+Definition: a github user and metarelate collaborator who has joint ownership of a mapping
 
 Label:  owner
 
@@ -22,55 +22,22 @@ watcher
 
 URI:  http://www.metarelate.net/predicates/index.html#watcher
 
-Definition:
+Definition: a github user and metarelate collaborator who monitors a mapping
 
 Label:  watcher
 
 
-creator
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#creator
-
-Definition:
-
-Label:  creator
 
 status 
 ---------
 
 URI:  http://www.metarelate.net/predicates/index.html#status
 
-Definition:
+Definition: the status of a mapping: 'Approved', 'Proposed', 'Draft', 'Broken', 'Deprecated'
 
 Label:  status
 
 
-replaces
-----------
-
-URI:  http://www.metarelate.net/predicates/index.html#replaces
-
-Definition:
-
-Label:  replaces
-
-creation
------------
-
-URI:  http://www.metarelate.net/predicates/index.html#creation
-
-Definition:
-
-Label:  creation
-
-comment
-----------
-
-URI:  http://www.metarelate.net/predicates/index.html#comment
-
-Definition:
-Label:  comment
 
 reason
 ---------
@@ -81,14 +48,44 @@ Definition:
 
 Label:  reason
 
-linkage
+
+target
 --------
 
-URI:  http://www.metarelate.net/predicates/index.html#linkage
+URI:  http://www.metarelate.net/predicates/index.html#target
 
-Definition:
+Definition: a metarelate concept which this mapping translates to
 
-Label:  linkage
+Label:  target
+
+source
+--------
+
+URI:  http://www.metarelate.net/predicates/index.html#source
+
+Definition: a metarelate concept which this mapping translates from 
+
+Label:  source
+
+invertible
+-----------
+
+URI:  http://www.metarelate.net/predicates/index.html#invertible
+
+Definition: a boolean flag to indicate if the reciprocal relationship (target => source) is valid
+
+Label:  invertible
+
+
+format
+------
+
+URI:  http://www.metarelate.net/predicates/index.html#format
+
+Definition: a data format which metarelate supports 
+
+Label: format
+
 
 saveCache
 ----------
@@ -129,97 +126,66 @@ Definition: A datetime stamp for a contact who is defined no longer active.
 Label: retired
 
 
-
-MetaRelate Formats
-==================
-
-MetaRelate defines a number of format predicates enabling the linking of supported metadata schemes
-
-CFlink
+valueMap
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#CFlink
+URI:  http://www.metarelate.net/predicates/index.html#valueMap
 
-Definition:
+Definition: A valueMap for a mapping record
 
-Label:  CFlink
+Label:  valueMap
 
 
-.. toctree::
-   :maxdepth: 1
-
-   CF
-
-CFexport
+operator
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#CFexport
+URI:  http://www.metarelate.net/predicates/index.html#operator
 
-Definition: A flag to indicate if this relationship is recommended for export to CF
+Definition: The mathematical operator from the openMath definitions
 
-Label:  CFexport
+Label: operator
 
-CFimport
+subject
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#CFimport
+URI:  http://www.metarelate.net/predicates/index.html#subject
 
-Definition: A flag to indicate if this relationship is recommended for import to CF
+Definition: The subject of a mathematical operation
 
-Label:  CFimport
+Label:subject
 
-
-UMlink
+object
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#UMlink
+URI:  http://www.metarelate.net/predicates/index.html#object
 
-Definition:
+Definition: The object of a mathematical operation
 
-Label:  UMlink
+Label: object
 
-UMexport
+scope
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#UMexport
+URI:  http://www.metarelate.net/predicates/index.html#scope
 
-Definition: A flag to indicate if this relationship is recommended for export to UM
+Definition: The formatConcept which contains the property for a scopedProperty
 
-Label:  UMexport
+Label: scope
 
-UMimport
+property
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#UMimport
+URI:  http://www.metarelate.net/predicates/index.html#property
 
-Definition: A flag to indicate if this relationship is recommended for import to UM
+Definition: the property referenced by a scopedProperty
 
-Label:  UMimport
+Label: property
 
-
-GRIBlink
------------
-
-URI:  http://www.metarelate.net/predicates/index.html#GRIBlink
-
-Definition:
-
-Label:  GRIBlink
-
-GRIBexport
+name
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#GRIBexport
+URI:  http://www.metarelate.net/predicates/index.html#name
 
-Definition: A flag to indicate if this relationship is recommended for export to GRIB
+Definition: The reference to the property name definition in the relevant namespace 
 
-Label:  GRIBexport
-
-GRIBimport
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#GRIBimport
-
-Definition: A flag to indicate if this relationship is recommended for import to GRIB
-
-Label:  GRIBimport
+Label: name

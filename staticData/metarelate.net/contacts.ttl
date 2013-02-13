@@ -1,0 +1,91 @@
+#(C) British Crown Copyright 2011 - 2012, Met Office This file is part of metOcean-mapping.
+#metOcean-mapping is free software: you can redistribute it and/or modify it under the terms of the
+#GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License,
+#or (at your option) any later version. metOcean-mapping is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#See the GNU Lesser General Public License for more details. You should have received a copy of the
+#GNU Lesser General Public License along with metOcean-mapping. If not, see http://www.gnu.org/licenses/."
+
+@prefix cflink: <http://www.metarelate.net/metOcean/cflink/> .
+@prefix cfsn: <http://def.cfconventions.org/standard_names/> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix github: <https://github.com/> .
+@prefix map: <http://www.metarelate.net/metOcean/mapping/> .
+@prefix metoc: <http://www.metarelate.net/metOcean/> .
+@prefix moStCon: <http://reference.metoffice.gov.uk/def/um/stash/concept/> .
+@prefix moStEG: <http://reference.metoffice.gov.uk/def/um/stash/endgame/> .
+@prefix moStND: <http://reference.metoffice.gov.uk/def/um/stash/new_dynamics/> .
+@prefix mof: <http://reference.metoffice.gov.uk/def/um/fieldcode/> .
+@prefix momet08: <http://reference.metoffice.gov.uk/def/um/met08/> .
+@prefix moumdpC4: <http://reference.metoffice.gov.uk/def/um/umdp/c4/> .
+@prefix moumdpC4Pseud: <http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/> .
+@prefix mr: <http://www.metarelate.net/predicates/index.html#> .
+@prefix mrcf: <http://www.metarelate.net/predicates/CF.html#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+
+metoc:people a mr:contactList ;
+rdfs:label "Registered MetaRelate Contributors"@en .
+
+metoc:organisations a mr:contactList ;
+rdfs:label "Registered MetaRelate Managing Organisation"@en .
+
+
+github:marqh a mr:contact ;
+skos:member metoc:people ;
+mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+
+github:esc24 a mr:contact ;
+skos:member metoc:people ;
+mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+
+github:scitools a mr:contact ;
+skos:member metoc:organisations ;
+mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

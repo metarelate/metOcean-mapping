@@ -161,16 +161,13 @@ def get_contacts(fuseki_process, register, debug=False):
     return a list of contacts from the tdb which are part of the named register 
     """
     qstr = '''
-    SELECT ?s
+    SELECT ?s ?prefLabel
     WHERE
     { GRAPH <http://metarelate.net/contacts.ttl> {
-        ?s skos:member ?register .
-           OPTIONAL{
-               ?s mr:retired ?retired}
-               }
-    FILTER (!bound(?retired))
-    FILTER (regex(str(?register),"%s", "i"))
-    }
+        ?s skos:member <http://www.metarelate.net/metOcean/%s> ;
+           skos:prefLabel ?prefLabel ;
+           dc:valid ?valid .
+    } }
     ''' % register
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
@@ -183,12 +180,17 @@ def create_contact(fuseki_process, register, contact, creation, debug=False):
     INSERT DATA
     { GRAPH <http://metarelate.net/contacts.ttl> {
     %s a mr:contact ;
-    iso19135:definedInRegister %s ;
-    mr:creation "%s"^^xsd:dateTime .
+    skos:member %s ;
+    dc:valid creation .
     } }
     ''' % (contact, register, creation)
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
     return results
+
+# def retire_contact(fuseki_process, contact, debug=False):
+#     """
+#     retire a contact
+#     """
 
 def create_mediator(fuseki_process, label, fformat, debug=False):
     """

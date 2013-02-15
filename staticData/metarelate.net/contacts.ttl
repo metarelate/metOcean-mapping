@@ -35,24 +35,25 @@ metoc:organisations a mr:contactList ;
 rdfs:label "Registered MetaRelate Managing Organisation"@en .
 
 
-github:marqh a mr:contact ;
+<http://www.metarelate.net/metOcean/people/marqh> a mr:contact ;
 skos:member metoc:people ;
-mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+skos:prefLabel "marqh" ;
+mr:githubId github:marqh ;
+dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
-github:esc24 a mr:contact ;
+
+<http://www.metarelate.net/metOcean/people/esc24> a mr:contact ;
 skos:member metoc:people ;
-mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+skos:prefLabel "esc24" ;
+mr:githubId github:esc24 ;
+dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
-github:scitools a mr:contact ;
+
+<http://www.metarelate.net/metOcean/organisations/scitools> a mr:contact ;
 skos:member metoc:organisations ;
-mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
-
-
-
-
-
-
-
+skos:prefLabel "scitools" ;
+mr:githubId github:scitools ;
+dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
 
 

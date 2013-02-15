@@ -119,8 +119,9 @@ class Value(forms.Form):
     """
     form to define a value for use in a concept
     """
-    name =  forms.CharField(required=False,
-                                 widget=forms.TextInput(attrs={'size':'100'}))
+    # name =  forms.CharField(required=False,
+    #                              widget=forms.TextInput(attrs={'size':'100'}))
+    name = forms.ChoiceField()
     value = forms.CharField(required=False)
     operator = forms.CharField(required=False)
     
@@ -130,26 +131,38 @@ class Value(forms.Form):
         op_url = '<http://www.openmath.org/cd/relation1.xhtml#eq>'
         self.fields['operator'].initial = op_url
         if fformat == 'um':
-            F3 = '<http://reference.metoffice.gov.uk/def/um/umdp/F3/>'
-            self.fields['name'].initial = F3
-            # umRes = moq.subject_and_plabel(fuseki_process,
-                                         # 'http://um/umdpF3.ttl')
-            # choices = [(um['subject'], um['prefLabel'] for um in umRes]
-            # self.fields['vproperty'].choices = choices
+            # F3 = '<http://reference.metoffice.gov.uk/def/um/umdp/F3/>'
+            # self.fields['name'].initial = F3
+            umRes = moq.subject_and_plabel(fuseki_process,
+                                         'http://um/umdpF3.ttl')
+            choices = [(um['subject'], um['prefLabel']) for um in umRes]
+            self.fields['name'].choices = choices
+            sns = moq.subject_and_plabel(fuseki_process,
+                                                'http://um/stashconcepts.ttl')
+            sn_choices = [('','')]
+            sn_choices += [(um['subject'], um['prefLabel']) for um in sns]
+            self.fields['standard_name'] = forms.ChoiceField(required=False,
+                                                             choices=sn_choices)
+            fcs = moq.subject_and_plabel(fuseki_process,
+                                                'http://um/fieldcode.ttl')
+            fc_choices = [('','')]
+            fc_choices += [(um['subject'], um['prefLabel']) for um in fcs]
+            self.fields['field_code'] = forms.ChoiceField(required=False,
+                                                             choices=fc_choices)
         elif fformat == 'cf':
-            CF = '<http://def.cfconventions.org/data_model/>'
-            self.fields['name'].initial = CF
-            # cfRes = moq.subject_and_plabel(fuseki_process,
-                                         # 'http://CF/cfmodel.ttl')
-            # choices = [(cf['subject'], cf['prefLabel'] for cf in cfRes]
-            # self.fields['vproperty'].choices = choices
+            # CF = '<http://def.cfconventions.org/data_model/>'
+            # self.fields['name'].initial = CF
+            cfRes = moq.subject_and_plabel(fuseki_process,
+                                         'http://CF/cfmodel.ttl')
+            choices = [(cf['subject'], cf['prefLabel']) for cf in cfRes]
+            self.fields['name'].choices = choices
         elif fformat == 'grib':
-            GRIB = '<http://def.ecmwf.int/api/grib/keys/>'
-            self.fields['name'].initial = GRIB
-            # grRes = moq.subject_and_plabel(fuseki_process,
-                                           # 'http://grib/gribapi.ttl')
-            # choices = [(grib['subject'], grib['prefLabel'] for grib in grRes]
-            # self.fields['vproperty'].choices = choices
+            # GRIB = '<http://def.ecmwf.int/api/grib/keys/>'
+            # self.fields['name'].initial = GRIB
+            grRes = moq.subject_and_plabel(fuseki_process,
+                                           'http://grib/apikeys.ttl')
+            choices = [(grib['subject'], grib['prefLabel']) for grib in grRes]
+            self.fields['name'].choices = choices
         else:
             raise ValueError('invalid format supplied: {}'.format(fformat))
     def clean(self):
@@ -161,7 +174,7 @@ class Value(forms.Form):
                 lit = '<{}>'.format(lit)
             else:
                 lit = '"{}"'.format(lit)
-        self.cleaned_data['literal'] = lit
+        self.cleaned_data['value'] = lit
         return self.cleaned_data
 
 
@@ -197,7 +210,7 @@ class MappingMeta(forms.Form):
     last_editor = forms.CharField(max_length=50, required=False,
                                   widget=forms.TextInput(
                                       attrs={'readonly':True}))
-    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for
+    editor = forms.ChoiceField([(r['s'],r['prefLabel'].split('/')[-1]) for
                                 r in moq.get_contacts(fuseki_process, 'people')]
                                 , required=False)
 #    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for

@@ -197,6 +197,7 @@ class FusekiServer(object):
 
         """
         print 'clean:'
+        self.clean()
         for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
             graph = ingraph.split('/')[-1] + '/'
             for infile in glob.glob(os.path.join(ingraph, '*.ttl')):
@@ -259,13 +260,14 @@ class FusekiServer(object):
         except urllib2.URLError as err:
             ec = "Error connection to Fuseki server on {}.\n".format(BASEURL)
             ec += 'server returned {}'.format(err)
-            self.stop()
-            self.start()
-            try:
-                trydata = opener.open(urllib2.Request(BASEURL)).read()
-            except urllib2.URLError as err2:
-                ec += ec + '\n' + '{}'.format(err2)
-                raise RuntimeError(ec)
+            raise RuntimeError(ec)
+            # self.stop()
+            # self.start()
+            # try:
+            #     trydata = opener.open(urllib2.Request(BASEURL)).read()
+            # except urllib2.URLError as err2:
+            #     ec += ec + '\n' + '{}'.format(err2)
+            #     raise RuntimeError(ec)
         if output == "json":
             return process_data(data)
         elif output == "text":

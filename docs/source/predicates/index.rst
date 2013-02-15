@@ -126,40 +126,66 @@ Definition: A datetime stamp for a contact who is defined no longer active.
 Label: retired
 
 
-sourceFC
+valueMap
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#sourceFC
+URI:  http://www.metarelate.net/predicates/index.html#valueMap
 
-Definition: A source format concept for a valueMap
+Definition: A valueMap for a mapping record
 
-Label:  sourceFC
+Label:  valueMap
 
-sourceVal
-----------
 
-URI:  http://www.metarelate.net/predicates/index.html#sourceVal
-
-Definition: a source value for a valueMap
-
-Label:  sourceVal
-
-targetFC
+operator
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#targetFC
+URI:  http://www.metarelate.net/predicates/index.html#operator
 
-Definition: A target format concept for a valueMap
+Definition: The mathematical operator from the openMath definitions
 
-Label:  targetFC
+Label: operator
 
-targetVal
-----------
+subject
+---------
 
-URI:  http://www.metarelate.net/predicates/index.html#targetVal
+URI:  http://www.metarelate.net/predicates/index.html#subject
 
-Definition: a target value for a valueMap
+Definition: The subject of a mathematical operation
 
-Label:  targetVal
+Label:subject
 
+object
+---------
 
+URI:  http://www.metarelate.net/predicates/index.html#object
+
+Definition: The object of a mathematical operation
+
+Label: object
+
+scope
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#scope
+
+Definition: The formatConcept which contains the property for a scopedProperty
+
+Label: scope
+
+property
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#property
+
+Definition: the property referenced by a scopedProperty
+
+Label: property
+
+name
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#name
+
+Definition: The reference to the property name definition in the relevant namespace 
+
+Label: name

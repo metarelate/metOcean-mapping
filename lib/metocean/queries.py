@@ -354,12 +354,15 @@ def valid_ordered_mappings(fuseki_process, s_format, t_format, debug=False):
 ### blank node queries #####
 
 def get_property(fuseki_process, po_dict, debug=False):
-    """return one property record, matching the pred_obj dictionary
-    create one if it does not exist"""
+    """
+    Return one property record, matching the pred_obj dictionary
+    create one if it does not exist
+
+    """
     allowed_predicates = set(('mr:name','rdf:value',
                             'mr:operator'))
     single_predicates = allowed_predicates
-    preds = set(po_dict.keys())
+    preds = set(po_dict)
     if not preds.issubset(allowed_predicates):
         ec = '''{} is not a subset of the allowed predicates set
                 for a value record {}'''.format(preds, allowed_preds)
@@ -369,7 +372,7 @@ def get_property(fuseki_process, po_dict, debug=False):
     search_string = ''
     filter_string = ''
     assign_string = ''
-    for pred in po_dict.keys():
+    for pred in preds:
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) != 1 and pred in single_predicates:
                 ec = 'get_property only accepts 1 statement per predicate {}'
@@ -440,8 +443,9 @@ def get_property(fuseki_process, po_dict, debug=False):
 
 def retrieve_property(fuseki_process, prop_id, debug=False):
     """
-    retrieve a property record from it's id
-    or None if one does not exist
+    Retrieve a property record from it's id
+    or None if one does not exist.
+
     """
     qstr = '''SELECT ?property ?name ?operator
     (GROUP_CONCAT(?avalue; SEPARATOR='&') AS ?value)
@@ -463,17 +467,18 @@ def retrieve_property(fuseki_process, prop_id, debug=False):
     else:
         prop = results[0]
     return prop
-
-    
     
 
 def get_format_concept(fuseki_process, po_dict, debug=False):
-    """return a formatConcept record ID and format, matching the
+    """
+    Return a formatConcept record ID and format, matching the
     pred_obj dictionary
-    create one if it does not exist"""
+    create one if it does not exist.
+
+    """
     allowed_prefixes = set(('mr:format','skos:member', 'dc:requires',
                             'dc:mediates'))
-    preds = set(po_dict.keys())
+    preds = set(po_dict)
     if not preds.issubset(allowed_prefixes):
         ec = '''{} is not a subset of the allowed predicates set for
                 a formatConcept record {}'''
@@ -483,7 +488,7 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
     search_string = ''
     n_members = 0
     n_reqs = 0
-    for pred in po_dict.keys():
+    for pred in po_dict:
         if isinstance(po_dict[pred], list):
             if pred == 'mr:format' and len(po_dict[pred]) != 1:
                 ec = '''get_format_concept only accepts 1 mr:format statement
@@ -554,17 +559,18 @@ def get_format_concept(fuseki_process, po_dict, debug=False):
         if len(results) == 1:
             results = results[0]
         else:
-            raise ValueError('''multiple results returned from
-            get_format_concept, only one allowed
-            {}'''.format(str(results)))
+            raise ValueError('multiple results returned from '
+                             'get_format_concept, only one allowed'
+                             '{}'.format(str(results)))
     else:
         results = None
     return results
 
 def retrieve_format_concept(fuseki_process, fcId, debug=False):
     """
-    return a formatConcept record from the provided id
-    or None if one does not exist
+    Return a formatConcept record from the provided id
+    or None if one does not exist.
+    
     """
     qstr = '''SELECT ?formatConcept ?format ?mediates 
     (GROUP_CONCAT(?amember; SEPARATOR='&') AS ?member)
@@ -590,10 +596,13 @@ def retrieve_format_concept(fuseki_process, fcId, debug=False):
     return fCon
 
 def get_value_map(fuseki_process, po_dict, debug=False):
-    """return a valueMap record ID, matching the pred_obj dictionary
-    create one if it does not exist"""
+    """
+    Return a valueMap record ID, matching the pred_obj dictionary
+    create one if it does not exist
+
+    """
     allowed_preds = set(('mr:source','mr:target'))
-    preds = set(po_dict.keys())
+    preds = set(po_dict)
     if not preds == allowed_preds:
         ec = '''{} is not a subset of the allowed predicates set
                 for a valueMap record
@@ -602,7 +611,7 @@ def get_value_map(fuseki_process, po_dict, debug=False):
         raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/valueMap'
     search_string = ''
-    for pred in po_dict.keys():
+    for pred in po_dict:
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) != 1:
                 ec = 'get_format_concept only accepts 1 mr:format statement }'
@@ -649,10 +658,13 @@ def get_value_map(fuseki_process, po_dict, debug=False):
     return results
 
 def get_value(fuseki_process, po_dict, debug=False):
-    """return a value record ID, matching the pred_obj dictionary
-    create one if it does not exist"""
+    """
+    Return a value record ID, matching the pred_obj dictionary
+    create one if it does not exist.
+    
+    """
     allowed_preds = set(('mr:operator','mr:subject', 'mr:object'))
-    preds = set(po_dict.keys())
+    preds = set(po_dict)
     if not preds.issubset(allowed_preds):
         ec = '''{} is not a subset of the allowed predicates set
                 for a value record
@@ -661,7 +673,7 @@ def get_value(fuseki_process, po_dict, debug=False):
         raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/value'
     search_string = ''
-    for pred in po_dict.keys():
+    for pred in po_dict:
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) != 1:
                 ec = 'get_value only accepts 1 mr:format statement }'
@@ -708,10 +720,13 @@ def get_value(fuseki_process, po_dict, debug=False):
     return results
 
 def get_scoped_property(fuseki_process, po_dict, debug=False):
-    """return a scopedProperty record ID, matching the pred_obj dictionary
-    create one if it does not exist"""
+    """
+    Return a scopedProperty record ID, matching the pred_obj dictionary
+    create one if it does not exist.
+    
+    """
     allowed_preds = set(('mr:scope','mr:property'))
-    preds = set(po_dict.keys())
+    preds = set(po_dict)
     if not preds == allowed_preds:
         ec = '''{} is not a subset of the allowed predicates set
                 for a scopedProperty record
@@ -720,7 +735,7 @@ def get_scoped_property(fuseki_process, po_dict, debug=False):
         raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/scopedProperty'
     search_string = ''
-    for pred in po_dict.keys():
+    for pred in po_dict:
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) != 1:
                 ec = 'get_scopedProperty only accepts 1 mr:format statement }'
@@ -759,9 +774,9 @@ def get_scoped_property(fuseki_process, po_dict, debug=False):
         if len(results) == 1:
             results = results[0]
         else:
-            raise ValueError('''multiple results returned from
-            get_scopedProperty, only one allowed
-            {}'''.format(str(results)))
+            raise ValueError('multiple results returned from '
+                             'get_scopedProperty, only one '
+                             'allowed {}'.format(results))
     else:
         results = None
     return results
@@ -842,10 +857,13 @@ def retrieve_scoped_property(fuseki_process, spId, debug=False):
 
 
 def get_contact(fuseki_process, subject, po_dict, debug=False):
-    """return a contact record ID, matching the pred_obj dictionary
-    create one if it does not exist"""
+    """
+    Return a contact record ID, matching the pred_obj dictionary
+    create one if it does not exist.
+    
+    """
     allowed_prefixes = set(('skos:inScheme', 'dc:dateAccepted'))
-    preds = set(po_dict.keys())
+    preds = set(po_dict)
     if not preds.issubset(allowed_prefixes):
         ec = '''{}
             is not a subset of the allowed predicates set for a contact record
@@ -853,7 +871,7 @@ def get_contact(fuseki_process, subject, po_dict, debug=False):
         ec = ec.format(preds, allowed_preds)
         raise ValueError(ec)
     search_string = ''
-    for pred in po_dict.keys():
+    for pred in po_dict:
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) == 1:
                 ec = 'get_format_concept accepts 1 statement per predicate {}'
@@ -901,14 +919,15 @@ def get_contact(fuseki_process, subject, po_dict, debug=False):
 
 
 def create_mapping(fuseki_process, po_dict, debug=False):
-    """create a new mapping record using the po_dict
+    """
+    create a new mapping record using the po_dict
     """
     subj_pref = 'http://metarelate.net/metocean/mapping'
     allowed_prefixes = set(('mr:source', 'mr:target', 'mr:invertible',
                             'dc:replaces', 'mr:valueMap', 'mr:status',
                             'skos:note', 'mr:reason', 'dc:date', 'dc:creator',
                             'mr:owner', 'mr:watcher'))
-    preds = set(po_dict.keys())
+    preds = set(po_dict)
     if not preds.issubset(allowed_prefixes):
         ec = '''{}
         is not a subset of the allowed predicates set for a mapping record
@@ -928,7 +947,7 @@ def create_mapping(fuseki_process, po_dict, debug=False):
                              'dc:replaces', 'mr:status', 'skos:note',
                              'mr:reason', 'dc:date', 'dc:creator'))
     search_string = ''
-    for pred in po_dict.keys():
+    for pred in po_dict:
         if isinstance(po_dict[pred], list):
             if pred in singular_prefixes and len(po_dict[pred]) != 1:
                 ec = 'create_mapping limits {} to one statement per record '
@@ -1005,10 +1024,6 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
         %s ''' % (map_id, result))
     return result
 
-
-
-
-
 ###validation rules
 
 def multiple_mappings(fuseki_process, debug=False):
@@ -1058,26 +1073,6 @@ def multiple_mappings(fuseki_process, debug=False):
     '''
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
 
 
 ##### legacy ###
@@ -1197,7 +1192,7 @@ def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
 #     subj_pref = 'http://www.metarelate.net/metOcean/concept'
 #     search_string = ''
 #     if po_dict:
-#         for pred in po_dict.keys():
+#         for pred in po_dict:
 #             if isinstance(po_dict[pred], list):
 #                 for obj in po_dict[pred]:
 #                     search_string += '''
@@ -1276,7 +1271,7 @@ def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
 #     subj_pref = 'http://www.metarelate.net/metOcean/concept'
 #     search_string = ''
 #     n_components = 0
-#     for pred in po_dict.keys():
+#     for pred in po_dict:
 #         if isinstance(po_dict[pred], list):
 #             if pred == 'mr:component':
 #                 n_components = len(po_dict[pred])

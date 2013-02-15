@@ -1,5 +1,27 @@
+
+# (C) British Crown Copyright 2011 - 2012, Met Office
+#
+# This file is part of metOcean-mapping.
+#
+# metOcean-mapping is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU Lesser General Public License 
+# as published by the Free Software Foundation, either version 3 of 
+# the License, or (at your option) any later version.
+#
+# metOcean-mapping is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+
+
 import datetime
+
 from django import template
+
+
 register = template.Library()
 
 @register.filter(name='dictKeyLookup')
@@ -59,7 +81,10 @@ def current_time(parser, token):
         # split_contents() knows not to split quoted strings.
         tag_name, format_string = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError("%r tag requires a single argument" % token.contents.split()[0])
-    if not (format_string[0] == format_string[-1] and format_string[0] in ('"', "'")):
-        raise template.TemplateSyntaxError("%r tag's argument should be in quotes" % tag_name)
+        raise template.TemplateSyntaxError("%r tag requires a single argument"
+                                           % token.contents.split()[0])
+    if not (format_string[0] == format_string[-1] and \
+            format_string[0] in ('"', "'")):
+        ec = "%r tag's argument should be in quotes" % tag_name
+        raise template.TemplateSyntaxError(ec)
     return CurrentTimeNode(format_string[1:-1])

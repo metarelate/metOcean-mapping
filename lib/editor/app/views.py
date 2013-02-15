@@ -65,24 +65,23 @@ def home(request):
                 # print request_string
                 url = url_with_querystring(reverse('invalid_mappings'),
                                            ref=json.dumps(invalids))
-                return HttpResponseRedirect(url)
+                response = HttpResponseRedirect(url)
             else:
                 url = url_with_querystring(reverse('home'))
-                return HttpResponseRedirect(url)
-                
-                
+                response = HttpResponseRedirect(url)
     else:
         form = forms.HomeForm(initial={'cache_status':cache_status,
                                        'cache_state':cache_state})
-    con_dict = {}
-    searchurl = url_with_querystring(reverse('fsearch'),ref='')
-    con_dict['search'] = {'url':searchurl, 'label':'search for mappings'}
-    createurl = reverse('mapping_formats')
-    con_dict['create'] = {'url':createurl, 'label':'create a new mapping'}
-    con_dict['control'] = {'control':'control'}
-    con_dict['form'] = form
-    context = RequestContext(request, con_dict)
-    return render_to_response('main.html', context)
+        con_dict = {}
+        searchurl = url_with_querystring(reverse('fsearch'),ref='')
+        con_dict['search'] = {'url':searchurl, 'label':'search for mappings'}
+        createurl = reverse('mapping_formats')
+        con_dict['create'] = {'url':createurl, 'label':'create a new mapping'}
+        con_dict['control'] = {'control':'control'}
+        con_dict['form'] = form
+        context = RequestContext(request, con_dict)
+        response = render_to_response('main.html', context)
+    return response
 
 def mapping_formats(request):
     """
@@ -98,11 +97,12 @@ def mapping_formats(request):
                                      'skos:member': []}}
             url = url_with_querystring(reverse('mapping_concepts'),
                                        ref=json.dumps(referrer))
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         form = forms.MappingFormats()
-    context = RequestContext(request, {'form':form})
-    return render_to_response('simpleform.html', context)
+        context = RequestContext(request, {'form':form})
+        response = render_to_response('simpleform.html', context)
+    return response
 
 def _prop_id(members):
     """
@@ -121,10 +121,11 @@ def _prop_id(members):
     return prop_ids, members
 
 def url_with_querystring(path, **kwargs):
-    '''
+    """
     helper function
     returns url for path and query string
-    '''
+
+    """
     return path + '?' + urllib.urlencode(kwargs)
 
 
@@ -255,18 +256,17 @@ def mapping_concepts(request):
                 raise ValueError('The source and target are not both defined')
         ref = json.dumps(new_map)
         url = url_with_querystring(reverse('value_maps'),ref=ref)
-        return HttpResponseRedirect(url)
-
+        response = HttpResponseRedirect(url)
     else:
         form = forms.MappingConcept()
         for key in ['mr:source','mr:target']:
             amended_dict = _concept_links(key, request_search, amended_dict)
-
-    con_dict = {}
-    con_dict['mapping'] = amended_dict
-    con_dict['form'] = form
-    context = RequestContext(request, con_dict)
-    return render_to_response('mapping_concept.html', context)
+        con_dict = {}
+        con_dict['mapping'] = amended_dict
+        con_dict['form'] = form
+        context = RequestContext(request, con_dict)
+        response = render_to_response('mapping_concept.html', context)
+    return response
 
 def define_mediator(request, mediator, fformat):
     """
@@ -285,12 +285,13 @@ def define_mediator(request, mediator, fformat):
             # request_search_path = json.dumps(request_search)
             url = url_with_querystring(reverse('mapping_concepts'),
                                        ref=request_search_path)
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         form = forms.Mediator(fformat=fformat)
-    con_dict = {'form':form}
-    context = RequestContext(request, con_dict)
-    return render_to_response('simpleform.html', context)
+        con_dict = {'form':form}
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
+    return response
 
 def _get_value(value):
     """
@@ -337,7 +338,7 @@ def value_maps(request):
             #value['value'] = val_id
         url = url_with_querystring(reverse('mapping_edit'),
                                    ref = json.dumps(request_search))
-        return HttpResponseRedirect(url)
+        response = HttpResponseRedirect(url)
             
     else:
         form = forms.MappingConcept()
@@ -353,13 +354,13 @@ def value_maps(request):
                                        ref=json.dumps(request_search))
             amended_dict['addValueMap'] = {'url':url,
                                            'label':'add a value mapping'}
-            
-    con_dict = {}
-    con_dict['mapping'] = amended_dict
-    con_dict['form'] = form
-    context = RequestContext(request, con_dict)
-    return render_to_response('mapping_concept.html', context)
-    
+        con_dict = {}
+        con_dict['mapping'] = amended_dict
+        con_dict['form'] = form
+        context = RequestContext(request, con_dict)
+        response = render_to_response('mapping_concept.html', context)
+    return response
+
 def define_valuemap(request):
     """
     returns a view to input choices for an individual value_map
@@ -406,12 +407,13 @@ def define_valuemap(request):
             request_search_path = json.dumps(request_search)
             url = url_with_querystring(reverse('value_maps'),
                                        ref=request_search_path)
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         form = forms.ValueMap(sc=source_list, tc=target_list)
-    con_dict = {'form':form}
-    context = RequestContext(request, con_dict)
-    return render_to_response('simpleform.html', context)
+        con_dict = {'form':form}
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
+    return response
 
 def define_property(request, fformat):
     """
@@ -433,12 +435,13 @@ def define_property(request, fformat):
             request_search_path = request_search_path.replace('"&&&&"', newv)
             url = url_with_querystring(reverse('mapping_concepts'),
                                        ref=request_search_path)
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         form = forms.Value(fformat=fformat)
-    con_dict = {'form':form}
-    context = RequestContext(request, con_dict)
-    return render_to_response('simpleform.html', context)
+        con_dict = {'form':form}
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
+    return response
 
 
 def define_concept(request, fformat):
@@ -455,12 +458,13 @@ def define_concept(request, fformat):
             request_search_path = request_search_path.replace('"&&&&"', newv)
             url = url_with_querystring(reverse('mapping_concepts'),
                                        ref=request_search_path)
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         form = forms.FormatConcept(fformat=fformat)
-    con_dict = {'form':form}
-    context = RequestContext(request, con_dict)
-    return render_to_response('simpleform.html', context)
+        con_dict = {'form':form}
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
+    return response
 
     
 def mapping_edit(request):
@@ -480,7 +484,7 @@ def mapping_edit(request):
             request_search['mapping'] = map_id
             url = url_with_querystring(reverse('mapping_edit'),
                                        ref=json.dumps(request_search))
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         ## look for mapping, if it exists, show it, with a warning
         ## if a partially matching mapping exists, handle this (somehow)
@@ -489,8 +493,7 @@ def mapping_edit(request):
                    'target':request_search.get('mr:target').get('formatConcept')
                    , 'valueMaps':'&'.join([vm.get('valueMap') for vm
                                          in request_search.get('mr:valueMap',
-                                                               [])])
-                  }
+                                                               [])])}
         map_id = request_search.get('mapping')
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id)
@@ -505,11 +508,12 @@ def mapping_edit(request):
             else:
                 raise ValueError('mismatch in referrer')
         form = forms.MappingMeta(initial)
-    con_dict = {}
-    con_dict['mapping'] = request_search
-    con_dict['form'] = form
-    context = RequestContext(request, con_dict)
-    return render_to_response('mapping_concept.html', context)
+        con_dict = {}
+        con_dict['mapping'] = request_search
+        con_dict['form'] = form
+        context = RequestContext(request, con_dict)
+        response = render_to_response('mapping_concept.html', context)
+    return response
 
 
 
@@ -591,9 +595,6 @@ def process_form(form, request_search_path):
     return map_id
 
 
-
-
-
 def invalid_mappings(request):
     """
     list mappings which reference the concept search criteria
@@ -640,14 +641,14 @@ def search_param(request):
             param_list.append(form.cleaned_data['parameter'])
             param_string = '|'.join(param_list).lstrip('|')
             url = url_with_querystring(reverse('search'),ref=param_string)
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         form = Searchform()
-
-    context = RequestContext(request, {
-        'form':form,
-        })
-    return render_to_response('form.html', context)
+        context = RequestContext(request, {
+            'form':form,
+            })
+        response = render_to_response('form.html', context)
+    return response
 
 def format_param(request, fformat):
     '''
@@ -673,14 +674,14 @@ def format_param(request, fformat):
             if fformat.startswith('um'):
                 fformat = 'um'
             url = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref=param_string)
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
     else:
         form = Searchform()
-
-    context = RequestContext(request, {
-        'form':form,
-        })
-    return render_to_response('form.html', context)
+        context = RequestContext(request, {
+            'form':form,
+            })
+        response = render_to_response('form.html', context)
+    return response
 
 
 def fsearch(request):
@@ -749,7 +750,7 @@ def concept(request, fformat):
             if form.cleaned_data['operation'] == 'create':
                 concept_match = moq.get_concept(fuseki_process, po_dict, create=True)
             redirect = url_with_querystring(reverse('mappings'), ref=request_search_path)
-            return HttpResponseRedirect(redirect)
+            response = HttpResponseRedirect(redirect)
         else:
             print form.errors
             
@@ -771,13 +772,12 @@ def concept(request, fformat):
             form = forms.ConceptForm(initial = init)
         else:
             raise ValueError('Two exact matches for concept exist: %s' % search_path) 
-    
-    context_dict['form'] = form
-    context_dict['read_only'] =  READ_ONLY
-            
-    context = RequestContext(request, context_dict)
-    return render_to_response('form.html', context)
-        
+        context_dict['form'] = form
+        context_dict['read_only'] =  READ_ONLY
+        context = RequestContext(request, context_dict)
+        response = render_to_response('form.html', context)
+    return response
+
 
 def concepts(request, fformat):
     """returns a view listing all the concepts which match or submatch the search pattern
@@ -801,7 +801,7 @@ def concepts(request, fformat):
                     concepts.append(form.cleaned_data['concept'])
             param_string = '|'.join(concepts)
             url = url_with_querystring(reverse('mappings'),ref=param_string)
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
         else:
             print formlist.errors
     else:
@@ -821,12 +821,12 @@ def concepts(request, fformat):
             init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
             initial_dataset.append(init)
         formlist = ConceptFormSet(initial = initial_dataset)
-    context_dict = {
-
-        'formlist' : formlist,
-        'read_only' : READ_ONLY,
-        }
-    context = RequestContext(request, context_dict)
-    return render_to_response('form.html', context)
+        context_dict = {
+            'formlist' : formlist,
+            'read_only' : READ_ONLY,
+            }
+        context = RequestContext(request, context_dict)
+        response = render_to_response('form.html', context)
+    return response
 
               

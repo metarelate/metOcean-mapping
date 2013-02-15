@@ -34,9 +34,10 @@ from settings import fuseki_process
 
 def get_states():
     """
-    helper method to return valid states
+    Helper method to return valid states.
     (consider storing these in the triple store and
-    providing access via a query)
+    providing access via a query).
+    
     """
     STATES = (
         'Draft',
@@ -49,9 +50,10 @@ def get_states():
 
 def get_reasons():
     """
-    helper method to return valid reasons
+    Helper method to return valid reasons.
     (consider storing these in the triple store and
-    providing access via a query)
+    providing access via a query).
+    
     """
     REASONS = (
         'new mapping',
@@ -65,12 +67,15 @@ def get_reasons():
 
 
 def formats():
-    """temporary, returns formats
+    """
+    Temporary, returns formats
     These should be stored in the triple store and
-    provided by a query"""
+    provided by a query
+
+    """
     format_choices = [('http://metarelate.net/metocean/format/grib', 'GRIB'),
-               ('http://metarelate.net/metocean/format/um', 'UM'),
-               ('http://metarelate.net/metocean/format/cf', 'CF')]
+                      ('http://metarelate.net/metocean/format/um', 'UM'),
+                      ('http://metarelate.net/metocean/format/cf', 'CF')]
     return format_choices
 
 class MappingFormats(forms.Form):
@@ -114,7 +119,6 @@ class Value(forms.Form):
     """
     form to define a value for use in a concept
     """
-    #vproperty =  forms.ChoiceField()
     name =  forms.CharField(required=False,
                                  widget=forms.TextInput(attrs={'size':'100'}))
     value = forms.CharField(required=False)
@@ -146,16 +150,18 @@ class Value(forms.Form):
                                            # 'http://grib/gribapi.ttl')
             # choices = [(grib['subject'], grib['prefLabel'] for grib in grRes]
             # self.fields['vproperty'].choices = choices
+        else:
+            raise ValueError('invalid format supplied: {}'.format(fformat))
     def clean(self):
+        lit = self.cleaned_data['value']
         try:
-            int(self.cleaned_data['value'])
+            int(lit)
         except ValueError:
-            if self.cleaned_data['value'].startswith('http'):
-                self.cleaned_data['value'] = '<{}>'.format(
-                                                self.cleaned_data['value'])
+            if lit.startswith('http'):
+                lit = '<{}>'.format(lit)
             else:
-                self.cleaned_data['value'] = '"{}"'.format(
-                                                self.cleaned_data['value'])
+                lit = '"{}"'.format(lit)
+        self.cleaned_data['literal'] = lit
         return self.cleaned_data
 
 
@@ -249,12 +255,12 @@ class HomeForm(forms.Form):
     Form to support the home control panel
     """
     cache_status = forms.CharField(max_length=200, 
-                                   widget=forms.TextInput(attrs={'size':'100',
+                                   widget=forms.TextInput(attrs={'size': '100',
                                                                  'readonly':True
                                                                  }))
     cache_state = forms.CharField(required=False,
-                                  widget=forms.Textarea(attrs={'cols':100,
-                                                               'rows':50,
+                                  widget=forms.Textarea(attrs={'cols': 100,
+                                                               'rows': 50,
                                                                'readonly':True
                                                                }))
 
@@ -290,14 +296,15 @@ class SearchParam(forms.Form):
 
 
 class UMSTASHParam(forms.Form):
-    '''A django form for adding UM STASH elements to a linkage search path
-    '''
+    """
+    A django form for adding UM STASH elements to a linkage search path
+    """
     parameter = forms.ChoiceField()
     def __init__(self,  *args, **kwargs):
         super(UMSTASHParam, self).__init__(*args, **kwargs)
         stashRes = moq.subject_by_graph(fuseki_process,
                                         'http://um/stashconcepts.ttl')
-        #define choices
+        # define choices
         choices = [(stash['subject'], stash['subject'].split('/')[-1]) for
                    stash in stashRes]
         
@@ -312,7 +319,7 @@ class UMFCParam(forms.Form):
         super(UMFCParam, self).__init__(*args, **kwargs)
         fcRs = moq.subject_by_graph(fuseki_process,
                                         'http://um/fieldcode.ttl')
-        #define choices
+        # define choices
         choices = [(fc['subject'], fc['subject'].split('/')[-1]) for fc in fcRs]
         
 
@@ -327,7 +334,7 @@ class GRIBParam(forms.Form):
         super(GRIBParam, self).__init__(*args, **kwargs)
         gribRes = moq.subject_by_graph(fuseki_process,
                                        'http://grib/codesflags.ttl')
-        #define choices
+        # define choices
         choices = [(grib['subject'], grib['subject']) for grib in gribRes]
         
         self.fields['parameter'].choices = choices
@@ -346,7 +353,7 @@ class CFParam(forms.Form):
         super(CFParam, self).__init__(*args, **kwargs)
         snRes = moq.subject_by_graph(fuseki_process,
                                      'http://CF/cf-standard-name-table.ttl')
-        #define choices
+        # define choices
         choices = [(name['subject'],name['subject'].split('/')[-1]) for
                                                               name in snRes]
 
@@ -396,7 +403,7 @@ class ContactForm(forms.Form):
     github_name = forms.CharField(max_length=50)
     types = (('http://www.metarelate.net/metOcean/people','people'),
              ('http://www.metarelate.net/metOcean/organisations',
-                                                   'organisations'))
+              'organisations'))
     register = forms.ChoiceField(choices=types)
 
 

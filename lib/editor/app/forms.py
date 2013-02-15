@@ -124,6 +124,10 @@ class Value(forms.Form):
     name = forms.ChoiceField()
     value = forms.CharField(required=False)
     operator = forms.CharField(required=False)
+    ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/ops.ttl')
+    ops = [(op['subject'], op['prefLabel']) for op in ops]
+    ops =[('','')] + ops
+    operator = forms.ChoiceField(required=False, choices=ops)
     
     def __init__(self, *args, **kwargs):
         fformat = kwargs.pop('fformat')
@@ -138,17 +142,17 @@ class Value(forms.Form):
             choices = [(um['subject'], um['prefLabel']) for um in umRes]
             self.fields['name'].choices = choices
             sns = moq.subject_and_plabel(fuseki_process,
-                                                'http://um/stashconcepts.ttl')
+                                         'http://um/stashconcepts.ttl')
             sn_choices = [('','')]
             sn_choices += [(um['subject'], um['prefLabel']) for um in sns]
-            self.fields['standard_name'] = forms.ChoiceField(required=False,
-                                                             choices=sn_choices)
+            self.fields['stash_code'] = forms.ChoiceField(required=False,
+                                                          choices=sn_choices)
             fcs = moq.subject_and_plabel(fuseki_process,
-                                                'http://um/fieldcode.ttl')
+                                         'http://um/fieldcode.ttl')
             fc_choices = [('','')]
             fc_choices += [(um['subject'], um['prefLabel']) for um in fcs]
             self.fields['field_code'] = forms.ChoiceField(required=False,
-                                                             choices=fc_choices)
+                                                          choices=fc_choices)
         elif fformat == 'cf':
             # CF = '<http://def.cfconventions.org/data_model/>'
             # self.fields['name'].initial = CF
@@ -156,6 +160,18 @@ class Value(forms.Form):
                                          'http://CF/cfmodel.ttl')
             choices = [(cf['subject'], cf['prefLabel']) for cf in cfRes]
             self.fields['name'].choices = choices
+            sns = moq.subject_and_plabel(fuseki_process,
+                                         'http://CF/cf-standard-name-table.ttl')
+            sn_choices = [('','')]
+            sn_choices += [(sn['subject'], sn['prefLabel']) for sn in sns]
+            self.fields['standard_name'] = forms.ChoiceField(required=False,
+                                                             choices=sn_choices)
+            mod = moq.subject_and_plabel(fuseki_process,
+                                         'http://CF/cfmodel.ttl')
+            md_choices = [('','')]
+            md_choices += [(mo['subject'], mo['prefLabel']) for mo in mod]
+            self.fields['cf model'] = forms.ChoiceField(required=False,
+                                                        choices=md_choices)
         elif fformat == 'grib':
             # GRIB = '<http://def.ecmwf.int/api/grib/keys/>'
             # self.fields['name'].initial = GRIB
@@ -166,7 +182,40 @@ class Value(forms.Form):
         else:
             raise ValueError('invalid format supplied: {}'.format(fformat))
     def clean(self):
-        lit = self.cleaned_data['value']
+        stcode = self.cleaned_data.get('stash_code')
+        fcode = self.cleaned_data.get('field_code')
+        lit = self.cleaned_data.get('value')
+        st_name = self.cleaned_data.get('standard_name')
+        cfmodel = self.cleaned_data.get('cf model')
+        op = self.cleaned_data.get('operator')
+        if not op and (fcode or lit or stcode):
+            raise forms.ValidationError('if operator is not set '
+                                        'then no value or code can be '
+                                        'interpreted')
+        if stcode:
+            if fcode or lit:
+                raise forms.ValidationError('only one of value, stash code'
+                                            ' or fieldcode may be entered')
+            else:
+                lit = stcode
+        elif fcode:
+            if stcode or lit:
+                raise forms.ValidationError('only one of value, stash code'
+                                            ' or fieldcode may be entered')
+            else:
+                lit = fcode
+        elif st_name:
+            if lit or cfmodel:
+                raise forms.ValidationError('only one of value or standard_name'
+                                            ' or cf model may be entered')
+            else:
+                lit = st_name
+        elif cfmodel:
+            if lit or st_name:
+                raise forms.ValidationError('only one of value or standard_name'
+                                            ' or cf model may be entered')
+            else:
+                lit = cfmodel
         try:
             int(lit)
         except ValueError:

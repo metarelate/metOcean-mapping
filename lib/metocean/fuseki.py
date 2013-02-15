@@ -215,9 +215,13 @@ class FusekiServer(object):
         run the validation queries
         """
         failures = {}
-        mm_string = '''The following mappings are ambiguous, providing multiple
-                       targets in the same format for a particular source'''
+        mm_string = 'The following mappings are ambiguous, providing multiple '
+        mm_string += 'targets in the same format for a particular source'
         failures[mm_string] = queries.multiple_mappings(self)
+        valid_stash = 'The following mappings contain an invalid um code'
+        # failures[valid_stash] = queries.valid_vocab(self)
+        valid_cf = 'The following mappings contain an invalid cf standard'
+        valid_cf += ' name or data model name'
         return failures
 
 

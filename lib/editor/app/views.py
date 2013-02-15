@@ -436,6 +436,10 @@ def define_property(request, fformat):
             url = url_with_querystring(reverse('mapping_concepts'),
                                        ref=request_search_path)
             response = HttpResponseRedirect(url)
+        else:
+            con_dict = {'form':form}
+            context = RequestContext(request, con_dict)
+            response = render_to_response('simpleform.html', context)
     else:
         form = forms.Value(fformat=fformat)
         con_dict = {'form':form}

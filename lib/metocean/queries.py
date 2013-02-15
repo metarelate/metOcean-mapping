@@ -453,9 +453,9 @@ def retrieve_property(fuseki_process, prop_id, debug=False):
     (GROUP_CONCAT(?avalue; SEPARATOR='&') AS ?value)
     WHERE {
     GRAPH <http://metarelate.net/concepts.ttl> {
-        ?property mr:name ?name ;
-                  rdf:value ?avalue ;
-                  mr:operator ?operator .
+        ?property mr:name ?name .
+        OPTIONAL { ?property rdf:value ?avalue ;
+                  mr:operator ?operator . }
         FILTER(?property = %s)
         }
     }
@@ -1076,6 +1076,37 @@ def multiple_mappings(fuseki_process, debug=False):
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
+def valid_vocab(fuseki_process, debug=False):
+    """
+    find all valid mapping and every property they reference
+    """
+    qstr = ''' SELECT DISTINCT ?amap
+    WHERE {
+    
+    {
+    SELECT ?amap ?name ?op ?value
+    WHERE {
+    GRAPH <http://metarelate.net/mappings.ttl> { {
+    ?amap mr:status ?astatus ;
+    FILTER (?astatus NOT IN ("Deprecated", "Broken"))
+    MINUS {?amap ^dc:replaces+ ?anothermap}
+    }
+    {
+    ?amap mr:source ?fc .
+    }
+    UNION {
+    ?amap mr:target ?fc .
+    } }
+    GRAPH <http://metarelate.net/concepts.ttl> {
+    ?fc skos:member+ ?prop .
+    ?prop mr:name ?name .
+    OPTIONAL {?prop mr:operator ?op ;
+                    rdf:value ?value . }
+    } }
+    } }
+    '''
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
 
 ##### legacy ###
 ######  not functional, not for review #######

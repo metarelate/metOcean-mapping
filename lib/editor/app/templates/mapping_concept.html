@@ -1,6 +1,7 @@
 
 {% extends "base.html" %}
 {% load dict_keys %}
+{% load inclusions %}
 <!--
 # (C) British Crown Copyright 2011 - 2012, Met Office
 #
@@ -65,7 +66,7 @@
     <tr>
     <td>
     <h4>Format</h4>
-    {{ mapping|multi_key:"mr:source,mr:format" }}
+    {{ mapping|multi_key:"mr:source,mr:hasFormat" }}
     </td></tr>
     {% if mapping|multi_key:"mr:source,dc:requires" %}
     <tr><td>
@@ -88,7 +89,9 @@
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
           </li>
-      {% else %}
+      {% else prop_res = moq.get_property(fuseki_process, prop)
+                    cpid = '{}'.format(prop_res['property'])
+                    comp_mem['mr:hasProperty'][i] = cpid%}
         <li>dc:mediates</li>
         <ul>
         <li>{{ elem }}</li>
@@ -101,73 +104,31 @@
     <tr><td>
     <h4>Definition</h4>
     <ul>
-    {% for member in  mapping|multi_key:"mr:source,skos:member" %}
-
-        {% if member.url %}
-          <li> <a href="{{ member.url }}">{{ member.label }} </a>
-          </li>
-        {% endif %}
-      
-
-        {% if member|multi_key:"skos:member" %}
-
-
-          <li>Sub Component </li>
-          <ul>
-            {% if member|multi_key:"remove" %}
-
-            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
-            {% endif %}
-
-
-          {% for sub_member in member|multi_key:"skos:member" %}
-
-
-            {% if sub_member.url %}
-              <li> <a href="{{ sub_member.url }}">{{ sub_member.label }} </a>
-              </li>
-            {% endif %}
-
-            {% if sub_member|multi_key:"mr:name" %}
-
-              <li>{{ sub_member|multi_key:"mr:name" }}</li>
-
-              <ul>
-              {% if sub_member|multi_key:"rdf:value" %}
-                <li>{{ sub_member|multi_key:"rdf:value" }}</li>
-              {% endif %}
-              {% if sub_member|multi_key:"remove" %}
-                <li><a href="{{ sub_member|multi_key:"remove,url" }}"> {{ sub_member|multi_key:"remove,label" }}</a></li>
-              {% endif %}
-            </ul>
-            {% endif %}
-
-          {% endfor %}
-          </ul>
-
+    {% for component in  mapping|multi_key:"mr:source,mr:hasComponent" %}
+      {% if component.url %}
+      <li><a href="{{ component.url }}">{{ component.label }}</a></li> 
+      {% else %}
+        {% if component|multi_key:"component" %}
+          <li> {{ component|multi_key:"component" }}:</li>
         {% else %}
-
-          {% if member|multi_key:"mr:name" %}
-            <li>{{ member|multi_key:"mr:name" }}</li>
-          {% endif %}
-          <ul>
-          {% if member|multi_key:"rdf:value" %}
-            <li>{{ member|multi_key:"rdf:value" }}</li>
-          {% endif %}
-          {% if member|multi_key:"mr:operator" %}
-            <li>{{ member|multi_key:"mr:operator" }}</li>
-          {% endif %}
-          {% if member|multi_key:"remove" %}
-            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
-          {% endif %}
-          </ul>
-
-
+          <li> component: </li>
         {% endif %}
+      {% endif %}
+      <ul>
+      {% if component.remove %}
+      <li><a href="{{ component.remove.url }}">{{ component.remove.label }}</a></li> 
+      {% endif %}
 
-
-
+      {% for aproperty in  component|multi_key:"mr:hasProperty" %}
+      {% show_property aproperty %}
+      {% endfor %}
+      </ul>
     {% endfor %}
+
+    {% for aproperty in  mapping|multi_key:"mr:source,mr:hasProperty" %}
+    {% show_property aproperty %}
+    {% endfor %}
+
     </ul>
     </tr></td>
     </table>
@@ -184,7 +145,7 @@
     <tr>
     <td>
     <h4>Format</h4>
-    {{ mapping|multi_key:"mr:target,mr:format" }}
+    {{ mapping|multi_key:"mr:target,mr:hasFormat" }}
     </td></tr>
     {% if mapping|multi_key:"mr:target,dc:requires" %}
     <tr><td>
@@ -219,74 +180,38 @@
     {% endif %}
     <tr><td>
     <h4>Definition</h4>
+
+
     <ul>
-    {% for member in  mapping|multi_key:"mr:target,skos:member" %}
-
-        {% if member.url %}
-          <li> <a href="{{ member.url }}">{{ member.label }} </a>
-          </li>
-        {% endif %}
-      
-        {% if member|multi_key:"skos:member" %}
-
-          <li>Sub Component </li>
-          <ul>
-            {% if member|multi_key:"remove" %}
-            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
-            {% endif %}
-
-
-          {% for sub_member in member|multi_key:"skos:member" %}
-
-
-            {% if sub_member.url %}
-              <li> <a href="{{ sub_member.url }}">{{ sub_member.label }} </a>
-              </li>
-            {% endif %}
-
-            {% if sub_member|multi_key:"mr:name" %}
-
-              <li>{{ sub_member|multi_key:"mr:name" }}</li>
-
-              <ul>
-              {% if sub_member|multi_key:"rdf:value" %}
-                <li>{{ sub_member|multi_key:"rdf:value" }}</li>
-              {% endif %}
-              {% if sub_member|multi_key:"remove" %}
-                <li><a href="{{ sub_member|multi_key:"remove,url" }}"> {{ sub_member|multi_key:"remove,label" }}</a></li>
-              {% endif %}
-              </ul>
-            {% endif %}
-            
-          {% endfor %}
-           </ul>
-
+    {% for component in  mapping|multi_key:"mr:target,mr:hasComponent" %}
+      {% if component.url %}
+      <li><a href="{{ component.url }}">{{ component.label }}</a></li> 
+      {% else %}
+        {% if component|multi_key:"component" %}
+          <li> {{ component|multi_key:"component" }}:</li>
         {% else %}
-
-          {% if member|multi_key:"mr:name" %}
-            <li>{{ member|multi_key:"mr:name" }}</li>
-          {% endif %}
-          
-          <ul>
-          {% if member|multi_key:"rdf:value" %}
-            <li>{{ member|multi_key:"rdf:value" }}</li>
-          {% endif %}
-          {% if member|multi_key:"mr:operator" %}
-            <li>{{ member|multi_key:"mr:operator" }}</li>
-          {% endif %}
-          {% if member|multi_key:"remove" %}
-            <li><a href="{{ member|multi_key:"remove,url" }}"> {{ member|multi_key:"remove,label" }}</a></li>
-          {% endif %}
-          </ul>
-
-
-
+          <li> component: </li>
         {% endif %}
+      {% endif %}
+      <ul>
+      {% if component.remove %}
+      <li><a href="{{ component.remove.url }}">{{ component.remove.label }}</a></li> 
+      {% endif %}
 
-
-
+      {% for aproperty in  component|multi_key:"mr:hasProperty" %}
+      {% show_property aproperty %}
+      {% endfor %}
+      </ul>
     {% endfor %}
+
+    {% for aproperty in  mapping|multi_key:"mr:target,mr:hasProperty" %}
+    {% show_property aproperty %}
+    {% endfor %}
+
     </ul>
+
+
+
     </tr></td>
     </table>
 
@@ -303,17 +228,17 @@
 </td>
 </tr>
 
-{% if mapping|multi_key:"mr:valueMap" %}
+{% if mapping|multi_key:"mr:hasValueMap" %}
 
 
-{% for valuemap in mapping|multi_key:"mr:valueMap" %}
+{% for valuemap in mapping|multi_key:"mr:hasValueMap" %}
 <tr><td>
 <p>
 {{ valuemap|multi_key:"mr:source,mr:subject,mr:scope" }}
 
 <ul>
-{% if valuemap|multi_key:"mr:source,mr:subject,mr:property,mr:name" %}
-<li> {{ valuemap|multi_key:"mr:source,mr:subject,mr:property,mr:name" }}</li>
+{% if valuemap|multi_key:"mr:source,mr:subject,mr:hasProperty,mr:name" %}
+<li> {{ valuemap|multi_key:"mr:source,mr:subject,mr:hasProperty,mr:name" }}</li>
 {% endif %}
 </ul>
 </td><td>
@@ -321,8 +246,8 @@
 {{ valuemap|multi_key:"mr:target,mr:subject,mr:scope" }}
 
 <ul>
-{% if valuemap|multi_key:"mr:target,mr:subject,mr:property,mr:name" %}
-<li> {{ valuemap|multi_key:"mr:target,mr:subject,mr:property,mr:name" }}</li>
+{% if valuemap|multi_key:"mr:target,mr:subject,mr:hasProperty,mr:name" %}
+<li> {{ valuemap|multi_key:"mr:target,mr:subject,mr:hasProperty,mr:name" }}</li>
 {% endif %}
 </ul>
 </td>

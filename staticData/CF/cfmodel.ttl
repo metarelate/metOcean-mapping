@@ -15,84 +15,90 @@
 
 <http://def.cfconventions.org/datamodel/type> 
       a      skos:Concept ;
-      skos:prefLabel "type" .
+      skos:notation "type" .
 
 <http://def.cfconventions.org/datamodel/Field> 
       a      skos:Concept ;
-      skos:prefLabel "Field" .
+      skos:notation "Field" .
 
 <http://def.cfconventions.org/datamodel/DimensionCoordinate> 
       a      skos:Concept ;
-      skos:prefLabel "DimensionCoordinate" .
+      skos:notation "DimensionCoordinate" .
 
 <http://def.cfconventions.org/datamodel/AuxiliaryCoordinate> 
       a      skos:Concept ;
-      skos:prefLabel "AuxiliaryCoordinate" .
+      skos:notation "AuxiliaryCoordinate" .
 
 <http://def.cfconventions.org/datamodel/CellMethod> 
       a      skos:Concept ;
-      skos:prefLabel "CellMethod" .
+      skos:notation "CellMethod" .
 
 <http://def.cfconventions.org/datamodel/CellMeasure> 
       a      skos:Concept ;
-      skos:prefLabel "CellMeasure" .
+      skos:notation "CellMeasure" .
 
+<http://def.cfconventions.org/datamodel/DomainAxis> 
+      a      skos:Concept ;
+      skos:notation "DomainAxis" .
 
+<http://def.cfconventions.org/datamodel/AxisIndex> 
+      a      skos:Concept ;
+      skos:notation "AxisIndex" .
 
 
 <http://def.cfconventions.org/datamodel/points> 
       a      skos:Concept ;
-      skos:prefLabel "points" .
+      skos:notation "points" .
 
 <http://def.cfconventions.org/datamodel/points/dimensionality> 
       a      skos:Concept ;
-      skos:prefLabel "points.dimensionality" .
+      skos:notation "points.dimensionality" .
 
 <http://def.cfconventions.org/datamodel/points/shape> 
       a      skos:Concept ;
-      skos:prefLabel "points.shape" .
+      skos:notation "points.shape" .
 
 <http://def.cfconventions.org/datamodel/bounds> 
       a      skos:Concept ;
-      skos:prefLabel "bounds" .
+      skos:notation "bounds" .
 
 <http://def.cfconventions.org/datamodel/bounds/dimensionality> 
       a      skos:Concept ;
-      skos:prefLabel "bounds.dimensionality" .
+      skos:notation "bounds.dimensionality" .
 
 <http://def.cfconventions.org/datamodel/bounds/shape> 
       a      skos:Concept ;
-      skos:prefLabel "bounds.shape" .
+      skos:notation "bounds.shape" .
 
 <http://def.cfconventions.org/datamodel/data> 
       a      skos:Concept ;
-      skos:prefLabel "data" .
+      skos:notation "data" .
 
 <http://def.cfconventions.org/datamodel/data/dimensionality> 
       a      skos:Concept ;
-      skos:prefLabel "data.dimensionality" .
+      skos:notation "data.dimensionality" .
 
 <http://def.cfconventions.org/datamodel/data/shape> 
       a      skos:Concept ;
-      skos:prefLabel "data.shape" .
+      skos:notation "data.shape" .
 
 <http://def.cfconventions.org/datamodel/units> 
       a      skos:Concept ;
-      skos:prefLabel "units" .
+      skos:notation "units" .
 
 <http://def.cfconventions.org/datamodel/calendar> 
       a      skos:Concept ;
-      skos:prefLabel "calendar" .
+      skos:notation "calendar" .
 
 <http://def.cfconventions.org/datamodel/standard_name> 
       a      skos:Concept ;
-      skos:prefLabel "standard_name" .
+      skos:notation "standard_name" .
 
 <http://def.cfconventions.org/datamodel/long_name> 
       a      skos:Concept ;
-      skos:prefLabel "long_name" .
+      skos:notation "long_name" .
 
 <http://def.cfconventions.org/datamodel/attribute> 
       a      skos:Concept ;
-      skos:prefLabel "attribute" .
+      skos:notation "attribute" .
 

@@ -7,36 +7,181 @@ MetaRelate Vocabulary
 
 The following table gives an overview of the MetaRelate vocabulary.
 
+Classes
+=======
+
+Component
+-----------
+
+URI: http://www.metarelate.net/predicates/index.html#Component
+
+Definition: 
+
+Label: Component
+
+
+Mapping
+-------
+
+URI: http://www.metarelate.net/predicates/index.html#Mapping
+
+Definition: 
+
+Label: Mapping
+
+
+Mediator
+--------
+
+URI: http://www.metarelate.net/predicates/index.html#Mediator
+
+Definition: 
+
+Label: Mediator
+
+
+Property
+--------
+
+URI: http://www.metarelate.net/predicates/index.html#Property
+
+Definition: 
+
+Label: Property
+
+
+Release
+-------
+
+URI: http://www.metarelate.net/predicates/index.html#Release
+
+Definition: 
+
+Label: Release
+
+
+ScopedProperty
+---------------
+
+URI: http://www.metarelate.net/predicates/index.html#ScopedProperty
+
+Definition: 
+
+Label: ScopedProperty
+
+
+Value
+------
+
+URI: http://www.metarelate.net/predicates/index.html#Value
+
+Definition: 
+
+Label: Value
+
+
+ValueMap
+--------
+
+URI: http://www.metarelate.net/predicates/index.html#ValueMap
+
+Definition: 
+
+Label: ValueMap
+
+
+
+Properties
+==========
+
+
+hasComponent
+------------
+
+URI: http://www.metarelate.net/predicates/index.html#hasComponent
+
+Definition: 
+
+Label: hasComponent
+
+
+hasFormat
+----------
+
+URI:  http://www.metarelate.net/predicates/index.html#hasFormat
+
+Definition: a data format which metarelate supports 
+
+Label: hasFormat
+
+
+hasProperty
+------------
+
+URI: http://www.metarelate.net/predicates/index.html#hasProperty
+
+Definition: 
+
+Label: hasProperty
+
+hasValueMap
+-----------
+
+URI:  http://www.metarelate.net/predicates/index.html#hasValueMap
+
+Definition: A valueMap for a mapping record
+
+Label:  hasValueMap
+
+
+invertible
+-----------
+
+URI:  http://www.metarelate.net/predicates/index.html#invertible
+
+Definition: a boolean flag to indicate if the reciprocal relationship (target => source) is valid
+
+Label:  invertible
+
+
+name
+------
+
+URI:  http://www.metarelate.net/predicates/index.html#name
+
+Definition: The reference to the property name definition in the relevant namespace 
+
+Label: name
+
+
+object
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#object
+
+Definition: The object of a mathematical operation
+
+Label: object
+
+
+operator
+---------
+
+URI:  http://www.metarelate.net/predicates/index.html#operator
+
+Definition: The mathematical operator from the openMath definitions
+
+Label: operator
+
+
 owner
 --------
 
 URI:  http://www.metarelate.net/predicates/index.html#owner
 
-Definition: a github user and metarelate collaborator who has joint ownership of a mapping
+Definition: a metarelate collaborator who has joint ownership of a mapping
 
 Label:  owner
-
-
-watcher 
-----------
-
-URI:  http://www.metarelate.net/predicates/index.html#watcher
-
-Definition: a github user and metarelate collaborator who monitors a mapping
-
-Label:  watcher
-
-
-
-status 
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#status
-
-Definition: the status of a mapping: 'Approved', 'Proposed', 'Draft', 'Broken', 'Deprecated'
-
-Label:  status
-
 
 
 reason
@@ -49,44 +194,6 @@ Definition:
 Label:  reason
 
 
-target
---------
-
-URI:  http://www.metarelate.net/predicates/index.html#target
-
-Definition: a metarelate concept which this mapping translates to
-
-Label:  target
-
-source
---------
-
-URI:  http://www.metarelate.net/predicates/index.html#source
-
-Definition: a metarelate concept which this mapping translates from 
-
-Label:  source
-
-invertible
------------
-
-URI:  http://www.metarelate.net/predicates/index.html#invertible
-
-Definition: a boolean flag to indicate if the reciprocal relationship (target => source) is valid
-
-Label:  invertible
-
-
-format
-------
-
-URI:  http://www.metarelate.net/predicates/index.html#format
-
-Definition: a data format which metarelate supports 
-
-Label: format
-
-
 saveCache
 ----------
 
@@ -96,72 +203,6 @@ Definition: A flag to indicate that changes exist in the triple store which are 
 
 Label:  saveCache
 
-contactList
------------
-
-URI:  http://www.metarelate.net/predicates/index.html#contactList
-
-Definition: A collection of contact accounts.
-
-Label:  contactList
-
-
-contact
--------
-
-URI:  http://www.metarelate.net/predicates/index.html#contact
-
-Definition: A contact accounts; a person or an organisation.
-
-Label:  contact
-
-
-retired
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#retired
-
-Definition: A datetime stamp for a contact who is defined no longer active.
-
-Label: retired
-
-
-valueMap
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#valueMap
-
-Definition: A valueMap for a mapping record
-
-Label:  valueMap
-
-
-operator
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#operator
-
-Definition: The mathematical operator from the openMath definitions
-
-Label: operator
-
-subject
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#subject
-
-Definition: The subject of a mathematical operation
-
-Label:subject
-
-object
----------
-
-URI:  http://www.metarelate.net/predicates/index.html#object
-
-Definition: The object of a mathematical operation
-
-Label: object
 
 scope
 ---------
@@ -172,20 +213,55 @@ Definition: The formatConcept which contains the property for a scopedProperty
 
 Label: scope
 
-property
+
+source
+--------
+
+URI:  http://www.metarelate.net/predicates/index.html#source
+
+Definition: a metarelate concept which this mapping translates from 
+
+Label:  source
+
+
+status 
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#property
+URI:  http://www.metarelate.net/predicates/index.html#status
 
-Definition: the property referenced by a scopedProperty
+Definition: the status of a mapping: 'Approved', 'Proposed', 'Draft', 'Broken', 'Deprecated'
 
-Label: property
+Label:  status
 
-name
+
+subject
 ---------
 
-URI:  http://www.metarelate.net/predicates/index.html#name
+URI:  http://www.metarelate.net/predicates/index.html#subject
 
-Definition: The reference to the property name definition in the relevant namespace 
+Definition: The subject of a mathematical operation
 
-Label: name
+Label:subject
+
+
+target
+--------
+
+URI:  http://www.metarelate.net/predicates/index.html#target
+
+Definition: a metarelate concept which this mapping translates to
+
+Label:  target
+
+
+
+watcher 
+----------
+
+URI:  http://www.metarelate.net/predicates/index.html#watcher
+
+Definition: a metarelate collaborator who monitors a mapping
+
+Label:  watcher
+
+

@@ -125,7 +125,7 @@ class Value(forms.Form):
     value = forms.CharField(required=False)
     operator = forms.CharField(required=False)
     ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/ops.ttl')
-    ops = [(op['subject'], op['prefLabel']) for op in ops]
+    ops = [(op['subject'], op['notation']) for op in ops]
     ops =[('','')] + ops
     operator = forms.ChoiceField(required=False, choices=ops)
     
@@ -139,18 +139,18 @@ class Value(forms.Form):
             # self.fields['name'].initial = F3
             umRes = moq.subject_and_plabel(fuseki_process,
                                          'http://um/umdpF3.ttl')
-            choices = [(um['subject'], um['prefLabel']) for um in umRes]
+            choices = [(um['subject'], um['notation']) for um in umRes]
             self.fields['name'].choices = choices
             sns = moq.subject_and_plabel(fuseki_process,
                                          'http://um/stashconcepts.ttl')
             sn_choices = [('','')]
-            sn_choices += [(um['subject'], um['prefLabel']) for um in sns]
+            sn_choices += [(um['subject'], um['notation']) for um in sns]
             self.fields['stash_code'] = forms.ChoiceField(required=False,
                                                           choices=sn_choices)
             fcs = moq.subject_and_plabel(fuseki_process,
                                          'http://um/fieldcode.ttl')
             fc_choices = [('','')]
-            fc_choices += [(um['subject'], um['prefLabel']) for um in fcs]
+            fc_choices += [(um['subject'], um['notation']) for um in fcs]
             self.fields['field_code'] = forms.ChoiceField(required=False,
                                                           choices=fc_choices)
         elif fformat == 'cf':
@@ -158,18 +158,18 @@ class Value(forms.Form):
             # self.fields['name'].initial = CF
             cfRes = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cfmodel.ttl')
-            choices = [(cf['subject'], cf['prefLabel']) for cf in cfRes]
+            choices = [(cf['subject'], cf['notation']) for cf in cfRes]
             self.fields['name'].choices = choices
             sns = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cf-standard-name-table.ttl')
             sn_choices = [('','')]
-            sn_choices += [(sn['subject'], sn['prefLabel']) for sn in sns]
+            sn_choices += [(sn['subject'], sn['notation']) for sn in sns]
             self.fields['standard_name'] = forms.ChoiceField(required=False,
                                                              choices=sn_choices)
             mod = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cfmodel.ttl')
             md_choices = [('','')]
-            md_choices += [(mo['subject'], mo['prefLabel']) for mo in mod]
+            md_choices += [(mo['subject'], mo['notation']) for mo in mod]
             self.fields['cf model'] = forms.ChoiceField(required=False,
                                                         choices=md_choices)
         elif fformat == 'grib':
@@ -177,7 +177,7 @@ class Value(forms.Form):
             # self.fields['name'].initial = GRIB
             grRes = moq.subject_and_plabel(fuseki_process,
                                            'http://grib/apikeys.ttl')
-            choices = [(grib['subject'], grib['prefLabel']) for grib in grRes]
+            choices = [(grib['subject'], grib['notation']) for grib in grRes]
             self.fields['name'].choices = choices
         else:
             raise ValueError('invalid format supplied: {}'.format(fformat))
@@ -478,24 +478,24 @@ class ContactForm(forms.Form):
 
 
 
-class ConceptForm(forms.Form):
-    """Form for the display and selection of concepts"""
-    concept = forms.CharField(max_length=200, required=False)
-    components = forms.CharField(max_length=200)
-    display = forms.BooleanField(required=False)
-    def __init__(self, *args, **kwargs):
-       super(ConceptForm, self).__init__(*args, **kwargs)
-       self.fields['concept'].widget.attrs['readonly'] = True
-       self.fields['components'].widget.attrs['readonly'] = True
-       self.fields['concept'].widget = forms.HiddenInput()
-    def clean(self):
-        if self.data.has_key('create'):
-            self.cleaned_data['operation'] = 'create'
-            #make one
-        elif self.data.has_key('search'):
-            self.cleaned_data['operation'] = 'search'
+# class ConceptForm(forms.Form):
+#     """Form for the display and selection of concepts"""
+#     concept = forms.CharField(max_length=200, required=False)
+#     components = forms.CharField(max_length=200)
+#     display = forms.BooleanField(required=False)
+#     def __init__(self, *args, **kwargs):
+#        super(ConceptForm, self).__init__(*args, **kwargs)
+#        self.fields['concept'].widget.attrs['readonly'] = True
+#        self.fields['components'].widget.attrs['readonly'] = True
+#        self.fields['concept'].widget = forms.HiddenInput()
+#     def clean(self):
+#         if self.data.has_key('create'):
+#             self.cleaned_data['operation'] = 'create'
+#             #make one
+#         elif self.data.has_key('search'):
+#             self.cleaned_data['operation'] = 'search'
         
-        return self.cleaned_data
+#         return self.cleaned_data
 
 
 class MappingForm(forms.Form):

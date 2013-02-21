@@ -28,32 +28,38 @@
 
 
 
-metoc:people a mr:contactList ;
-rdfs:label "Registered MetaRelate Contributors"@en .
+metoc:people a skos:ConceptScheme ;
+skos:prefLabel "Registered MetaRelate Contributors"@en .
 
-metoc:organisations a mr:contactList ;
-rdfs:label "Registered MetaRelate Managing Organisation"@en .
+metoc:organisations a skos:ConceptScheme ;
+skos:prefLabel "Registered MetaRelate Managing Organisation"@en .
 
 
-<http://www.metarelate.net/metOcean/people/marqh> a mr:contact ;
-skos:member metoc:people ;
+<http://www.metarelate.net/metOcean/people/marqh> a skos:Concept ;
+skos:inScheme metoc:people ;
 skos:prefLabel "marqh" ;
-mr:githubId github:marqh ;
+skos:definition github:marqh ;
 dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
 
-<http://www.metarelate.net/metOcean/people/esc24> a mr:contact ;
-skos:member metoc:people ;
+<http://www.metarelate.net/metOcean/people/esc24> a skos:Concept ;
+skos:inScheme metoc:people ;
 skos:prefLabel "esc24" ;
-mr:githubId github:esc24 ;
+skos:definition github:esc24 ;
 dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
 
-<http://www.metarelate.net/metOcean/organisations/scitools> a mr:contact ;
-skos:member metoc:organisations ;
+<http://www.metarelate.net/metOcean/organisations/scitools> a skos:Concept ;
+skos:inScheme metoc:organisations ;
 skos:prefLabel "scitools" ;
-mr:githubId github:scitools ;
+skos:definition github:scitools ;
 dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+
+
+
+
+
+
 
 
 

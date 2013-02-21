@@ -27,49 +27,49 @@
 <http://reference.metoffice.gov.uk/def/um/umdpF3> a skos:Collection .
 
 moumdpF3:t1 a skos:Concept ;
-skos:prefLabel "t1" ;
+skos:notation "t1" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:t2 a skos:Concept ;
-skos:prefLabel "t3" ;
+skos:notation "t2" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:lbft a skos:Concept ;
-skos:prefLabel "lbft" ;
+skos:notation "lbft" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:lbtim.ia a skos:Concept ;
-skos:prefLabel "lbtim.ia" ;
+skos:notation "lbtim.ia" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:lbtim.ib a skos:Concept ;
-skos:prefLabel "lbtim.ic" ;
+skos:notation "lbtim.ic" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:lbtim.ic a skos:Concept ;
-skos:prefLabel "lbtim.ic" ;
+skos:notation "lbtim.ic" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:lbcode a skos:Concept ;
-skos:prefLabel "lbcode" ;
+skos:notation "lbcode" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:lbcode.ix a skos:Concept ;
-skos:prefLabel "lbcode.ix" ;
+skos:notation "lbcode.ix" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 moumdpF3:lbcode.iy a skos:Concept ;
-skos:prefLabel "lbcode.iy" ;
+skos:notation "lbcode.iy" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 
 moumdpF3:stash a skos:Concept ;
-skos:prefLabel "stash" ;
+skos:notation "stash" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 
 moumdpF3:lbfc a skos:Concept ;
-skos:prefLabel "lbfc" ;
+skos:notation "lbfc" ;
 skos:member <http://reference.metoffice.gov.uk/def/um/umdpF3> .
 
 

@@ -10,4 +10,4 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <http://www.openmath.org/cd/relation1.xhtml#eq> a skos:Concept;
-skos:prefLabel '=' .
+skos:notation '=' .

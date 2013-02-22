@@ -15,12 +15,12 @@ class Prefixes(dict):
         'skos'     : 'http://www.w3.org/2004/02/skos/core#',
         'xsd'      : 'http://www.w3.org/2001/XMLSchema#',
         'dc'       : 'http://purl.org/dc/terms/',
-        'map'      : 'http://www.metarelate.net/metOcean/mapping/',
-        'cflink'   : 'http://www.metarelate.net/metOcean/cflink/',
-        'mr'       : 'http://www.metarelate.net/predicates/index.html#',
-        'mrcf'     : 'http://www.metarelate.net/predicates/CF.html#',
         'github'   : 'https://github.com/' ,
+        'map'      : 'http://www.metarelate.net/metOcean/mapping/',
+        'mr'       : 'http://www.metarelate.net/predicates/index.html#',
         'metoc'    : 'http://www.metarelate.net/metOcean/' ,
+        'metocFormat' : 'http://www.metarelate.net/metOcean/format/' ,
+        'metocMed' : 'http://www.metarelate.net/metOcean/mediator/' ,
         'moStCon'  : 'http://reference.metoffice.gov.uk/def/um/stash/concept/' ,
         'moStND'   : 'http://reference.metoffice.gov.uk/def/um/stash/new_dynamics/' ,
         'moStEG'   : 'http://reference.metoffice.gov.uk/def/um/stash/endgame/' ,
@@ -31,7 +31,8 @@ class Prefixes(dict):
         'momet08'  : 'http://reference.metoffice.gov.uk/def/um/met08/',
         'cfsn'     : 'http://def.cfconventions.org/standard_names/' ,
         'cfm'      : 'http://def.cfconventions.org/datamodel/' ,
-        'gribapi'  : 'http://def.ecmwf.int/api/grib/keys',
+        'gribapi'  : 'http://def.ecmwf.int/api/grib/keys/',
+        'openmathr1' : 'http://www.openmath.org/cd/relation1.xhtml#',
         }
         self.update(prefixd)
 

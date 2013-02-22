@@ -216,7 +216,7 @@ def create_mediator(fuseki_process, label, fformat, debug=False):
     create a new mediator
     """
     ff = fformat.rstrip('}').split('/')[-1]
-    med = '<http://www.metarelate.net/metocean/mediates/{}/{}>'.format(ff,
+    med = '<http://www.metarelate.net/metOcean/mediates/{}/{}>'.format(ff,
                                                                        label)
     qstr = '''
     INSERT DATA
@@ -240,7 +240,7 @@ def get_mediators(fuseki_process, fformat='', debug=False):
     { GRAPH <http://metarelate.net/contacts.ttl> {
         ?mediator mr:hasFormat ?format ;
                   rdf:label ?label .
-    FILTER(?mediator = <http://www.metarelate.net/metocean/mediates/%s>)
+    FILTER(?mediator = <http://www.metarelate.net/metOcean/mediates/%s>)
     }
     ''' % fformat
     results = fuseki_process.run_query(qstr, debug=debug)
@@ -588,9 +588,9 @@ def retrieve_component(fuseki_process, fcId, debug=False):
     (GROUP_CONCAT(?arequires; SEPARATOR='&') AS ?requires)
     WHERE {
     GRAPH <http://metarelate.net/concepts.ttl> {
-        ?component mr:hasFormat ?format ;
-                   mr:hasComponent ?acomponent ;
-                   mr:hasProperty ?aproperty .
+        ?component mr:hasFormat ?format .
+        OPTIONAL{?component mr:hasComponent ?acomponent .}
+        OPTIONAL{?component mr:hasProperty ?aproperty .}
         OPTIONAL{?component dc:requires ?arequires .}
         OPTIONAL{?component dc:mediates ?mediates .}
         FILTER(?component = %s)
@@ -934,7 +934,7 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     """
     create a new mapping record using the po_dict
     """
-    subj_pref = 'http://metarelate.net/metocean/mapping'
+    subj_pref = 'http://www.metarelate.net/metOcean/mapping'
     allowed_prefixes = set(('mr:source', 'mr:target', 'mr:invertible',
                             'dc:replaces', 'mr:hasValueMap', 'mr:status',
                             'skos:note', 'mr:reason', 'dc:date', 'dc:creator',
@@ -1043,6 +1043,7 @@ def multiple_mappings(fuseki_process, debug=False):
     returns all the mappings which map the same source to a different target
     """
     qstr = '''SELECT ?amap ?asource ?atarget ?bmap ?bsource ?btarget
+    (GROUP_CONCAT(DISTINCT(?value); SEPARATOR='&') AS ?signature)
     WHERE {
     GRAPH <http://metarelate.net/mappings.ttl> { {
     ?amap mr:status ?astatus ;
@@ -1074,13 +1075,27 @@ def multiple_mappings(fuseki_process, debug=False):
     filter (?btarget != ?atarget)
     } 
     GRAPH <http://metarelate.net/concepts.ttl> {
-    ?asource mr:format ?asourceformat .
-    ?bsource mr:format ?bsourceformat .
-    ?atarget mr:format ?atargetformat .
-    ?btarget mr:format ?btargetformat .
+    ?asource mr:hasFormat ?asourceformat .
+    ?bsource mr:hasFormat ?bsourceformat .
+    ?atarget mr:hasFormat ?atargetformat .
+    ?btarget mr:hasFormat ?btargetformat .
     }
     filter (?btargetformat = ?atargetformat)
-    }
+    GRAPH <http://metarelate.net/concepts.ttl> { {
+    ?asource mr:hasProperty ?prop . }
+    UNION {
+    ?atarget mr:hasProperty ?prop . }
+    UNION {
+    ?asource mr:hasComponent|mr:hasProperty ?prop . }
+    UNION {
+    ?atarget mr:hasComponent|mr:hasProperty ?prop . }
+    UNION { 
+    ?asource mr:hasProperty|mr:hasComponent|mr:hasProperty ?prop . }
+    UNION { 
+    ?atarget mr:hasProperty|mr:hasComponent|mr:hasProperty ?prop . }
+    OPTIONAL { ?prop rdf:value ?value . }
+    } }
+    GROUP BY ?amap ?asource ?atarget ?bmap ?bsource ?btarget
     ORDER BY ?asource
     '''
     results = fuseki_process.run_query(qstr, debug=debug)
@@ -1090,29 +1105,34 @@ def valid_vocab(fuseki_process, debug=False):
     """
     find all valid mapping and every property they reference
     """
-    qstr = ''' SELECT DISTINCT ?amap
-    WHERE {
-    {
-    SELECT ?amap ?name ?prop ?op ?value
-    WHERE {
-    GRAPH <http://metarelate.net/mappings.ttl> { {
-    ?amap mr:status ?astatus ;
-    FILTER (?astatus NOT IN ("Deprecated", "Broken"))
-    MINUS {?amap ^dc:replaces+ ?anothermap}
-    }
-    {
-    ?amap mr:source ?fc .
-    }
+    qstr = '''
+    SELECT DISTINCT  ?amap 
+    (GROUP_CONCAT(DISTINCT(?vocab); SEPARATOR = '&') AS ?signature)
+    WHERE {      
+    GRAPH <http://metarelate.net/mappings.ttl> { {  
+    ?amap mr:status ?astatus ; 
+    FILTER (?astatus NOT IN ("Deprecated", "Broken")) 
+    MINUS {?amap ^dc:replaces+ ?anothermap}      }
+    { 
+    ?amap mr:source ?fc .      }
     UNION {
-    ?amap mr:target ?fc .
-    } }
-    GRAPH <http://metarelate.net/concepts.ttl> {
-    ?fc skos:member+ ?prop .
-    ?prop mr:name ?name .
-    OPTIONAL {?prop mr:operator ?op ;
-                    rdf:value ?value . }
-    } }
-    } }
+    ?amap mr:target ?fc .      } } 
+    GRAPH <http://metarelate.net/concepts.ttl> { {
+    ?fc mr:hasProperty ?prop . }
+    UNION {
+    ?fc mr:hasComponent|mr:hasProperty ?prop . }
+    UNION { 
+    ?fc mr:hasProperty|mr:hasComponent|mr:hasProperty ?prop .
+    }
+    { ?prop mr:name ?vocab . }
+    UNION {
+    ?prop mr:operator ?vocab . }
+    UNION {
+    ?prop rdf:value ?vocab . }
+    FILTER(ISURI(?vocab))  }
+    OPTIONAL {GRAPH ?g{?vocab ?p ?o .} }
+    FILTER(!BOUND(?g))      }
+    GROUP BY ?amap
     '''
     results = fuseki_process.run_query(qstr, debug=debug)
     return results

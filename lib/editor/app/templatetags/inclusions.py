@@ -19,10 +19,10 @@
 
 from django import template
 
-
 register = template.Library()
 
 
 @register.inclusion_tag('prop.html')
 def show_property(aproperty):
     return {'aproperty':aproperty}
+

@@ -218,10 +218,8 @@ class FusekiServer(object):
         mm_string = 'The following mappings are ambiguous, providing multiple '
         mm_string += 'targets in the same format for a particular source'
         failures[mm_string] = queries.multiple_mappings(self)
-        valid_stash = 'The following mappings contain an invalid um code'
-        # failures[valid_stash] = queries.valid_vocab(self)
-        valid_cf = 'The following mappings contain an invalid cf standard'
-        valid_cf += ' name or data model name'
+        invalid_vocab = 'The following mappings contain an undeclared URI'
+        failures[invalid_vocab] = queries.valid_vocab(self)
         return failures
 
 
@@ -293,39 +291,45 @@ class FusekiServer(object):
             mapping_list.append(self.structured_mapping(mapping))
         return mapping_list
 
-    def _retrieve_format_concept(self, fc_id):
+    def _retrieve_component(self, c_id):
         """
-        returns a dictionary of formatConcept information
+        returns a dictionary of component information
         recursive call to get all the nested formatConcept
         information from a formatConcept
         """
-        # fc_dict = {'formatConcept':'', 'mr:format': '', 'skos:member': []},
-        top_fc = queries.retrieve_format_concept(self, fc_id)
-        if top_fc:
-            fc_dict = {'formatConcept':fc_id, 'mr:format': top_fc['format'],
-                       'skos:member':[]}
-            if isinstance(top_fc['member'], str):
-                top_fc['member'] = [top_fc['member']]
-            for member in top_fc['member']:
-                if member.startswith(
-                        '<http://www.metarelate.net/metOcean/property/'):
-                    prop_dict = queries.retrieve_property(self, member)
-                    pref_prop_dict = {}
-                    if prop_dict.get('name'):
-                        pref_prop_dict['mr:name'] = prop_dict['name']
-                    if prop_dict.get('operator'):
-                        pref_prop_dict['mr:operator'] = prop_dict['operator']
-                    if prop_dict.get('value'):
-                        pref_prop_dict['rdf:value'] = prop_dict['value']
-                    fc_dict['skos:member'].append(pref_prop_dict)
-                elif member.startswith(
-                        '<http://www.metarelate.net/metOcean/formatConcept/'):
-                    subfc_dict = self._retrieve_format_concept(member)
-                    fc_dict.append(subfc_dict)
-                else:
-                    raise ValueError('{} a malformed formatConcept'.format(
-                                                                        fc_id))
-        return fc_dict
+        # c_dict = {'formatConcept':'', 'mr:format': '', 'skos:member': []},
+        top_c = queries.retrieve_component(self, c_id)
+        if top_c:
+            c_dict = {'component':c_id, 'mr:hasFormat': top_c['format']}
+            if isinstance(top_c.get('property'), str):
+                top_c['property'] = [top_c['property']]
+            if isinstance(top_c.get('subComponent'), str):
+                top_c['subComponent'] = [top_c['subComponent']]
+            if top_c.get('property'):
+                c_dict['mr:hasProperty'] = []
+            if top_c.get('subComponent'):
+                c_dict['mr:hasComponent'] = []
+            for aproperty in top_c.get('property', []):
+                prop_dict = queries.retrieve_property(self, aproperty)
+                pref_prop_dict = {}
+                pcomp = prop_dict.get('mr:hasComponent') 
+                if pcomp:
+                    comp = self._retrieve_component(pcomp)
+                    pref_prop_dict['mr:hasComponent'] = pcomp
+                if prop_dict.get('name'):
+                    pref_prop_dict['mr:name'] = prop_dict['name']
+                if prop_dict.get('operator'):
+                    pref_prop_dict['mr:operator'] = prop_dict['operator']
+                if prop_dict.get('value'):
+                    pref_prop_dict['rdf:value'] = prop_dict['value']
+                c_dict['mr:hasProperty'].append(pref_prop_dict)
+            for component in top_c.get('subComponent',[]):
+                subc_dict = self._retrieve_component(component)
+                c_dict.append(subc_dict)
+                # else:
+                #     raise ValueError('{} a malformed formatConcept'.format(
+                #                                                         fc_id))
+        return c_dict
 
     def _retrieve_value_map(self, valmap_id, inv):
         """
@@ -368,15 +372,15 @@ class FusekiServer(object):
         referrer = {'mapping': mapping['mapping'],
                     'mr:source': {'formatConcept': ''},
                     'mr:target': {'formatConcept': ''},
-                    'mr:valueMap': []}
+                    'mr:hasValueMap': []}
         if mapping.get('source') and mapping.get('target'):
-            referrer['mr:source'] = self._retrieve_format_concept(mapping['source'])
-            referrer['mr:target'] = self._retrieve_format_concept(mapping['target'])
+            referrer['mr:source'] = self._retrieve_component(mapping['source'])
+            referrer['mr:target'] = self._retrieve_component(mapping['target'])
             if mapping.get('valueMaps'):
                 if isinstance(mapping['valueMaps'], string):
                     mapping['valueMaps'] = [mapping['valueMaps']]
                 for valmap in mapping['valueMaps']:#.split('&'):
-                    referrer['mr:valueMap'].append(self._retrieve_value_map(valmap,
+                    referrer['mr:hasValueMap'].append(self._retrieve_value_map(valmap,
                                                         mapping['inverted']))
         return referrer
 
@@ -407,6 +411,7 @@ def process_data(jsondata):
                         val = '<{}>'.format(val)
                     else:
                         val = ['<{}>'.format(v) for v in val.split('&')]
+                    # val = ['<{}>'.format(v) for v in val.split('&')]
                 tmpdict[var] = val
         if tmpdict != {}:
             resultslist.append(tmpdict)

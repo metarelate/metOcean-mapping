@@ -7,14 +7,14 @@
           {% endif %}
 
           {% if aproperty|multi_key:"mr:name" %}
-            <li>{{ aproperty|multi_key:"mr:name" }}</li>
+            <li>{{ aproperty|prefix_uri:"mr:name" }}</li>
           {% endif %}
           <ul>
           {% if aproperty|multi_key:"rdf:value" %}
-            <li>{{ aproperty|multi_key:"rdf:value" }}</li>
+            <li>{{ aproperty|prefix_uri:"rdf:value" }}</li>
           {% endif %}
           {% if aproperty|multi_key:"mr:operator" %}
-            <li>{{ aproperty|multi_key:"mr:operator" }}</li>
+            <li>{{ aproperty|prefix_uri:"mr:operator" }}</li>
           {% endif %}
           {% if aproperty|multi_key:"remove" %}
             <li><a href="{{ aproperty|multi_key:"remove,url" }}"> {{ aproperty|multi_key:"remove,label" }}</a></li>

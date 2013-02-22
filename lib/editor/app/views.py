@@ -681,9 +681,9 @@ def mapping_edit(request):
     else:
         ## look for mapping, if it exists, show it, with a warning
         ## if a partially matching mapping exists, handle this (somehow)
-        initial = {'source':request_search.get('mr:source').get('formatConcept')
+        initial = {'source':request_search.get('mr:source').get('component')
                    ,
-                   'target':request_search.get('mr:target').get('formatConcept')
+                   'target':request_search.get('mr:target').get('component')
                    , 'valueMaps':'&'.join([vm.get('valueMap') for vm
                                          in request_search.get('mr:valueMap',
                                                                [])])}
@@ -805,12 +805,19 @@ def invalid_mappings(request):
             mapping = moq.get_mapping_by_id(fuseki_process, inv_map['amap'])
             referrer = fuseki_process.structured_mapping(mapping)
             map_json = json.dumps(referrer)
-            url = url_with_querystring(reverse('mapping_edit'),
-                                           ref=map_json)
-            label = 'mapping'
-            
-            invalid['mappings'].append({'url':url,
-                                        'label':label})
+            url = url_with_querystring(reverse('mapping_edit'), ref=map_json)
+            sig = inv_map.get('signature', [])
+            label = []
+            if isinstance(sig, list):
+                for elem in sig:
+                    label.append(elem.split('/')[-1].strip('<>'))
+            else:
+                label.append(sig.split('/')[-1].strip('<>'))
+            if label:
+                '&'.join(label)
+            else:
+                label = 'mapping'
+            invalid['mappings'].append({'url':url, 'label':label})
         invalids.append(invalid)
     context_dict = {'invalid': invalids}
     context = RequestContext(request, context_dict)

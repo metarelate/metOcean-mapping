@@ -21,8 +21,28 @@ import datetime
 
 from django import template
 
+import metocean.prefixes as pref
 
 register = template.Library()
+
+pre = pref.Prefixes()
+inv_pre = dict([[v,k] for k,v in pre.items()])
+
+@register.filter
+@register.simple_tag
+def prefix_uri(adict, keys=''):
+    uri = multi_key(adict, keys)
+    if uri and uri.startswith('<http:'):
+        label = uri
+        url = uri.lstrip('<').rstrip('>')
+        for p in inv_pre:
+            if url.startswith(p):
+                suffix = url.split(p)[1]
+                label = '{}: {}'.format(inv_pre[p],suffix)
+    else:
+        label = uri
+    return label
+
 
 @register.filter(name='dictKeyLookup')
 @register.simple_tag

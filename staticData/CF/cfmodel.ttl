@@ -102,3 +102,16 @@
       a      skos:Concept ;
       skos:notation "attribute" .
 
+<http://def.cfconventions.org/datamodel/aux_coordinate> 
+      a      skos:Concept ;
+      skos:notation "aux_coordinate" .
+
+<http://def.cfconventions.org/datamodel/dim_coordinate> 
+      a      skos:Concept ;
+      skos:notation "dim_coordinate" .
+
+<http://def.cfconventions.org/datamodel/coordinate> 
+      a      skos:Concept ;
+      skos:notation "coordinate" .
+
+

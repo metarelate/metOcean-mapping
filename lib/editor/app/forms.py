@@ -287,12 +287,12 @@ class MappingMeta(forms.Form):
                              widget=forms.TextInput(attrs={'readonly':True}))
     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()],
                                     required=False)
-    source = forms.CharField(max_length=200, 
-                              widget=forms.TextInput(attrs={'hidden':True}))
-    target = forms.CharField(max_length=200, 
-                              widget=forms.TextInput(attrs={'hidden':True}))
-    valueMaps = forms.CharField(max_length=1000, required=False, 
-                              widget=forms.TextInput(attrs={'hidden':True}))
+    # source = forms.CharField(max_length=200, 
+    #                           widget=forms.TextInput(attrs={'hidden':True}))
+    # target = forms.CharField(max_length=200, 
+    #                           widget=forms.TextInput(attrs={'hidden':True}))
+    # valueMaps = forms.CharField(max_length=1000, required=False, 
+    #                           widget=forms.TextInput(attrs={'hidden':True}))
 
     # def clean(self):
     #     print self.data['invertible']

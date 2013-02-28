@@ -215,15 +215,16 @@ def create_mediator(fuseki_process, label, fformat, debug=False):
     """
     create a new mediator
     """
-    ff = fformat.rstrip('}').split('/')[-1]
+    ff = fformat.rstrip('>').split('/')[-1]
     med = '<http://www.metarelate.net/metOcean/mediates/{}/{}>'.format(ff,
                                                                        label)
     qstr = '''
     INSERT DATA
     { GRAPH <http://metarelate.net/concepts.ttl> {
     %s a mr:Mediator ;
-         rdf:label %s
-         mr:hasFormat %s .
+         rdf:label "%s" ;
+         mr:hasFormat <http://www.metarelate.net/metOcean/format/%s> ;
+         mr:saveCache "True" .
          } }
     ''' % (med, label, fformat)
     results = fuseki_process.run_query(qstr, update=True, debug=debug)
@@ -234,15 +235,20 @@ def get_mediators(fuseki_process, fformat='', debug=False):
     return all mediators from the triple store
     fformat limits the mediators to one format
     """
+    if fformat:
+        ffilter = 'FILTER(?format = <http://www.metarelate.net/metOcean/format/{}>)'
+        ffilter = ffilter.format(fformat)
+    else:
+        ffilter = ''
     qstr = '''
     SELECT ?mediator ?format ?label
     WHERE
-    { GRAPH <http://metarelate.net/contacts.ttl> {
+    { GRAPH <http://metarelate.net/concepts.ttl> {
         ?mediator mr:hasFormat ?format ;
                   rdf:label ?label .
-    FILTER(?mediator = <http://www.metarelate.net/metOcean/mediates/%s>)
-    }
-    ''' % fformat
+    %s
+    } }
+    ''' % ffilter
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
     
@@ -481,10 +487,10 @@ def get_component(fuseki_process, po_dict, debug=False):
     preds = set(po_dict)
     if not preds.issubset(allowed_prefixes):
         ec = '''{} is not a subset of the allowed predicates set for
-                a formatConcept record {}'''
+                a component record {}'''
         ec = ec.format(preds, allowed_prefixes)
         raise ValueError(ec)
-    subj_pref = 'http://www.metarelate.net/metOcean/formatConcept'
+    subj_pref = 'http://www.metarelate.net/metOcean/component'
     search_string = ''
     n_propertys = 0
     n_components = 0

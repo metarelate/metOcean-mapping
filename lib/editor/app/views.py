@@ -121,12 +121,12 @@ def _prop_id(members):
                 for i, (prop, new_prop) in enumerate(zip(props, new_props)):
                     prop_res = moq.get_property(fuseki_process, prop)
                     cpid = '{}'.format(prop_res['property'])
-                    print 'props:', props
+                    #print 'props:', props
                     props[i] = cpid
-                    print 'props:', props
-                    print 'new_props:', new_props
+                    #print 'props:', props
+                    #print 'new_props:', new_props
                     new_props[i]['component'] = cpid
-                    print 'new_props:', new_props
+                    #print 'new_props:', new_props
             else:
                 #validation error please
                 raise ValueError('If a property has a component that component'
@@ -442,9 +442,42 @@ def define_mediator(request, mediator, fformat):
     else:
         # form = forms.Mediator(fformat=fformat)
         con_dict = {'form':form}
+        if mediator == 'dc:mediates':
+            links = []
+            link_url = url_with_querystring(reverse('create_mediator', kwargs={'fformat':fformat}),
+                                            ref=request_search_path)
+            links.append({'url':link_url, 'label':'create a new mediator'})
+            con_dict['links'] = links
         context = RequestContext(request, con_dict)
         response = render_to_response('simpleform.html', context)
     return response
+
+
+def create_mediator(request, fformat):
+    """
+    returns a view to define a mediator for a
+    formatConcept
+    """
+    request_search_path = request.GET.get('ref', '')
+    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    request_search = json.loads(request_search_path)
+    if request.method == 'POST':
+        form = forms.NewMediator(request.POST)
+    else:
+        form = forms.NewMediator()
+    if request.method == 'POST' and form.is_valid():
+        mediator = form.cleaned_data['mediator']
+        moq.create_mediator(fuseki_process, mediator, fformat)
+        kw = {'mediator':'dc:mediates','fformat':fformat}
+        url = url_with_querystring(reverse('define_mediator', kwargs=kw),
+                                   ref=request_search_path)
+        response = HttpResponseRedirect(url)
+    else:
+        con_dict = {'form':form}
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
+    return response
+
 
 def _get_value(value):
     """
@@ -457,8 +490,17 @@ def _get_value(value):
     sc_prop = moq.get_scoped_property(fuseki_process,
                                       {'mr:hasProperty':prop['property'],
                                     'mr:scope':value['mr:subject']['mr:scope']})
-    value =  moq.get_value(fuseki_process, {'mr:operator':value['mr:operator'],
-                                    'mr:subject':sc_prop['scopedProperty']})
+    new_val = {'mr:subject':sc_prop['scopedProperty']}
+    if value.get('mr:object'):
+        oprop = moq.get_property(fuseki_process,
+                               value['mr:object']['mr:hasProperty'])
+        o_sc_prop = moq.get_scoped_property(fuseki_process,
+                                      {'mr:hasProperty':oprop['property'],
+                                    'mr:scope':value['mr:object']['mr:scope']})
+        new_val['mr:object'] = o_sc_prop['scopedProperty'] 
+    if value.get('mr:operator'):
+        new_val['mr:operator'] = value.get('mr:operator')
+    value =  moq.get_value(fuseki_process, new_val)
     v_id = value['value']
     return v_id
         
@@ -488,7 +530,7 @@ def value_maps(request):
             vmap_dict = {'mr:source':_get_value(valuemap['mr:source']),
                          'mr:target':_get_value(valuemap['mr:target'])}
             vmap = moq.get_value_map(fuseki_process, vmap_dict)
-            valuemap['hasValueMap'] = vmap['valueMap']
+            valuemap['valueMap'] = vmap['valueMap']
             #value['value'] = val_id
         url = url_with_querystring(reverse('mapping_edit'),
                                    ref = json.dumps(request_search))
@@ -515,19 +557,18 @@ def value_maps(request):
         response = render_to_response('mapping_concept.html', context)
     return response
 
-def _define_valuemap_choice(comp, property, choice):
+def _define_valuemap_choice(comp, aproperty, choice):
     """
     """
-    pcomp = property.get('mr:hasComponent')
-    if not property.get('rdf:value') and not pcomp:
-        choice[1].append(('%s||%s' % (comp, property.get('mr:name')),
-                      property.get('mr:name', '').split('/')[-1]))
+    pcomp = aproperty.get('mr:hasComponent')
+    if not aproperty.get('rdf:value') and not pcomp:
+        choice[1].append(json.dumps({'mr:subject':{'mr:scope':comp, 
+                           'mr:hasProperty': {'mr:name':aproperty.get('mr:name')}}}))
     elif pcomp:
         for prop in pcomp.get('mr:hasProperty', []):
             if not prop.get('rdf:value'):
-                val = ('%s||%s' % (pcomp.get('component')
-                                  , property.get('mr:name')),
-                      property.get('mr:name', '').split('/')[-1])
+                val = json.dumps({'mr:subject':{'mr:scope':pcomp.get('component'), 
+                           'mr:hasProperty': {'mr:name': aproperty.get('mr:name')}}})
                 choice[1].append(val)
     return choice
 
@@ -538,6 +579,7 @@ def define_valuemap(request):
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     request_search = json.loads(request_search_path)
+    #print request_search
     source_list = []
     target_list = []
     choices = [('mr:source', source_list),('mr:target', target_list)]
@@ -546,49 +588,24 @@ def define_valuemap(request):
             comp = request_search[ch[0]]['component']
             for elem in request_search[ch[0]]['mr:hasProperty']:
                 choices[i] = _define_valuemap_choice(comp, elem, ch)
-            # pcomp = elem.get('mr:hasComponent')
-            # if not elem.get('rdf:value') and not pcomp:
-            #     ch[1].append(('%s||%s' % (request_search[ch[0]]['component']
-            #                               , elem.get('mr:name')),
-            #                   elem.get('mr:name', '').split('/')[-1]))
-            # elif pcomp:
-            #     for prop in pcomp.get('mr:hasProperty', []):
-            #         if not prop.get('rdf:value'):
-            #             val = ('%s||%s' % (pcomp['component']
-            #                               , elem.get('mr:name')),
-            #                   elem.get('mr:name', '').split('/')[-1])
-            #             ch[1].append(val)
         elif request_search[ch[0]].get('mr:hasComponent'):
             for elem in request_search[ch[0]]['mr:hasComponent']:
                 comp = elem['component']
                 for selem in elem['mr:hasProperty']:
                     choices[i] = _define_valuemap_choice(comp, selem, ch)
-
-                # for sprop in selem.get('mr:hasProperty', []):
-                #     spcomp = elem.get('mr:hasComponent')
-                #     if not selem.get('rdf:value') and not spcomp:
-                #         ch[1].append(('%s||%s' % (spcomp['component'],
-                #                                   selem.get('mr:name')),
-                #                                   '  - %s' %
-                #                 selem.get('mr:name', '').split('/')[-1]))
-                #     elif spcomp:
-                #         for prop in spcomp.get('mr:hasProperty', []):
-
-
+        if request_search.get('derived_values'):
+            for derived in request_search['derived_values'].get(ch[0]):
+                ch[1].append(json.dumps(derived))
     if request.method == 'POST':
         form = forms.ValueMap(request.POST, sc=source_list, tc=target_list)
         if form.is_valid():
-            source = form.cleaned_data['source_value'].split('||')
-            target = form.cleaned_data['target_value'].split('||')
-            new_vmap = {'mr:source':{'mr:operator':
-                        '<http://www.openmath.org/cd/sts.xhtml#NumericalValue>',
-                                     'mr:subject':{'mr:scope':source[0],
-                                     'mr:hasProperty':{'mr:name':source[1]}}},
-                        'mr:target':{'mr:operator':
-                        '<http://www.openmath.org/cd/sts.xhtml#NumericalValue>',
-                                     'mr:subject':{'mr:scope':target[0],
-                                     'mr:hasProperty':{'mr:name':target[1]}}}}
+            source = json.loads(form.cleaned_data['source_value'])
+            target = json.loads(form.cleaned_data['target_value'])
+            new_vmap = {'mr:source':source,
+                        'mr:target':target}
             request_search['mr:hasValueMap'].append(new_vmap)
+            if request_search.get('derived_values'):
+                del request_search['derived_values']
                 # {'mr:sourceFC':source[0],
                 #                                   'mr:sourceVal':source[1],
                 #                                   'mr:targetFC':target[0],
@@ -596,13 +613,71 @@ def define_valuemap(request):
             request_search_path = json.dumps(request_search)
             url = url_with_querystring(reverse('value_maps'),
                                        ref=request_search_path)
-            response = HttpResponseRedirect(url)
+            return HttpResponseRedirect(url)
     else:
         form = forms.ValueMap(sc=source_list, tc=target_list)
+    con_dict = {'form':form}
+    links = []
+    link_url = url_with_querystring(reverse('derived_value', kwargs={'role':'source'}),
+                                        ref=request_search_path)
+    links.append({'url':link_url, 'label':'create a derived source value'})
+    link_url = url_with_querystring(reverse('derived_value', kwargs={'role':'target'}),
+                                        ref=request_search_path)
+    links.append({'url':link_url, 'label':'create a derived target value'})
+    con_dict['links'] = links
+    context = RequestContext(request, con_dict)
+    return render_to_response('simpleform.html', context)
+
+
+def derived_value(request, role):
+    """
+    """
+    request_search_path = request.GET.get('ref', '')
+    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    request_search = json.loads(request_search_path)
+    if not request_search.get('derived_values'):
+        request_search['derived_values'] = {'mr:source':[], 'mr:target':[]}
+    source_list = []
+    target_list = []
+    choices = [('mr:source', source_list),('mr:target', target_list)]
+    for i, ch in enumerate(choices):
+        if request_search[ch[0]].get('mr:hasProperty'):
+            comp = request_search[ch[0]]['component']
+            for elem in request_search[ch[0]]['mr:hasProperty']:
+                choices[i] = _define_valuemap_choice(comp, elem, ch)
+        elif request_search[ch[0]].get('mr:hasComponent'):
+            for elem in request_search[ch[0]]['mr:hasComponent']:
+                comp = elem['component']
+                for selem in elem['mr:hasProperty']:
+                    choices[i] = _define_valuemap_choice(comp, selem, ch)
+    if role == 'source':
+        components = source_list
+    elif role == 'target':
+        components = target_list
+    else:
+        raise ValueError('role must be source or target')
+    if request.method == 'POST':
+        form = forms.DerivedValue(request.POST, components=components)
+        if form.is_valid():
+            derived_val = json.loads(form.cleaned_data['_subject'])
+            derived_val['mr:object'] = json.loads(form.cleaned_data['_object'])['mr:subject']
+            derived_val['mr:operator'] = form.cleaned_data['_operator']
+            request_search['derived_values']['mr:{}'.format(role)].append(derived_val)
+            request_search_path = json.dumps(request_search)
+            url = url_with_querystring(reverse('define_valuemaps'),
+                                       ref=request_search_path)
+            response = HttpResponseRedirect(url)
+        else:
+            con_dict = {'form':form}
+            context = RequestContext(request, con_dict)
+            response = render_to_response('simpleform.html', context)
+    else:
+        form = forms.DerivedValue(components=components)
         con_dict = {'form':form}
         context = RequestContext(request, con_dict)
         response = render_to_response('simpleform.html', context)
     return response
+
 
 def define_property(request, fformat):
     """
@@ -670,6 +745,7 @@ def mapping_edit(request):
     if request_search_path == '':
         request_search_path = '{}'
     request_search = json.loads(request_search_path)
+    print request_search
     if request.method == 'POST':
         form = forms.MappingMeta(request.POST)
         if form.is_valid():
@@ -677,7 +753,7 @@ def mapping_edit(request):
             request_search['mapping'] = map_id
             url = url_with_querystring(reverse('mapping_edit'),
                                        ref=json.dumps(request_search))
-            response = HttpResponseRedirect(url)
+            return HttpResponseRedirect(url)
     else:
         ## look for mapping, if it exists, show it, with a warning
         ## if a partially matching mapping exists, handle this (somehow)
@@ -685,8 +761,9 @@ def mapping_edit(request):
                    ,
                    'target':request_search.get('mr:target').get('component')
                    , 'valueMaps':'&'.join([vm.get('valueMap') for vm
-                                         in request_search.get('mr:valueMap',
+                                         in request_search.get('mr:hasValueMap',
                                                                [])])}
+        print 'initial:  ', initial
         map_id = request_search.get('mapping')
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id)
@@ -695,29 +772,28 @@ def mapping_edit(request):
             ts = initial['source'] == mapping['source']
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \
-                  mapping.get('valueMaps', '').split('&').sort()
+                  mapping.get('hasValueMaps', '').split('&').sort()
             if ts and tt and tvm:
                 initial = mapping                
             else:
                 raise ValueError('mismatch in referrer')
         form = forms.MappingMeta(initial)
-        con_dict = {}
-        con_dict['mapping'] = request_search
-        con_dict['form'] = form
-        context = RequestContext(request, con_dict)
-        response = render_to_response('mapping_concept.html', context)
-    return response
+    con_dict = {}
+    con_dict['mapping'] = request_search
+    con_dict['form'] = form
+    context = RequestContext(request, con_dict)
+    return render_to_response('mapping_concept.html', context)
 
 
 
 def process_form(form, request_search_path):
     globalDateTime = datetime.datetime.now().isoformat()
-    form_data=form.cleaned_data
+    data = form.cleaned_data
     mapping_p_o = collections.defaultdict(list)
     ## take the new values from the form and add all of the initial values
     ## not included in the 'remove' field
     for label in ['owner','watcher']:
-        data = form.cleaned_data
+        #data = form.cleaned_data
         #if data['add_()s'.format(label)] != '':
         if data['add_%ss' % label] != '':
             for val in data['add_%ss' % label].split(','):
@@ -741,8 +817,8 @@ def process_form(form, request_search_path):
     mapping_p_o['mr:source'] = ['%s' % data['source']]
     mapping_p_o['mr:target'] = ['%s' % data['target']]
     mapping_p_o['mr:invertible'] = ['"%s"' % data['invertible']]
-    if data['valueMaps']:
-        mapping_p_o['mr:valueMap'] = ['%s' % vm for vm in
+    if data.get('valueMaps'):
+        mapping_p_o['mr:hasValueMap'] = ['%s' % vm for vm in
                                   data['valueMaps'].split('&')]
 
     # #check to see if the updated mapping record is simply the last one

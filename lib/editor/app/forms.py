@@ -17,9 +17,11 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import json
 from string import Template
 import sys
 import time
+import urllib
 
 from django import forms
 from django.core.urlresolvers import reverse
@@ -101,10 +103,24 @@ class Mediator(forms.Form):
     def __init__(self, *args, **kwargs):
         fformat = kwargs.pop('fformat')
         super(Mediator, self).__init__(*args, **kwargs)
-        #meds = moq.get_mediators(fuseki_process, fformat)['med']
-        meds = [('<http://www.metarelate.net/metocean/mediates/cf/calendar>',
-                 'calendar')]
+        meds = moq.get_mediators(fuseki_process, fformat)
+        if isinstance(meds, list):
+            meds = [(med['mediator'], med['label']) for med in meds]
+        else:
+            meds = (meds['mediator'], meds['label'])
+        #meds = [('<http://www.metarelate.net/metocean/mediates/cf/calendar>',
+        #         'calendar')]
         self.fields['mediator'].choices = meds
+
+class NewMediator(forms.Form):
+    """
+    form to create a new mediator
+    """
+    mediator = forms.CharField()
+
+
+
+
 
 class MappingConcept(forms.Form):
     """
@@ -124,9 +140,9 @@ class Value(forms.Form):
     name = forms.ChoiceField()
     value = forms.CharField(required=False)
     operator = forms.CharField(required=False)
-    ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/ops.ttl')
+    ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/tests.ttl')
     ops = [(op['subject'], op['notation']) for op in ops]
-    ops =[('','')] + ops
+    ops = [('','')] + ops
     operator = forms.ChoiceField(required=False, choices=ops)
     
     def __init__(self, *args, **kwargs):
@@ -158,8 +174,10 @@ class Value(forms.Form):
             # self.fields['name'].initial = CF
             cfRes = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cfmodel.ttl')
-            choices = [(cf['subject'], cf['notation']) for cf in cfRes]
+            choices = [('','')] + [(cf['subject'], cf['notation']) for cf in cfRes]
             self.fields['name'].choices = choices
+            self.fields['name'].required = False
+            self.fields['_name'] = forms.CharField(required=False)
             sns = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cf-standard-name-table.ttl')
             sn_choices = [('','')]
@@ -182,13 +200,29 @@ class Value(forms.Form):
         else:
             raise ValueError('invalid format supplied: {}'.format(fformat))
     def clean(self):
+        name = self.cleaned_data.get('name')
+        _name = self.cleaned_data.get('_name')
         stcode = self.cleaned_data.get('stash_code')
         fcode = self.cleaned_data.get('field_code')
         lit = self.cleaned_data.get('value')
         st_name = self.cleaned_data.get('standard_name')
         cfmodel = self.cleaned_data.get('cf model')
         op = self.cleaned_data.get('operator')
-        if not op and (fcode or lit or stcode):
+        if name:
+            if _name:
+                raise forms.ValidationError('Name and name are mutually exclusive')
+        else:
+            if not _name:
+                raise forms.VaildationError('a name must be selected')
+            else:
+                n = '<http://def.cfconventions.org/datamodel/attribute_name/{}>'
+                self.cleaned_data['name'] = n 
+                self.cleaned_data['name'] = self.cleaned_data['name'].format(_name)
+        if op and not (fcode or lit or stcode or st_name or cfmodel):
+            raise forms.ValidationError('if operator is set '
+                                        'then a value or code is '
+                                        'required')
+        if not op and (fcode or lit or stcode or st_name or cfmodel):
             raise forms.ValidationError('if operator is not set '
                                         'then no value or code can be '
                                         'interpreted')
@@ -227,6 +261,7 @@ class Value(forms.Form):
         return self.cleaned_data
 
 
+
 class ValueMap(forms.Form):
     """
     form to define a value map
@@ -235,12 +270,45 @@ class ValueMap(forms.Form):
     target_value = forms.ChoiceField()
     def __init__(self, *args, **kwargs):
         sc = kwargs.pop('sc')
+        #sc = urllib.unquote(sc).decode('utf8')
+        #print 'sc: ', sc
+        sc = [json.loads(anSc) for anSc in sc]
+        sc = [(json.dumps(anSc),'{su} {op} {ob}'.format(
+                    su=anSc.get('mr:subject', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1],
+#                    anSc['mr:subject']['mr:hasProperty']['mr:name'],
+                    op=anSc.get('mr:operator', '').split('#')[-1], 
+                    ob=anSc.get('mr:object', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1])) for
+               anSc in sc]
         tc = kwargs.pop('tc')
+        #tc = urllib.unquote(tc).decode('utf8')
+        #print 'tc: ', tc
+        tc = [json.loads(aTc) for aTc in tc]
+        tc = [(json.dumps(aTc),'{su} {op} {ob}'.format(
+                    su=aTc.get('mr:subject', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1],
+                    op=aTc.get('mr:operator', '').split('#')[-1],
+                    ob=aTc.get('mr:object', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1])) for
+               aTc in tc]
         super(ValueMap, self).__init__(*args, **kwargs)
         self.fields['source_value'].choices = sc
         self.fields['target_value'].choices = tc
         
-        
+class DerivedValue(forms.Form):
+    """
+    """        
+    ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/ops.ttl')
+    #print ops
+    ops = [('','')] + [(op['subject'], op['notation']) for op in ops]
+    _operator = forms.ChoiceField(choices=ops)
+    _subject = forms.ChoiceField()
+    _object = forms.ChoiceField()
+    def __init__(self, *args, **kwargs):
+        components = kwargs.pop('components')
+        super(DerivedValue, self).__init__(*args, **kwargs)
+        components = [json.loads(component) for component in components]
+        components = [(json.dumps(component),component['mr:subject']['mr:hasProperty']['mr:name']) for
+               component in components]
+        self.fields['_subject'].choices = components
+        self.fields['_object'].choices = components
     
 class MappingMeta(forms.Form):
     """
@@ -287,12 +355,12 @@ class MappingMeta(forms.Form):
                              widget=forms.TextInput(attrs={'readonly':True}))
     next_status = forms.ChoiceField(choices=[(x,x) for x in get_states()],
                                     required=False)
-    # source = forms.CharField(max_length=200, 
-    #                           widget=forms.TextInput(attrs={'hidden':True}))
-    # target = forms.CharField(max_length=200, 
-    #                           widget=forms.TextInput(attrs={'hidden':True}))
-    # valueMaps = forms.CharField(max_length=1000, required=False, 
-    #                           widget=forms.TextInput(attrs={'hidden':True}))
+    source = forms.CharField(max_length=200, 
+                              widget=forms.TextInput(attrs={'hidden':True}))
+    target = forms.CharField(max_length=200, 
+                              widget=forms.TextInput(attrs={'hidden':True}))
+    valueMaps = forms.CharField(max_length=1000, required=False, 
+                              widget=forms.TextInput(attrs={'hidden':True}))
 
     # def clean(self):
     #     print self.data['invertible']

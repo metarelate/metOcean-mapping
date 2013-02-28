@@ -114,4 +114,11 @@
       a      skos:Concept ;
       skos:notation "coordinate" .
 
+<http://def.cfconventions.org/datamodel/coordinate_reference_system> 
+      a      skos:Concept ;
+      skos:notation "coordinate_reference_system" .
+
+<http://def.cfconventions.org/datamodel/crs_name> 
+      a      skos:Concept ;
+      skos:notation "crs_name" .
 

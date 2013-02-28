@@ -51,6 +51,12 @@
 
 {% endif %} 
 
-
+{% if links %}
+<ul>
+{% for link in links %}
+<li><a href="{{ link.url }}">{{ link.label }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
 
 {% endblock %}

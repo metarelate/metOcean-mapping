@@ -745,7 +745,7 @@ def mapping_edit(request):
     if request_search_path == '':
         request_search_path = '{}'
     request_search = json.loads(request_search_path)
-    print request_search
+    # print request_search
     if request.method == 'POST':
         form = forms.MappingMeta(request.POST)
         if form.is_valid():
@@ -757,13 +757,14 @@ def mapping_edit(request):
     else:
         ## look for mapping, if it exists, show it, with a warning
         ## if a partially matching mapping exists, handle this (somehow)
-        initial = {'source':request_search.get('mr:source').get('component')
+        initial = {'invertible':True,
+                   'source':request_search.get('mr:source').get('component')
                    ,
                    'target':request_search.get('mr:target').get('component')
                    , 'valueMaps':'&'.join([vm.get('valueMap') for vm
                                          in request_search.get('mr:hasValueMap',
                                                                [])])}
-        print 'initial:  ', initial
+        # print 'initial:  ', initial
         map_id = request_search.get('mapping')
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id)

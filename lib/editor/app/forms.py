@@ -213,7 +213,7 @@ class Value(forms.Form):
                 raise forms.ValidationError('Name and name are mutually exclusive')
         else:
             if not _name:
-                raise forms.VaildationError('a name must be selected')
+                raise forms.ValidationError('a name must be selected')
             else:
                 n = '<http://def.cfconventions.org/datamodel/attribute_name/{}>'
                 self.cleaned_data['name'] = n 
@@ -316,8 +316,9 @@ class MappingMeta(forms.Form):
     pne the source, target and value maps are defined
     """
     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
-    invertible = forms.BooleanField(widget=forms.NullBooleanSelect,
-                                    required=False)
+    # invertible = forms.BooleanField(widget=forms.NullBooleanSelect(),
+    #                                 required=False)
+    invertible = forms.BooleanField(required=False)
     ## i cannot believe that an answer of false to this
     ## type hits the 'required validatio step!!!
     mapping = forms.CharField(max_length=200, required=False,
@@ -361,9 +362,19 @@ class MappingMeta(forms.Form):
                               widget=forms.TextInput(attrs={'hidden':True}))
     valueMaps = forms.CharField(max_length=1000, required=False, 
                               widget=forms.TextInput(attrs={'hidden':True}))
-
+    # def __init__(self, *args, **kwargs):
+    #     super(MappingMeta, self).__init__(*args, **kwargs)
+    #     dir(self)
+    #     print self.initial
+    #     self.init = self.initial
     # def clean(self):
-    #     print self.data['invertible']
+    #     print 'init:  \n', self.init
+    #     if self.initial == self.data:
+    #         raise forms.ValidationError('i know the form has not changed')
+    #     raise forms.ValidationError('the form has not changed')
+    #     asource = queries.multiple_mappings(fuseki_process, test_map=self.data['mapping'])
+    #     if asource:
+    #         raise forms.ValidationError
     #     return self.cleaned_data
 
 

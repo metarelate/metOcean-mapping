@@ -18,6 +18,7 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 import collections
+import re
 import hashlib
 
 
@@ -1044,10 +1045,17 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
 
 ###validation rules
 
-def multiple_mappings(fuseki_process, debug=False):
+def multiple_mappings(fuseki_process, test_map=None, debug=False):
     """
     returns all the mappings which map the same source to a different target
+    filter to a single test mapping with test_map
     """
+    tm_filter = ''
+    if test_map:
+        pattern = '<http.*>'
+        pattern = re.compile(pattern)
+        if pattern.match(test_map):
+            tm_filter = '\n\tFILTER(?amap = {})'.format()
     qstr = '''SELECT ?amap ?asource ?atarget ?bmap ?bsource ?btarget
     (GROUP_CONCAT(DISTINCT(?value); SEPARATOR='&') AS ?signature)
     WHERE {
@@ -1062,7 +1070,7 @@ def multiple_mappings(fuseki_process, debug=False):
          mr:target ?asource ;
          mr:source ?atarget . } 
     FILTER (?astatus NOT IN ("Deprecated", "Broken"))
-    MINUS {?amap ^dc:replaces+ ?anothermap}
+    MINUS {?amap ^dc:replaces+ ?anothermap} %s
     } 
     GRAPH <http://metarelate.net/mappings.ttl> { {
     ?bmap mr:status ?bstatus ;
@@ -1103,7 +1111,7 @@ def multiple_mappings(fuseki_process, debug=False):
     } }
     GROUP BY ?amap ?asource ?atarget ?bmap ?bsource ?btarget
     ORDER BY ?asource
-    '''
+    ''' % tm_filter
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 

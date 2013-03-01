@@ -190,16 +190,15 @@ def _create_components(key, request_search, new_map, components):
     for i, (mem, newm) in enumerate(zip(request_search[key]['mr:hasComponent'],
                                   new_map[key]['mr:hasComponent'])):
         if mem.get('mr:hasProperty'):
-            prop_ids, newm[i] = _prop_id(mem.get('mr:hasProperty'))
+            prop_ids, newm['mr:hasProperty'] = _prop_id(mem.get('mr:hasProperty'))
             sub_concept_dict = {
                 'mr:hasFormat': '<%s>' % request_search[key]['mr:hasFormat'],
                 'mr:hasProperty':prop_ids}                    
             sub_comp = moq.get_component(fuseki_process,
                                                  sub_concept_dict)
             subc_ids.append('%s' % sub_comp['component'])
-            new_map[key]['mr:hasComponent'][i]['component'] = \
-                            '%s' % sub_concept['component']
-    concept_dict = {'mr:hasFormat':'<%s>' % request_search[key]['mr:hasFormat'],
+            newm['component'] = '%s' % sub_comp['component']
+    comp_dict = {'mr:hasFormat':'<%s>' % request_search[key]['mr:hasFormat'],
                                 'mr:hasComponent':subc_ids}
     comp = moq.get_component(fuseki_process, comp_dict)
     if comp:
@@ -324,7 +323,7 @@ def _component_links(key, request_search, amended_dict):
             if elem.get('mr:name') and not elem.get('mr:operator') and not \
                 elem.get('rdf:value') and not elem.get('mr:hasComponent'):
                 refr = copy.deepcopy(request_search)
-                refr[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent'] = {'mr:hsFormat':fformurl}
+                refr[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent'] = {'mr:hasFormat':fformurl}
                 compurl = url_with_querystring(reverse('mapping_concepts'),
                                          ref=json.dumps(refr))
                 ref = {'url':compurl, 'label':'add a component'}
@@ -352,7 +351,8 @@ def _component_links(key, request_search, amended_dict):
     ## mediators
     for fckey in ['dc:requires', 'dc:mediates']:
         url = None
-        if fformat == 'cf':
+        if True:
+        # if fformat == 'cf':
             adder = copy.deepcopy(request_search)
             if request_search[key].get(fckey):
                 if fckey == 'dc:requires':
@@ -385,6 +385,7 @@ def mapping_concepts(request):
     if request_search_path == '':
         request_search_path = '{}'
     request_search = json.loads(request_search_path)
+    print request_search
     amended_dict = copy.deepcopy(request_search)
     if request.method == 'POST':
         ## get the formatConcepts for source and target
@@ -568,8 +569,9 @@ def _define_valuemap_choice(comp, aproperty, choice):
         for prop in pcomp.get('mr:hasProperty', []):
             if not prop.get('rdf:value'):
                 val = json.dumps({'mr:subject':{'mr:scope':pcomp.get('component'), 
-                           'mr:hasProperty': {'mr:name': aproperty.get('mr:name')}}})
+                           'mr:hasProperty': {'mr:name': prop.get('mr:name')}}})
                 choice[1].append(val)
+#            elif prop.get('mr:hasComponent'):
     return choice
 
 def define_valuemap(request):
@@ -579,7 +581,7 @@ def define_valuemap(request):
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
     request_search = json.loads(request_search_path)
-    #print request_search
+    print request_search
     source_list = []
     target_list = []
     choices = [('mr:source', source_list),('mr:target', target_list)]
@@ -650,6 +652,9 @@ def derived_value(request, role):
                 comp = elem['component']
                 for selem in elem['mr:hasProperty']:
                     choices[i] = _define_valuemap_choice(comp, selem, ch)
+        if request_search.get('derived_values'):
+            for derived in request_search['derived_values'].get(ch[0]):
+                ch[1].append(json.dumps(derived))
     if role == 'source':
         components = source_list
     elif role == 'target':
@@ -745,7 +750,7 @@ def mapping_edit(request):
     if request_search_path == '':
         request_search_path = '{}'
     request_search = json.loads(request_search_path)
-    # print request_search
+    print request_search
     if request.method == 'POST':
         form = forms.MappingMeta(request.POST)
         if form.is_valid():

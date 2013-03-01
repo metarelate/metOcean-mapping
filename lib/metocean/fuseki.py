@@ -356,8 +356,8 @@ class FusekiServer(object):
                 value_map['mr:{}'.format(role)]['mr:{}'.format(key)] = val[key]
             for sc_prop in ['mr:subject', 'mr:object']:
                 prop = queries.retrieve_scoped_property(self,
-                    value_map['mr:{}'.format(role)]['mr:{}'.format(sc_prop)])
-                for pkey in prop.keys():
+                    value_map['mr:{}'.format(role)]['{}'.format(sc_prop)])
+                for pkey in prop:
                     pv = prop[pkey]
                     value_map['mr:{}'.format(role)]['mr:{}'.format(pkey)] = pv
                         
@@ -377,7 +377,7 @@ class FusekiServer(object):
             referrer['mr:source'] = self._retrieve_component(mapping['source'])
             referrer['mr:target'] = self._retrieve_component(mapping['target'])
             if mapping.get('valueMaps'):
-                if isinstance(mapping['valueMaps'], string):
+                if isinstance(mapping['valueMaps'], str):
                     mapping['valueMaps'] = [mapping['valueMaps']]
                 for valmap in mapping['valueMaps']:#.split('&'):
                     referrer['mr:hasValueMap'].append(self._retrieve_value_map(valmap,

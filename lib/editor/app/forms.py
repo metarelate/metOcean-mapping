@@ -137,7 +137,8 @@ class Value(forms.Form):
     """
     # name =  forms.CharField(required=False,
     #                              widget=forms.TextInput(attrs={'size':'100'}))
-    name = forms.ChoiceField()
+    name = forms.ChoiceField(required=False)
+    _name = forms.CharField(required=False)
     value = forms.CharField(required=False)
     operator = forms.CharField(required=False)
     ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/tests.ttl')
@@ -155,7 +156,7 @@ class Value(forms.Form):
             # self.fields['name'].initial = F3
             umRes = moq.subject_and_plabel(fuseki_process,
                                          'http://um/umdpF3.ttl')
-            choices = [(um['subject'], um['notation']) for um in umRes]
+            choices = [('','')] + [(um['subject'], um['notation']) for um in umRes]
             self.fields['name'].choices = choices
             sns = moq.subject_and_plabel(fuseki_process,
                                          'http://um/stashconcepts.ttl')
@@ -176,8 +177,6 @@ class Value(forms.Form):
                                          'http://CF/cfmodel.ttl')
             choices = [('','')] + [(cf['subject'], cf['notation']) for cf in cfRes]
             self.fields['name'].choices = choices
-            self.fields['name'].required = False
-            self.fields['_name'] = forms.CharField(required=False)
             sns = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cf-standard-name-table.ttl')
             sn_choices = [('','')]
@@ -195,7 +194,7 @@ class Value(forms.Form):
             # self.fields['name'].initial = GRIB
             grRes = moq.subject_and_plabel(fuseki_process,
                                            'http://grib/apikeys.ttl')
-            choices = [(grib['subject'], grib['notation']) for grib in grRes]
+            choices = [('','')] + [(grib['subject'], grib['notation']) for grib in grRes]
             self.fields['name'].choices = choices
         else:
             raise ValueError('invalid format supplied: {}'.format(fformat))
@@ -303,10 +302,17 @@ class DerivedValue(forms.Form):
     _object = forms.ChoiceField()
     def __init__(self, *args, **kwargs):
         components = kwargs.pop('components')
-        super(DerivedValue, self).__init__(*args, **kwargs)
         components = [json.loads(component) for component in components]
-        components = [(json.dumps(component),component['mr:subject']['mr:hasProperty']['mr:name']) for
+        components = [(json.dumps(component),'{su} {op} {ob}'.format(
+                    su=component.get('mr:subject', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1],
+#                    component['mr:subject']['mr:hasProperty']['mr:name'],
+                    op=component.get('mr:operator', '').split('#')[-1], 
+                    ob=component.get('mr:object', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1])) for
                component in components]
+        super(DerivedValue, self).__init__(*args, **kwargs)
+        # components = [json.loads(component) for component in components]
+        # components = [(json.dumps(component),component['mr:subject']['mr:hasProperty']['mr:name']) for
+        #        component in components]
         self.fields['_subject'].choices = components
         self.fields['_object'].choices = components
     
@@ -376,6 +382,76 @@ class MappingMeta(forms.Form):
     #     if asource:
     #         raise forms.ValidationError
     #     return self.cleaned_data
+    # def clean(self):
+    #     globalDateTime = datetime.datetime.now().isoformat()
+    #     data = self.cleaned_data
+    #     mapping_p_o = collections.defaultdict(list)
+    #     ## take the new values from the form and add all of the initial values
+    #     ## not included in the 'remove' field
+    #     for label in ['owner','watcher']:
+    #         if data['add_%ss' % label] != '':
+    #             for val in data['add_%ss' % label].split(','):
+    #                 mapping_p_o['mr:%s' % label].append('"%s"' % val)
+    #         if data['%ss' % label] != '':
+    #             for val in data['%ss' % label].split(','):
+    #                 if val not in data['remove_%ss' % label].split(',') and\
+    #                     val not in mapping_p_o['mr:%s' % label].split(','):
+    #                     mapping_p_o['mr:%s' % label].append('"%s"' % val)
+
+    #     mapping_p_o['dc:creator'] = ['%s' % data['editor']]
+    #     mapping_p_o['dc:date'] = ['"%s"^^xsd:dateTime' % globalDateTime]
+    #     mapping_p_o['mr:status'] = ['"%s"' % data['next_status']]
+    #     if data['mapping'] != "":
+    #         mapping_p_o['dc:replaces'] = ['%s' % data['mapping']]
+    #     if data['comment'] != '':
+    #         mapping_p_o['skos:note'] = ['"%s"' % data['comment']]
+    #     mapping_p_o['mr:reason'] = ['"%s"' % data['next_reason']]
+    #     mapping_p_o['mr:source'] = ['%s' % data['source']]
+    #     mapping_p_o['mr:target'] = ['%s' % data['target']]
+    #     mapping_p_o['mr:invertible'] = ['"%s"' % data['invertible']]
+    #     if data.get('valueMaps'):
+    #         mapping_p_o['mr:hasValueMap'] = ['%s' % vm for vm in
+    #                                   data['valueMaps'].split('&')]
+
+    #     # #check to see if the updated mapping record is simply the last one
+    #     # changed = False
+    #     # if mapping_p_o.has_key('mr:owner') and \
+    #     #     mapping_p_o['mr:owner'] != ['"%s"' % owner for owner in form.cleaned_data['owners'].split(',')]:
+    #     #     changed = True
+    #     #     print 'owner: changed = True'
+    #     # if mapping_p_o.has_key('mr:watcher') and \
+    #     #     mapping_p_o['mr:watcher'] != ['"%s"' % watcher for watcher in form.cleaned_data['watchers'].split(',')]:
+    #     #     changed = True
+    #     #     print 'watcher: changed = True'
+    #     # if mapping_p_o['dc:creator'] != ['<%s>' % form.cleaned_data['last_editor']]:
+    #     #     changed = True
+    #     #     print 'creator: changed = True'
+    #     # if mapping_p_o['mr:status'] != ['"%s"' % form.cleaned_data['current_status']]:
+    #     #     changed = True
+    #     #     print 'status: changed = True'
+    #     # if mapping_p_o.has_key('skos:note') and \
+    #     #     mapping_p_o['skos:note'] != ['"%s"' % form.cleaned_data['comment']]:
+    #     #     changed = True
+    #     #     print 'comment: changed = True'
+    #     # if mapping_p_o['mr:reason'] != ['"%s"' % form.cleaned_data['reason']]:
+    #     #     changed = True
+    #     #     print 'reason: changed = True'
+    #     # if mapping_p_o['mr:source'] != ['<%s>' % form.cleaned_data['source']]:
+    #     #     changed = True
+    #     #     print 'source: changed = True'
+    #     # if mapping_p_o['mr:target'] != ['<%s>' % form.cleaned_data['target']]:
+    #     #     changed = True
+    #     #     print 'target: changed = True'
+    #     # if mapping_p_o['mr:invertible'] != []:
+    #     #     changed = True
+    #     #     print 'invertible: changed = True'
+    #     # if mapping_p_o['mr:valueMaps'] != ['<%s>' % form.cleaned_data['target']]:
+    #     #     changed = True
+    #     #     print 'target: changed = True'
+
+    #     mapping = mapping_p_o
+    #     mapping = moq.create_mapping(fuseki_process, mapping_p_o,True)
+    #     map_id = mapping[0]['map']
 
 
 class URLwidget(forms.TextInput):

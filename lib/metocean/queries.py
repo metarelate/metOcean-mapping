@@ -379,7 +379,8 @@ def get_property(fuseki_process, po_dict, debug=False):
     search_string = ''
     filter_string = ''
     assign_string = ''
-    for pred in preds:
+    block_string = ''
+    for pred in allowed_predicates.intersection(preds):
         if isinstance(po_dict[pred], list):
             if len(po_dict[pred]) != 1 and pred in single_predicates:
                 ec = 'get_property only accepts 1 statement per predicate {}'
@@ -406,6 +407,9 @@ def get_property(fuseki_process, po_dict, debug=False):
             ''' % {'p':pred.split(':')[-1]}
             filter_string += '''
             FILTER(?%ss = %i)''' % (pred.split(':')[-1], 1)
+    for pred in allowed_predicates.difference(preds):
+        block_string += '\n\t OPTIONAL{?property %s ?%s .}' % (pred, pred.split(':')[-1])
+        block_string += '\n\t FILTER(!BOUND(?%s))' % pred.split(':')[-1]
     if search_string != '':
         qstr = '''SELECT ?property
         WHERE { {
@@ -415,13 +419,15 @@ def get_property(fuseki_process, po_dict, debug=False):
         GRAPH <http://metarelate.net/concepts.ttl> {
         ?property %(assign)s %(search)s
         .
+        %(block)s
         } }
         GROUP BY ?property
         }
         %(filter)s
         }
         ''' % {'count':count_string,'assign':assign_string,
-               'search':search_string, 'filter':filter_string}
+               'search':search_string, 'filter':filter_string,
+               'block':block_string}
         results = fuseki_process.run_query(qstr, debug=debug)
         if len(results) == 0:
             sha1 = make_hash(po_dict)
@@ -833,8 +839,8 @@ def retrieve_value(fuseki_process, vId, debug=False):
     qstr = '''SELECT ?value ?operator ?subject ?object
     WHERE {
     GRAPH <http://metarelate.net/concepts.ttl> {
-        ?value mr:operator ?operator ;
-                  mr:subject ?subject .
+        ?value mr:subject ?subject .
+        OPTIONAL {?value mr:operator ?operator .}
         OPTIONAL {?value mr:object ?object . }
         FILTER(?value = %s)
         }

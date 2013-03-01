@@ -41,9 +41,14 @@
       a      skos:Concept ;
       skos:notation "DomainAxis" .
 
-<http://def.cfconventions.org/datamodel/AxisIndex> 
+<http://def.cfconventions.org/datamodel/CoordinateReferenceSystem> 
       a      skos:Concept ;
-      skos:notation "AxisIndex" .
+      skos:notation "CoordinateReferenceSystem" .
+
+
+<http://def.cfconventions.org/datamodel/axis_index> 
+      a      skos:Concept ;
+      skos:notation "axis_index" .
 
 
 <http://def.cfconventions.org/datamodel/points> 

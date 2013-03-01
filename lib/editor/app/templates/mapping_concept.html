@@ -89,9 +89,7 @@
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
           </li>
-      {% else prop_res = moq.get_property(fuseki_process, prop)
-                    cpid = '{}'.format(prop_res['property'])
-                    comp_mem['mr:hasProperty'][i] = cpid%}
+      {% else %}
         <li>dc:mediates</li>
         <ul>
         <li>{{ elem }}</li>

@@ -861,12 +861,12 @@ def retrieve_scoped_property(fuseki_process, spId, debug=False):
     return a value record from the provided id
     or None if one does not exist
     """
-    qstr = '''SELECT ?scopedProperty ?scope ?property
+    qstr = '''SELECT ?scopedProperty ?scope ?hasProperty
     WHERE {
     GRAPH <http://metarelate.net/concepts.ttl> {
         ?scopedProperty mr:scope ?scope ;
-                  mr:hasProperty ?property .
-        FILTER(?value = %s)
+                  mr:hasProperty ?hasProperty .
+        FILTER(?scopedProperty = %s)
         }
     }
     ''' % spId

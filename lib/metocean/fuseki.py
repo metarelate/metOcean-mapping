@@ -325,7 +325,7 @@ class FusekiServer(object):
                 c_dict['mr:hasProperty'].append(pref_prop_dict)
             for component in top_c.get('subComponent',[]):
                 subc_dict = self._retrieve_component(component)
-                c_dict.append(subc_dict)
+                c_dict['mr:hasComponent'].append(subc_dict)
                 # else:
                 #     raise ValueError('{} a malformed formatConcept'.format(
                 #                                                         fc_id))
@@ -341,26 +341,33 @@ class FusekiServer(object):
             inv = True
         else:
             raise ValueError('inv = {}, not "True" or "False"'.format(inv))
+        print '_retrieve_value_map'
         value_map = {'valueMap':valmap_id, 'mr:source':{}, 'mr:target':{}}
         vm_record = queries.retrieve_valuemap(self, valmap_id)
         if inv:
-            value_map['mr:source']['source'] = vm_record['target']
-            value_map['mr:target']['target'] = vm_record['source']
+            value_map['mr:source']['value'] = vm_record['target']
+            value_map['mr:target']['value'] = vm_record['source']
         else:
-            value_map['mr:source']['source'] = vm_record['source']
-            value_map['mr:target']['target'] = vm_record['target']
-        for role in ['source','target']:
+            value_map['mr:source']['value'] = vm_record['source']
+            value_map['mr:target']['value'] = vm_record['target']
+        for role in ['mr:source', 'mr:target']:
             val = queries.retrieve_value(self,
-                            value_map['mr:{}'.format(role)]['{}'.format(role)])
+                            value_map[role]['value'])
             for key in val.keys():
-                value_map['mr:{}'.format(role)]['mr:{}'.format(key)] = val[key]
+                value_map[role]['mr:{}'.format(key)] = val[key]
             for sc_prop in ['mr:subject', 'mr:object']:
-                prop = queries.retrieve_scoped_property(self,
-                    value_map['mr:{}'.format(role)]['{}'.format(sc_prop)])
-                for pkey in prop:
-                    pv = prop[pkey]
-                    value_map['mr:{}'.format(role)]['mr:{}'.format(pkey)] = pv
-                        
+                pid = value_map[role].get(sc_prop)
+                if pid:
+                    prop = queries.retrieve_scoped_property(self, pid)
+                    value_map[role][sc_prop] = {}
+                    for pkey in prop:
+                        pv = prop[pkey]
+                        value_map[role][sc_prop]['mr:{}'.format(pkey)] = pv
+                        if pkey == 'hasProperty':
+                            aprop = queries.retrieve_property(self, value_map[role][sc_prop]['mr:{}'.format(pkey)])
+                            value_map[role][sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
+                            for p in aprop:
+                                value_map[role][sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p] 
         return value_map
 
 
@@ -370,8 +377,8 @@ class FusekiServer(object):
         from the mapping Id
         """
         referrer = {'mapping': mapping['mapping'],
-                    'mr:source': {'formatConcept': ''},
-                    'mr:target': {'formatConcept': ''},
+                    'mr:source': {'component': mapping['source']},
+                    'mr:target': {'component': mapping['target']},
                     'mr:hasValueMap': []}
         if mapping.get('source') and mapping.get('target'):
             referrer['mr:source'] = self._retrieve_component(mapping['source'])
@@ -380,8 +387,7 @@ class FusekiServer(object):
                 if isinstance(mapping['valueMaps'], str):
                     mapping['valueMaps'] = [mapping['valueMaps']]
                 for valmap in mapping['valueMaps']:#.split('&'):
-                    referrer['mr:hasValueMap'].append(self._retrieve_value_map(valmap,
-                                                        mapping['inverted']))
+                    referrer['mr:hasValueMap'].append(self._retrieve_value_map(valmap, mapping['inverted']))
         return referrer
 
 

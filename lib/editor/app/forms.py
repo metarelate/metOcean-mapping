@@ -42,11 +42,11 @@ def get_states():
     
     """
     STATES = (
-        'Draft',
-        'Proposed',
-        'Approved',
-        'Broken',
-        'Deprecated',
+        '"Draft"',
+        '"Proposed"',
+        '"Approved"',
+        '"Broken"',
+        '"Deprecated"',
     )
     return STATES
 
@@ -58,12 +58,12 @@ def get_reasons():
     
     """
     REASONS = (
-        'new mapping',
-        'added metadata',
-        'corrected metadata',
-        'linked to new format',
-        'corrected links',
-        'changed status'
+        '"new mapping"',
+        '"added metadata"',
+        '"corrected metadata"',
+        '"linked to new format"',
+        '"corrected links"',
+        '"changed status"'
         )
     return REASONS
 
@@ -75,9 +75,9 @@ def formats():
     provided by a query
 
     """
-    format_choices = [('http://metarelate.net/metocean/format/grib', 'GRIB'),
-                      ('http://metarelate.net/metocean/format/um', 'UM'),
-                      ('http://metarelate.net/metocean/format/cf', 'CF')]
+    format_choices = [('<http://metarelate.net/metocean/format/grib>', 'GRIB'),
+                      ('<http://metarelate.net/metocean/format/um>', 'UM'),
+                      ('<http://metarelate.net/metocean/format/cf>', 'CF')]
     return format_choices
 
 class MappingFormats(forms.Form):
@@ -135,8 +135,6 @@ class Value(forms.Form):
     """
     form to define a value for use in a concept
     """
-    # name =  forms.CharField(required=False,
-    #                              widget=forms.TextInput(attrs={'size':'100'}))
     name = forms.ChoiceField(required=False)
     _name = forms.CharField(required=False)
     value = forms.CharField(required=False)
@@ -147,13 +145,9 @@ class Value(forms.Form):
     operator = forms.ChoiceField(required=False, choices=ops)
     
     def __init__(self, *args, **kwargs):
-        fformat = kwargs.pop('fformat')
+        self.fformat = kwargs.pop('fformat')
         super(Value, self).__init__(*args, **kwargs)
-        op_url = '<http://www.openmath.org/cd/relation1.xhtml#eq>'
-        self.fields['operator'].initial = op_url
-        if fformat == 'um':
-            # F3 = '<http://reference.metoffice.gov.uk/def/um/umdp/F3/>'
-            # self.fields['name'].initial = F3
+        if self.fformat == 'um':
             umRes = moq.subject_and_plabel(fuseki_process,
                                          'http://um/umdpF3.ttl')
             choices = [('','')] + [(um['subject'], um['notation']) for um in umRes]
@@ -170,9 +164,7 @@ class Value(forms.Form):
             fc_choices += [(um['subject'], um['notation']) for um in fcs]
             self.fields['field_code'] = forms.ChoiceField(required=False,
                                                           choices=fc_choices)
-        elif fformat == 'cf':
-            # CF = '<http://def.cfconventions.org/data_model/>'
-            # self.fields['name'].initial = CF
+        elif self.fformat == 'cf':
             cfRes = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cfmodel.ttl')
             choices = [('','')] + [(cf['subject'], cf['notation']) for cf in cfRes]
@@ -187,11 +179,10 @@ class Value(forms.Form):
                                          'http://CF/cfmodel.ttl')
             md_choices = [('','')]
             md_choices += [(mo['subject'], mo['notation']) for mo in mod]
+            print md_choices
             self.fields['cf model'] = forms.ChoiceField(required=False,
                                                         choices=md_choices)
-        elif fformat == 'grib':
-            # GRIB = '<http://def.ecmwf.int/api/grib/keys/>'
-            # self.fields['name'].initial = GRIB
+        elif self.fformat == 'grib':
             grRes = moq.subject_and_plabel(fuseki_process,
                                            'http://grib/apikeys.ttl')
             choices = [('','')] + [(grib['subject'], grib['notation']) for grib in grRes]
@@ -214,9 +205,13 @@ class Value(forms.Form):
             if not _name:
                 raise forms.ValidationError('a name must be selected')
             else:
-                n = '<http://def.cfconventions.org/datamodel/attribute_name/{}>'
-                self.cleaned_data['name'] = n 
-                self.cleaned_data['name'] = self.cleaned_data['name'].format(_name)
+                if self.fformat == 'cf':
+                    n = '<http://def.cfconventions.org/datamodel/attribute_name#{}>'
+                elif self.fformat == 'um':
+                    n = '<http://reference.metoffice.gov.uk/def/um/computed_value#{}>'
+                elif self.fformat == 'grib':
+                    n = '<http://reference.metoffice.gov.uk/def/grib/computed_value#{}>'
+                self.cleaned_data['name'] = n.format(_name) 
         if op and not (fcode or lit or stcode or st_name or cfmodel):
             raise forms.ValidationError('if operator is set '
                                         'then a value or code is '
@@ -254,6 +249,8 @@ class Value(forms.Form):
         except ValueError:
             if lit.startswith('http'):
                 lit = '<{}>'.format(lit)
+            elif lit.startswith('<http'):
+                lit = lit
             else:
                 lit = '"{}"'.format(lit)
         self.cleaned_data['value'] = lit
@@ -322,11 +319,7 @@ class MappingMeta(forms.Form):
     pne the source, target and value maps are defined
     """
     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
-    # invertible = forms.BooleanField(widget=forms.NullBooleanSelect(),
-    #                                 required=False)
     invertible = forms.BooleanField(required=False)
-    ## i cannot believe that an answer of false to this
-    ## type hits the 'required validatio step!!!
     mapping = forms.CharField(max_length=200, required=False,
                               widget=forms.TextInput(attrs={'readonly':True}))
     last_edit = forms.CharField(max_length=50, required=False,
@@ -348,14 +341,14 @@ class MappingMeta(forms.Form):
                              widget=forms.TextInput(attrs={'readonly':True}))
     next_reason = forms.ChoiceField(choices=[(x,x) for x in get_reasons()],
                                     required=False)
-    owners = forms.CharField(max_length=200, required=False,
-                             widget=forms.TextInput(attrs={'readonly':True}))
-    add_owners = forms.CharField(max_length=200, required=False)
-    remove_owners = forms.CharField(max_length=200, required=False)
-    watchers = forms.CharField(max_length=200, required=False,
-                               widget=forms.TextInput(attrs={'readonly':True}))
-    add_watchers = forms.CharField(max_length=200, required=False)
-    remove_watchers = forms.CharField(max_length=200, required=False)
+    # owners = forms.CharField(max_length=200, required=False,
+    #                          widget=forms.TextInput(attrs={'readonly':True}))
+    # add_owners = forms.CharField(max_length=200, required=False)
+    # remove_owners = forms.CharField(max_length=200, required=False)
+    # watchers = forms.CharField(max_length=200, required=False,
+    #                            widget=forms.TextInput(attrs={'readonly':True}))
+    # add_watchers = forms.CharField(max_length=200, required=False)
+    # remove_watchers = forms.CharField(max_length=200, required=False)
     replaces = forms.CharField(max_length=128, required=False,
                                widget=forms.TextInput(attrs={'readonly':True}))
     status = forms.CharField(max_length=15, required=False,
@@ -366,93 +359,42 @@ class MappingMeta(forms.Form):
                               widget=forms.TextInput(attrs={'hidden':True}))
     target = forms.CharField(max_length=200, 
                               widget=forms.TextInput(attrs={'hidden':True}))
-    valueMaps = forms.CharField(max_length=1000, required=False, 
-                              widget=forms.TextInput(attrs={'hidden':True}))
-    # def __init__(self, *args, **kwargs):
-    #     super(MappingMeta, self).__init__(*args, **kwargs)
-    #     dir(self)
-    #     print self.initial
-    #     self.init = self.initial
-    # def clean(self):
-    #     print 'init:  \n', self.init
-    #     if self.initial == self.data:
-    #         raise forms.ValidationError('i know the form has not changed')
-    #     raise forms.ValidationError('the form has not changed')
-    #     asource = queries.multiple_mappings(fuseki_process, test_map=self.data['mapping'])
-    #     if asource:
-    #         raise forms.ValidationError
-    #     return self.cleaned_data
-    # def clean(self):
-    #     globalDateTime = datetime.datetime.now().isoformat()
-    #     data = self.cleaned_data
-    #     mapping_p_o = collections.defaultdict(list)
-    #     ## take the new values from the form and add all of the initial values
-    #     ## not included in the 'remove' field
-    #     for label in ['owner','watcher']:
-    #         if data['add_%ss' % label] != '':
-    #             for val in data['add_%ss' % label].split(','):
-    #                 mapping_p_o['mr:%s' % label].append('"%s"' % val)
-    #         if data['%ss' % label] != '':
-    #             for val in data['%ss' % label].split(','):
-    #                 if val not in data['remove_%ss' % label].split(',') and\
-    #                     val not in mapping_p_o['mr:%s' % label].split(','):
-    #                     mapping_p_o['mr:%s' % label].append('"%s"' % val)
+    valueMaps = forms.CharField(max_length=1000, required=False, widget=forms.TextInput(attrs={'hidden':True}))
 
-    #     mapping_p_o['dc:creator'] = ['%s' % data['editor']]
-    #     mapping_p_o['dc:date'] = ['"%s"^^xsd:dateTime' % globalDateTime]
-    #     mapping_p_o['mr:status'] = ['"%s"' % data['next_status']]
-    #     if data['mapping'] != "":
-    #         mapping_p_o['dc:replaces'] = ['%s' % data['mapping']]
-    #     if data['comment'] != '':
-    #         mapping_p_o['skos:note'] = ['"%s"' % data['comment']]
-    #     mapping_p_o['mr:reason'] = ['"%s"' % data['next_reason']]
-    #     mapping_p_o['mr:source'] = ['%s' % data['source']]
-    #     mapping_p_o['mr:target'] = ['%s' % data['target']]
-    #     mapping_p_o['mr:invertible'] = ['"%s"' % data['invertible']]
-    #     if data.get('valueMaps'):
-    #         mapping_p_o['mr:hasValueMap'] = ['%s' % vm for vm in
-    #                                   data['valueMaps'].split('&')]
-
-    #     # #check to see if the updated mapping record is simply the last one
-    #     # changed = False
-    #     # if mapping_p_o.has_key('mr:owner') and \
-    #     #     mapping_p_o['mr:owner'] != ['"%s"' % owner for owner in form.cleaned_data['owners'].split(',')]:
-    #     #     changed = True
-    #     #     print 'owner: changed = True'
-    #     # if mapping_p_o.has_key('mr:watcher') and \
-    #     #     mapping_p_o['mr:watcher'] != ['"%s"' % watcher for watcher in form.cleaned_data['watchers'].split(',')]:
-    #     #     changed = True
-    #     #     print 'watcher: changed = True'
-    #     # if mapping_p_o['dc:creator'] != ['<%s>' % form.cleaned_data['last_editor']]:
-    #     #     changed = True
-    #     #     print 'creator: changed = True'
-    #     # if mapping_p_o['mr:status'] != ['"%s"' % form.cleaned_data['current_status']]:
-    #     #     changed = True
-    #     #     print 'status: changed = True'
-    #     # if mapping_p_o.has_key('skos:note') and \
-    #     #     mapping_p_o['skos:note'] != ['"%s"' % form.cleaned_data['comment']]:
-    #     #     changed = True
-    #     #     print 'comment: changed = True'
-    #     # if mapping_p_o['mr:reason'] != ['"%s"' % form.cleaned_data['reason']]:
-    #     #     changed = True
-    #     #     print 'reason: changed = True'
-    #     # if mapping_p_o['mr:source'] != ['<%s>' % form.cleaned_data['source']]:
-    #     #     changed = True
-    #     #     print 'source: changed = True'
-    #     # if mapping_p_o['mr:target'] != ['<%s>' % form.cleaned_data['target']]:
-    #     #     changed = True
-    #     #     print 'target: changed = True'
-    #     # if mapping_p_o['mr:invertible'] != []:
-    #     #     changed = True
-    #     #     print 'invertible: changed = True'
-    #     # if mapping_p_o['mr:valueMaps'] != ['<%s>' % form.cleaned_data['target']]:
-    #     #     changed = True
-    #     #     print 'target: changed = True'
-
-    #     mapping = mapping_p_o
-    #     mapping = moq.create_mapping(fuseki_process, mapping_p_o,True)
-    #     map_id = mapping[0]['map']
-
+    def clean(self):
+        source = self.data.get('source')
+        map_id = self.data.get('mapping')
+        if source:
+            src_maps = moq.multiple_mappings(fuseki_process, source)
+            if len(src_maps) > 1:
+                e = 'mappings already exist for this source'
+                raise forms.ValidationError(e)
+        if map_id:
+            mapping = moq.get_mapping_by_id(fuseki_process, map_id)
+            if not mapping:
+                raise forms.ValidationError('the mapping Id is not valid')
+            changed = False
+            changes = []
+            change_keys = [('source','source'), ('target','target'),
+                           ('invertible','invertible'), ('status','status'),
+                           ('replaces', 'replaces'), ('comment','note'),
+                           ('next_reason', 'reason'), ('editor', 'creator'),
+                           ('valueMaps', 'valueMaps')]
+            for fkey, mkey in change_keys:
+                if self.data.get(fkey) != mapping.get(mkey, ''):
+                    changed = True
+                    changes.append((mkey,(self.data.get(fkey),
+                                          mapping.get(mkey, ''))))
+            if changed == False:
+                raise forms.ValidationError('No update: mapping not changed')
+            else:
+                print 'changes:', changes
+                return self.cleaned_data
+        # if False:
+        #     return self.cleaned_Data
+        # else:
+        #     raise forms.ValidationError('well, I would have returned')
+        
 
 class URLwidget(forms.TextInput):
     def render(self, name, value, attrs=None):
@@ -497,117 +439,117 @@ class HomeForm(forms.Form):
         return self.cleaned_data
 
 
-class SearchParam(forms.Form):
-    '''
-    '''
-    parameter = forms.ChoiceField()
-    def __init__(self,  *args, **kwargs):
-        super(SearchParam, self).__init__(*args, **kwargs)
-        choices = (('', ''),
-                   ('http://i.am.a/avocet', 'avocet'),
-                   ('http://i.am.a/beaver', 'beaver'),
-                   ('http://i.am.a/cheetah', 'cheetah'),
-                   ('http://i.am.a/dugong', 'dugong'),
-                   ('http://i.am.a/emu', 'emu'))
-        self.fields['parameter'].choices = choices
+# class SearchParam(forms.Form):
+#     '''
+#     '''
+#     parameter = forms.ChoiceField()
+#     def __init__(self,  *args, **kwargs):
+#         super(SearchParam, self).__init__(*args, **kwargs)
+#         choices = (('', ''),
+#                    ('http://i.am.a/avocet', 'avocet'),
+#                    ('http://i.am.a/beaver', 'beaver'),
+#                    ('http://i.am.a/cheetah', 'cheetah'),
+#                    ('http://i.am.a/dugong', 'dugong'),
+#                    ('http://i.am.a/emu', 'emu'))
+#         self.fields['parameter'].choices = choices
 
 
-class UMSTASHParam(forms.Form):
-    """
-    A django form for adding UM STASH elements to a linkage search path
-    """
-    parameter = forms.ChoiceField()
-    def __init__(self,  *args, **kwargs):
-        super(UMSTASHParam, self).__init__(*args, **kwargs)
-        stashRes = moq.subject_by_graph(fuseki_process,
-                                        'http://um/stashconcepts.ttl')
-        # define choices
-        choices = [(stash['subject'], stash['subject'].split('/')[-1]) for
-                   stash in stashRes]
+# class UMSTASHParam(forms.Form):
+#     """
+#     A django form for adding UM STASH elements to a linkage search path
+#     """
+#     parameter = forms.ChoiceField()
+#     def __init__(self,  *args, **kwargs):
+#         super(UMSTASHParam, self).__init__(*args, **kwargs)
+#         stashRes = moq.subject_by_graph(fuseki_process,
+#                                         'http://um/stashconcepts.ttl')
+#         # define choices
+#         choices = [(stash['subject'], stash['subject'].split('/')[-1]) for
+#                    stash in stashRes]
         
 
-        self.fields['parameter'].choices = choices
+#         self.fields['parameter'].choices = choices
 
-class UMFCParam(forms.Form):
-    '''A django form for adding UM STASH elements to a linkage search path
-    '''
-    parameter = forms.ChoiceField()
-    def __init__(self,  *args, **kwargs):
-        super(UMFCParam, self).__init__(*args, **kwargs)
-        fcRs = moq.subject_by_graph(fuseki_process,
-                                        'http://um/fieldcode.ttl')
-        # define choices
-        choices = [(fc['subject'], fc['subject'].split('/')[-1]) for fc in fcRs]
+# class UMFCParam(forms.Form):
+#     '''A django form for adding UM STASH elements to a linkage search path
+#     '''
+#     parameter = forms.ChoiceField()
+#     def __init__(self,  *args, **kwargs):
+#         super(UMFCParam, self).__init__(*args, **kwargs)
+#         fcRs = moq.subject_by_graph(fuseki_process,
+#                                         'http://um/fieldcode.ttl')
+#         # define choices
+#         choices = [(fc['subject'], fc['subject'].split('/')[-1]) for fc in fcRs]
         
 
-        self.fields['parameter'].choices = choices
+#         self.fields['parameter'].choices = choices
 
 
-class GRIBParam(forms.Form):
-    '''A django form for adding GRIB elements to a linkage search path
-    '''
-    parameter = forms.ChoiceField()
-    def __init__(self,  *args, **kwargs):
-        super(GRIBParam, self).__init__(*args, **kwargs)
-        gribRes = moq.subject_by_graph(fuseki_process,
-                                       'http://grib/codesflags.ttl')
-        # define choices
-        choices = [(grib['subject'], grib['subject']) for grib in gribRes]
+# class GRIBParam(forms.Form):
+#     '''A django form for adding GRIB elements to a linkage search path
+#     '''
+#     parameter = forms.ChoiceField()
+#     def __init__(self,  *args, **kwargs):
+#         super(GRIBParam, self).__init__(*args, **kwargs)
+#         gribRes = moq.subject_by_graph(fuseki_process,
+#                                        'http://grib/codesflags.ttl')
+#         # define choices
+#         choices = [(grib['subject'], grib['subject']) for grib in gribRes]
         
-        self.fields['parameter'].choices = choices
+#         self.fields['parameter'].choices = choices
 
             
-class CFParam(forms.Form):
-    '''A django form for adding CF elements to a linkage search path
-    '''
-    parameter = forms.CharField(max_length=100, required=False)
-    cf_type = forms.ChoiceField(choices=[('Field','Field')], required=False)
-    standard_name = forms.ChoiceField(required=False)
-    long_name = forms.CharField(max_length=50, required=False)
-    units = forms.CharField(max_length=16, required=False)
+# class CFParam(forms.Form):
+#     '''A django form for adding CF elements to a linkage search path
+#     '''
+#     parameter = forms.CharField(max_length=100, required=False)
+#     cf_type = forms.ChoiceField(choices=[('Field','Field')], required=False)
+#     standard_name = forms.ChoiceField(required=False)
+#     long_name = forms.CharField(max_length=50, required=False)
+#     units = forms.CharField(max_length=16, required=False)
     
-    def __init__(self,  *args, **kwargs):
-        super(CFParam, self).__init__(*args, **kwargs)
-        snRes = moq.subject_by_graph(fuseki_process,
-                                     'http://CF/cf-standard-name-table.ttl')
-        # define choices
-        choices = [(name['subject'],name['subject'].split('/')[-1]) for
-                                                              name in snRes]
+#     def __init__(self,  *args, **kwargs):
+#         super(CFParam, self).__init__(*args, **kwargs)
+#         snRes = moq.subject_by_graph(fuseki_process,
+#                                      'http://CF/cf-standard-name-table.ttl')
+#         # define choices
+#         choices = [(name['subject'],name['subject'].split('/')[-1]) for
+#                                                               name in snRes]
 
-        self.fields['standard_name'].choices = choices
-        self.fields['parameter'].widget = forms.HiddenInput()
+#         self.fields['standard_name'].choices = choices
+#         self.fields['parameter'].widget = forms.HiddenInput()
         
-    def clean(self):
-        cleaned_data = super(CFParam, self).clean()
-        pred_obj = {}
-        pred_obj['mrcf:type'] = '"%s"' % cleaned_data.get('cf_type')
-        if cleaned_data.get('standard_name') != \
-                                        'http://cf-pcmdi.llnl.gov/documents/':
-            pred_obj['mrcf:standard_name'] = '<{}>'.format(
-                                             cleaned_data.get('standard_name'))
-        if cleaned_data.get('long_name') != '':
-            pred_obj['mrcf:long_name'] = '"%s"' % cleaned_data.get('long_name')
-        if cleaned_data.get('units') != '':
-            pred_obj['mrcf:units'] = '"%s"' % cleaned_data.get('units')
-        # print repr(pred_obj)
-        cfres = moq.get_cflinks(fuseki_process, pred_obj)
-        # print 'cfres: ', cfres
-        if not cfres:
-            # if there is no result returned from the query, then
-            # create the record and rerun the query
-            cfres = moq.create_cflink(fuseki_process, pred_obj,
-                                      'http://www.metarelate.net/metocean/cf')
-            #cfres = moq.get_cflinks(fuseki_process, pred_obj)
-        # print len(cfres)
-        # print 'cfres: ', cfres
-        if len(cfres) == 1:
-            # assign the single result to be returned by the function
-            cflink = cfres[0]['s']
-        else:
-            cflink = ''
-        cleaned_data['parameter'] = cflink
-        # print 'cflink: ',cflink
-        return cleaned_data
+#     def clean(self):
+#         cleaned_data = super(CFParam, self).clean()
+#         pred_obj = {}
+#         pred_obj['mrcf:type'] = '"%s"' % cleaned_data.get('cf_type')
+#         if cleaned_data.get('standard_name') != \
+#                                         'http://cf-pcmdi.llnl.gov/documents/':
+#             pred_obj['mrcf:standard_name'] = '<{}>'.format(
+#                                              cleaned_data.get('standard_name'))
+#         if cleaned_data.get('long_name') != '':
+#             pred_obj['mrcf:long_name'] = '"%s"' % cleaned_data.get('long_name')
+#         if cleaned_data.get('units') != '':
+#             pred_obj['mrcf:units'] = '"%s"' % cleaned_data.get('units')
+#         # print repr(pred_obj)
+#         cfres = moq.get_cflinks(fuseki_process, pred_obj)
+#         # print 'cfres: ', cfres
+#         if not cfres:
+#             # if there is no result returned from the query, then
+#             # create the record and rerun the query
+#             cfres = moq.create_cflink(fuseki_process, pred_obj,
+#                                       'http://www.metarelate.net/metocean/cf')
+#             #cfres = moq.get_cflinks(fuseki_process, pred_obj)
+#         # print len(cfres)
+#         # print 'cfres: ', cfres
+#         if len(cfres) == 1:
+#             # assign the single result to be returned by the function
+#             cflink = cfres[0]['s']
+#         else:
+#             cflink = ''
+#         cleaned_data['parameter'] = cflink
+#         # print 'cflink: ',cflink
+#         return cleaned_data
         
 
 

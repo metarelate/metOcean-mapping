@@ -326,18 +326,21 @@ class FusekiServer(object):
             for component in top_c.get('subComponent',[]):
                 subc_dict = self._retrieve_component(component)
                 c_dict['mr:hasComponent'].append(subc_dict)
-                # else:
-                #     raise ValueError('{} a malformed formatConcept'.format(
-                #                                                         fc_id))
+            if top_c.get('mediates'):
+                c_dict['dc:mediates'] = [top_c['mediates']]
+            if top_c.get('requires'):
+                c_dict['dc:requires'] = top_c['requires']
+        else:
+            raise ValueError('{} a malformed formatConcept'.format(fc_id))
         return c_dict
 
     def _retrieve_value_map(self, valmap_id, inv):
         """
         returns a dictionary of valueMap information
         """
-        if inv == "False":
+        if inv == '"False"':
             inv = False
-        elif inv == "True":
+        elif inv == '"True"':
             inv = True
         else:
             raise ValueError('inv = {}, not "True" or "False"'.format(inv))
@@ -367,6 +370,8 @@ class FusekiServer(object):
                             aprop = queries.retrieve_property(self, value_map[role][sc_prop]['mr:{}'.format(pkey)])
                             value_map[role][sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
                             for p in aprop:
+#                                if not aprop[p].startswith('<http'):
+#                                    aprop[p] = '"{}"'.format(aprop[p])
                                 value_map[role][sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p] 
         return value_map
 
@@ -418,6 +423,15 @@ def process_data(jsondata):
                     else:
                         val = ['<{}>'.format(v) for v in val.split('&')]
                     # val = ['<{}>'.format(v) for v in val.split('&')]
+                else:
+                    try:
+                        int(val)
+                    except ValueError:
+                        try:
+                            float(val)
+                        except ValueError:
+                            if not val.startswith('<'):
+                                val = '"{}"'.format(val)
                 tmpdict[var] = val
         if tmpdict != {}:
             resultslist.append(tmpdict)

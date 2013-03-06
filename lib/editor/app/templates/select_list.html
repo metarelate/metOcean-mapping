@@ -31,6 +31,7 @@
 
 {% block content %}
 
+{% if invalid %}
 
 {% for inv in invalid %}
 
@@ -43,5 +44,20 @@
   {% endfor %}
 
 {% endfor %}
+{% endif %}
+
+{% if mappings %}
+
+{% for mapping in mappings %}
+
+<ul>
+<li><a href="{{ mapping.url }}">{{ mapping.label }}</a></li>
+</ul>
+
+
+{% endfor %}
+
+{% endif %}
 
 {% endblock %}
+

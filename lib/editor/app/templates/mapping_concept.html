@@ -56,7 +56,11 @@
 {% if mapping %}
 
 <tr>
-
+{% if amend %}
+<ul>
+<li><a href="{{ amend.url }}">{{ amend.label }}</a></li>
+</ul>
+{% endif %}
     <td>
 
     <h2>Mapping Source</h2>
@@ -70,8 +74,20 @@
     </td></tr>
     {% if mapping|multi_key:"mr:source,dc:requires" %}
     <tr><td>
+
+
+    {% if mapping|multi_key:"mr:source,dc:requires" %}
+    <tr><td>
     <h4>Mediators</h4>
     <ul>
+    {% else %}
+    {% if mapping|multi_key:"mr:source,dc:mediates" %}
+        <tr><td>
+        <h4>Mediators</h4>
+        <ul>
+    {% endif %}
+    {% endif %}
+
     {% for elem in mapping|multi_key:"mr:source,dc:requires" %}
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
@@ -145,10 +161,20 @@
     <h4>Format</h4>
     {{ mapping|prefix_uri:"mr:target,mr:hasFormat" }}
     </td></tr>
+
     {% if mapping|multi_key:"mr:target,dc:requires" %}
     <tr><td>
     <h4>Mediators</h4>
     <ul>
+    {% else %}
+    {% if mapping|multi_key:"mr:target,dc:mediates" %}
+        <tr><td>
+        <h4>Mediators</h4>
+        <ul>
+    {% endif %}
+    {% endif %}
+
+    {% if mapping|multi_key:"mr:target,dc:requires" %}
     {% for elem in mapping|multi_key:"mr:target,dc:requires" %}
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
@@ -170,7 +196,7 @@
         <li>dc:mediates</li>
         <ul>
         <li>{{ elem }}</li>
-        </ul>
+         </ul>
       {% endif %}
     {% endfor %}
     </ul>

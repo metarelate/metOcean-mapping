@@ -1009,10 +1009,14 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     return [{'map':'<{}>'.format(mapping)}]
 
 
-def get_mapping_by_id(fuseki_process, map_id, debug=False):
+def get_mapping_by_id(fuseki_process, map_id, valid=True, debug=False):
     """
     return a mapping record if one exists, from the provided id
     """
+    vstr = ''
+    if valid:
+        vstr = '\tFILTER (?status NOT IN ("Deprecated", "Broken"))'
+        vstr += '\n\tMINUS {?map ^dc:replaces+ ?anothermap}'
     qstr = '''SELECT ?mapping ?source ?target ?invertible ?replaces ?status
                      ?note ?reason ?date ?creator ?inverted
     (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = '&') AS ?owners)
@@ -1034,11 +1038,12 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
     OPTIONAL {?mapping mr:owner ?owner .}
     OPTIONAL {?mapping mr:watcher ?watcher .}
     FILTER(?mapping = %s)
+    %s
     }
     }
     GROUP BY ?mapping ?source ?target ?invertible ?replaces
              ?status ?note ?reason ?date ?creator ?inverted
-    ''' % str(map_id)
+    ''' % (map_id, vstr)
     result = fuseki_process.run_query(qstr, debug=debug)
     if result == []:
         result = None
@@ -1051,17 +1056,18 @@ def get_mapping_by_id(fuseki_process, map_id, debug=False):
 
 ###validation rules
 
-def multiple_mappings(fuseki_process, test_map=None, debug=False):
+def multiple_mappings(fuseki_process, test_source=None, debug=False):
     """
     returns all the mappings which map the same source to a different target
+    where the targets are the same format
     filter to a single test mapping with test_map
     """
     tm_filter = ''
-    if test_map:
+    if test_source:
         pattern = '<http.*>'
         pattern = re.compile(pattern)
-        if pattern.match(test_map):
-            tm_filter = '\n\tFILTER(?amap = {})'.format()
+        if pattern.match(test_source):
+            tm_filter = '\n\tFILTER(?asource = {})'.format(test_source)
     qstr = '''SELECT ?amap ?asource ?atarget ?bmap ?bsource ?btarget
     (GROUP_CONCAT(DISTINCT(?value); SEPARATOR='&') AS ?signature)
     WHERE {
@@ -1156,6 +1162,74 @@ def valid_vocab(fuseki_process, debug=False):
     '''
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
+
+#### search queries ###
+
+def mapping_by_properties(fuseki_process, prop_list, debug=False):
+    """
+    Return the mapping id's which contain all of the proerties
+    in the list of property dictionaries
+    
+    """
+    mapping = None
+    for prop_dict in prop_list:
+        fstr = ''
+        name = prop_dict.get('mr:name')
+        op = prop_dict.get('mr:operator')
+        value = prop_dict.get('rdf:value')
+        if name:
+            fstr += '\tFILTER(?name = {})\n'.format(name)
+        if op:
+            fstr += '\tFILTER(?operator = {})\n'.format(op)
+        if value:
+            fstr += '\tFILTER(?value = {})\n'.format(value)
+            
+        qstr = '''SELECT DISTINCT ?mapping 
+        WHERE {
+        GRAPH <http://metarelate.net/mappings.ttl> {    
+        ?mapping rdf:type mr:Mapping ;
+                 mr:source ?source ;
+                 mr:target ?target ;
+                 mr:status ?status ;
+
+        FILTER (?status NOT IN ("Deprecated", "Broken"))
+        MINUS {?mapping ^dc:replaces+ ?anothermap}
+        }
+        GRAPH <http://metarelate.net/concepts.ttl> { {
+        ?source mr:hasProperty ?property
+        }
+        UNION {
+        ?target mr:hasProperty ?property
+        }
+        UNION {
+        ?source mr:hasComponent|mr:hasProperty ?property
+        }
+        UNION {
+        ?target mr:hasComponent|mr:hasProperty ?property
+        }
+        UNION {
+        ?source mr:hasProperty|mr:hasComponent|mr:hasProperty ?property
+        }
+        UNION {
+        ?target mr:hasProperty|mr:hasComponent|mr:hasProperty ?property
+        }
+        ?property mr:name ?name .
+        OPTIONAL{?property rdf:value ?value . }
+        OPTIONAL{?property mr:operator ?operator . }
+        %s
+        }
+        }
+        ''' % fstr
+        results = fuseki_process.run_query(qstr, debug=debug)
+        print results
+        maps = set([r['mapping'] for r in results])
+        if not mapping:
+            mappings = maps
+        else:
+            mappings.intersection_update(maps)
+    print mappings
+    return mappings
+
 
 ##### legacy ###
 ######  not functional, not for review #######

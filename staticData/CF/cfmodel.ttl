@@ -103,9 +103,9 @@
       a      skos:Concept ;
       skos:notation "long_name" .
 
-<http://def.cfconventions.org/datamodel/attribute> 
+<http://def.cfconventions.org/datamodel/attribute#> 
       a      skos:Concept ;
-      skos:notation "attribute" .
+      skos:notation "#" .
 
 <http://def.cfconventions.org/datamodel/aux_coordinate> 
       a      skos:Concept ;

@@ -58,11 +58,6 @@ def home(request):
         if form.is_valid():
             invalids = form.cleaned_data.get('validation')
             if invalids:
-                # for key in invalids:
-                #     invalids[key] = '|'.join([inv['amap'] for
-                #                               inv in invalids[key]])
-                # request_string = '|'.join([invalids[key] for key in invalids])
-                # print request_string
                 url = url_with_querystring(reverse('invalid_mappings'),
                                            ref=json.dumps(invalids))
                 response = HttpResponseRedirect(url)
@@ -121,12 +116,8 @@ def _prop_id(members):
                 for i, (prop, new_prop) in enumerate(zip(props, new_props)):
                     prop_res = moq.get_property(fuseki_process, prop)
                     cpid = '{}'.format(prop_res['property'])
-                    #print 'props:', props
                     props[i] = cpid
-                    #print 'props:', props
-                    #print 'new_props:', new_props
                     new_props[i]['component'] = cpid
-                    #print 'new_props:', new_props
             else:
                 #validation error please
                 raise ValueError('If a property has a component that component'
@@ -150,40 +141,10 @@ def url_with_querystring(path, **kwargs):
     return path + '?' + urllib.urlencode(kwargs)
 
 
-# def _create_concepts(key, request_search, new_map, concepts):
-#     """
-#     helper to create concepts in the triple store
-#     """
-#     if isinstance(request_search[key]['skos:member'], list):
-#         subc_ids = []
-#         for i,member in enumerate(request_search[key]['skos:member']):
-#             if member.get('skos:member') is not None:
-#                 prop_ids, members = _prop_id(member.get('skos:member'))
-#                 sub_concept_dict = {
-#                     'mr:format': '<%s>' % request_search[key]['mr:format'],
-#                     'skos:member':prop_ids}                    
-#                 sub_concept = moq.get_format_concept(fuseki_process,
-#                                                      sub_concept_dict)
-#                 subc_ids.append('%s' % sub_concept['formatConcept'])
-#                 new_map[key]['skos:member'][i]['formatConcept'] = \
-#                                 '%s' % sub_concept['formatConcept']
-#         prop_ids, members = _prop_id(request_search[key]['skos:member'])
-#         concept_dict = {'mr:format':'<%s>' % request_search[key]['mr:format'],
-#                                     'skos:member':prop_ids+subc_ids}
-#         if request_search[key].get('dc:mediates'):
-#             concept_dict['dc:mediates'] = request_search[key]['dc:mediates']
-#         if request_search[key].get('dc:requires'):
-#             concept_dict['dc:requires'] = request_search[key]['dc:requires']
-#         concept = moq.get_format_concept(fuseki_process, concept_dict)
-#         if concept:
-#             concepts[key] = concept['formatConcept']
-#         else:
-#             ec = 'formatConcept get did not return 1 id {}'.format(concept)
-#             raise ValueError(ec)
-#     return new_map, concepts
-
 def _create_components(key, request_search, new_map, components):
     """
+    return the mapping json structure and components list having created
+    relevant component records in the triple store
 
     """
     subc_ids = []
@@ -192,13 +153,13 @@ def _create_components(key, request_search, new_map, components):
         if mem.get('mr:hasProperty'):
             prop_ids, newm['mr:hasProperty'] = _prop_id(mem.get('mr:hasProperty'))
             sub_concept_dict = {
-                'mr:hasFormat': '<%s>' % request_search[key]['mr:hasFormat'],
+                'mr:hasFormat': '%s' % request_search[key]['mr:hasFormat'],
                 'mr:hasProperty':prop_ids}                    
             sub_comp = moq.get_component(fuseki_process,
                                                  sub_concept_dict)
             subc_ids.append('%s' % sub_comp['component'])
             newm['component'] = '%s' % sub_comp['component']
-    comp_dict = {'mr:hasFormat':'<%s>' % request_search[key]['mr:hasFormat'],
+    comp_dict = {'mr:hasFormat':'%s' % request_search[key]['mr:hasFormat'],
                                 'mr:hasComponent':subc_ids}
     comp = moq.get_component(fuseki_process, comp_dict)
     if comp:
@@ -210,10 +171,12 @@ def _create_components(key, request_search, new_map, components):
 
 def _create_properties(key, request_search, new_map, components):
     """
+    return the mapping json structure and components list having created
+    relevant property records in the triple store
     """
     props = request_search[key]['mr:hasProperty']
     prop_ids, new_map[key]['mr:hasProperty'] = _prop_id(props)
-    comp_dict = {'mr:hasFormat':'<%s>' % request_search[key]['mr:hasFormat'],
+    comp_dict = {'mr:hasFormat':'%s' % request_search[key]['mr:hasFormat'],
                                 'mr:hasProperty':prop_ids}
     if request_search[key].get('dc:mediates'):
         comp_dict['dc:mediates'] = request_search[key]['dc:mediates']
@@ -233,8 +196,9 @@ def _component_links(key, request_search, amended_dict):
     helper method
     provides urls in amended_dict for adding and removing concepts
     """
-    fformurl = '<%s>' % request_search[key]['mr:hasFormat']
+    fformurl = '%s' % request_search[key]['mr:hasFormat']
     fformat = request_search[key]['mr:hasFormat'].split('/')[-1]
+    fformat = fformat.rstrip('>')
     ## 'add a new component' link
     fterm = copy.deepcopy(request_search)
     if not fterm[key].get('mr:hasProperty'):
@@ -435,13 +399,10 @@ def define_mediator(request, mediator, fformat):
         mediator = form.cleaned_data['mediator']
         request_search_path = request_search_path.replace('&&&&',
                                                           mediator)
-        # request_search_path = json.dumps(request_search)
         url = url_with_querystring(reverse('mapping_concepts'),
                                    ref=request_search_path)
         response = HttpResponseRedirect(url)
-        #return HttpResponseRedirect(url)
     else:
-        # form = forms.Mediator(fformat=fformat)
         con_dict = {'form':form}
         if mediator == 'dc:mediates':
             links = []
@@ -608,10 +569,6 @@ def define_valuemap(request):
             request_search['mr:hasValueMap'].append(new_vmap)
             if request_search.get('derived_values'):
                 del request_search['derived_values']
-                # {'mr:sourceFC':source[0],
-                #                                   'mr:sourceVal':source[1],
-                #                                   'mr:targetFC':target[0],
-                #                                   'mr:targetVal':target[1]})
             request_search_path = json.dumps(request_search)
             url = url_with_querystring(reverse('value_maps'),
                                        ref=request_search_path)
@@ -717,28 +674,6 @@ def define_property(request, fformat):
     return response
 
 
-# def define_concept(request, fformat):
-#     """
-#     returns a view to define an indivdual  concept
-#     """
-#     request_search_path = request.GET.get('ref', '')
-#     request_search_path = urllib.unquote(request_search_path).decode('utf8')
-#     if request.method == 'POST':
-#         form = forms.FormatConcept(request.POST, fformat=fformat)
-#         if form.is_valid():
-#             new_value = {'skos:member':[{}]}
-#             newv = json.dumps(new_value)
-#             request_search_path = request_search_path.replace('"&&&&"', newv)
-#             url = url_with_querystring(reverse('mapping_concepts'),
-#                                        ref=request_search_path)
-#             response = HttpResponseRedirect(url)
-#     else:
-#         form = forms.FormatConcept(fformat=fformat)
-#         con_dict = {'form':form}
-#         context = RequestContext(request, con_dict)
-#         response = render_to_response('simpleform.html', context)
-#     return response
-
     
 def mapping_edit(request):
     """
@@ -769,24 +704,34 @@ def mapping_edit(request):
                    , 'valueMaps':'&'.join([vm.get('valueMap') for vm
                                          in request_search.get('mr:hasValueMap',
                                                                [])])}
-        # print 'initial:  ', initial
         map_id = request_search.get('mapping')
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id)
-            # print 'mapping:', mapping
-            # print 'initial:', initial
             ts = initial['source'] == mapping['source']
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \
                   mapping.get('hasValueMaps', '').split('&').sort()
             if ts and tt and tvm:
-                initial = mapping                
+                initial = mapping
+                if mapping.get('valueMaps'):
+                    initial['valueMaps'] = '&'.join(mapping['valueMaps'])
+                if mapping.get('note'):
+                    initial['comment'] = mapping['note']
+                if mapping.get('reason'):
+                    initial['next_reason'] = mapping['reason']
+                if mapping.get('status'):
+                    initial['next_status'] = mapping['status']
+                if mapping.get('creator'):
+                    initial['last_editor'] = mapping['creator']
             else:
                 raise ValueError('mismatch in referrer')
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = request_search
     con_dict['form'] = form
+    con_dict['amend'] = {'url': url_with_querystring(reverse(mapping_concepts),
+                                                    ref=request_search_path),
+                        'label': 'Re-define this Mapping'}
     context = RequestContext(request, con_dict)
     return render_to_response('mapping_concept.html', context)
 
@@ -798,70 +743,30 @@ def process_form(form, request_search_path):
     mapping_p_o = collections.defaultdict(list)
     ## take the new values from the form and add all of the initial values
     ## not included in the 'remove' field
-    for label in ['owner','watcher']:
-        #data = form.cleaned_data
-        #if data['add_()s'.format(label)] != '':
-        if data['add_%ss' % label] != '':
-            for val in data['add_%ss' % label].split(','):
-                mapping_p_o['mr:%s' % label].append('"%s"' % val)
-        if data['%ss' % label] != '':
-            for val in data['%ss' % label].split(','):
-                if val not in data['remove_%ss' % label].split(',') and\
-                    val not in mapping_p_o['mr:%s' % label].split(','):
-                    mapping_p_o['mr:%s' % label].append('"%s"' % val)
-        #if len(mapping_p_o['mr:%s' % label]) == 0:
-        #    mapping_p_o['mr:%s' % label] = ['"None"']
-
+    ## to be reimplemented
+    # for label in ['owner','watcher']:
+    #     if data['add_%ss' % label] != '':
+    #         for val in data['add_%ss' % label].split(','):
+    #             mapping_p_o['mr:%s' % label].append('"%s"' % val)
+    #     if data['%ss' % label] != '':
+    #         for val in data['%ss' % label].split(','):
+    #             if val not in data['remove_%ss' % label].split(',') and\
+    #                 val not in mapping_p_o['mr:%s' % label].split(','):
+    #                 mapping_p_o['mr:%s' % label].append('"%s"' % val)
     mapping_p_o['dc:creator'] = ['%s' % data['editor']]
     mapping_p_o['dc:date'] = ['"%s"^^xsd:dateTime' % globalDateTime]
-    mapping_p_o['mr:status'] = ['"%s"' % data['next_status']]
+    mapping_p_o['mr:status'] = ['%s' % data['next_status']]
     if data['mapping'] != "":
         mapping_p_o['dc:replaces'] = ['%s' % data['mapping']]
     if data['comment'] != '':
         mapping_p_o['skos:note'] = ['"%s"' % data['comment']]
-    mapping_p_o['mr:reason'] = ['"%s"' % data['next_reason']]
+    mapping_p_o['mr:reason'] = ['%s' % data['next_reason']]
     mapping_p_o['mr:source'] = ['%s' % data['source']]
     mapping_p_o['mr:target'] = ['%s' % data['target']]
-    mapping_p_o['mr:invertible'] = ['"%s"' % data['invertible']]
+    mapping_p_o['mr:invertible'] = ['%s' % data['invertible']]
     if data.get('valueMaps'):
         mapping_p_o['mr:hasValueMap'] = ['%s' % vm for vm in
                                   data['valueMaps'].split('&')]
-
-    # #check to see if the updated mapping record is simply the last one
-    # changed = False
-    # if mapping_p_o.has_key('mr:owner') and \
-    #     mapping_p_o['mr:owner'] != ['"%s"' % owner for owner in form.cleaned_data['owners'].split(',')]:
-    #     changed = True
-    #     print 'owner: changed = True'
-    # if mapping_p_o.has_key('mr:watcher') and \
-    #     mapping_p_o['mr:watcher'] != ['"%s"' % watcher for watcher in form.cleaned_data['watchers'].split(',')]:
-    #     changed = True
-    #     print 'watcher: changed = True'
-    # if mapping_p_o['dc:creator'] != ['<%s>' % form.cleaned_data['last_editor']]:
-    #     changed = True
-    #     print 'creator: changed = True'
-    # if mapping_p_o['mr:status'] != ['"%s"' % form.cleaned_data['current_status']]:
-    #     changed = True
-    #     print 'status: changed = True'
-    # if mapping_p_o.has_key('skos:note') and \
-    #     mapping_p_o['skos:note'] != ['"%s"' % form.cleaned_data['comment']]:
-    #     changed = True
-    #     print 'comment: changed = True'
-    # if mapping_p_o['mr:reason'] != ['"%s"' % form.cleaned_data['reason']]:
-    #     changed = True
-    #     print 'reason: changed = True'
-    # if mapping_p_o['mr:source'] != ['<%s>' % form.cleaned_data['source']]:
-    #     changed = True
-    #     print 'source: changed = True'
-    # if mapping_p_o['mr:target'] != ['<%s>' % form.cleaned_data['target']]:
-    #     changed = True
-    #     print 'target: changed = True'
-    # if mapping_p_o['mr:invertible'] != []:
-    #     changed = True
-    #     print 'invertible: changed = True'
-    # if mapping_p_o['mr:valueMaps'] != ['<%s>' % form.cleaned_data['target']]:
-    #     changed = True
-    #     print 'target: changed = True'
 
     mapping = mapping_p_o
     mapping = moq.create_mapping(fuseki_process, mapping_p_o,True)
@@ -906,65 +811,7 @@ def invalid_mappings(request):
     return render_to_response('select_list.html', context)
 
 
-    
-##### non-functional: not for review ####################################
-
-
-def search_param(request):
-    '''
-    '''
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    param_list = request_search_path.split('|')
-    Searchform = forms.SearchParam
-    if request.method == 'POST': # If the form has been submitted...
-        form = Searchform(request.POST) # A form bound to the POST data
-        if form.is_valid():
-            param_list.append(form.cleaned_data['parameter'])
-            param_string = '|'.join(param_list).lstrip('|')
-            url = url_with_querystring(reverse('search'),ref=param_string)
-            response = HttpResponseRedirect(url)
-    else:
-        form = Searchform()
-        context = RequestContext(request, {
-            'form':form,
-            })
-        response = render_to_response('form.html', context)
-    return response
-
-def format_param(request, fformat):
-    '''
-    '''
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    param_list = request_search_path.split('|')
-    if fformat == 'umSTASH':
-        Searchform = forms.UMSTASHParam
-    elif fformat == 'umFC':
-        Searchform = forms.UMFCParam
-    elif fformat == 'cf':
-        Searchform = forms.CFParam
-    elif fformat == 'grib':
-        Searchform = forms.GRIBParam
-    else:
-        raise NameError("there is no form available for this format type")
-    if request.method == 'POST': # If the form has been submitted...
-        form = Searchform(request.POST) # A form bound to the POST data
-        if form.is_valid():
-            param_list.append(form.cleaned_data['parameter'])
-            param_string = '|'.join(param_list).lstrip('|')
-            if fformat.startswith('um'):
-                fformat = 'um'
-            url = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref=param_string)
-            response = HttpResponseRedirect(url)
-    else:
-        form = Searchform()
-        context = RequestContext(request, {
-            'form':form,
-            })
-        response = render_to_response('form.html', context)
-    return response
-
+### searching    
 
 def fsearch(request):
     """
@@ -974,7 +821,7 @@ def fsearch(request):
     formats = ['um', 'cf', 'grib']
     for form in formats:
         searchurl = url_with_querystring(reverse('search', kwargs={'fformat':form}),ref='')
-        search = {'url':searchurl, 'label':'search for %s concepts' % form}
+        search = {'url':searchurl, 'label':'search for %s components' % form}
         urls[form] = search
     context = RequestContext(request, urls)
     return render_to_response('main.html', context)
@@ -986,129 +833,136 @@ def search(request, fformat):
     itemlist = ['Search Parameters:']
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    paramlist = request_search_path.split('|')
+    if request_search_path == '':
+        request_search_path = '[]'
+    paramlist = json.loads(request_search_path)
     for param in paramlist:
         itemlist.append(param)
     con_dict = {'itemlist' : itemlist}
-    if fformat == 'um':
-        stashurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat + 'STASH'}),ref=request_search_path)
-        addstash = {'url':stashurl, 'label': 'add STASH concept'}
-        con_dict['addstash'] = addstash
-        fcurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat + 'FC'}),ref=request_search_path)
-        addfc = {'url':fcurl, 'label': 'add Field Code'}
-        con_dict['addfc'] = addfc
-    else:
-        addurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat}),ref=request_search_path)
-        add = {'url':addurl, 'label':'add parameter'}
-        con_dict['add'] = add
-    conurl = url_with_querystring(reverse('concepts', kwargs={'fformat':fformat}), ref=request_search_path)
-    concepts = {'url':conurl, 'label':'find partially matching concepts'}
-    xconurl = url_with_querystring(reverse('concept', kwargs={'fformat':fformat}), ref=request_search_path)
-    xconcepts = {'url':xconurl, 'label':'find exactly matching concepts'}
+    addurl = url_with_querystring(reverse('search_property',
+                                           kwargs={'fformat':fformat}),
+                                           ref=request_search_path)
+    add = {'url':addurl, 'label':'add parameter'}
+    con_dict['add'] = add
+    conurl = url_with_querystring(reverse('search_maps'),
+                                  ref=request_search_path)
+    concepts = {'url':conurl, 'label':'find mappings'}
     con_dict['search'] = concepts
-    con_dict['exact'] = xconcepts
-    clearurl = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref='')
+    clearurl = url_with_querystring(reverse('search',
+                                            kwargs={'fformat':fformat}), ref='')
     con_dict['clear'] = {'url':clearurl, 'label':'clear parameters'}
     context = RequestContext(request,con_dict)
     return render_to_response('main.html', context)
 
-def concept(request, fformat):
+
+def search_property(request, fformat):
     """
-    returns a view of the concept exactly matching the search pattern
+    returns a view to define an individual property
     """
-    if fformat == 'grib':
-        fformat = 'grib/2'
     request_search_path = request.GET.get('ref', '')
     request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    search_path = request_search_path.split('|')
-    components = ['<%s>' % component for component in search_path]
-    po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
-                'mr:component':components}
-    context_dict = {}
+    request_search = json.loads(request_search_path)
     if request.method == 'POST':
-        form = forms.ConceptForm(request.POST)
+        form = forms.Value(request.POST, fformat=fformat)
         if form.is_valid():
-            #redirect
-            if form.cleaned_data['operation'] == 'create':
-                concept_match = moq.get_concept(fuseki_process, po_dict, create=True)
-            redirect = url_with_querystring(reverse('mappings'), ref=request_search_path)
-            response = HttpResponseRedirect(redirect)
-        else:
-            print form.errors
-            
-    else:        
-        concept_match = moq.get_concept(fuseki_process, po_dict, create=False)
-        con_strs = moq.concept_components(fuseki_process, concept_match)
-        if len(con_strs) == 1:
-            con = con_strs[0]
-            concept = con['concept']
-            components = con['components'].split('&')
-            component_view = [component.split('/')[-1] for component in components]
-            init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
-            form = forms.ConceptForm(initial = init)
-            
-        elif len(con_strs) == 0:
-            context_dict['create'] = True
-            component_view = [component.split('/')[-1] for component in search_path]
-            init = {'components': '&'.join(component_view), 'display': True}
-            form = forms.ConceptForm(initial = init)
-        else:
-            raise ValueError('Two exact matches for concept exist: %s' % search_path) 
-        context_dict['form'] = form
-        context_dict['read_only'] =  READ_ONLY
-        context = RequestContext(request, context_dict)
-        response = render_to_response('form.html', context)
-    return response
-
-
-def concepts(request, fformat):
-    """returns a view listing all the concepts which match or submatch the search pattern
-    """
-    if fformat == 'grib':
-        fformat = 'grib/2'
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    request_search = request_search_path.split('|')
-    if request_search != [u'']:
-        search_path = request_search
-    else:
-        search_path = False#[('','')]
-    ConceptFormSet = formset_factory(forms.ConceptForm, extra=0)
-    if request.method == 'POST': # If the form has been submitted...
-        formlist = ConceptFormSet(data=request.POST)
-        concepts = []
-        if formlist.is_valid():
-            for form in formlist:
-                if form.cleaned_data['display'] is True:
-                    concepts.append(form.cleaned_data['concept'])
-            param_string = '|'.join(concepts)
-            url = url_with_querystring(reverse('mappings'),ref=param_string)
+            new_value = {}
+            if form.cleaned_data.get('name'):
+                new_value['mr:name'] = form.cleaned_data['name']
+            if form.cleaned_data['value'] != '""':
+                new_value['rdf:value'] =  form.cleaned_data['value']
+            if form.cleaned_data.get('operator'):
+                new_value['mr:operator'] = form.cleaned_data['operator']
+            request_search.append(new_value)
+            request_search_path = json.dumps(request_search)
+            url = url_with_querystring(reverse('search',
+                                               kwargs={'fformat':fformat}),
+                                       ref=request_search_path)
             response = HttpResponseRedirect(url)
         else:
-            print formlist.errors
+            con_dict = {'form':form}
+            context = RequestContext(request, con_dict)
+            response = render_to_response('simpleform.html', context)
     else:
-        if search_path:
-            components = ['<%s>' % component for component in search_path]
-            po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
-                   'mr:component':components}
-        else:
-            po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat}
-        concept_match = moq.get_superset_concept(fuseki_process, po_dict)
-        initial_dataset = []
-        con_strs = moq.concept_components(fuseki_process, concept_match)
-        for con in con_strs:
-            concept = con['concept']
-            components = con['components'].split('&')
-            component_view = [component.split('/')[-1] for component in components]
-            init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
-            initial_dataset.append(init)
-        formlist = ConceptFormSet(initial = initial_dataset)
-        context_dict = {
-            'formlist' : formlist,
-            'read_only' : READ_ONLY,
-            }
-        context = RequestContext(request, context_dict)
-        response = render_to_response('form.html', context)
+        form = forms.Value(fformat=fformat)
+        con_dict = {'form':form}
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
     return response
+
+
+def search_maps(request):
+    """
+    returns a view of the mappings containing the search pattern properties
+    """
+    request_search_path = request.GET.get('ref', '')
+    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    if request_search_path == '':
+        request_search_path = '[]'
+    prop_list = json.loads(request_search_path)
+    mappings = moq.mapping_by_properties(fuseki_process, prop_list)
+    mapurls = {'label': 'These mappings contain the search properties',
+               'mappings':[]}
+    for amap in mappings:
+        mapping = moq.get_mapping_by_id(fuseki_process, amap)
+        referrer = fuseki_process.structured_mapping(mapping)
+        map_json = json.dumps(referrer)
+        url = url_with_querystring(reverse('mapping_edit'), ref=map_json)
+        label = 'mapping'
+        mapurls['mappings'].append({'url':url, 'label':label})
+    context_dict = {'invalid': [mapurls]}  
+    context = RequestContext(request, context_dict)
+    response = render_to_response('select_list.html', context)
+    return response
+
+
+# def concepts(request, fformat):
+#     """returns a view listing all the concepts which match or submatch the search pattern
+#     """
+#     if fformat == 'grib':
+#         fformat = 'grib/2'
+#     request_search_path = request.GET.get('ref', '')
+#     request_search_path = urllib.unquote(request_search_path).decode('utf8')
+#     request_search = request_search_path.split('|')
+#     if request_search != [u'']:
+#         search_path = request_search
+#     else:
+#         search_path = False#[('','')]
+#     ConceptFormSet = formset_factory(forms.ConceptForm, extra=0)
+#     if request.method == 'POST': # If the form has been submitted...
+#         formlist = ConceptFormSet(data=request.POST)
+#         concepts = []
+#         if formlist.is_valid():
+#             for form in formlist:
+#                 if form.cleaned_data['display'] is True:
+#                     concepts.append(form.cleaned_data['concept'])
+#             param_string = '|'.join(concepts)
+#             url = url_with_querystring(reverse('mappings'),ref=param_string)
+#             response = HttpResponseRedirect(url)
+#         else:
+#             print formlist.errors
+#     else:
+#         if search_path:
+#             components = ['<%s>' % component for component in search_path]
+#             po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
+#                    'mr:component':components}
+#         else:
+#             po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat}
+#         concept_match = moq.get_superset_concept(fuseki_process, po_dict)
+#         initial_dataset = []
+#         con_strs = moq.concept_components(fuseki_process, concept_match)
+#         for con in con_strs:
+#             concept = con['concept']
+#             components = con['components'].split('&')
+#             component_view = [component.split('/')[-1] for component in components]
+#             init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
+#             initial_dataset.append(init)
+#         formlist = ConceptFormSet(initial = initial_dataset)
+#         context_dict = {
+#             'formlist' : formlist,
+#             'read_only' : READ_ONLY,
+#             }
+#         context = RequestContext(request, context_dict)
+#         response = render_to_response('form.html', context)
+#     return response
 
               

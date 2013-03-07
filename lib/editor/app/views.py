@@ -697,7 +697,7 @@ def mapping_edit(request):
     else:
         ## look for mapping, if it exists, show it, with a warning
         ## if a partially matching mapping exists, handle this (somehow)
-        initial = {'invertible':True,
+        initial = {'invertible':'"True"',
                    'source':request_search.get('mr:source').get('component')
                    ,
                    'target':request_search.get('mr:target').get('component')
@@ -769,7 +769,7 @@ def process_form(form, request_search_path):
                                   data['valueMaps'].split('&')]
 
     mapping = mapping_p_o
-    mapping = moq.create_mapping(fuseki_process, mapping_p_o,True)
+    mapping = moq.create_mapping(fuseki_process, mapping_p_o)
     map_id = mapping[0]['map']
 
     return map_id

@@ -79,7 +79,7 @@ for fc,cf in umcf.LBFC_TO_CF.iteritems():
         adict['mr:invertible'] = '"True"'
     else:
         adict['mr:invertible'] = '"False"'
-    adict['mr:source'] = {'mr:hasProperty':[{'mr:name':'moumdpF3:lbfc', 'mr:operator':'<http://www.openmath.org/cd/relation1.xhtml#eq>', 'rdf:value':'mofc:%i' % fc}],
+    adict['mr:source'] = {'mr:hasProperty':[{'mr:name':'moumdpF3:lbfc', 'mr:operator':'<http://www.openmath.org/cd/relation1.xhtml#eq>', 'rdf:value':'mofc:%s' % fc}],
                        'mr:hasFormat':['<http://www.metarelate.net/metOcean/format/um>']}
     linkages.append(adict)
 

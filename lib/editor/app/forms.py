@@ -319,7 +319,9 @@ class MappingMeta(forms.Form):
     pne the source, target and value maps are defined
     """
     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
-    invertible = forms.BooleanField(required=False)
+    #invertible = forms.BooleanField(required=False)
+    invertible = forms.ChoiceField(choices=[('"True"', 'True'),
+                                            ('"False"', 'False')])
     mapping = forms.CharField(max_length=200, required=False,
                               widget=forms.TextInput(attrs={'readonly':True}))
     last_edit = forms.CharField(max_length=50, required=False,
@@ -389,7 +391,7 @@ class MappingMeta(forms.Form):
                 raise forms.ValidationError('No update: mapping not changed')
             else:
                 print 'changes:', changes
-                return self.cleaned_data
+        return self.cleaned_data
         # if False:
         #     return self.cleaned_Data
         # else:

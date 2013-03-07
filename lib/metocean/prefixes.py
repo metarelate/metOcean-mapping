@@ -17,7 +17,7 @@ class Prefixes(dict):
         'dc'       : 'http://purl.org/dc/terms/',
         'github'   : 'https://github.com/' ,
         'map'      : 'http://www.metarelate.net/metOcean/mapping/',
-        'mr'       : 'http://www.metarelate.net/predicates/index.html#',
+        'mr'       : 'http://www.metarelate.net/vocabulary/index.html#',
         'metoc'    : 'http://www.metarelate.net/metOcean/' ,
         'metocFormat' : 'http://www.metarelate.net/metOcean/format/' ,
         'metocMed' : 'http://www.metarelate.net/metOcean/mediator/' ,

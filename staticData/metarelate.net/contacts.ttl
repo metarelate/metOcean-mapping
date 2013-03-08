@@ -19,7 +19,7 @@
 @prefix momet08: <http://reference.metoffice.gov.uk/def/um/met08/> .
 @prefix moumdpC4: <http://reference.metoffice.gov.uk/def/um/umdp/c4/> .
 @prefix moumdpC4Pseud: <http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/> .
-@prefix mr: <http://www.metarelate.net/predicates/index.html#> .
+@prefix mr: <http://www.metarelate.net/vocabulary/index.html#> .
 @prefix mrcf: <http://www.metarelate.net/predicates/CF.html#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -54,6 +54,10 @@ skos:inScheme metoc:organisations ;
 skos:prefLabel "scitools" ;
 skos:definition github:scitools ;
 dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+
+
+
+
 
 
 

@@ -23,7 +23,8 @@
 @prefix moumdpC4: <http://reference.metoffice.gov.uk/def/um/umdp/c4/> .
 @prefix moumdpC4Pseud: <http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/> .
 @prefix moumdpF3: <http://reference.metoffice.gov.uk/def/um/umdp/F3/> .
-@prefix mr: <http://www.metarelate.net/predicates/index.html#> .
+@prefix mr: <http://www.metarelate.net/vocabulary/index.html#> .
+@prefix openmatha1: <http://www.openmath.org/cd/arith1.xhtml#> .
 @prefix openmathr1: <http://www.openmath.org/cd/relation1.xhtml#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -10720,4 +10721,675 @@
       mr:name       cfm:units ;
       mr:operator   openmathr1:eq ;
 	.
+
+
+<http://www.metarelate.net/metOcean/scopedProperty/de0c56138626e769dbb57e769640d73295645afc>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/e284bb17d52f45a2bdcc4292d9dae764230bcc20> .
+
+<http://www.metarelate.net/metOcean/property/bcf1dbc4363bd9f47e2c3cda8c89674f4badfb8c>
+      rdf:type      mr:Property ;
+      mr:name       gribapi:scaledValueOfEarthMajorAxis ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/3be38a5730b17deb69fd67a000bc1cec202980df>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/89c30e5ee703da82d4628b5895005efaccc42dcb> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/a72e7e48cd4b6286c49f505b3befbe5203dd57fc> .
+
+<http://www.metarelate.net/metOcean/component/30dae669b7fa43801a4dcc299c240a39b98d011b>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/0d1c2aa9501a662f3c341a497e219d030aa01d4d> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/82485ef74187322202fad66d764141b28c72f80d> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/449e4ff1dc9d20bc87d63b9d6dc40bdfe5e7aa83> ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/7e13f93fa0307fc1892275ad5075117fb16a8c64>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/b0b665f7939f579029fdc5d28b997200425c979b> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/305a3d5973047023bcbc77c631bee200faef65f6> .
+
+<http://www.metarelate.net/metOcean/scopedProperty/78819b2e3d8bbd929195d1565ab151741d053417>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/38d58255b295a8b6ac6c5eb130b91a5155e20f2e> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/721415dd19ee299552858d186f126ed2af9c4b50> .
+
+<http://www.metarelate.net/metOcean/component/4b39c659d2772e02a7bfab2d13051e58ca92c4e6>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/61adf7b86a380251033068a878e2845db78b59c7> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/a3350983a536f89f28963b8851d559a3ca160d83> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+	.
+
+<http://www.metarelate.net/metOcean/value/d70e15024feae62d61206213cfbaffdabeb8fd6f>
+      rdf:type      mr:Value ;
+      mr:object     <http://www.metarelate.net/metOcean/scopedProperty/5863a4258eca93c1f5bc0f23befd506506724bb8> ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/4c63b3014cfd7318a791a63a10d512700b736ae4> .
+
+<http://www.metarelate.net/metOcean/component/726c830bd326aabc9049917b069dafcc95a118d8>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/76832c58a7fec72a2ea9053e8ed55aa79919d3c6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/414ebb950b0ace07d89c619fce295ee2ce2a0afc> ;
+	.
+
+<http://www.metarelate.net/metOcean/valueMap/75d761922d20f5fd67964665c6531621236948bf>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/407719096bd15e07ef9035c5257b6a213070ad29> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/5d6ec1a72259cc261e834a63aa55e289f6c824d8> .
+
+<http://www.metarelate.net/metOcean/property/b22720c4c515ddcefe7efb34458651edbb174587>
+      rdf:type      mr:Property ;
+      mr:hasComponent  <http://www.metarelate.net/metOcean/component/bc4c7514b566e08b65045dd56fa7b148c0202e12> ;
+      mr:name       cfm:coordinate ;
+	.
+
+<http://www.metarelate.net/metOcean/property/33f7612c03d4862a582c6de057f76805a58dc221>
+      rdf:type      mr:Property ;
+      rdf:value     "rotated_ll" ;
+      mr:name       gribapi:gridType ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/1b4f61067a7676daeee32fbb195592e8dfadfece>
+      rdf:type      mr:Property ;
+      mr:name       gribapi:scaleFactorOfEarthMinorAxis ;
+	.
+
+<http://www.metarelate.net/metOcean/property/34e212140057d52a34b54d368ab215838a247146>
+      rdf:type      mr:Property ;
+      rdf:value     6378160 ;
+      mr:name       <http://def.cfconventions.org/datamodel/attribute_name#semi_major_axis> ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/9f28da6e42e8cad72f5174d3db0cca2beaec3e2f>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/1b4f61067a7676daeee32fbb195592e8dfadfece> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/5cb90a76fb910627e55e16c637cbef284307b4e6> .
+
+<http://www.metarelate.net/metOcean/component/721415dd19ee299552858d186f126ed2af9c4b50>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/480e3838ee4b0635cd9694e5090a109889ebe7ab> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/ef3cbca9d5c71c553f182bb9df2752f0b040c1e6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/5a110f2a75de5a835bc192407e9f2a5e1c64c694> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/38d58255b295a8b6ac6c5eb130b91a5155e20f2e> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/a3350983a536f89f28963b8851d559a3ca160d83>
+      rdf:type      mr:Property ;
+      rdf:value     "rotated_latitude_longitude" ;
+      mr:name       cfm:crs_name ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/f560f8d395f7aa4bc0d72d54905e3053e04eaaf2>
+      rdf:type      mr:Property ;
+      rdf:value     0 ;
+      mr:name       gribapi:shapeOfTheEarth ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/value/feceda07415f2bbf7ea09b1164a7f41cf66f50e8>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/7e13f93fa0307fc1892275ad5075117fb16a8c64> .
+
+<http://www.metarelate.net/metOcean/value/bc46978a6d6e5953621eec776a76d59c2c68dfab>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/410f3a2f085f7138b73a3d2a5db9c7bf30a883c0> .
+
+<http://www.metarelate.net/metOcean/scopedProperty/7494a0f47d10a1fc928fcd794ea5e7964adecb9a>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7d61c758a7cc76ffb6d1f6598955e41f4bb863b0> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/8caa18039838025528a34f57fc3c1717e118b137> .
+
+<http://www.metarelate.net/metOcean/property/38d58255b295a8b6ac6c5eb130b91a5155e20f2e>
+      rdf:type      mr:Property ;
+      mr:name       gribapi:scaledValueOfRadiusOfSphericalEarth ;
+	.
+
+<http://www.metarelate.net/metOcean/valueMap/76c3e34b9914323ad1dafc919e47ec9fd7410dab>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/c32978ecc4f150b24dcc911ab23dbc4f02d35172> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/bc46978a6d6e5953621eec776a76d59c2c68dfab> .
+
+<http://www.metarelate.net/metOcean/component/5cb90a76fb910627e55e16c637cbef284307b4e6>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/eb7c3eac9daa8096cf04b37dad10d5b75429e3a4> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/33f7612c03d4862a582c6de057f76805a58dc221> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/1b4f61067a7676daeee32fbb195592e8dfadfece> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bcf1dbc4363bd9f47e2c3cda8c89674f4badfb8c> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/84a1154ddcd39d8118929c053b4666cd6c449a4c> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7d61c758a7cc76ffb6d1f6598955e41f4bb863b0> ;
+	.
+
+<http://www.metarelate.net/metOcean/value/55ff3e82da47c9d2f00b1c14f8aa714801db1a51>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/de0c56138626e769dbb57e769640d73295645afc> .
+
+<http://www.metarelate.net/metOcean/value/96f65af1b4f4a556da268846e5936f2ddedc4420>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/f7ff35121874087b037037725c2aced791102e42> .
+
+<http://www.metarelate.net/metOcean/scopedProperty/410f3a2f085f7138b73a3d2a5db9c7bf30a883c0>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/726c830bd326aabc9049917b069dafcc95a118d8> .
+
+<http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6>
+      rdf:type      mr:Property ;
+      mr:name       <http://def.cfconventions.org/datamodel/attribute_name#semi_major_axis> ;
+	.
+
+<http://www.metarelate.net/metOcean/value/54c12505dff3f8f9fa1fd083e0e014e9204f46b5>
+      rdf:type      mr:Value ;
+      mr:object     <http://www.metarelate.net/metOcean/scopedProperty/405c6822b30630949a96f8dd410f2569c0736ee8> ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/d1b672d9290b76967dd70f320dff0f7d10853194> .
+
+<http://www.metarelate.net/metOcean/property/414ebb950b0ace07d89c619fce295ee2ce2a0afc>
+      rdf:type      mr:Property ;
+      mr:name       <http://def.cfconventions.org/datamodel/attribute_name#semi_minor_axis> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/5d808db3a6f293676b16a9d50f53947941635a18>
+      rdf:type      mr:Property ;
+      rdf:value     <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:name       cfm:coordinate_reference_system ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/d1b672d9290b76967dd70f320dff0f7d10853194>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bcf1dbc4363bd9f47e2c3cda8c89674f4badfb8c> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/5cb90a76fb910627e55e16c637cbef284307b4e6> .
+
+<http://www.metarelate.net/metOcean/valueMap/29a3f9b7a4e399d2d9784f1a3d6253451ad47724>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/ecec78ee84d3a29176d80645370da92fa559bf51> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/f88b9026095872951cc72a731e88c5ba0ff768a1> .
+
+<http://www.metarelate.net/metOcean/component/e284bb17d52f45a2bdcc4292d9dae764230bcc20>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/76832c58a7fec72a2ea9053e8ed55aa79919d3c6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+	.
+
+<http://www.metarelate.net/metOcean/value/c32978ecc4f150b24dcc911ab23dbc4f02d35172>
+      rdf:type      mr:Value ;
+      mr:object     1000.0 ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/value/d70e15024feae62d61206213cfbaffdabeb8fd6f> .
+
+<http://www.metarelate.net/metOcean/component/8010d8bd2a075d7308d5643205644c69464e9e79>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/a3350983a536f89f28963b8851d559a3ca160d83> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/9c36ad6efa9868c28cd29b68cda229995082b91f>
+      rdf:type      mr:Property ;
+      mr:name       <http://reference.metoffice.gov.uk/def/grib/computed_value#_y_points> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/5a110f2a75de5a835bc192407e9f2a5e1c64c694>
+      rdf:type      mr:Property ;
+      rdf:value     "regular_ll" ;
+      mr:name       gribapi:gridType ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/4c63b3014cfd7318a791a63a10d512700b736ae4>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bcf1dbc4363bd9f47e2c3cda8c89674f4badfb8c> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/8caa18039838025528a34f57fc3c1717e118b137> .
+
+<http://www.metarelate.net/metOcean/value/f88b9026095872951cc72a731e88c5ba0ff768a1>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/0eff26dd21ca8f4bcef8fd31cbd808de84845114> .
+
+<http://www.metarelate.net/metOcean/valueMap/a17f7648d92e8dd3f47fa7c6d4ff9608818dbeef>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/45315dbc3e609043cb585ac1a530d5df4b33c014> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/55ff3e82da47c9d2f00b1c14f8aa714801db1a51> .
+
+<http://www.metarelate.net/metOcean/scopedProperty/f7ff35121874087b037037725c2aced791102e42>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/414ebb950b0ace07d89c619fce295ee2ce2a0afc> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/2b45ff6eec5d63952c33b0a2a4c3be6a939d1249> .
+
+<http://www.metarelate.net/metOcean/value/70be80264558fb856e9e911f214566b7baba4cf2>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/cfbd5a677ba09a76a0ea209117091738c8377799> .
+
+<http://www.metarelate.net/metOcean/component/8caa18039838025528a34f57fc3c1717e118b137>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/eb7c3eac9daa8096cf04b37dad10d5b75429e3a4> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/1b4f61067a7676daeee32fbb195592e8dfadfece> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/5a110f2a75de5a835bc192407e9f2a5e1c64c694> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bcf1dbc4363bd9f47e2c3cda8c89674f4badfb8c> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/84a1154ddcd39d8118929c053b4666cd6c449a4c> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7d61c758a7cc76ffb6d1f6598955e41f4bb863b0> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/cde9d35b8a377015e5b91dc45d58792c3d739896>
+      rdf:type      mr:Property ;
+      rdf:value     2 ;
+      mr:name       gribapi:shapeOfTheEarth ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/449e4ff1dc9d20bc87d63b9d6dc40bdfe5e7aa83>
+      rdf:type      mr:Property ;
+      rdf:value     0 ;
+      mr:name       cfm:axis_index ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/7b4156eb833e8afa3e08383af6e19510c4603074>
+      rdf:type      mr:Property ;
+      rdf:value     1 ;
+      mr:name       cfm:axis_index ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/7844734392d75895f4a818bee71d607292a677dc>
+      rdf:type      mr:Property ;
+      rdf:value     cfm:DimensionCoordinate ;
+      mr:name       cfm:type ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/5863a4258eca93c1f5bc0f23befd506506724bb8>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/eb7c3eac9daa8096cf04b37dad10d5b75429e3a4> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/8caa18039838025528a34f57fc3c1717e118b137> .
+
+<http://www.metarelate.net/metOcean/property/e64794efd21bb226f2a8b179ff370dc592e00e85>
+      rdf:type      mr:Property ;
+      rdf:value     0 ;
+      mr:name       gribapi:jPointsAreConsecutive ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/component/cd87d4e1b7875609ea640e1a729192e6fc6b544d>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/480e3838ee4b0635cd9694e5090a109889ebe7ab> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/ef3cbca9d5c71c553f182bb9df2752f0b040c1e6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/33f7612c03d4862a582c6de057f76805a58dc221> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/38d58255b295a8b6ac6c5eb130b91a5155e20f2e> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/6d7156d9e9c4d937f1d3836567b8a75c7199c5ba>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/cde9d35b8a377015e5b91dc45d58792c3d739896> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/5a110f2a75de5a835bc192407e9f2a5e1c64c694> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/e46d8c906fe3d421365bae36b45f960cbe988bd0>
+      rdf:type      mr:Component ;
+      mr:hasComponent  <http://www.metarelate.net/metOcean/component/b6c01c2bd31a6076a4b0a40a09c463fe92e800b2> ;
+      mr:hasComponent  <http://www.metarelate.net/metOcean/component/30dae669b7fa43801a4dcc299c240a39b98d011b> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/bc4c7514b566e08b65045dd56fa7b148c0202e12>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/26969888486a1420ae4963456b22ac20874240d6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/0fb179b3d1c94d8b3e63d4a07fb395ef2083a205> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/1a204ed7abeb29b35f1ec958dcaa74899338a513> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/b0b665f7939f579029fdc5d28b997200425c979b> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/5d808db3a6f293676b16a9d50f53947941635a18> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7844734392d75895f4a818bee71d607292a677dc> ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/f8487a1e991d0c0f1a2f4515a1893f6f1b63423c>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/b0b665f7939f579029fdc5d28b997200425c979b> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/bc4c7514b566e08b65045dd56fa7b148c0202e12> .
+
+<http://www.metarelate.net/metOcean/scopedProperty/cd6a1d8a617ecd82260744064f5d426ceb5cebed>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/1b4f61067a7676daeee32fbb195592e8dfadfece> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/8caa18039838025528a34f57fc3c1717e118b137> .
+
+<http://www.metarelate.net/metOcean/component/14a394429a93ced8f28c0d7e42e8bf5636d86568>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/f560f8d395f7aa4bc0d72d54905e3053e04eaaf2> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/5a110f2a75de5a835bc192407e9f2a5e1c64c694> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/b8db5916ce413c4e3fb0db550ec4ffa916dc983d>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/79be707b9dd244b29b49080f8357328dd12a9b9f> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/34e212140057d52a34b54d368ab215838a247146> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/76832c58a7fec72a2ea9053e8ed55aa79919d3c6> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/dedcc423376e09909f2b11fb12433cd0422f24da>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/79be707b9dd244b29b49080f8357328dd12a9b9f> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/34e212140057d52a34b54d368ab215838a247146> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/a3350983a536f89f28963b8851d559a3ca160d83> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/b520f030ed456b340930951053d51753fb055efa>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/9c36ad6efa9868c28cd29b68cda229995082b91f> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/a72e7e48cd4b6286c49f505b3befbe5203dd57fc> .
+
+<http://www.metarelate.net/metOcean/valueMap/42b950733f2771d73bf0c0646298e0acc3702e19>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/e6cf94a0084480ffc87ee329f64589a7eaee2db0> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/70be80264558fb856e9e911f214566b7baba4cf2> .
+
+<http://www.metarelate.net/metOcean/property/22263ad7b23b11ac9c44ff5435186322419721fa>
+      rdf:type      mr:Property ;
+      rdf:value     cfsn:latitude ;
+      mr:name       cfm:standard_name ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/value/45315dbc3e609043cb585ac1a530d5df4b33c014>
+      rdf:type      mr:Value ;
+      mr:object     <http://www.metarelate.net/metOcean/scopedProperty/9c79f949c45322f05a1c7d93a86e6450ac73e661> ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/78819b2e3d8bbd929195d1565ab151741d053417> .
+
+<http://www.metarelate.net/metOcean/valueMap/5558feed0c618485446604ceb6c01b68f1098486>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/067dbd94002dfd623f9a322b07db7de419a9922a> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/96f65af1b4f4a556da268846e5936f2ddedc4420> .
+
+<http://www.metarelate.net/metOcean/value/82cfc7e5af382e00d6b8e0aea6768a1de9ebf568>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/b520f030ed456b340930951053d51753fb055efa> .
+
+<http://www.metarelate.net/metOcean/property/ef3cbca9d5c71c553f182bb9df2752f0b040c1e6>
+      rdf:type      mr:Property ;
+      rdf:value     1 ;
+      mr:name       gribapi:shapeOfTheEarth ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/value/16a2f3aea3e80b79f89555891613589b260f92dd>
+      rdf:type      mr:Value ;
+      mr:object     <http://www.metarelate.net/metOcean/scopedProperty/cd6a1d8a617ecd82260744064f5d426ceb5cebed> ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/7494a0f47d10a1fc928fcd794ea5e7964adecb9a> .
+
+<http://www.metarelate.net/metOcean/component/92fe47a7b025f0649ac6f90f6c3316be44d12953>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/cde9d35b8a377015e5b91dc45d58792c3d739896> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/33f7612c03d4862a582c6de057f76805a58dc221> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/b0b665f7939f579029fdc5d28b997200425c979b>
+      rdf:type      mr:Property ;
+      mr:name       cfm:points ;
+	.
+
+<http://www.metarelate.net/metOcean/property/7d61c758a7cc76ffb6d1f6598955e41f4bb863b0>
+      rdf:type      mr:Property ;
+      mr:name       gribapi:scaledValueOfEarthMinorAxis ;
+	.
+
+<http://www.metarelate.net/metOcean/property/480e3838ee4b0635cd9694e5090a109889ebe7ab>
+      rdf:type      mr:Property ;
+      mr:name       gribapi:scaleFactorOfRadiusOfSphericalEarth ;
+	.
+
+<http://www.metarelate.net/metOcean/property/eb7c3eac9daa8096cf04b37dad10d5b75429e3a4>
+      rdf:type      mr:Property ;
+      mr:name       gribapi:scaleFactorOfEarthMajorAxis ;
+	.
+
+<http://www.metarelate.net/metOcean/component/2268d70cc933b160103887cbe45790d7818d5c99>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/f560f8d395f7aa4bc0d72d54905e3053e04eaaf2> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/33f7612c03d4862a582c6de057f76805a58dc221> ;
+	.
+
+<http://www.metarelate.net/metOcean/value/440a96008ce9576ed0b67907d848cbf0253f5257>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/5fb05c89fa3f28710847dbf90e0ef3b2b485d291> .
+
+<http://www.metarelate.net/metOcean/property/76832c58a7fec72a2ea9053e8ed55aa79919d3c6>
+      rdf:type      mr:Property ;
+      rdf:value     "latitude_longitude" ;
+      mr:name       cfm:crs_name ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/405c6822b30630949a96f8dd410f2569c0736ee8>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/eb7c3eac9daa8096cf04b37dad10d5b75429e3a4> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/5cb90a76fb910627e55e16c637cbef284307b4e6> .
+
+<http://www.metarelate.net/metOcean/property/0d1c2aa9501a662f3c341a497e219d030aa01d4d>
+      rdf:type      mr:Property ;
+      rdf:value     cfm:DomainAxis ;
+      mr:name       cfm:type ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/84a1154ddcd39d8118929c053b4666cd6c449a4c>
+      rdf:type      mr:Property ;
+      rdf:value     3 ;
+      mr:name       gribapi:shapeOfTheEarth ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/5fb05c89fa3f28710847dbf90e0ef3b2b485d291>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/2b45ff6eec5d63952c33b0a2a4c3be6a939d1249> .
+
+<http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system>
+      rdf:type      mr:Mediator ;
+      rdf:label     "coordinate_reference_system" ;
+      mr:hasFormat  metocFormat:cf ;
+	.
+
+<http://www.metarelate.net/metOcean/value/8bcacd628984cd23660d906f0e7a08cc4cb7216e>
+      rdf:type      mr:Value ;
+      mr:object     <http://www.metarelate.net/metOcean/scopedProperty/9f28da6e42e8cad72f5174d3db0cca2beaec3e2f> ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/005585f3569d7809a696aa5182ded649e48cc58f> .
+
+<http://www.metarelate.net/metOcean/value/e6cf94a0084480ffc87ee329f64589a7eaee2db0>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/95382e77dbfcfb7246dc3f12f0887f492872c0ee> .
+
+<http://www.metarelate.net/metOcean/component/305a3d5973047023bcbc77c631bee200faef65f6>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/26969888486a1420ae4963456b22ac20874240d6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/0fb179b3d1c94d8b3e63d4a07fb395ef2083a205> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/22263ad7b23b11ac9c44ff5435186322419721fa> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/b0b665f7939f579029fdc5d28b997200425c979b> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/5d808db3a6f293676b16a9d50f53947941635a18> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7844734392d75895f4a818bee71d607292a677dc> ;
+	.
+
+<http://www.metarelate.net/metOcean/valueMap/b9746aab00463440ada42fd381c0e7cc46246dad>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/82cfc7e5af382e00d6b8e0aea6768a1de9ebf568> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/feceda07415f2bbf7ea09b1164a7f41cf66f50e8> .
+
+<http://www.metarelate.net/metOcean/value/ecec78ee84d3a29176d80645370da92fa559bf51>
+      rdf:type      mr:Value ;
+      mr:object     1000.0 ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/value/16a2f3aea3e80b79f89555891613589b260f92dd> .
+
+<http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc>
+      rdf:type      mr:Property ;
+      rdf:value     cfm:CoordinateReferenceSystem ;
+      mr:name       cfm:type ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/value/067dbd94002dfd623f9a322b07db7de419a9922a>
+      rdf:type      mr:Value ;
+      mr:object     1000.0 ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/value/8bcacd628984cd23660d906f0e7a08cc4cb7216e> .
+
+<http://www.metarelate.net/metOcean/component/702cf6c6f4fbb48b889ba19581d92c0df01d1c36>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/61adf7b86a380251033068a878e2845db78b59c7> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/76832c58a7fec72a2ea9053e8ed55aa79919d3c6> ;
+	.
+
+<http://www.metarelate.net/metOcean/value/ef6489c0e4d510d721c47247ae05eccdafd43fc1>
+      rdf:type      mr:Value ;
+      mr:object     1000.0 ;
+      mr:operator   openmatha1:times ;
+      mr:subject    <http://www.metarelate.net/metOcean/value/54c12505dff3f8f9fa1fd083e0e014e9204f46b5> .
+
+<http://www.metarelate.net/metOcean/scopedProperty/9c79f949c45322f05a1c7d93a86e6450ac73e661>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/480e3838ee4b0635cd9694e5090a109889ebe7ab> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/721415dd19ee299552858d186f126ed2af9c4b50> .
+
+<http://www.metarelate.net/metOcean/value/5d6ec1a72259cc261e834a63aa55e289f6c824d8>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/f8487a1e991d0c0f1a2f4515a1893f6f1b63423c> .
+
+<http://www.metarelate.net/metOcean/component/b6c01c2bd31a6076a4b0a40a09c463fe92e800b2>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/0d1c2aa9501a662f3c341a497e219d030aa01d4d> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/b22720c4c515ddcefe7efb34458651edbb174587> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7b4156eb833e8afa3e08383af6e19510c4603074> ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/0eff26dd21ca8f4bcef8fd31cbd808de84845114>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/414ebb950b0ace07d89c619fce295ee2ce2a0afc> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/726c830bd326aabc9049917b069dafcc95a118d8> .
+
+<http://www.metarelate.net/metOcean/property/0fb179b3d1c94d8b3e63d4a07fb395ef2083a205>
+      rdf:type      mr:Property ;
+      rdf:value     "degrees" ;
+      mr:name       cfm:units ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/1a204ed7abeb29b35f1ec958dcaa74899338a513>
+      rdf:type      mr:Property ;
+      rdf:value     cfsn:longitude ;
+      mr:name       cfm:standard_name ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/valueMap/8de3868198132415a23e853e33288208227d0eab>
+      rdf:type      mr:ValueMap ;
+      mr:source     <http://www.metarelate.net/metOcean/value/ef6489c0e4d510d721c47247ae05eccdafd43fc1> ;
+      mr:target     <http://www.metarelate.net/metOcean/value/440a96008ce9576ed0b67907d848cbf0253f5257> .
+
+<http://www.metarelate.net/metOcean/property/89c30e5ee703da82d4628b5895005efaccc42dcb>
+      rdf:type      mr:Property ;
+      mr:name       <http://reference.metoffice.gov.uk/def/grib/computed_value#_x_points> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/61adf7b86a380251033068a878e2845db78b59c7>
+      rdf:type      mr:Property ;
+      rdf:value     6367470 ;
+      mr:name       <http://def.cfconventions.org/datamodel/attribute_name#semi_major_axis> ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/component/2b45ff6eec5d63952c33b0a2a4c3be6a939d1249>
+      rdf:type      mr:Component ;
+      dc:mediates   <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/cf> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/a3350983a536f89f28963b8851d559a3ca160d83> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c93a6321af941cf4444657cd7c39e91660e41ffc> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/414ebb950b0ace07d89c619fce295ee2ce2a0afc> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/a72e7e48cd4b6286c49f505b3befbe5203dd57fc>
+      rdf:type      mr:Component ;
+      mr:hasFormat  <http://metarelate.net/metocean/format/grib> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/e64794efd21bb226f2a8b179ff370dc592e00e85> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/89c30e5ee703da82d4628b5895005efaccc42dcb> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/9c36ad6efa9868c28cd29b68cda229995082b91f> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/5a110f2a75de5a835bc192407e9f2a5e1c64c694> ;
+	.
+
+<http://www.metarelate.net/metOcean/value/407719096bd15e07ef9035c5257b6a213070ad29>
+      rdf:type      mr:Value ;
+      mr:subject    <http://www.metarelate.net/metOcean/scopedProperty/3be38a5730b17deb69fd67a000bc1cec202980df> .
+
+<http://www.metarelate.net/metOcean/property/82485ef74187322202fad66d764141b28c72f80d>
+      rdf:type      mr:Property ;
+      mr:hasComponent  <http://www.metarelate.net/metOcean/component/305a3d5973047023bcbc77c631bee200faef65f6> ;
+      mr:name       cfm:coordinate ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/005585f3569d7809a696aa5182ded649e48cc58f>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7d61c758a7cc76ffb6d1f6598955e41f4bb863b0> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/5cb90a76fb910627e55e16c637cbef284307b4e6> .
+
+<http://www.metarelate.net/metOcean/property/79be707b9dd244b29b49080f8357328dd12a9b9f>
+      rdf:type      mr:Property ;
+      rdf:value     297.0 ;
+      mr:name       <http://def.cfconventions.org/datamodel/attribute_name#inverse_flattening> ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/cfbd5a677ba09a76a0ea209117091738c8377799>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/bf8f0425e3b5a618bba76e483554f5aeeed739e6> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/8010d8bd2a075d7308d5643205644c69464e9e79> .
+
+<http://www.metarelate.net/metOcean/property/26969888486a1420ae4963456b22ac20874240d6>
+      rdf:type      mr:Property ;
+      rdf:value     "None" ;
+      mr:name       cfm:bounds ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/scopedProperty/95382e77dbfcfb7246dc3f12f0887f492872c0ee>
+      rdf:type      mr:Property ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/38d58255b295a8b6ac6c5eb130b91a5155e20f2e> ;
+      mr:scope      <http://www.metarelate.net/metOcean/component/cd87d4e1b7875609ea640e1a729192e6fc6b544d> .
+
+
 

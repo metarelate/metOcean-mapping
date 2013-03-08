@@ -1016,7 +1016,7 @@ def get_mapping_by_id(fuseki_process, map_id, valid=True, debug=False):
     vstr = ''
     if valid:
         vstr = '\tFILTER (?status NOT IN ("Deprecated", "Broken"))'
-        vstr += '\n\tMINUS {?map ^dc:replaces+ ?anothermap}'
+        vstr += '\n\tMINUS {?mapping ^dc:replaces+ ?anothermap}'
     qstr = '''SELECT ?mapping ?source ?target ?invertible ?replaces ?status
                      ?note ?reason ?date ?creator ?inverted
     (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = '&') AS ?owners)

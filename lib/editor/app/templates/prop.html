@@ -5,7 +5,6 @@
             <li> <a href="{{ aproperty.url }}">{{ aproperty.label }} </a>
             </li>
           {% endif %}
-
           {% if aproperty|multi_key:"mr:name" %}
             <li>{{ aproperty|prefix_uri:"mr:name" }}</li>
           {% endif %}

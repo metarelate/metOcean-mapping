@@ -57,7 +57,10 @@ def multi_key(adict, keys=''):
     result = adict
     for key in key_list:
         if result:
-            result = result.get(key)
+            if isinstance(result, dict):
+                result = result.get(key)
+            else:
+                result = None
     return result
 
 @register.filter

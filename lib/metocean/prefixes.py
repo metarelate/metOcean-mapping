@@ -33,6 +33,7 @@ class Prefixes(dict):
         'cfm'      : 'http://def.cfconventions.org/datamodel/' ,
         'gribapi'  : 'http://def.ecmwf.int/api/grib/keys/',
         'openmathr1' : 'http://www.openmath.org/cd/relation1.xhtml#',
+        'openmatha1' : 'http://www.openmath.org/cd/arith1.xhtml#',
         }
         self.update(prefixd)
 

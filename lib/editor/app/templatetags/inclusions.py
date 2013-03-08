@@ -26,3 +26,7 @@ register = template.Library()
 def show_property(aproperty):
     return {'aproperty':aproperty}
 
+
+@register.inclusion_tag('val.html')
+def show_value(avalmap):
+    return {'aval':avalmap}

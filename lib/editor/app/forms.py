@@ -245,7 +245,7 @@ class Value(forms.Form):
             else:
                 lit = cfmodel
         try:
-            int(lit)
+            float(lit)
         except ValueError:
             if lit.startswith('http'):
                 lit = '<{}>'.format(lit)
@@ -258,6 +258,32 @@ class Value(forms.Form):
 
 
 
+def _unpack_values(vals):
+    """
+    return the entiress for the ChoiceField choices for a list of values
+    available to map
+    
+    """
+    vals = [json.loads(aVal) for aVal in vals]
+    newVals = []
+    for aVal in vals:
+        newS = [json.dumps(aVal), '', '', '']
+        if not aVal.get('mr:subject'):
+            newS[1] = aVal.get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1]
+        else:
+            newS[1] = aVal.get('mr:subject').get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1]
+            newS[2] = aVal.get('mr:operator', '').split('#')[-1]
+            if isinstance(aVal.get('mr:object'), unicode):
+                newS[3] = aVal.get('mr:object')
+            else:
+                newS[3] = aVal.get('mr:object', {}).get('mr:hasProperty',{})
+                newS[3] = newS[3].get('mr:name', '').split('/')[-1]
+        newVals.append(newS)
+    choices = [(aVal[0],'{su} {op} {ob}'.format(su=aVal[1], op=aVal[2],
+                                           ob=aVal[3])) for aVal in newVals]
+    return choices
+
+
 class ValueMap(forms.Form):
     """
     form to define a value map
@@ -265,25 +291,10 @@ class ValueMap(forms.Form):
     source_value = forms.ChoiceField()
     target_value = forms.ChoiceField()
     def __init__(self, *args, **kwargs):
-        sc = kwargs.pop('sc')
-        #sc = urllib.unquote(sc).decode('utf8')
-        #print 'sc: ', sc
-        sc = [json.loads(anSc) for anSc in sc]
-        sc = [(json.dumps(anSc),'{su} {op} {ob}'.format(
-                    su=anSc.get('mr:subject', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1],
-#                    anSc['mr:subject']['mr:hasProperty']['mr:name'],
-                    op=anSc.get('mr:operator', '').split('#')[-1], 
-                    ob=anSc.get('mr:object', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1])) for
-               anSc in sc]
-        tc = kwargs.pop('tc')
-        #tc = urllib.unquote(tc).decode('utf8')
-        #print 'tc: ', tc
-        tc = [json.loads(aTc) for aTc in tc]
-        tc = [(json.dumps(aTc),'{su} {op} {ob}'.format(
-                    su=aTc.get('mr:subject', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1],
-                    op=aTc.get('mr:operator', '').split('#')[-1],
-                    ob=aTc.get('mr:object', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1])) for
-               aTc in tc]
+        sc_vals = kwargs.pop('sc')
+        sc = _unpack_values(sc_vals)
+        tc_vals = kwargs.pop('tc')
+        tc = _unpack_values(tc_vals)
         super(ValueMap, self).__init__(*args, **kwargs)
         self.fields['source_value'].choices = sc
         self.fields['target_value'].choices = tc
@@ -296,22 +307,35 @@ class DerivedValue(forms.Form):
     ops = [('','')] + [(op['subject'], op['notation']) for op in ops]
     _operator = forms.ChoiceField(choices=ops)
     _subject = forms.ChoiceField()
-    _object = forms.ChoiceField()
+    _object = forms.ChoiceField(required=False)
+    _object_literal = forms.CharField(required=False)
     def __init__(self, *args, **kwargs):
-        components = kwargs.pop('components')
-        components = [json.loads(component) for component in components]
-        components = [(json.dumps(component),'{su} {op} {ob}'.format(
-                    su=component.get('mr:subject', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1],
-#                    component['mr:subject']['mr:hasProperty']['mr:name'],
-                    op=component.get('mr:operator', '').split('#')[-1], 
-                    ob=component.get('mr:object', {}).get('mr:hasProperty',{}).get('mr:name', '').split('/')[-1])) for
-               component in components]
+        comp_vals = kwargs.pop('components')
+        components = _unpack_values(comp_vals)
         super(DerivedValue, self).__init__(*args, **kwargs)
         # components = [json.loads(component) for component in components]
         # components = [(json.dumps(component),component['mr:subject']['mr:hasProperty']['mr:name']) for
         #        component in components]
         self.fields['_subject'].choices = components
-        self.fields['_object'].choices = components
+        self.fields['_object'].choices = [('','')] + components
+    def clean(self):
+        op = self.data.get('_operator')
+        obj = self.data.get('_object')
+        obj_lit = self.data.get('_object_literal')
+        if not (obj or obj_lit):
+            err = 'an object (choice or literal) is required'
+            raise forms.ValidationError(err)
+        elif obj and obj_lit:
+            err = 'the object and object_literal fields are mutually exclusive'
+            raise forms.ValidationError(err)
+        elif obj_lit:
+            try:
+                float(obj_lit)
+            except ValueError:
+                raise forms.ValidationError('object_literal must be a number')
+        return self.cleaned_data
+            
+        
     
 class MappingMeta(forms.Form):
     """

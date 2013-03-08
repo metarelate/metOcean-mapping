@@ -445,21 +445,31 @@ def _get_value(value):
     """
     returns a value id for a given json input
     """
-    id_value = copy.deepcopy(value)
-    #fragile, doesn't work for nested values
-    prop = moq.get_property(fuseki_process,
+    if value.get('mr:subject').get('mr:subject'):
+        subj_id = _get_value(value.get('mr:subject'))
+    else:
+        prop = moq.get_property(fuseki_process,
                                value['mr:subject']['mr:hasProperty'])
-    sc_prop = moq.get_scoped_property(fuseki_process,
+        sc_prop = moq.get_scoped_property(fuseki_process,
                                       {'mr:hasProperty':prop['property'],
                                     'mr:scope':value['mr:subject']['mr:scope']})
-    new_val = {'mr:subject':sc_prop['scopedProperty']}
+        subj_id = sc_prop['scopedProperty']
+    new_val = {'mr:subject':subj_id}
     if value.get('mr:object'):
-        oprop = moq.get_property(fuseki_process,
+        if isinstance(value.get('mr:object'), dict) and \
+            value.get('mr:object').get('mr:subject'):
+            obj_id = _get_value(value.get('mr:object'))
+        else:
+            if isinstance(value.get('mr:object'), dict):
+                oprop = moq.get_property(fuseki_process,
                                value['mr:object']['mr:hasProperty'])
-        o_sc_prop = moq.get_scoped_property(fuseki_process,
+                o_sc_prop = moq.get_scoped_property(fuseki_process,
                                       {'mr:hasProperty':oprop['property'],
                                     'mr:scope':value['mr:object']['mr:scope']})
-        new_val['mr:object'] = o_sc_prop['scopedProperty'] 
+                obj_id = o_sc_prop['scopedProperty']
+            else:
+                obj_id = value.get('mr:object')
+        new_val['mr:object'] = obj_id
     if value.get('mr:operator'):
         new_val['mr:operator'] = value.get('mr:operator')
     value =  moq.get_value(fuseki_process, new_val)
@@ -524,13 +534,13 @@ def _define_valuemap_choice(comp, aproperty, choice):
     """
     pcomp = aproperty.get('mr:hasComponent')
     if not aproperty.get('rdf:value') and not pcomp:
-        choice[1].append(json.dumps({'mr:subject':{'mr:scope':comp, 
-                           'mr:hasProperty': {'mr:name':aproperty.get('mr:name')}}}))
+        choice[1].append(json.dumps({'mr:scope':comp, 
+                           'mr:hasProperty': {'mr:name':aproperty.get('mr:name')}}))
     elif pcomp:
         for prop in pcomp.get('mr:hasProperty', []):
             if not prop.get('rdf:value'):
-                val = json.dumps({'mr:subject':{'mr:scope':pcomp.get('component'), 
-                           'mr:hasProperty': {'mr:name': prop.get('mr:name')}}})
+                val = json.dumps({'mr:scope':pcomp.get('component'), 
+                           'mr:hasProperty': {'mr:name': prop.get('mr:name')}})
                 choice[1].append(val)
 #            elif prop.get('mr:hasComponent'):
     return choice
@@ -559,11 +569,17 @@ def define_valuemap(request):
         if request_search.get('derived_values'):
             for derived in request_search['derived_values'].get(ch[0]):
                 ch[1].append(json.dumps(derived))
+    print 'DERIVED VALUES'
+    print request_search.get('derived_values')
     if request.method == 'POST':
         form = forms.ValueMap(request.POST, sc=source_list, tc=target_list)
         if form.is_valid():
             source = json.loads(form.cleaned_data['source_value'])
+            if not source.get('mr:subject'):
+                source = {'mr:subject': source}
             target = json.loads(form.cleaned_data['target_value'])
+            if not target.get('mr:subject'):
+                target = {'mr:subject': target}
             new_vmap = {'mr:source':source,
                         'mr:target':target}
             request_search['mr:hasValueMap'].append(new_vmap)
@@ -612,6 +628,8 @@ def derived_value(request, role):
         if request_search.get('derived_values'):
             for derived in request_search['derived_values'].get(ch[0]):
                 ch[1].append(json.dumps(derived))
+    print 'DERIVED VALUES'
+    print request_search.get('derived_values')
     if role == 'source':
         components = source_list
     elif role == 'target':
@@ -621,8 +639,12 @@ def derived_value(request, role):
     if request.method == 'POST':
         form = forms.DerivedValue(request.POST, components=components)
         if form.is_valid():
-            derived_val = json.loads(form.cleaned_data['_subject'])
-            derived_val['mr:object'] = json.loads(form.cleaned_data['_object'])['mr:subject']
+            derived_val = {}
+            derived_val['mr:subject'] = json.loads(form.cleaned_data['_subject'])
+            if form.cleaned_data.get('_object'):
+                derived_val['mr:object'] = json.loads(form.cleaned_data['_object'])
+            elif form.cleaned_data.get('_object_literal'):
+                derived_val['mr:object'] = form.cleaned_data['_object_literal']
             derived_val['mr:operator'] = form.cleaned_data['_operator']
             request_search['derived_values']['mr:{}'.format(role)].append(derived_val)
             request_search_path = json.dumps(request_search)

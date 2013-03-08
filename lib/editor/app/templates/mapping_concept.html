@@ -117,6 +117,11 @@
     {% endif %}
     <tr><td>
     <h4>Definition</h4>
+
+    {% if mapping|multi_key:"mr:source,component" %}
+    {{ mapping|prefix_uri:"mr:source,component" }}
+    {% endif %}
+
     <ul>
     {% for component in  mapping|multi_key:"mr:source,mr:hasComponent" %}
       {% if component.url %}
@@ -205,6 +210,10 @@
     <tr><td>
     <h4>Definition</h4>
 
+    {% if mapping|multi_key:"mr:target,component" %}
+    {{ mapping|prefix_uri:"mr:target,component" }}
+    {% endif %}
+
 
     <ul>
     {% for component in  mapping|multi_key:"mr:target,mr:hasComponent" %}
@@ -245,41 +254,29 @@
 
 </tr>
 
-
+{% if mapping|multi_key:"mr:hasValueMap" %}
 <tr>
 <td>
 <h2>Value Mappings</h2>
 </td>
 </tr>
+  {% for valuemap in mapping|multi_key:"mr:hasValueMap" %}
+  <tr><td>
 
-{% if mapping|multi_key:"mr:hasValueMap" %}
+  {% show_value valuemap|multi_key:"mr:source" %}
 
+  </td><td>
 
-{% for valuemap in mapping|multi_key:"mr:hasValueMap" %}
-<tr><td>
-<p>
-{{ valuemap|multi_key:"mr:source,mr:subject,mr:scope" }}
-
-<ul>
-{% if valuemap|multi_key:"mr:source,mr:subject,mr:hasProperty,mr:name" %}
-<li> {{ valuemap|multi_key:"mr:source,mr:subject,mr:hasProperty,mr:name" }}</li>
-{% endif %}
-</ul>
-</td><td>
-<p>
-{{ valuemap|multi_key:"mr:target,mr:subject,mr:scope" }}
-
-<ul>
-{% if valuemap|multi_key:"mr:target,mr:subject,mr:hasProperty,mr:name" %}
-<li> {{ valuemap|multi_key:"mr:target,mr:subject,mr:hasProperty,mr:name" }}</li>
-{% endif %}
-</ul>
-</td>
-</td></tr>
-{% endfor %}
+  {% show_value valuemap|multi_key:"mr:target" %}
+  
+  </td>
+  </td></tr>
+  {% endfor %}
 
 
 {% endif %}
+
+
 
 {% if mapping|multi_key:"addValueMap,url" %}
 <tr>

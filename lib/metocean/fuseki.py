@@ -354,26 +354,58 @@ class FusekiServer(object):
             value_map['mr:source']['value'] = vm_record['source']
             value_map['mr:target']['value'] = vm_record['target']
         for role in ['mr:source', 'mr:target']:
-            val = queries.retrieve_value(self,
-                            value_map[role]['value'])
-            for key in val.keys():
-                value_map[role]['mr:{}'.format(key)] = val[key]
-            for sc_prop in ['mr:subject', 'mr:object']:
-                pid = value_map[role].get(sc_prop)
-                if pid:
-                    prop = queries.retrieve_scoped_property(self, pid)
-                    value_map[role][sc_prop] = {}
+            value_map[role] = self._retrieve_value(value_map[role]['value'])
+    #         val = queries.retrieve_value(self,
+    #                         value_map[role]['value'])
+    #         for key in val.keys():
+    #             value_map[role]['mr:{}'.format(key)] = val[key]
+    #         for sc_prop in ['mr:subject', 'mr:object']:
+    #             pid = value_map[role].get(sc_prop)
+    #             if pid:
+    #                 prop = queries.retrieve_scoped_property(self, pid)
+    #                 if prop:
+    #                     value_map[role][sc_prop] = {}
+    #                     for pkey in prop:
+    #                         pv = prop[pkey]
+    #                         value_map[role][sc_prop]['mr:{}'.format(pkey)] = pv
+    #                         if pkey == 'hasProperty':
+    #                             aprop = queries.retrieve_property(self, value_map[role][sc_prop]['mr:{}'.format(pkey)])
+    #                             value_map[role][sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
+    #                             for p in aprop:
+    # #                                if not aprop[p].startswith('<http'):
+    # #                                    aprop[p] = '"{}"'.format(aprop[p])
+    #                                 value_map[role][sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p]
+        return value_map
+
+    def _retrieve_value(self, val_id):
+        """
+        returns a dictionary from a val_id
+        
+        """
+        value_dict = {'value':val_id}
+        val = queries.retrieve_value(self, val_id)
+        for key in val.keys():
+            value_dict['mr:{}'.format(key)] = val[key]
+        for sc_prop in ['mr:subject', 'mr:object']:
+            pid = value_dict.get(sc_prop)
+            if pid:
+                prop = queries.retrieve_scoped_property(self, pid)
+                if prop:
+                    value_dict[sc_prop] = {}
                     for pkey in prop:
                         pv = prop[pkey]
-                        value_map[role][sc_prop]['mr:{}'.format(pkey)] = pv
+                        value_dict[sc_prop]['mr:{}'.format(pkey)] = pv
                         if pkey == 'hasProperty':
-                            aprop = queries.retrieve_property(self, value_map[role][sc_prop]['mr:{}'.format(pkey)])
-                            value_map[role][sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
+                            aprop = queries.retrieve_property(self, value_dict[sc_prop]['mr:{}'.format(pkey)])
+                            value_dict[sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
                             for p in aprop:
-#                                if not aprop[p].startswith('<http'):
-#                                    aprop[p] = '"{}"'.format(aprop[p])
-                                value_map[role][sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p] 
-        return value_map
+                                value_dict[sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p]
+                elif pid.startswith('<http://www.metarelate.net/metOcean/value/'):
+                    newval = self._retrieve_value(pid)
+                    value_dict[sc_prop] = newval
+                else:
+                    value_dict[sc_prop] = pid
+        return value_dict
 
 
     def structured_mapping(self, mapping):

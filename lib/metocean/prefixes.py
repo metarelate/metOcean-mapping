@@ -34,6 +34,9 @@ class Prefixes(dict):
         'gribapi'  : 'http://def.ecmwf.int/api/grib/keys/',
         'openmathr1' : 'http://www.openmath.org/cd/relation1.xhtml#',
         'openmatha1' : 'http://www.openmath.org/cd/arith1.xhtml#',
+        'meta'     : 'http://reference.metoffice.gov.uk/data/wmo/def/met#',
+        'metamap'  : 'http://reference.metoffice.gov.uk/data/wmo/meta/mapping#',
+        
         }
         self.update(prefixd)
 

@@ -172,17 +172,13 @@ for st_file in glob.glob('../staticData/metarelate.net/*.ttl'):
 
 globalDateTime = datetime.datetime.now().isoformat()
 mapping_p_o = {}
-mapping_p_o['dc:creator'] = ['<https://github.com/marqh>']
+mapping_p_o['dc:creator'] = ['<http://www.metarelate.net/metOcean/people/marqh>']
 mapping_p_o['dc:date'] = ['"%s"^^xsd:dateTime' % globalDateTime]
 mapping_p_o['mr:status'] = ['"Draft"']
 mapping_p_o['skos:note'] = ['"Imported from external mapping resource: Iris 1.1"']
 mapping_p_o['mr:reason'] = ['"new mapping"']
 
 
-    # adict['mr:target'] = {'mr:hasFormat':['<http://www.metarelate.net/metOcean/format/cf>'],
-    #                    'mr:hasProperty':[{'mr:name':'cfm:standard_name', 'mr:operator':'<http://www.openmath.org/cd/relation1.xhtml#eq>', 'rdf:value':'cfsn:%s' % cf[0]},
-    #                 {'mr:name':'cfm:units', 'mr:operator':'<http://www.openmath.org/cd/relation1.xhtml#eq>', 'rdf:value':'"%s"' % cf[1]},
-    #                 {'mr:name':'cfm:type', 'mr:operator':'<http://www.openmath.org/cd/relation1.xhtml#eq>', 'rdf:value':'cfm:Field'}]}
 
 with fu.FusekiServer(3131) as fu_p:
     fu_p.load()
@@ -199,7 +195,8 @@ with fu.FusekiServer(3131) as fu_p:
                 if prop_res:
                     prop_id = '%s' % prop_res['property']
                 else:
-                    raise ValueError('%i results returned from get_value %s' % (len(val_res), str(val_res)))
+                    raise ValueError('%i results returned from get_value %s' %
+                                     (len(val_res), str(val_res)))
                 memberids.append(prop_id)
             fc_dict = {'mr:hasFormat' : newlink[pref]['mr:hasFormat'],
                        'mr:hasProperty' : memberids}
@@ -207,7 +204,8 @@ with fu.FusekiServer(3131) as fu_p:
             if fc_res:
                 fcID = '%s' % fc_res['component']
             else:
-                raise ValueError('%i results returned from get_component %s' % (len(fc_res), str(fc_res)))
+                raise ValueError('%i results returned from get_component %s' %
+                                 (len(fc_res), str(fc_res)))
             map_dict[pref] = fcID
         map_res = moq.create_mapping(fu_p, map_dict)
     print 'saving cached changes'

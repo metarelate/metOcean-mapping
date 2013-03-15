@@ -948,33 +948,33 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     create a new mapping record using the po_dict
     """
     subj_pref = 'http://www.metarelate.net/metOcean/mapping'
-    allowed_prefixes = set(('mr:source', 'mr:target', 'mr:invertible',
+    allowed_preds = set(('mr:source', 'mr:target', 'mr:invertible',
                             'dc:replaces', 'mr:hasValueMap', 'mr:status',
                             'skos:note', 'mr:reason', 'dc:date', 'dc:creator',
                             'mr:owner', 'mr:watcher'))
     preds = set(po_dict)
-    if not preds.issubset(allowed_prefixes):
+    if not preds.issubset(allowed_preds):
         ec = '''{}
         is not a subset of the allowed predicates set for a mapping record
         {}'''
         ec = ec.format(preds, allowed_preds)
         raise ValueError(ec)
-    mandated_prefixes = set(('mr:source', 'mr:target', 'mr:invertible', 
+    mandated_preds = set(('mr:source', 'mr:target', 'mr:invertible', 
                             'mr:status',  'mr:reason',
                             'dc:date', 'dc:creator'))
-    if not preds.issuperset(mandated_prefixes):
+    if not preds.issuperset(mandated_preds):
         ec = '''{}
         is not a superset of the mandated predicates set for a mapping record
         {}'''
-        ec = ec.format(preds, mandated_prefixes)
+        ec = ec.format(preds, mandated_preds)
         raise ValueError(ec)
-    singular_prefixes = set(('mr:source', 'mr:target', 'mr:invertible',
+    singular_preds = set(('mr:source', 'mr:target', 'mr:invertible',
                              'dc:replaces', 'mr:status', 'skos:note',
                              'mr:reason', 'dc:date', 'dc:creator'))
     search_string = ''
     for pred in po_dict:
         if isinstance(po_dict[pred], list):
-            if pred in singular_prefixes and len(po_dict[pred]) != 1:
+            if pred in singular_preds and len(po_dict[pred]) != 1:
                 ec = 'create_mapping limits {} to one statement per record '
                 ec = ec.format(pred)
                 raise ValueError(ec)

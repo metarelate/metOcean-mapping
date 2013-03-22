@@ -390,11 +390,12 @@ class MappingMeta(forms.Form):
     def clean(self):
         source = self.data.get('source')
         map_id = self.data.get('mapping')
-        if source:
-            src_maps = moq.multiple_mappings(fuseki_process, source)
-            if len(src_maps) > 1:
-                e = 'mappings already exist for this source'
-                raise forms.ValidationError(e)
+        # if source:
+        #     src_maps = moq.multiple_mappings(fuseki_process, source)
+        #     if len(src_maps) > 1:
+        #         e = 'mappings already exist for this source'
+        #         raise forms.ValidationError(e)
+        #  worried about this, prevents updates to deprecate etc
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id)
             if not mapping:

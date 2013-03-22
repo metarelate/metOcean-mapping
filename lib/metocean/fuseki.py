@@ -312,10 +312,11 @@ class FusekiServer(object):
             for aproperty in top_c.get('property', []):
                 prop_dict = queries.retrieve_property(self, aproperty)
                 pref_prop_dict = {}
-                pcomp = prop_dict.get('mr:hasComponent') 
+                #pcomp = prop_dict.get('mr:hasComponent')
+                pcomp = prop_dict.get('component') 
                 if pcomp:
                     comp = self._retrieve_component(pcomp)
-                    pref_prop_dict['mr:hasComponent'] = pcomp
+                    pref_prop_dict['mr:hasComponent'] = comp
                 if prop_dict.get('name'):
                     pref_prop_dict['mr:name'] = prop_dict['name']
                 if prop_dict.get('operator'):

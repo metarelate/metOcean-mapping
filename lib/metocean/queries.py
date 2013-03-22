@@ -288,7 +288,11 @@ def get_label(fuseki_process, subject, debug=False):
     qstr += '\n\tFILTER(?s = %(sub)s) }' % {'sub':subj_str}
     results = fuseki_process.run_query(qstr, debug=debug)
     if len(results) == 0:
-        label = subject
+        hash_split = subject.split('#')
+        if len(hash_split) == 2 and hash_split[1].endswith('>'):
+            label = hash_split[1].rstrip('>')
+        else:
+            label = subject
     elif len(results) >1:
         raise ValueError('{} returns multiple prefLabels'.format(subject))
     else:
@@ -1009,13 +1013,14 @@ def create_mapping(fuseki_process, po_dict, debug=False):
     return [{'map':'<{}>'.format(mapping)}]
 
 
-def get_mapping_by_id(fuseki_process, map_id, valid=True, debug=False):
+def get_mapping_by_id(fuseki_process, map_id, val=True, rep=True, debug=False):
     """
     return a mapping record if one exists, from the provided id
     """
     vstr = ''
-    if valid:
-        vstr = '\tFILTER (?status NOT IN ("Deprecated", "Broken"))'
+    if val:
+        vstr += '\tFILTER (?status NOT IN ("Deprecated", "Broken"))'
+    if rep:
         vstr += '\n\tMINUS {?mapping ^dc:replaces+ ?anothermap}'
     qstr = '''SELECT ?mapping ?source ?target ?invertible ?replaces ?status
                      ?note ?reason ?date ?creator ?inverted

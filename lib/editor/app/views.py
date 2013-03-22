@@ -728,7 +728,7 @@ def mapping_edit(request):
                                                                [])])}
         map_id = request_search.get('mapping')
         if map_id:
-            mapping = moq.get_mapping_by_id(fuseki_process, map_id)
+            mapping = moq.get_mapping_by_id(fuseki_process, map_id, val=False)
             ts = initial['source'] == mapping['source']
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \

@@ -282,7 +282,7 @@ def get_label(fuseki_process, subject, debug=False):
     qstr = ''' SELECT ?notation 
     WHERE { {'''
     for graph in _vocab_graphs():
-        qstr += '\n\tGRAPH %s) {' % graph
+        qstr += '\n\tGRAPH %s {' % graph
         qstr += '\n\t?s skos:notation ?notation . }}\n\tUNION {'
     qstr = qstr.rstrip('\n\tUNION {')
     qstr += '\n\tFILTER(?s = %(sub)s) }' % {'sub':subj_str}

@@ -75,10 +75,10 @@ def formats():
     provided by a query
 
     """
-    format_choices = [('<http://metarelate.net/metocean/format/grib>', 'GRIB'),
-                      ('<http://metarelate.net/metocean/format/um>', 'UM'),
-                      ('<http://metarelate.net/metocean/format/cf>', 'CF')]
-    return format_choices
+    choices = [('<http://www.metarelate.net/metOcean/format/grib>', 'GRIB'),
+               ('<http://www.metarelate.net/metOcean/format/um>', 'UM'),
+               ('<http://www.metarelate.net/metOcean/format/cf>', 'CF')]
+    return choices
 
 class MappingFormats(forms.Form):
     """

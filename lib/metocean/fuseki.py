@@ -66,7 +66,7 @@ class FusekiServer(object):
         return self
         
     def __exit__(self, *args):
-        print 'exiting'
+        #print 'exiting'
         self.stop(save=False)
         
     def start(self):

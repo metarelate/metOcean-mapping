@@ -36,7 +36,8 @@ def make_hash(pred_obj, omitted=None):
         A dictionary of predicates and lists of objects, or single objects
         which will be used, in order, to construct the hash
     * omitted:
-        A list of predicate strings to be ignored when building the hash 
+        A list of predicate strings to be ignored when building the hash
+        
     """
     if omitted is None:
         omitted = []
@@ -71,6 +72,7 @@ def revert_cache(fuseki_process, graph, debug=False):
     """
     update a graph in the triple database removing all records
     flagged with the saveCache predicate
+    
     """
     qstr = '''
     DELETE
@@ -97,6 +99,7 @@ def save_cache(fuseki_process, graph, debug=False):
     as flagged by the manager application
     clear the 'not saved' flags on records, updating a graph in the triple store
     with the fact that changes have been persisted to ttl
+    
     """
     qstr = '''
     CONSTRUCT
@@ -140,9 +143,7 @@ def save_cache(fuseki_process, graph, debug=False):
     return save_string
 
 def _vocab_graphs():
-    """
-    returns a list of the graphs which contain thirds party vocabularies
-    """
+    """ returns a list of the graphs which contain thirds party vocabularies """
     vocab_graphs = []
     vocab_graphs.append('<http://um/umdpF3.ttl>')
     vocab_graphs.append('<http://um/stashconcepts.ttl>')
@@ -157,6 +158,10 @@ def _vocab_graphs():
 def query_cache(fuseki_process, graph, debug=False):
     """
     return all triples cached for saving but not saved
+    Args:
+    
+    * graph:
+        the URI of the graph being queried
     """
     qstr = '''
     SELECT ?s ?p ?o
@@ -173,7 +178,8 @@ def query_cache(fuseki_process, graph, debug=False):
 
 def get_contacts(fuseki_process, register, debug=False):
     """
-    return a list of contacts from the tdb which are part of the named register 
+    return a list of contacts from the tdb which are part of the named register
+    
     """
     qstr = '''
     SELECT ?s ?prefLabel ?def
@@ -235,6 +241,7 @@ def get_mediators(fuseki_process, fformat='', debug=False):
     """
     return all mediators from the triple store
     fformat limits the mediators to one format
+    
     """
     if fformat:
         ffilter = 'FILTER(?format = <http://www.metarelate.net/metOcean/format/{}>)'
@@ -273,6 +280,7 @@ def print_records(res):
 def get_label(fuseki_process, subject, debug=False):
     """
     return the skos:notation for a subject, if it exists
+    
     """
     subject = str(subject)
     if not subject.startswith('<') and not subject.startswith('"'):
@@ -303,6 +311,7 @@ def get_label(fuseki_process, subject, debug=False):
 def subject_and_plabel(fuseki_process, graph, debug=False):
     """
     selects subject and prefLabel from a particular graph
+    
     """
     qstr = '''
         SELECT ?subject ?prefLabel ?notation
@@ -322,6 +331,7 @@ def valid_ordered_mappings(fuseki_process, s_format, t_format, debug=False):
     """
     returns all the ordered mappings for a particular
     source and target format
+    
     """
     qstr = '''
     SELECT ?mapping ?source ?sourceFormat ?target ?targetFormat ?inverted
@@ -360,9 +370,6 @@ def valid_ordered_mappings(fuseki_process, s_format, t_format, debug=False):
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
-
-
-### blank node queries #####
 
 def get_property(fuseki_process, po_dict, debug=False):
     """
@@ -815,6 +822,7 @@ def retrieve_valuemap(fuseki_process, vmId, debug=False):
     """
     return a valueMap record from the provided id
     or None if one does not exist
+    
     """
     qstr = '''SELECT ?valueMap ?source ?target
     WHERE {
@@ -839,6 +847,7 @@ def retrieve_value(fuseki_process, vId, debug=False):
     """
     return a value record from the provided id
     or None if one does not exist
+    
     """
     qstr = '''SELECT ?value ?operator ?subject ?object
     WHERE {
@@ -864,6 +873,7 @@ def retrieve_scoped_property(fuseki_process, spId, debug=False):
     """
     return a value record from the provided id
     or None if one does not exist
+    
     """
     qstr = '''SELECT ?scopedProperty ?scope ?hasProperty
     WHERE {
@@ -884,72 +894,11 @@ def retrieve_scoped_property(fuseki_process, spId, debug=False):
     return result
 
 
-
-# def get_contact(fuseki_process, subject, po_dict, debug=False):
-#     """
-#     Return a contact record ID, matching the pred_obj dictionary
-#     create one if it does not exist.
-    
-#     """
-#     allowed_prefixes = set(('skos:inScheme', 'dc:dateAccepted'))
-#     preds = set(po_dict)
-#     if not preds.issubset(allowed_prefixes):
-#         ec = '''{}
-#             is not a subset of the allowed predicates set for a contact record
-#             {}'''
-#         ec = ec.format(preds, allowed_preds)
-#         raise ValueError(ec)
-#     search_string = ''
-#     for pred in po_dict:
-#         if isinstance(po_dict[pred], list):
-#             if len(po_dict[pred]) == 1:
-#                 ec = 'get_format_concept accepts 1 statement per predicate {}'
-#                 ec = ec.format(str(po_dict))
-#                 raise ValueError(ec)
-#             else:
-#                 for obj in po_dict[pred]:
-#                     search_string += '''
-#                     %s %s ;''' % (pred, obj)
-#         else:
-#             search_string += '''
-#             %s %s ;''' % (pred, po_dict[pred])
-#     if search_string != '':
-#         qstr = '''SELECT DISTINCT ?contact 
-#         WHERE{
-#         GRAPH <http://metarelate.net/contacts.ttl> {
-#         ?contact ?p ?o .
-#         filter (?contact = <%s>)
-#         }
-#         }
-#         ''' % (subject)
-#         results = fuseki_process.run_query(qstr, debug=debug)
-#         if len(results) == 0:
-#             instr = '''INSERT DATA {
-#             GRAPH <http://metarelate.net/contacts.ttl> {
-#             <%s> rdf:type skos:Concept ;
-#                     %s
-#                     mr:saveCache "True" .
-#             }
-#             }
-#             ''' % (subject, search_string)
-#             insert_results = fuseki_process.run_query(instr, update=True,
-#                                                       debug=debug)
-#             results = fuseki_process.run_query(qstr, debug=debug)
-#         if len(results) == 1:
-#             results = results[0]
-#         else:
-#             raise ValueError('''multiple results returned from
-#             get_contact, only one allowed
-#             {}'''.format(str(results)))
-#     else:
-#         results = None
-#     return results
-
-
-
 def create_mapping(fuseki_process, po_dict, debug=False):
     """
     create a new mapping record using the po_dict
+    defining the mapping record
+    
     """
     subj_pref = 'http://www.metarelate.net/metOcean/mapping'
     allowed_preds = set(('mr:source', 'mr:target', 'mr:invertible',
@@ -1015,7 +964,9 @@ def create_mapping(fuseki_process, po_dict, debug=False):
 
 def get_mapping_by_id(fuseki_process, map_id, val=True, rep=True, debug=False):
     """
-    return a mapping record if one exists, from the provided id
+    return a mapping record if one exists,
+    from the provided map_id
+    
     """
     vstr = ''
     if val:
@@ -1066,6 +1017,7 @@ def multiple_mappings(fuseki_process, test_source=None, debug=False):
     returns all the mappings which map the same source to a different target
     where the targets are the same format
     filter to a single test mapping with test_map
+    
     """
     tm_filter = ''
     if test_source:
@@ -1135,6 +1087,7 @@ def multiple_mappings(fuseki_process, test_source=None, debug=False):
 def valid_vocab(fuseki_process, debug=False):
     """
     find all valid mapping and every property they reference
+
     """
     qstr = '''
     SELECT DISTINCT  ?amap 
@@ -1242,6 +1195,7 @@ def mapping_by_properties(fuseki_process, prop_list, debug=False):
 def current_mappings(fuseki_process, debug=False):
     """
     return all triples currently valid in the mappings graph
+    
     """
     qstr = '''
     SELECT ?s ?p ?o
@@ -1269,6 +1223,7 @@ def current_mappings(fuseki_process, debug=False):
 def select_graph(fuseki_process, graph, debug=False):
     """
     selects a particular graph from the TDB
+    
     """
     qstr = '''
         SELECT DISTINCT ?g
@@ -1287,6 +1242,7 @@ def select_graph(fuseki_process, graph, debug=False):
 def subject_by_graph(fuseki_process, graph, debug=False):
     """
     selects distinct subject from a particular graph
+    
     """
     qstr = '''
         SELECT DISTINCT ?subject 
@@ -1303,6 +1259,7 @@ def subject_by_graph(fuseki_process, graph, debug=False):
 def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
     """
     selects distinct subject from a particular graph matching a pattern
+    
     """
     qstr = '''
         SELECT DISTINCT ?subject
@@ -1317,7 +1274,8 @@ def subject_graph_pattern(fuseki_process, graph,pattern,debug=False):
     results = fuseki_process.run_query(qstr, debug=debug)
     return results
 
-
+#### potentially refactorable for more comprehensive search
+###### currently not functional
 
 # def concept_components(fuseki_process, concepts, debug=False):
 #     """

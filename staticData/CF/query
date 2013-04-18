@@ -10,6 +10,7 @@ CONSTRUCT{
 ?uri rdf:type skos:Concept ;
      dc:source ?nercID ;
      skos:prefLabel ?name ;
+     skos:notation ?sname ;
      skos:definition ?def ;
      skos:note ?canon .
 }
@@ -18,7 +19,7 @@ WHERE
 ?nercID skos:prefLabel ?name ;
         skos:definition ?def .
 
-        
+BIND(str(?name) as ?sname)   
 BIND(ENCODE_FOR_URI(?name) as ?uriname)        
 BIND(URI(CONCAT("http://def.cfconventions.org/standard_names/", ?uriname)) as ?uri)
 FILTER(regex(str(?nercID), "http://vocab.nerc.ac.uk/collection/P07/current/"))

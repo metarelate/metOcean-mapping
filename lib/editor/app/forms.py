@@ -84,6 +84,7 @@ class MappingFormats(forms.Form):
     """
     form to define the file format of the source and target
     for a mapping
+    
     """
     source_format = forms.ChoiceField(choices=formats())
     target_format = forms.ChoiceField(choices=formats())
@@ -98,6 +99,8 @@ class MappingFormats(forms.Form):
 class Mediator(forms.Form):
     """
     form to select a mediator from the list of mediators
+    defined mappings, grouped into a named collection 
+    
     """
     mediator = forms.ChoiceField()
     def __init__(self, *args, **kwargs):
@@ -113,9 +116,7 @@ class Mediator(forms.Form):
         self.fields['mediator'].choices = meds
 
 class NewMediator(forms.Form):
-    """
-    form to create a new mediator
-    """
+    """ form to create a new mediator """
     mediator = forms.CharField()
 
 
@@ -127,6 +128,7 @@ class MappingConcept(forms.Form):
     form to define the concepts for a mapping
     the work of the form is handled by the json
     in the referrer, not the form class
+    
     """
     def clean(self):
         return self.cleaned_data
@@ -134,6 +136,8 @@ class MappingConcept(forms.Form):
 class Value(forms.Form):
     """
     form to define a value for use in a concept
+    format specific
+    
     """
     name = forms.ChoiceField(required=False)
     _name = forms.CharField(required=False)
@@ -150,7 +154,8 @@ class Value(forms.Form):
         if self.fformat == 'um':
             umRes = moq.subject_and_plabel(fuseki_process,
                                          'http://um/umdpF3.ttl')
-            choices = [('','')] + [(um['subject'], um['notation']) for um in umRes]
+            choices = [(um['subject'], um['notation']) for um in umRes]
+            choices = [('','')] + choices
             self.fields['name'].choices = choices
             sns = moq.subject_and_plabel(fuseki_process,
                                          'http://um/stashconcepts.ttl')
@@ -167,7 +172,8 @@ class Value(forms.Form):
         elif self.fformat == 'cf':
             cfRes = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cfmodel.ttl')
-            choices = [('','')] + [(cf['subject'], cf['notation']) for cf in cfRes]
+            choices = [(cf['subject'], cf['notation']) for cf in cfRes]
+            choices = [('','')] + choices
             self.fields['name'].choices = choices
             sns = moq.subject_and_plabel(fuseki_process,
                                          'http://CF/cf-standard-name-table.ttl')
@@ -185,7 +191,8 @@ class Value(forms.Form):
         elif self.fformat == 'grib':
             grRes = moq.subject_and_plabel(fuseki_process,
                                            'http://grib/apikeys.ttl')
-            choices = [('','')] + [(grib['subject'], grib['notation']) for grib in grRes]
+            choices = [(grib['subject'], grib['notation']) for grib in grRes]
+            choices = [('','')] + choices
             self.fields['name'].choices = choices
         else:
             raise ValueError('invalid format supplied: {}'.format(fformat))
@@ -200,17 +207,18 @@ class Value(forms.Form):
         op = self.cleaned_data.get('operator')
         if name:
             if _name:
-                raise forms.ValidationError('Name and name are mutually exclusive')
+                raise forms.ValidationError('Name, name are mutually exclusive')
         else:
             if not _name:
                 raise forms.ValidationError('a name must be selected')
             else:
+                n = '<http://'
                 if self.fformat == 'cf':
-                    n = '<http://def.cfconventions.org/datamodel/attribute_name#{}>'
+                    n += 'def.cfconventions.org/datamodel/attribute_name#{}>'
                 elif self.fformat == 'um':
-                    n = '<http://reference.metoffice.gov.uk/def/um/computed_value#{}>'
+                    n += 'reference.metoffice.gov.uk/def/um/computed_value#{}>'
                 elif self.fformat == 'grib':
-                    n = '<http://reference.metoffice.gov.uk/def/grib/computed_value#{}>'
+                    n += 'reference.metoffice.gov.uk/def/grib/computed_value#{}>'
                 self.cleaned_data['name'] = n.format(_name) 
         if op and not (fcode or lit or stcode or st_name or cfmodel):
             raise forms.ValidationError('if operator is set '
@@ -287,6 +295,8 @@ def _unpack_values(vals):
 class ValueMap(forms.Form):
     """
     form to define a value map
+    using the available values
+    
     """
     source_value = forms.ChoiceField()
     target_value = forms.ChoiceField()
@@ -301,6 +311,9 @@ class ValueMap(forms.Form):
         
 class DerivedValue(forms.Form):
     """
+    form to define a derived value
+    using the available values
+    
     """        
     ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/ops.ttl')
     #print ops
@@ -340,7 +353,8 @@ class DerivedValue(forms.Form):
 class MappingMeta(forms.Form):
     """
     form to define the metadata for a mapping
-    pne the source, target and value maps are defined
+    once the source, target and value maps are defined
+    
     """
     isoformat = "%Y-%m-%dT%H:%M:%S.%f"
     #invertible = forms.BooleanField(required=False)
@@ -388,6 +402,7 @@ class MappingMeta(forms.Form):
     valueMaps = forms.CharField(max_length=1000, required=False, widget=forms.TextInput(attrs={'hidden':True}))
 
     def clean(self):
+        """process the form"""
         source = self.data.get('source')
         map_id = self.data.get('mapping')
         # if source:
@@ -424,6 +439,7 @@ class MappingMeta(forms.Form):
         
 
 class URLwidget(forms.TextInput):
+    """helper widget"""
     def render(self, name, value, attrs=None):
         if value in ('None', None):
             tpl = value
@@ -439,6 +455,7 @@ class URLwidget(forms.TextInput):
 class HomeForm(forms.Form):
     """
     Form to support the home control panel
+    and control buttons
     """
     cache_status = forms.CharField(max_length=200, 
                                    widget=forms.TextInput(attrs={'size': '100',
@@ -466,119 +483,6 @@ class HomeForm(forms.Form):
         return self.cleaned_data
 
 
-# class SearchParam(forms.Form):
-#     '''
-#     '''
-#     parameter = forms.ChoiceField()
-#     def __init__(self,  *args, **kwargs):
-#         super(SearchParam, self).__init__(*args, **kwargs)
-#         choices = (('', ''),
-#                    ('http://i.am.a/avocet', 'avocet'),
-#                    ('http://i.am.a/beaver', 'beaver'),
-#                    ('http://i.am.a/cheetah', 'cheetah'),
-#                    ('http://i.am.a/dugong', 'dugong'),
-#                    ('http://i.am.a/emu', 'emu'))
-#         self.fields['parameter'].choices = choices
-
-
-# class UMSTASHParam(forms.Form):
-#     """
-#     A django form for adding UM STASH elements to a linkage search path
-#     """
-#     parameter = forms.ChoiceField()
-#     def __init__(self,  *args, **kwargs):
-#         super(UMSTASHParam, self).__init__(*args, **kwargs)
-#         stashRes = moq.subject_by_graph(fuseki_process,
-#                                         'http://um/stashconcepts.ttl')
-#         # define choices
-#         choices = [(stash['subject'], stash['subject'].split('/')[-1]) for
-#                    stash in stashRes]
-        
-
-#         self.fields['parameter'].choices = choices
-
-# class UMFCParam(forms.Form):
-#     '''A django form for adding UM STASH elements to a linkage search path
-#     '''
-#     parameter = forms.ChoiceField()
-#     def __init__(self,  *args, **kwargs):
-#         super(UMFCParam, self).__init__(*args, **kwargs)
-#         fcRs = moq.subject_by_graph(fuseki_process,
-#                                         'http://um/fieldcode.ttl')
-#         # define choices
-#         choices = [(fc['subject'], fc['subject'].split('/')[-1]) for fc in fcRs]
-        
-
-#         self.fields['parameter'].choices = choices
-
-
-# class GRIBParam(forms.Form):
-#     '''A django form for adding GRIB elements to a linkage search path
-#     '''
-#     parameter = forms.ChoiceField()
-#     def __init__(self,  *args, **kwargs):
-#         super(GRIBParam, self).__init__(*args, **kwargs)
-#         gribRes = moq.subject_by_graph(fuseki_process,
-#                                        'http://grib/codesflags.ttl')
-#         # define choices
-#         choices = [(grib['subject'], grib['subject']) for grib in gribRes]
-        
-#         self.fields['parameter'].choices = choices
-
-            
-# class CFParam(forms.Form):
-#     '''A django form for adding CF elements to a linkage search path
-#     '''
-#     parameter = forms.CharField(max_length=100, required=False)
-#     cf_type = forms.ChoiceField(choices=[('Field','Field')], required=False)
-#     standard_name = forms.ChoiceField(required=False)
-#     long_name = forms.CharField(max_length=50, required=False)
-#     units = forms.CharField(max_length=16, required=False)
-    
-#     def __init__(self,  *args, **kwargs):
-#         super(CFParam, self).__init__(*args, **kwargs)
-#         snRes = moq.subject_by_graph(fuseki_process,
-#                                      'http://CF/cf-standard-name-table.ttl')
-#         # define choices
-#         choices = [(name['subject'],name['subject'].split('/')[-1]) for
-#                                                               name in snRes]
-
-#         self.fields['standard_name'].choices = choices
-#         self.fields['parameter'].widget = forms.HiddenInput()
-        
-#     def clean(self):
-#         cleaned_data = super(CFParam, self).clean()
-#         pred_obj = {}
-#         pred_obj['mrcf:type'] = '"%s"' % cleaned_data.get('cf_type')
-#         if cleaned_data.get('standard_name') != \
-#                                         'http://cf-pcmdi.llnl.gov/documents/':
-#             pred_obj['mrcf:standard_name'] = '<{}>'.format(
-#                                              cleaned_data.get('standard_name'))
-#         if cleaned_data.get('long_name') != '':
-#             pred_obj['mrcf:long_name'] = '"%s"' % cleaned_data.get('long_name')
-#         if cleaned_data.get('units') != '':
-#             pred_obj['mrcf:units'] = '"%s"' % cleaned_data.get('units')
-#         # print repr(pred_obj)
-#         cfres = moq.get_cflinks(fuseki_process, pred_obj)
-#         # print 'cfres: ', cfres
-#         if not cfres:
-#             # if there is no result returned from the query, then
-#             # create the record and rerun the query
-#             cfres = moq.create_cflink(fuseki_process, pred_obj,
-#                                       'http://www.metarelate.net/metocean/cf')
-#             #cfres = moq.get_cflinks(fuseki_process, pred_obj)
-#         # print len(cfres)
-#         # print 'cfres: ', cfres
-#         if len(cfres) == 1:
-#             # assign the single result to be returned by the function
-#             cflink = cfres[0]['s']
-#         else:
-#             cflink = ''
-#         cleaned_data['parameter'] = cflink
-#         # print 'cflink: ',cflink
-#         return cleaned_data
-        
-
 
 
 
@@ -601,25 +505,6 @@ class ContactForm(forms.Form):
 
 
 
-
-# class ConceptForm(forms.Form):
-#     """Form for the display and selection of concepts"""
-#     concept = forms.CharField(max_length=200, required=False)
-#     components = forms.CharField(max_length=200)
-#     display = forms.BooleanField(required=False)
-#     def __init__(self, *args, **kwargs):
-#        super(ConceptForm, self).__init__(*args, **kwargs)
-#        self.fields['concept'].widget.attrs['readonly'] = True
-#        self.fields['components'].widget.attrs['readonly'] = True
-#        self.fields['concept'].widget = forms.HiddenInput()
-#     def clean(self):
-#         if self.data.has_key('create'):
-#             self.cleaned_data['operation'] = 'create'
-#             #make one
-#         elif self.data.has_key('search'):
-#             self.cleaned_data['operation'] = 'search'
-        
-#         return self.cleaned_data
 
 
 class MappingForm(forms.Form):

@@ -46,10 +46,6 @@ os.environ['JENAROOT'] = JENAROOT
 os.environ['FUSEKI_HOME'] = FUSEKIROOT
 
 
-
-
-
-
 class FusekiServer(object):
     """
     A class to represent an instance of a process managing
@@ -112,6 +108,7 @@ class FusekiServer(object):
             
 
     def status(self):
+        """check status of instance (is it up?)"""
         return self._check_port()
 
     def _check_port(self):
@@ -124,9 +121,7 @@ class FusekiServer(object):
         except socket.error, e: 
             #print "Connecting to %s on port %s failed with
             # the following error: %s" %(address, port, e) 
-            return False 
-
-
+            return False
 
 
     def clean(self):
@@ -140,7 +135,6 @@ class FusekiServer(object):
             os.remove(TDBfile)
         return glob.glob("%s*"% TDB)
         
-
 
     def save(self):
         """
@@ -161,7 +155,6 @@ class FusekiServer(object):
                         sg.write('\n')
 
 
-
     def revert(self):
         """
         identify all cached changes in the metocean graph
@@ -175,9 +168,11 @@ class FusekiServer(object):
             graph = 'http://%s/%s' % (maingraph, ingraph)
             revert_string = queries.revert_cache(self, graph)
 
+
     def query_cache(self):
         """
         identify all cached changes in the metocean graph
+
         """
         results = []
         maingraph = 'metarelate.net'
@@ -187,8 +182,6 @@ class FusekiServer(object):
             result = queries.query_cache(self, graph)
             results = results + result
         return results
-
-
 
 
     def load(self):
@@ -223,11 +216,11 @@ class FusekiServer(object):
         return failures
 
 
-
-
     def run_query(self, query_string, output='json', update=False, debug=False):
         """
         run a query_string on the FusekiServer instance
+        return the results
+        
         """
         if not self.status():
             self.stop()
@@ -296,6 +289,7 @@ class FusekiServer(object):
         returns a dictionary of component information
         recursive call to get all the nested formatConcept
         information from a formatConcept
+        
         """
         # c_dict = {'formatConcept':'', 'mr:format': '', 'skos:member': []},
         top_c = queries.retrieve_component(self, c_id)
@@ -338,6 +332,7 @@ class FusekiServer(object):
     def _retrieve_value_map(self, valmap_id, inv):
         """
         returns a dictionary of valueMap information
+        
         """
         if inv == '"False"':
             inv = False
@@ -356,26 +351,7 @@ class FusekiServer(object):
             value_map['mr:target']['value'] = vm_record['target']
         for role in ['mr:source', 'mr:target']:
             value_map[role] = self._retrieve_value(value_map[role]['value'])
-    #         val = queries.retrieve_value(self,
-    #                         value_map[role]['value'])
-    #         for key in val.keys():
-    #             value_map[role]['mr:{}'.format(key)] = val[key]
-    #         for sc_prop in ['mr:subject', 'mr:object']:
-    #             pid = value_map[role].get(sc_prop)
-    #             if pid:
-    #                 prop = queries.retrieve_scoped_property(self, pid)
-    #                 if prop:
-    #                     value_map[role][sc_prop] = {}
-    #                     for pkey in prop:
-    #                         pv = prop[pkey]
-    #                         value_map[role][sc_prop]['mr:{}'.format(pkey)] = pv
-    #                         if pkey == 'hasProperty':
-    #                             aprop = queries.retrieve_property(self, value_map[role][sc_prop]['mr:{}'.format(pkey)])
-    #                             value_map[role][sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
-    #                             for p in aprop:
-    # #                                if not aprop[p].startswith('<http'):
-    # #                                    aprop[p] = '"{}"'.format(aprop[p])
-    #                                 value_map[role][sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p]
+
         return value_map
 
     def _retrieve_value(self, val_id):
@@ -397,7 +373,8 @@ class FusekiServer(object):
                         pv = prop[pkey]
                         value_dict[sc_prop]['mr:{}'.format(pkey)] = pv
                         if pkey == 'hasProperty':
-                            aprop = queries.retrieve_property(self, value_dict[sc_prop]['mr:{}'.format(pkey)])
+                            pr = value_dict[sc_prop]['mr:{}'.format(pkey)]
+                            aprop = queries.retrieve_property(self, pr)
                             value_dict[sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
                             for p in aprop:
                                 value_dict[sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p]
@@ -413,6 +390,7 @@ class FusekiServer(object):
         """
         returns the json for a mapping, fully expanded
         from the mapping Id
+        
         """
         referrer = {'mapping': mapping['mapping'],
                     'mr:source': {'component': mapping['source']},
@@ -433,9 +411,7 @@ class FusekiServer(object):
 
 
 def process_data(jsondata):
-    """
-    helper method to take JSON output from a query and return the results
-    """
+    """ helper method to take JSON output from a query and return the results"""
     resultslist = []
     try:
         jdata = json.loads(jsondata)
@@ -470,11 +446,3 @@ def process_data(jsondata):
             resultslist.append(tmpdict)
     return resultslist
 
-# def group_by(resultslist, group_by):
-#     """
-#     implementation of group_by functionality as a post processing step
-#     takes a resultslist, as output from process_data and uses the named group_by
-#     keys to aggregate the quantities into lists
-#     """
-#     modresults = resultslist
-#     return modresults

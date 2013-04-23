@@ -73,6 +73,8 @@ class FusekiServer(object):
         
         """
         if not self._check_port():
+            print 'rm nohup.out'
+            os.remove('nohup.out')
             self._process = subprocess.Popen(['nohup',
                                        FUSEKIROOT +
                                        '/fuseki-server',
@@ -208,8 +210,8 @@ class FusekiServer(object):
         run the validation queries
         """
         failures = {}
-        mm_string = 'The following mappings are ambiguous, providing multiple '
-        mm_string += 'targets in the same format for a particular source'
+        mm_string = 'The following mappings are ambiguous, providing multiple '\
+                    'targets in the same format for a particular source'
         failures[mm_string] = queries.multiple_mappings(self)
         invalid_vocab = 'The following mappings contain an undeclared URI'
         failures[invalid_vocab] = queries.valid_vocab(self)
@@ -253,8 +255,9 @@ class FusekiServer(object):
         try:
             data = opener.open(urllib2.Request(BASEURL), qstr).read()
         except urllib2.URLError as err:
-            ec = "Error connection to Fuseki server on {}.\n".format(BASEURL)
-            ec += 'server returned {}'.format(err)
+            ec = 'Error connection to Fuseki server on {}.\n server returned {}'
+            ec.format(BASEURL, err)
+            ec += .format(err)
             raise RuntimeError(ec)
             # self.stop()
             # self.start()
@@ -322,7 +325,7 @@ class FusekiServer(object):
                 subc_dict = self._retrieve_component(component)
                 c_dict['mr:hasComponent'].append(subc_dict)
             if top_c.get('mediates'):
-                c_dict['dc:mediates'] = [top_c['mediates']]
+                c_dict['dc:mediator'] = [top_c['mediates']]
             if top_c.get('requires'):
                 c_dict['dc:requires'] = top_c['requires']
         else:
@@ -340,7 +343,7 @@ class FusekiServer(object):
             inv = True
         else:
             raise ValueError('inv = {}, not "True" or "False"'.format(inv))
-        print '_retrieve_value_map'
+        #print '_retrieve_value_map'
         value_map = {'valueMap':valmap_id, 'mr:source':{}, 'mr:target':{}}
         vm_record = queries.retrieve_valuemap(self, valmap_id)
         if inv:

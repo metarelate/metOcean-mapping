@@ -862,4 +862,12 @@
             skos:notation "7777" ;
             .
             
+            <http://def.ecmwf.int/api/grib/keys/table2Version> a skos:concept ;
+            skos:notation "table2Version" ;
+            .
+
+	    <http://def.ecmwf.int/api/grib/keys/indicatorOfParameter> a skos:concept ;
+	    skos:notation "indicatorOfParameter" ;
+	    .
+            
             

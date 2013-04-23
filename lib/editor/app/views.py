@@ -114,6 +114,8 @@ def _prop_id(members):
             new_props = new_comp.get('mr:hasProperty')
             if props and new_props:
                 for i, (prop, new_prop) in enumerate(zip(props, new_props)):
+                    # remove old property id
+                    prop.pop('property', None)
                     prop_res = moq.get_property(fuseki_process, prop)
                     cpid = '{}'.format(prop_res['property'])
                     props[i] = cpid
@@ -125,6 +127,8 @@ def _prop_id(members):
             cres = moq.get_component(fuseki_process, comp_mem)
             mem['mr:hasComponent'] = cres['component']
             new_mem['mr:hasComponent']['component'] = cres['component']
+        # remove old property id
+        mem.pop('property', None)
         res = moq.get_property(fuseki_process, mem)
         pid = res['property']
         new_mem['property'] = pid
@@ -179,8 +183,8 @@ def _create_properties(key, requestor, new_map, components):
     prop_ids, new_map[key]['mr:hasProperty'] = _prop_id(props)
     comp_dict = {'mr:hasFormat':'%s' % requestor[key]['mr:hasFormat'],
                                 'mr:hasProperty':prop_ids}
-    if requestor[key].get('dc:mediates'):
-        comp_dict['dc:mediates'] = requestor[key]['dc:mediates']
+    if requestor[key].get('dc:mediator'):
+        comp_dict['dc:mediator'] = requestor[key]['dc:mediator']
     if requestor[key].get('dc:requires'):
         comp_dict['dc:requires'] = requestor[key]['dc:requires']
     comp = moq.get_component(fuseki_process, comp_dict)
@@ -328,7 +332,7 @@ def _component_links(key, request, amended):
                                    ref=json.dumps(remover))
                     pad['remove'] = {'url':url, 'label':'remove this item'}
     ## mediators
-    for fckey in ['dc:requires', 'dc:mediates']:
+    for fckey in ['dc:requires', 'dc:mediator']:
         url = None
         # if True:
         # if fformat == 'cf':
@@ -474,7 +478,7 @@ def __component_links(key, requestor, amended_dict):
                                                        ref=json.dumps(remover))
                     amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'][j]['remove'] = {'url':url, 'label':'remove this item'}
     ## mediators
-    for fckey in ['dc:requires', 'dc:mediates']:
+    for fckey in ['dc:requires', 'dc:mediator']:
         url = None
         if True:
         # if fformat == 'cf':
@@ -567,7 +571,7 @@ def define_mediator(request, mediator, fformat):
         response = HttpResponseRedirect(url)
     else:
         con_dict = {'form':form}
-        if mediator == 'dc:mediates':
+        if mediator == 'dc:mediator':
             links = []
             link_url = url_qstr(reverse('create_mediator',
                                         kwargs={'fformat':fformat}),
@@ -595,7 +599,7 @@ def create_mediator(request, fformat):
     if request.method == 'POST' and form.is_valid():
         mediator = form.cleaned_data['mediator']
         moq.create_mediator(fuseki_process, mediator, fformat)
-        kw = {'mediator':'dc:mediates','fformat':fformat}
+        kw = {'mediator':'dc:mediator','fformat':fformat}
         url = url_qstr(reverse('define_mediator', kwargs=kw),
                                    ref=requestor_path)
         response = HttpResponseRedirect(url)
@@ -904,20 +908,24 @@ def mapping_edit(request):
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \
                   mapping.get('hasValueMaps', '').split('&').sort()
-            if ts and tt and tvm:
-                initial = mapping
-                if mapping.get('valueMaps'):
-                    initial['valueMaps'] = '&'.join(mapping['valueMaps'])
-                if mapping.get('note'):
-                    initial['comment'] = mapping['note']
-                if mapping.get('reason'):
-                    initial['next_reason'] = mapping['reason']
-                if mapping.get('status'):
-                    initial['next_status'] = mapping['status']
-                if mapping.get('creator'):
-                    initial['last_editor'] = mapping['creator']
-            else:
-                raise ValueError('mismatch in referrer')
+            # if ts and tt and tvm:
+            initial = mapping
+            initial['source'] = requestor.get('mr:source').get('component')
+            initial['target'] =  requestor.get('mr:target').get('component')
+            initial['valueMaps'] = '&'.join([vm.get('valueMap') for vm in
+                                         requestor.get('mr:hasValueMap', [])])
+            if mapping.get('valueMaps'):
+                initial['valueMaps'] = '&'.join(mapping['valueMaps'])
+            if mapping.get('note'):
+                initial['comment'] = mapping['note'].strip('"')
+            if mapping.get('reason'):
+                initial['next_reason'] = mapping['reason']
+            if mapping.get('status'):
+                initial['next_status'] = mapping['status']
+            if mapping.get('creator'):
+                initial['last_editor'] = mapping['creator']
+#            else:
+#                raise ValueError('mismatch in referrer')
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = requestor

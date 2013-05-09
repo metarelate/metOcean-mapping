@@ -330,24 +330,24 @@ def _component_links(key, request, amended):
     ## mediators
     for fckey in ['dc:requires', 'dc:mediates']:
         url = None
-        if True:
+        # if True:
         # if fformat == 'cf':
-            adder = copy.deepcopy(request)
-            if request[key].get(fckey):
-                if fckey == 'dc:requires':
-                    adder[key][fckey].append('&&&&')
-                    rev = reverse('define_mediator', kwargs={'mediator':fckey,
-                                                             'fformat':fformat})
-                    url = url_qstr(rev, ref=json.dumps(adder))
-            else:
-                adder[key][fckey] = ['&&&&']
+        adder = copy.deepcopy(request)
+        if request[key].get(fckey):
+            if fckey == 'dc:requires':
+                adder[key][fckey].append('&&&&')
                 rev = reverse('define_mediator', kwargs={'mediator':fckey,
                                                          'fformat':fformat})
                 url = url_qstr(rev, ref=json.dumps(adder))
-                amended[key][fckey] = []
-            if url:
-                amended[key][fckey].append({'url': url,
-                                            'label': 'add a {}'.format(fckey)}) 
+        else:
+            adder[key][fckey] = ['&&&&']
+            rev = reverse('define_mediator', kwargs={'mediator':fckey,
+                                                     'fformat':fformat})
+            url = url_qstr(rev, ref=json.dumps(adder))
+            amended[key][fckey] = []
+        if url:
+            amended[key][fckey].append({'url': url,
+                                        'label': 'add a {}'.format(fckey)}) 
     return amended
 
 

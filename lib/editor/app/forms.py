@@ -110,7 +110,7 @@ class Mediator(forms.Form):
         if isinstance(meds, list):
             meds = [(med['mediator'], med['label']) for med in meds]
         else:
-            meds = (meds['mediator'], meds['label'])
+            meds = [(meds['mediator'], meds['label'])]
         #meds = [('<http://www.metarelate.net/metocean/mediates/cf/calendar>',
         #         'calendar')]
         self.fields['mediator'].choices = meds
@@ -139,6 +139,9 @@ class Value(forms.Form):
     format specific
     
     """
+    #two name fields are provided, 'name' is a drop down list of known names,
+    #'_name' is a free text field for unknown names
+    #only one may be used, validated in clean()
     name = forms.ChoiceField(required=False)
     _name = forms.CharField(required=False)
     value = forms.CharField(required=False)
@@ -195,7 +198,7 @@ class Value(forms.Form):
             choices = [('','')] + choices
             self.fields['name'].choices = choices
         else:
-            raise ValueError('invalid format supplied: {}'.format(fformat))
+            raise ValueError('invalid format supplied: {}'.format(self.fformat))
     def clean(self):
         name = self.cleaned_data.get('name')
         _name = self.cleaned_data.get('_name')
@@ -205,21 +208,21 @@ class Value(forms.Form):
         st_name = self.cleaned_data.get('standard_name')
         cfmodel = self.cleaned_data.get('cf model')
         op = self.cleaned_data.get('operator')
-        if name:
-            if _name:
-                raise forms.ValidationError('Name, name are mutually exclusive')
+        if name and _name:
+            # only one of name and _name may be used in a valid form entry
+            raise forms.ValidationError('Name, name are mutually exclusive')
+        elif not name and not _name:
+            # one name must be selected
+            raise forms.ValidationError('a name must be selected')
         else:
-            if not _name:
-                raise forms.ValidationError('a name must be selected')
-            else:
-                n = '<http://'
-                if self.fformat == 'cf':
-                    n += 'def.cfconventions.org/datamodel/attribute_name#{}>'
-                elif self.fformat == 'um':
-                    n += 'reference.metoffice.gov.uk/def/um/computed_value#{}>'
-                elif self.fformat == 'grib':
-                    n += 'reference.metoffice.gov.uk/def/grib/computed_value#{}>'
-                self.cleaned_data['name'] = n.format(_name) 
+            n = '<http://'
+            if self.fformat == 'cf':
+                n += 'def.cfconventions.org/datamodel/attribute_name#{}>'
+            elif self.fformat == 'um':
+                n += 'reference.metoffice.gov.uk/def/um/computed_value#{}>'
+            elif self.fformat == 'grib':
+                n += 'reference.metoffice.gov.uk/def/grib/computed_value#{}>'
+            self.cleaned_data['name'] = n.format(_name) 
         if op and not (fcode or lit or stcode or st_name or cfmodel):
             raise forms.ValidationError('if operator is set '
                                         'then a value or code is '
@@ -268,7 +271,7 @@ class Value(forms.Form):
 
 def _unpack_values(vals):
     """
-    return the entiress for the ChoiceField choices for a list of values
+    return the entries for the ChoiceField choices for a list of values
     available to map
     
     """
@@ -336,11 +339,11 @@ class DerivedValue(forms.Form):
         obj = self.data.get('_object')
         obj_lit = self.data.get('_object_literal')
         if not (obj or obj_lit):
-            err = 'an object (choice or literal) is required'
-            raise forms.ValidationError(err)
+            msg = 'an object (choice or literal) is required'
+            raise forms.ValidationError(msg)
         elif obj and obj_lit:
-            err = 'the object and object_literal fields are mutually exclusive'
-            raise forms.ValidationError(err)
+            msg = 'the object and object_literal fields are mutually exclusive'
+            raise forms.ValidationError(msg)
         elif obj_lit:
             try:
                 float(obj_lit)
@@ -427,7 +430,7 @@ class MappingMeta(forms.Form):
                     changed = True
                     changes.append((mkey,(self.data.get(fkey),
                                           mapping.get(mkey, ''))))
-            if changed == False:
+            if not changed:
                 raise forms.ValidationError('No update: mapping not changed')
             else:
                 print 'changes:', changes

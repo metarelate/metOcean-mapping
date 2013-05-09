@@ -1,4 +1,3 @@
-import subprocess
 
 TMPFILE = 'gribkeys'
 OUTFILE = 'apikeys.ttl'
@@ -26,16 +25,16 @@ outstr = '''#(C) British Crown Copyright 2011 - 2012, Met Office This file is pa
 prefix = 'http://def.ecmwf.int/api/grib/keys/'
 
 with open(TMPFILE) as keys:
-    lines = keys.readlines()
-    for line in lines:
-        line = line.rstrip('\n')
-        line = line.split('(')[0].strip()
-        if not line.startswith('==='):
-            outstr += '''<{pref}{line}> rdf:type skos:concept ;
-            skos:prefLabel "{line}" ;
-            .
-            
-            '''.format(pref=prefix,line=line)
+    for line in keys:
+        line = line.split('(')[0]
+        if len(line)>0:
+            line = line.strip()
+            if not line.startswith('==='):
+                outstr += '''<{pref}{line}> rdf:type skos:concept ;
+                skos:prefLabel "{line}" ;
+                .
+
+                '''.format(pref=prefix,line=line)
 
 with open(OUTFILE, 'w') as ttl:
     ttl.write(outstr)

@@ -1179,13 +1179,13 @@ def mapping_by_properties(fuseki_process, prop_list, debug=False):
         }
         ''' % fstr
         results = fuseki_process.run_query(qstr, debug=debug)
-        print results
+        #print results
         maps = set([r['mapping'] for r in results])
         if not mapping:
             mappings = maps
         else:
             mappings.intersection_update(maps)
-    print mappings
+    #print mappings
     return mappings
 
 

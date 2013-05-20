@@ -1,0 +1,31 @@
+{% load dict_keys %}
+{% load inclusions %}
+
+          {% if aproperty.url %}
+            <li> <a href="{{ aproperty.url }}">{{ aproperty.label }} </a>
+            </li>
+          {% endif %}
+          {% if aproperty|multi_key:"mr:name" %}
+            <li>{{ aproperty|prefix_uri:"mr:name" }}</li>
+          {% endif %}
+          <ul>
+          {% if aproperty|multi_key:"rdf:value" %}
+            <li>{{ aproperty|prefix_uri:"rdf:value" }}</li>
+          {% endif %}
+          {% if aproperty|multi_key:"mr:operator" %}
+            <li>{{ aproperty|prefix_uri:"mr:operator" }}</li>
+          {% endif %}
+          {% if aproperty|multi_key:"remove" %}
+            <li><a href="{{ aproperty|multi_key:"remove,url" }}"> {{ aproperty|multi_key:"remove,label" }}</a></li>
+          {% endif %}
+          {% if aproperty|multi_key:"define_component" %}
+            <li><a href="{{ aproperty|multi_key:"define_component,url" }}"> {{ aproperty|multi_key:"define_component,label" }}</a></li>
+          {% endif %}
+          {% if aproperty|multi_key:"mr:hasComponent" %}
+            <ul>
+            {% for bproperty in  aproperty|multi_key:"mr:hasComponent,mr:hasProperty" %}
+            {% show_property bproperty %}
+            {% endfor %}
+            </ul>
+          {% endif %}
+          </ul>

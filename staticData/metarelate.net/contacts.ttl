@@ -19,7 +19,7 @@
 @prefix momet08: <http://reference.metoffice.gov.uk/def/um/met08/> .
 @prefix moumdpC4: <http://reference.metoffice.gov.uk/def/um/umdp/c4/> .
 @prefix moumdpC4Pseud: <http://reference.metoffice.gov.uk/def/um/umdp/c4/pseudo/> .
-@prefix mr: <http://www.metarelate.net/predicates/index.html#> .
+@prefix mr: <http://www.metarelate.net/vocabulary/index.html#> .
 @prefix mrcf: <http://www.metarelate.net/predicates/CF.html#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -28,24 +28,153 @@
 
 
 
-metoc:people a mr:contactList ;
-rdfs:label "Registered MetaRelate Contributors"@en .
+metoc:people a skos:ConceptScheme ;
+skos:prefLabel "Registered MetaRelate Contributors"@en .
 
-metoc:organisations a mr:contactList ;
-rdfs:label "Registered MetaRelate Managing Organisation"@en .
+metoc:organisations a skos:ConceptScheme ;
+skos:prefLabel "Registered MetaRelate Managing Organisation"@en .
 
 
-github:marqh a mr:contact ;
-skos:member metoc:people ;
-mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+<http://www.metarelate.net/metOcean/people/marqh> a skos:Concept ;
+skos:inScheme metoc:people ;
+skos:prefLabel "marqh" ;
+skos:definition github:marqh ;
+dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
-github:esc24 a mr:contact ;
-skos:member metoc:people ;
-mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
 
-github:scitools a mr:contact ;
-skos:member metoc:organisations ;
-mr:creation "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+<http://www.metarelate.net/metOcean/people/esc24> a skos:Concept ;
+skos:inScheme metoc:people ;
+skos:prefLabel "esc24" ;
+skos:definition github:esc24 ;
+dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+
+
+<http://www.metarelate.net/metOcean/organisations/scitools> a skos:Concept ;
+skos:inScheme metoc:organisations ;
+skos:prefLabel "scitools" ;
+skos:definition github:scitools ;
+dc:valid  "2012-10-08T08:30:13.498404"^^xsd:dateTime .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

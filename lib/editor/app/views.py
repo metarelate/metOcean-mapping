@@ -47,6 +47,7 @@ def home(request):
     returns a view for the editor homepage
     a control panel for interacting with the triple store
     and reporting on status
+    
     """
     persist = fuseki_process.query_cache()
     cache_status = '{} statements in the local triple store are' \
@@ -58,22 +59,17 @@ def home(request):
         if form.is_valid():
             invalids = form.cleaned_data.get('validation')
             if invalids:
-                # for key in invalids:
-                #     invalids[key] = '|'.join([inv['amap'] for
-                #                               inv in invalids[key]])
-                # request_string = '|'.join([invalids[key] for key in invalids])
-                # print request_string
-                url = url_with_querystring(reverse('invalid_mappings'),
+                url = url_qstr(reverse('invalid_mappings'),
                                            ref=json.dumps(invalids))
                 response = HttpResponseRedirect(url)
             else:
-                url = url_with_querystring(reverse('home'))
+                url = url_qstr(reverse('home'))
                 response = HttpResponseRedirect(url)
     else:
         form = forms.HomeForm(initial={'cache_status':cache_status,
                                        'cache_state':cache_state})
         con_dict = {}
-        searchurl = url_with_querystring(reverse('fsearch'),ref='')
+        searchurl = url_qstr(reverse('fsearch'),ref='')
         con_dict['search'] = {'url':searchurl, 'label':'search for mappings'}
         createurl = reverse('mapping_formats')
         con_dict['create'] = {'url':createurl, 'label':'create a new mapping'}
@@ -84,18 +80,14 @@ def home(request):
     return response
 
 def mapping_formats(request):
-    """
-    returns a view to define the formats for the mapping_concept
-    """
+    """ returns a view to define the formats for the mapping_concept """
     if request.method == 'POST':
         form = forms.MappingFormats(data=request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            referrer = {'mr:source': {'mr:format': data['source_format'],
-                                     'skos:member': []},
-                        'mr:target': {'mr:format': data['target_format'],
-                                     'skos:member': []}}
-            url = url_with_querystring(reverse('mapping_concepts'),
+            referrer = {'mr:source': {'mr:hasFormat': data['source_format']},
+                        'mr:target': {'mr:hasFormat': data['target_format']}}
+            url = url_qstr(reverse('mapping_concepts'),
                                        ref=json.dumps(referrer))
             response = HttpResponseRedirect(url)
     else:
@@ -106,117 +98,397 @@ def mapping_formats(request):
 
 def _prop_id(members):
     """
-    helper method
+    helper function
     returns the value_ids from a list of value records
     in the triple store
+    
     """
+    new_map = copy.deepcopy(members)
     property_list = []
     prop_ids = []
-    for mem in members:
-        if not mem.get('skos:Concept'):
-            res = moq.get_property(fuseki_process, mem)
-            pid = '%s' % res['property']
-            mem['property'] = '%s' % pid
-            prop_ids.append(pid)
-    return prop_ids, members
+    for mem, new_mem in zip(members, new_map):
+        comp_mem = mem.get('mr:hasComponent')
+        new_comp = new_mem.get('mr:hasComponent')
+        if comp_mem and new_comp:
+            props = comp_mem.get('mr:hasProperty')
+            new_props = new_comp.get('mr:hasProperty')
+            if props and new_props:
+                for i, (prop, new_prop) in enumerate(zip(props, new_props)):
+                    prop_res = moq.get_property(fuseki_process, prop)
+                    cpid = '{}'.format(prop_res['property'])
+                    props[i] = cpid
+                    new_props[i]['component'] = cpid
+            else:
+                #validation error please
+                raise ValueError('If a property has a component that component'
+                                 'must itself reference properties')
+            cres = moq.get_component(fuseki_process, comp_mem)
+            mem['mr:hasComponent'] = cres['component']
+            new_mem['mr:hasComponent']['component'] = cres['component']
+        res = moq.get_property(fuseki_process, mem)
+        pid = res['property']
+        new_mem['property'] = pid
+        prop_ids.append(pid)
+    return prop_ids, new_map
 
-def url_with_querystring(path, **kwargs):
+
+def url_qstr(path, **kwargs):
     """
     helper function
     returns url for path and query string
-
+    
     """
     return path + '?' + urllib.urlencode(kwargs)
 
 
-def _create_concepts(key, request_search, new_map, concepts):
+def _create_components(key, requestor, new_map, components):
     """
-    helper to create concepts in the triple store
-    """
-    if isinstance(request_search[key]['skos:member'], list):
-        subc_ids = []
-        for i,member in enumerate(request_search[key]['skos:member']):
-            if member.get('skos:member') is not None:
-                prop_ids, members = _prop_id(member.get('skos:member'))
-                sub_concept_dict = {
-                    'mr:format': '<%s>' % request_search[key]['mr:format'],
-                    'skos:member':prop_ids}                    
-                sub_concept = moq.get_format_concept(fuseki_process,
-                                                     sub_concept_dict)
-                subc_ids.append('%s' % sub_concept['formatConcept'])
-                new_map[key]['skos:member'][i]['formatConcept'] = \
-                                '%s' % sub_concept['formatConcept']
-        prop_ids, members = _prop_id(request_search[key]['skos:member'])
-        concept_dict = {'mr:format':'<%s>' % request_search[key]['mr:format'],
-                                    'skos:member':prop_ids+subc_ids}
-        if request_search[key].get('dc:mediates'):
-            concept_dict['dc:mediates'] = request_search[key]['dc:mediates']
-        if request_search[key].get('dc:requires'):
-            concept_dict['dc:requires'] = request_search[key]['dc:requires']
-        concept = moq.get_format_concept(fuseki_process, concept_dict)
-        if concept:
-            concepts[key] = concept['formatConcept']
-        else:
-            ec = 'formatConcept get did not return 1 id {}'.format(concept)
-            raise ValueError(ec)
-    return new_map, concepts
+    return the mapping json structure and components list having created
+    relevant component records in the triple store
 
-def _concept_links(key, request_search, amended_dict):
+    """
+    subc_ids = []
+    for i, (mem, newm) in enumerate(zip(requestor[key]['mr:hasComponent'],
+                                  new_map[key]['mr:hasComponent'])):
+        if mem.get('mr:hasProperty'):
+            pr_ids, newm['mr:hasProperty'] = _prop_id(mem.get('mr:hasProperty'))
+            sub_concept_dict = {
+                'mr:hasFormat': '%s' % requestor[key]['mr:hasFormat'],
+                'mr:hasProperty':pr_ids}                    
+            sub_comp = moq.get_component(fuseki_process,
+                                                 sub_concept_dict)
+            subc_ids.append('%s' % sub_comp['component'])
+            newm['component'] = '%s' % sub_comp['component']
+    comp_dict = {'mr:hasFormat':'%s' % requestor[key]['mr:hasFormat'],
+                                'mr:hasComponent':subc_ids}
+    comp = moq.get_component(fuseki_process, comp_dict)
+    if comp:
+        components[key] = comp['component']
+    else:
+        ec = 'get_component get did not return 1 id {}'.format(concept)
+        raise ValueError(ec)
+    return new_map, components
+
+def _create_properties(key, requestor, new_map, components):
+    """
+    return the mapping json structure and components list having created
+    relevant property records in the triple store
+    
+    """
+    props = requestor[key]['mr:hasProperty']
+    prop_ids, new_map[key]['mr:hasProperty'] = _prop_id(props)
+    comp_dict = {'mr:hasFormat':'%s' % requestor[key]['mr:hasFormat'],
+                                'mr:hasProperty':prop_ids}
+    if requestor[key].get('dc:mediates'):
+        comp_dict['dc:mediates'] = requestor[key]['dc:mediates']
+    if requestor[key].get('dc:requires'):
+        comp_dict['dc:requires'] = requestor[key]['dc:requires']
+    comp = moq.get_component(fuseki_process, comp_dict)
+    if comp:
+        components[key] = comp['component']
+    else:
+        ec = 'get_component get did not return 1 id {}'.format(concept)
+        raise ValueError(ec)
+    return new_map, components
+
+def _component_links(key, request, amended):
+    """
+    helper method
+    provides urls in amended (the dictionary used for rendering the view,
+    for adding and removing concepts
+    
+    """
+    fformurl = '%s' % request[key]['mr:hasFormat']
+    fformat = request[key]['mr:hasFormat'].split('/')[-1]
+    fformat = fformat.rstrip('>')
+    ## 'add a new component' link
+    fterm = copy.deepcopy(request)
+    if not fterm[key].get('mr:hasProperty'):
+        if not fterm[key].get('mr:hasComponent'):
+            fterm[key]['mr:hasComponent'] = []
+            amended[key]['mr:hasComponent'] = []
+        fterm[key]['mr:hasComponent'].append({"mr:hasComponent":[]})
+        refer = {'url': url_qstr(reverse('mapping_concepts'),
+                                             ref=json.dumps(fterm)),
+                'label': 'add a component'}
+        amended[key]['mr:hasComponent'].append(refer)
+    ## 'add a new property' link if no sub-component exist
+    if not request[key].get('mr:hasComponent'):
+        new_term = copy.deepcopy(request)
+        if not new_term[key].get('mr:hasProperty'):
+            new_term[key]['mr:hasProperty'] = []
+            amended[key]['mr:hasProperty'] = []
+        new_term[key]['mr:hasProperty'].append('&&&&')
+        refer = {'url':url_qstr(reverse('define_property',
+                      kwargs={'fformat':fformat}),
+                      ref=json.dumps(new_term)),
+                'label':'add a property definition'}
+        amended[key]['mr:hasProperty'].append(refer)
+    ## removers
+    rem_keys = ['mr:hasProperty', 'mr:hasComponent']
+    for rem_key in rem_keys:
+        for i, rs in enumerate(request[key].get(rem_key, [])):
+            remover = copy.deepcopy(request)
+            del remover[key][rem_key][i]
+            url = url_qstr(reverse('mapping_concepts'),
+                                               ref=json.dumps(remover))
+            ad = amended[key].get(rem_key, [])[i]
+            ad['remove'] = {'url':url, 'label':'remove this item'}
+    for i, rq in enumerate(request[key].get('mr:hasProperty', [])):
+        ad = amended[key].get('mr:hasProperty', [])[i]
+        ## link to add a new component to a 'name only' property
+        if rq.get('mr:name') and not rq.get('mr:operator') and not \
+            rq.get('rdf:value') and not rq.get('mr:hasComponent'):
+            refr = copy.deepcopy(request)
+            new_comp = {'mr:hasFormat':fformurl}
+            refr[key]['mr:hasProperty'][i]['mr:hasComponent'] = new_comp
+            compurl = url_qstr(reverse('mapping_concepts'),
+                                     ref=json.dumps(refr))
+            ref = {'url':compurl, 'label':'add a component'}
+            ad['define_component'] = ref
+        #adder for a new sub-conponent property to a name and concept property
+        elif rq.get('mr:name') and not rq.get('mr:operator') and not \
+            rq.get('rdf:value') and rq.get('mr:hasComponent'):
+            refr = copy.deepcopy(request)
+            rf = refr[key]['mr:hasProperty'][i]
+            if not rq['mr:hasComponent'].get('mr:hasProperty'):
+                rf['mr:hasComponent']['mr:hasProperty'] = []
+                ad['mr:hasComponent']['mr:hasProperty'] = []
+            rf['mr:hasComponent']['mr:hasProperty'].append('&&&&')
+            prop = {'url':url_qstr(reverse('define_property',
+                                           kwargs={'fformat':fformat}),
+                                   ref=json.dumps(refr)),
+                    'label':'add a property definition'}
+            ad['mr:hasComponent']['mr:hasProperty'].append(prop)
+            #remover for each sub-component property
+            for j, prq in enumerate(rq['mr:hasComponent'].get('mr:hasProperty',
+                                                              [])):
+                remover = copy.deepcopy(request)
+                rm = remover[key]['mr:hasProperty'][i]
+                del rm['mr:hasComponent']['mr:hasProperty'][j]
+                url = url_qstr(reverse('mapping_concepts'),
+                               ref=json.dumps(remover))
+                rmer = {'url':url, 'label':'remove this item'}
+                ad['mr:hasComponent']['mr:hasProperty'][j]['remove'] = rmer
+    ## iterate through sub-components
+    for k, scomp in enumerate(request[key].get('mr:hasComponent', [])):
+        amd = amended[key].get('mr:hasComponent', [])[k]
+        ## add property
+        new_term = copy.deepcopy(request)
+        if not scomp.get('mr:hasProperty'):
+            new_term[key]['mr:hasComponent'][k]['mr:hasProperty'] = []
+            amd['mr:hasProperty'] = []
+        new_term[key]['mr:hasComponent'][k]['mr:hasProperty'].append('&&&&')
+        refer = {'url':url_qstr(reverse('define_property',
+                                        kwargs={'fformat':fformat}),
+                                ref=json.dumps(new_term)),
+                'label':'add a property definition'}
+        amd['mr:hasProperty'].append(refer)
+        
+        for i, elem in enumerate(scomp.get('mr:hasProperty', [])):
+            ad = amd.get('mr:hasProperty', [])[i]
+        ## remove property
+            remover = copy.deepcopy(request)
+            del remover[key]['mr:hasComponent'][k]['mr:hasProperty'][i]
+            url = url_qstr(reverse('mapping_concepts'), ref=json.dumps(remover))
+            ad['remove'] = {'url':url, 'label':'remove this item'}
+            ## enable component as property
+            if elem.get('mr:name') and not elem.get('mr:operator') and not \
+                elem.get('rdf:value') and not elem.get('mr:hasComponent'):
+                refr = copy.deepcopy(request)
+                refR = refr[key]['mr:hasComponent'][k]['mr:hasProperty'][i]
+                refR['mr:hasComponent'] = {'mr:hasFormat':fformurl}
+                compurl = url_qstr(reverse('mapping_concepts'),
+                                         ref=json.dumps(refr))
+                ref = {'url':compurl, 'label':'add a component'}
+                ad['define_component'] = ref
+            elif elem.get('mr:name') and not elem.get('mr:operator') and not \
+                elem.get('rdf:value') and elem.get('mr:hasComponent'):
+                #adder for a new property
+                refr = copy.deepcopy(request)
+                refR = refr[key]['mr:hasComponent'][k]['mr:hasProperty'][i]
+                if not elem['mr:hasComponent'].get('mr:hasProperty'):
+                    refR['mr:hasComponent']['mr:hasProperty'] = []
+                    ad['mr:hasComponent']['mr:hasProperty'] = []
+                refR['mr:hasComponent']['mr:hasProperty'].append('&&&&')
+                prop = {'url':url_qstr(reverse('define_property',
+                                                kwargs={'fformat':fformat}),
+                                       ref=json.dumps(refr)),
+                        'label':'add a property definition'}
+                ad['mr:hasComponent']['mr:hasProperty'].append(prop)
+                #remover for each property
+                pelems = elem['mr:hasComponent'].get('mr:hasProperty', [])
+                pads = ad['mr:hasComponent'].get('mr:hasProperty', [])
+                for j, pelem, pad in enumerate(pelems):
+                    pad = pads[j]
+                    rer = copy.deepcopy(request)
+                    rmR = rer[key]['mr:hasComponent'][k]['mr:hasProperty'][i]
+                    del rmR['mr:hasComponent']['mr:hasProperty'][j]
+                    url = url_qstr(reverse('mapping_concepts'),
+                                   ref=json.dumps(remover))
+                    pad['remove'] = {'url':url, 'label':'remove this item'}
+    ## mediators
+    for fckey in ['dc:requires', 'dc:mediates']:
+        url = None
+        # if True:
+        # if fformat == 'cf':
+        adder = copy.deepcopy(request)
+        if request[key].get(fckey):
+            if fckey == 'dc:requires':
+                adder[key][fckey].append('&&&&')
+                rev = reverse('define_mediator', kwargs={'mediator':fckey,
+                                                         'fformat':fformat})
+                url = url_qstr(rev, ref=json.dumps(adder))
+        else:
+            adder[key][fckey] = ['&&&&']
+            rev = reverse('define_mediator', kwargs={'mediator':fckey,
+                                                     'fformat':fformat})
+            url = url_qstr(rev, ref=json.dumps(adder))
+            amended[key][fckey] = []
+        if url:
+            amended[key][fckey].append({'url': url,
+                                        'label': 'add a {}'.format(fckey)}) 
+    return amended
+
+
+### for comparison post refactoring (see above): 
+def __component_links(key, requestor, amended_dict):
     """
     helper method
     provides urls in amended_dict for adding and removing concepts
     """
-    if isinstance(request_search[key]['skos:member'], list):
-        fterm = copy.deepcopy(request_search)
-        fterm[key]['skos:member'].append({"skos:member":[]})
-        amended_dict[key]['skos:member'].append({
-            'url': url_with_querystring(reverse('mapping_concepts'),
-                                               ref=json.dumps(fterm)),
-            'label': 'add a sub_concept'})
-        new_term = copy.deepcopy(request_search)
-        new_term[key]['skos:member'].append('&&&&')
-        amended_dict[key]['skos:member'].append({'url':url_with_querystring(
-            reverse('define_property', kwargs={
-                'fformat':new_term[key]['mr:format'].split('/')[-1]}),
-                ref=json.dumps(new_term)), 'label':'add a value definition'})
-        for i, element in enumerate(request_search[key]['skos:member']):
-            remover = copy.deepcopy(request_search)
-            del remover[key]['skos:member'][i]
-            url = url_with_querystring(reverse('mapping_concepts'),
+    fformurl = '%s' % requestor[key]['mr:hasFormat']
+    fformat = requestor[key]['mr:hasFormat'].split('/')[-1]
+    fformat = fformat.rstrip('>')
+    ## 'add a new component' link
+    fterm = copy.deepcopy(requestor)
+    if not fterm[key].get('mr:hasProperty'):
+        if not fterm[key].get('mr:hasComponent'):
+            fterm[key]['mr:hasComponent'] = []
+            amended_dict[key]['mr:hasComponent'] = []
+        fterm[key]['mr:hasComponent'].append({"mr:hasComponent":[]})
+        refer = {'url': url_qstr(reverse('mapping_concepts'),
+                                             ref=json.dumps(fterm)),
+                'label': 'add a component'}
+        amended_dict[key]['mr:hasComponent'].append(refer)
+    ## 'add a new property' link if no sub-component exist
+    if not requestor[key].get('mr:hasComponent'):
+        new_term = copy.deepcopy(requestor)
+        if not new_term[key].get('mr:hasProperty'):
+            new_term[key]['mr:hasProperty'] = []
+            amended_dict[key]['mr:hasProperty'] = []
+        new_term[key]['mr:hasProperty'].append('&&&&')
+        refer = {'url':url_qstr(reverse('define_property',
+                      kwargs={'fformat':fformat}),
+                      ref=json.dumps(new_term)),
+                'label':'add a property definition'}
+        amended_dict[key]['mr:hasProperty'].append(refer)
+    ## removers
+    rem_keys = ['mr:hasProperty', 'mr:hasComponent']
+    for rem_key in rem_keys:
+        for i, element in enumerate(requestor[key].get(rem_key, [])):
+            remover = copy.deepcopy(requestor)
+            del remover[key][rem_key][i]
+            url = url_qstr(reverse('mapping_concepts'),
                                                ref=json.dumps(remover))
-            amended_dict[key]['skos:member'][i]['remove'] = {'url':url,
+            amended_dict[key][rem_key][i]['remove'] = {'url':url,
                                     'label':'remove this item'}
-            if element.get('skos:member') is not None:
-                addition = copy.deepcopy(request_search)
-                addition[key]['skos:member'][i]["skos:member"].append('&&&&')
-                url = url_with_querystring(reverse('define_property', kwargs={
-                    'fformat':addition[key]['mr:format'].split('/')[-1]}),
-                    ref=json.dumps(addition))
-                amended_dict[key]['skos:member'][i]["skos:member"].append({
-                    'url':url, 'label':'add a value definition'})
-                for j, element in enumerate(
-                        request_search[key]['skos:member'][i]['skos:member']):
-                    remover = copy.deepcopy(request_search)
-                    del remover[key]['skos:member'][i]['skos:member'][j]
-                    url = url_with_querystring(reverse('mapping_concepts'),
+    for i, elem in enumerate(requestor[key].get('mr:hasProperty', [])):
+        ## link to add a new component to a 'name only' property
+        if elem.get('mr:name') and not elem.get('mr:operator') and not \
+            elem.get('rdf:value') and not elem.get('mr:hasComponent'):
+            refr = copy.deepcopy(requestor)
+            refr[key]['mr:hasProperty'][i]['mr:hasComponent'] = {'mr:hasFormat':fformurl}
+            compurl = url_qstr(reverse('mapping_concepts'),
+                                     ref=json.dumps(refr))
+            ref = {'url':compurl, 'label':'add a component'}
+            #print ref
+            amended_dict[key]['mr:hasProperty'][i]['define_component'] = ref
+        #adder for a new sub-conponent property to a name and concept property
+        elif elem.get('mr:name') and not elem.get('mr:operator') and not \
+            elem.get('rdf:value') and elem.get('mr:hasComponent'):
+            refr = copy.deepcopy(requestor)
+            if not elem['mr:hasComponent'].get('mr:hasProperty'):
+                refr[key]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'] = []
+                amended_dict[key]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'] = []
+            refr[key]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'].append('&&&&')
+            prop = {'url':url_qstr(reverse('define_property',
+              kwargs={'fformat':fformat}),
+              ref=json.dumps(refr)), 'label':'add a property definition'}
+            amended_dict[key]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'].append(prop)
+            #remover for each sub-component property
+            for j, pelem in enumerate(elem['mr:hasComponent'].get('mr:hasProperty', [])):
+                remover = copy.deepcopy(requestor)
+                del remover[key]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'][j]
+                url = url_qstr(reverse('mapping_concepts'),
+                                                   ref=json.dumps(remover))
+                amended_dict[key]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'][j]['remove'] = {'url':url, 'label':'remove this item'}
+    ## iterate through sub-components
+    for k, scomp in enumerate(requestor[key].get('mr:hasComponent', [])):
+        ## add property
+        new_term = copy.deepcopy(requestor)
+        if not new_term[key]['mr:hasComponent'][k].get('mr:hasProperty'):
+            new_term[key]['mr:hasComponent'][k]['mr:hasProperty'] = []
+            amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'] = []
+        new_term[key]['mr:hasComponent'][k]['mr:hasProperty'].append('&&&&')
+        refer = {'url':url_qstr(reverse('define_property',
+                      kwargs={'fformat':fformat}),
+                      ref=json.dumps(new_term)),
+                'label':'add a property definition'}
+        amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'].append(refer)
+    ## remove property
+        for i, elem in enumerate(requestor[key]['mr:hasComponent'][k].get('mr:hasProperty', [])):
+            remover = copy.deepcopy(requestor)
+            del remover[key]['mr:hasComponent'][k]['mr:hasProperty'][i]
+            url = url_qstr(reverse('mapping_concepts'),
+                                               ref=json.dumps(remover))
+            amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['remove'] = {'url':url,
+                                    'label':'remove this item'}
+            ## enable component as property
+            if elem.get('mr:name') and not elem.get('mr:operator') and not \
+                elem.get('rdf:value') and not elem.get('mr:hasComponent'):
+                refr = copy.deepcopy(requestor)
+                refr[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent'] = {'mr:hasFormat':fformurl}
+                compurl = url_qstr(reverse('mapping_concepts'),
+                                         ref=json.dumps(refr))
+                ref = {'url':compurl, 'label':'add a component'}
+                #print ref
+                amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['define_component'] = ref
+            elif elem.get('mr:name') and not elem.get('mr:operator') and not \
+                elem.get('rdf:value') and elem.get('mr:hasComponent'):
+                #adder for a new property
+                refr = copy.deepcopy(requestor)
+                if not elem['mr:hasComponent'].get('mr:hasProperty'):
+                    refr[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'] = []
+                    amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'] = []
+                refr[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'].append('&&&&')
+                prop = {'url':url_qstr(reverse('define_property',
+                  kwargs={'fformat':fformat}),
+                  ref=json.dumps(refr)), 'label':'add a property definition'}
+                amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'].append(prop)
+                #remover for each property
+                for j, pelem in enumerate(elem['mr:hasComponent'].get('mr:hasProperty', [])):
+                    remover = copy.deepcopy(requestor)
+                    del remover[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'][j]
+                    url = url_qstr(reverse('mapping_concepts'),
                                                        ref=json.dumps(remover))
-                    amended_dict[key]['skos:member'][i]['skos:member'][j]\
-                        ['remove'] = {'url': url, 'label': 'remove this item'}
+                    amended_dict[key]['mr:hasComponent'][k]['mr:hasProperty'][i]['mr:hasComponent']['mr:hasProperty'][j]['remove'] = {'url':url, 'label':'remove this item'}
+    ## mediators
     for fckey in ['dc:requires', 'dc:mediates']:
         url = None
-        fformat = request_search[key]['mr:format'].split('/')[-1]
-        if fformat == 'cf':
-            adder = copy.deepcopy(request_search)
-            if request_search[key].get(fckey):
+        if True:
+        # if fformat == 'cf':
+            adder = copy.deepcopy(requestor)
+            if requestor[key].get(fckey):
                 if fckey == 'dc:requires':
                     adder[key][fckey].append('&&&&')
-                    url = url_with_querystring(reverse('define_mediator',
+                    url = url_qstr(reverse('define_mediator',
                                                        kwargs={'mediator':fckey,
                                                         'fformat':fformat}),
                                                         ref=json.dumps(adder))
             else:
                 adder[key][fckey] = ['&&&&']
-                url = url_with_querystring(reverse('define_mediator', kwargs=
+                url = url_qstr(reverse('define_mediator', kwargs=
                                                    {'mediator':fckey,
                                                     'fformat':fformat}),
                                                     ref=json.dumps(adder))
@@ -232,35 +504,40 @@ def mapping_concepts(request):
     """
     returns a view to present the mapping concepts:
     source and target, and the valuemaps
+    
     """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    if request_search_path == '':
-        request_search_path = '{}'
-    request_search = json.loads(request_search_path)
-    amended_dict = copy.deepcopy(request_search)
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    if requestor_path == '':
+        requestor_path = '{}'
+    requestor = json.loads(requestor_path)
+    print requestor
+    amended_dict = copy.deepcopy(requestor)
     if request.method == 'POST':
         ## get the formatConcepts for source and target
         ## pass to value map definition
         form = forms.MappingConcept(request.POST)
-        concepts = {}
-        new_map = copy.deepcopy(request_search)
+        components = {}
+        new_map = copy.deepcopy(requestor)
         for key in ['mr:source','mr:target']:
-            if request_search[key].get('skos:member') is not None:
-                new_map, concepts = _create_concepts(key, request_search,
-                                           new_map, concepts)
+            if requestor[key].get('mr:hasProperty'):
+                new_map, components = _create_properties(key, requestor,
+                                                         new_map, components)
+            elif requestor[key].get('mr:hasComponent'):
+                new_map, components = _create_components(key, requestor,
+                                                         new_map, components)
         for key in ['mr:source','mr:target']:
-            if concepts.has_key(key):
-                new_map[key]['formatConcept'] = '%s' % concepts[key]
+            if components.has_key(key):
+                new_map[key]['component'] = '%s' % components[key]
             else:
                 raise ValueError('The source and target are not both defined')
         ref = json.dumps(new_map)
-        url = url_with_querystring(reverse('value_maps'),ref=ref)
+        url = url_qstr(reverse('value_maps'),ref=ref)
         response = HttpResponseRedirect(url)
     else:
         form = forms.MappingConcept()
         for key in ['mr:source','mr:target']:
-            amended_dict = _concept_links(key, request_search, amended_dict)
+            amended_dict = _component_links(key, requestor, amended_dict)
         con_dict = {}
         con_dict['mapping'] = amended_dict
         con_dict['form'] = form
@@ -272,40 +549,97 @@ def define_mediator(request, mediator, fformat):
     """
     returns a view to define a mediator for a
     formatConcept
+    
     """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    request_search = json.loads(request_search_path)
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    requestor = json.loads(requestor_path)
     if request.method == 'POST':
         form = forms.Mediator(request.POST, fformat=fformat)
-        if form.is_valid():
-            mediator = form.cleaned_data['mediator']
-            request_search_path = request_search_path.replace('&&&&',
-                                                              mediator)
-            # request_search_path = json.dumps(request_search)
-            url = url_with_querystring(reverse('mapping_concepts'),
-                                       ref=request_search_path)
-            response = HttpResponseRedirect(url)
     else:
         form = forms.Mediator(fformat=fformat)
+    if request.method == 'POST' and form.is_valid():
+        mediator = form.cleaned_data['mediator']
+        requestor_path = requestor_path.replace('&&&&',
+                                                          mediator)
+        url = url_qstr(reverse('mapping_concepts'),
+                                   ref=requestor_path)
+        response = HttpResponseRedirect(url)
+    else:
+        con_dict = {'form':form}
+        if mediator == 'dc:mediates':
+            links = []
+            link_url = url_qstr(reverse('create_mediator',
+                                        kwargs={'fformat':fformat}),
+                                ref=requestor_path)
+            links.append({'url':link_url, 'label':'create a new mediator'})
+            con_dict['links'] = links
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
+    return response
+
+
+def create_mediator(request, fformat):
+    """
+    returns a view to define a mediator for a
+    formatConcept
+    
+    """
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    requestor = json.loads(requestor_path)
+    if request.method == 'POST':
+        form = forms.NewMediator(request.POST)
+    else:
+        form = forms.NewMediator()
+    if request.method == 'POST' and form.is_valid():
+        mediator = form.cleaned_data['mediator']
+        moq.create_mediator(fuseki_process, mediator, fformat)
+        kw = {'mediator':'dc:mediates','fformat':fformat}
+        url = url_qstr(reverse('define_mediator', kwargs=kw),
+                                   ref=requestor_path)
+        response = HttpResponseRedirect(url)
+    else:
         con_dict = {'form':form}
         context = RequestContext(request, con_dict)
         response = render_to_response('simpleform.html', context)
     return response
 
+
 def _get_value(value):
     """
+    helper function
     returns a value id for a given json input
+    
     """
-    id_value = copy.deepcopy(value)
-    #fragile, doesn't work for nested values
-    prop = moq.get_property(fuseki_process,
-                               value['mr:subject']['mr:property'])
-    sc_prop = moq.get_scoped_property(fuseki_process,
-                                      {'mr:property':prop['property'],
+    if value.get('mr:subject').get('mr:subject'):
+        subj_id = _get_value(value.get('mr:subject'))
+    else:
+        prop = moq.get_property(fuseki_process,
+                               value['mr:subject']['mr:hasProperty'])
+        sc_prop = moq.get_scoped_property(fuseki_process,
+                                      {'mr:hasProperty':prop['property'],
                                     'mr:scope':value['mr:subject']['mr:scope']})
-    value =  moq.get_value(fuseki_process, {'mr:operator':value['mr:operator'],
-                                    'mr:subject':sc_prop['scopedProperty']})
+        subj_id = sc_prop['scopedProperty']
+    new_val = {'mr:subject':subj_id}
+    if value.get('mr:object'):
+        if isinstance(value.get('mr:object'), dict) and \
+            value.get('mr:object').get('mr:subject'):
+            obj_id = _get_value(value.get('mr:object'))
+        else:
+            if isinstance(value.get('mr:object'), dict):
+                oprop = moq.get_property(fuseki_process,
+                               value['mr:object']['mr:hasProperty'])
+                o_sc_prop = moq.get_scoped_property(fuseki_process,
+                                      {'mr:hasProperty':oprop['property'],
+                                    'mr:scope':value['mr:object']['mr:scope']})
+                obj_id = o_sc_prop['scopedProperty']
+            else:
+                obj_id = value.get('mr:object')
+        new_val['mr:object'] = obj_id
+    if value.get('mr:operator'):
+        new_val['mr:operator'] = value.get('mr:operator')
+    value =  moq.get_value(fuseki_process, new_val)
     v_id = value['value']
     return v_id
         
@@ -314,13 +648,15 @@ def value_maps(request):
     """
     returns a view to define value mappings for a defined
     source and target pair
+    
     """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    if request_search_path == '':
-        request_search_path = '{}'
-    request_search = json.loads(request_search_path)
-    amended_dict = copy.deepcopy(request_search)
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    if requestor_path == '':
+        requestor_path = '{}'
+    requestor = json.loads(requestor_path)
+    print requestor
+    amended_dict = copy.deepcopy(requestor)
     if request.method == 'POST':
         ## create the valuemaps as defined
         ## check if a mapping (including invalid) provides this source to target
@@ -329,29 +665,29 @@ def value_maps(request):
         ## then pass the json of {source:{},target:{},valueMaps[{}]
         ## to mapping_edit for creation
         form = forms.MappingConcept(request.POST)
-        for valuemap in request_search.get('mr:valueMap',[]):
+        for valuemap in requestor.get('mr:hasValueMap',[]):
             # vmap = moq.get_value_map(fuseki_process, valmap)
             vmap_dict = {'mr:source':_get_value(valuemap['mr:source']),
                          'mr:target':_get_value(valuemap['mr:target'])}
             vmap = moq.get_value_map(fuseki_process, vmap_dict)
             valuemap['valueMap'] = vmap['valueMap']
             #value['value'] = val_id
-        url = url_with_querystring(reverse('mapping_edit'),
-                                   ref = json.dumps(request_search))
+        url = url_qstr(reverse('mapping_edit'),
+                                   ref = json.dumps(requestor))
         response = HttpResponseRedirect(url)
             
     else:
         form = forms.MappingConcept()
-        if not amended_dict.has_key('mr:valueMap'):
-            addition = copy.deepcopy(request_search)
-            addition['mr:valueMap'] = []
-            url = url_with_querystring(reverse('define_valuemaps'),
+        if not amended_dict.has_key('mr:hasValueMap'):
+            addition = copy.deepcopy(requestor)
+            addition['mr:hasValueMap'] = []
+            url = url_qstr(reverse('define_valuemaps'),
                                        ref=json.dumps(addition))
             amended_dict['addValueMap'] = {'url':url,
                                            'label':'add a value mapping'}
         else:
-            url = url_with_querystring(reverse('define_valuemaps'),
-                                       ref=json.dumps(request_search))
+            url = url_qstr(reverse('define_valuemaps'),
+                           ref=json.dumps(requestor))
             amended_dict['addValueMap'] = {'url':url,
                                            'label':'add a value mapping'}
         con_dict = {}
@@ -361,81 +697,167 @@ def value_maps(request):
         response = render_to_response('mapping_concept.html', context)
     return response
 
+def _define_valuemap_choice(comp, aproperty, choice):
+    """
+    helper function
+    returns a value map choice given the potential inputs
+    
+    """
+    pcomp = aproperty.get('mr:hasComponent')
+    if not aproperty.get('rdf:value') and not pcomp:
+        prop = {'mr:name':aproperty.get('mr:name')}
+        choice[1].append(json.dumps({'mr:scope':comp, 'mr:hasProperty': prop}))
+    elif pcomp:
+        for prop in pcomp.get('mr:hasProperty', []):
+            if not prop.get('rdf:value'):
+                val = json.dumps({'mr:scope':pcomp.get('component'), 
+                           'mr:hasProperty': {'mr:name': prop.get('mr:name')}})
+                choice[1].append(val)
+#            elif prop.get('mr:hasComponent'):
+    return choice
+
 def define_valuemap(request):
-    """
-    returns a view to input choices for an individual value_map
-    """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    request_search = json.loads(request_search_path)
+    """ returns a view to input choices for an individual value_map """
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    requestor = json.loads(requestor_path)
+    # print requestor
     source_list = []
     target_list = []
     choices = [('mr:source', source_list),('mr:target', target_list)]
-    for ch in choices:
-        for elem in request_search[ch[0]]['skos:member']:
-            if not elem.has_key('rdfs:literal'):
-                ch[1].append(('%s||%s' % (request_search[ch[0]]['formatConcept']
-                                          , elem.get('mr:name')),
-                              elem.get('mr:name', '').split('/')[-1]))
-        for elem in request_search[ch[0]]['skos:member']:
-            if elem.has_key('skos:member'):
-                for selem in elem['skos:member']:
-                    if not selem.has_key('rdfs:literal'):
-                        ch[1].append(('%s||%s' % (elem['formatConcept'],
-                                                  selem.get('mr:name')),
-                                      '  - %s' %
-                                selem.get('mr:name', '').split('/')[-1]))
-
+    for i, ch in enumerate(choices):
+        if requestor[ch[0]].get('mr:hasProperty'):
+            comp = requestor[ch[0]]['component']
+            for elem in requestor[ch[0]]['mr:hasProperty']:
+                choices[i] = _define_valuemap_choice(comp, elem, ch)
+        elif requestor[ch[0]].get('mr:hasComponent'):
+            for elem in requestor[ch[0]]['mr:hasComponent']:
+                comp = elem['component']
+                for selem in elem['mr:hasProperty']:
+                    choices[i] = _define_valuemap_choice(comp, selem, ch)
+        if requestor.get('derived_values'):
+            for derived in requestor['derived_values'].get(ch[0]):
+                ch[1].append(json.dumps(derived))
+    # print 'DERIVED VALUES'
+    # print requestor.get('derived_values')
     if request.method == 'POST':
         form = forms.ValueMap(request.POST, sc=source_list, tc=target_list)
         if form.is_valid():
-            source = form.cleaned_data['source_value'].split('||')
-            target = form.cleaned_data['target_value'].split('||')
-            new_vmap = {'mr:source':{'mr:operator':
-                        '''<http://www.openmath.org/cd/arith1.xhtml#plus>''',
-                                     'mr:subject':{'mr:scope':source[0],
-                                     'mr:property':{'mr:name':source[1]}}},
-                        'mr:target':{'mr:operator':
-                        '''<http://www.openmath.org/cd/arith1.xhtml#plus>''',
-                                     'mr:subject':{'mr:scope':target[0],
-                                     'mr:property':{'mr:name':target[1]}}}}
-            request_search['mr:valueMap'].append(new_vmap)
-                # {'mr:sourceFC':source[0],
-                #                                   'mr:sourceVal':source[1],
-                #                                   'mr:targetFC':target[0],
-                #                                   'mr:targetVal':target[1]})
-            request_search_path = json.dumps(request_search)
-            url = url_with_querystring(reverse('value_maps'),
-                                       ref=request_search_path)
-            response = HttpResponseRedirect(url)
+            source = json.loads(form.cleaned_data['source_value'])
+            if not source.get('mr:subject'):
+                source = {'mr:subject': source}
+            target = json.loads(form.cleaned_data['target_value'])
+            if not target.get('mr:subject'):
+                target = {'mr:subject': target}
+            new_vmap = {'mr:source':source,
+                        'mr:target':target}
+            requestor['mr:hasValueMap'].append(new_vmap)
+            if requestor.get('derived_values'):
+                del requestor['derived_values']
+            requestor_path = json.dumps(requestor)
+            url = url_qstr(reverse('value_maps'),
+                                       ref=requestor_path)
+            return HttpResponseRedirect(url)
     else:
         form = forms.ValueMap(sc=source_list, tc=target_list)
+    con_dict = {'form':form}
+    links = []
+    link_url = url_qstr(reverse('derived_value', kwargs={'role':'source'}),
+                                        ref=requestor_path)
+    links.append({'url':link_url, 'label':'create a derived source value'})
+    link_url = url_qstr(reverse('derived_value', kwargs={'role':'target'}),
+                                        ref=requestor_path)
+    links.append({'url':link_url, 'label':'create a derived target value'})
+    con_dict['links'] = links
+    context = RequestContext(request, con_dict)
+    return render_to_response('simpleform.html', context)
+
+
+def derived_value(request, role):
+    """
+    reurns a view to create a derived value
+    given the potnetial inputs from the component request
+    
+    """
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    requestor = json.loads(requestor_path)
+    if not requestor.get('derived_values'):
+        requestor['derived_values'] = {'mr:source':[], 'mr:target':[]}
+    source_list = []
+    target_list = []
+    choices = [('mr:source', source_list),('mr:target', target_list)]
+    for i, ch in enumerate(choices):
+        if requestor[ch[0]].get('mr:hasProperty'):
+            comp = requestor[ch[0]]['component']
+            for elem in requestor[ch[0]]['mr:hasProperty']:
+                choices[i] = _define_valuemap_choice(comp, elem, ch)
+        elif requestor[ch[0]].get('mr:hasComponent'):
+            for elem in requestor[ch[0]]['mr:hasComponent']:
+                comp = elem['component']
+                for selem in elem['mr:hasProperty']:
+                    choices[i] = _define_valuemap_choice(comp, selem, ch)
+        if requestor.get('derived_values'):
+            for derived in requestor['derived_values'].get(ch[0]):
+                ch[1].append(json.dumps(derived))
+    #print 'DERIVED VALUES'
+    #print requestor.get('derived_values')
+    if role == 'source':
+        components = source_list
+    elif role == 'target':
+        components = target_list
+    else:
+        raise ValueError('role must be source or target')
+    if request.method == 'POST':
+        form = forms.DerivedValue(request.POST, components=components)
+        if form.is_valid():
+            derived = {}
+            derived['mr:subject'] = json.loads(form.cleaned_data['_subject'])
+            if form.cleaned_data.get('_object'):
+                derived['mr:object'] = json.loads(form.cleaned_data['_object'])
+            elif form.cleaned_data.get('_object_literal'):
+                derived['mr:object'] = form.cleaned_data['_object_literal']
+            derived['mr:operator'] = form.cleaned_data['_operator']
+            requestor['derived_values']['mr:{}'.format(role)].append(derived)
+            requestor_path = json.dumps(requestor)
+            url = url_qstr(reverse('define_valuemaps'),
+                                       ref=requestor_path)
+            response = HttpResponseRedirect(url)
+        else:
+            con_dict = {'form':form}
+            context = RequestContext(request, con_dict)
+            response = render_to_response('simpleform.html', context)
+    else:
+        form = forms.DerivedValue(components=components)
         con_dict = {'form':form}
         context = RequestContext(request, con_dict)
         response = render_to_response('simpleform.html', context)
     return response
 
+
 def define_property(request, fformat):
-    """
-    returns a view to define an individual property
-    """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
+    """ returns a view to define an individual property  """
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
     if request.method == 'POST':
         form = forms.Value(request.POST, fformat=fformat)
         if form.is_valid():
             new_value = {}
             if form.cleaned_data.get('name'):
                 new_value['mr:name'] = form.cleaned_data['name']
-            if form.cleaned_data['literal'] != '""':
-                new_value['rdfs:literal'] =  form.cleaned_data['literal']
-            if form.cleaned_data.get('length'):
-                new_value['mr:length'] = form.cleaned_data['length']
+            if form.cleaned_data['value'] != '""':
+                new_value['rdf:value'] =  form.cleaned_data['value']
+            if form.cleaned_data.get('operator'):
+                new_value['mr:operator'] = form.cleaned_data['operator']
             newv = json.dumps(new_value)
-            request_search_path = request_search_path.replace('"&&&&"', newv)
-            url = url_with_querystring(reverse('mapping_concepts'),
-                                       ref=request_search_path)
+            requestor_path = requestor_path.replace('"&&&&"', newv)
+            url = url_qstr(reverse('mapping_concepts'),
+                                       ref=requestor_path)
             response = HttpResponseRedirect(url)
+        else:
+            con_dict = {'form':form}
+            context = RequestContext(request, con_dict)
+            response = render_to_response('simpleform.html', context)
     else:
         form = forms.Value(fformat=fformat)
         con_dict = {'form':form}
@@ -444,302 +866,159 @@ def define_property(request, fformat):
     return response
 
 
-def define_concept(request, fformat):
-    """
-    returns a view to define an indivdual  concept
-    """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    if request.method == 'POST':
-        form = forms.FormatConcept(request.POST, fformat=fformat)
-        if form.is_valid():
-            new_value = {'skos:member':[{}]}
-            newv = json.dumps(new_value)
-            request_search_path = request_search_path.replace('"&&&&"', newv)
-            url = url_with_querystring(reverse('mapping_concepts'),
-                                       ref=request_search_path)
-            response = HttpResponseRedirect(url)
-    else:
-        form = forms.FormatConcept(fformat=fformat)
-        con_dict = {'form':form}
-        context = RequestContext(request, con_dict)
-        response = render_to_response('simpleform.html', context)
-    return response
-
     
 def mapping_edit(request):
     """
     returns a view to provide editing to the mapping record defining a
     source target and any valuemaps from the referrer
+    
     """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    if request_search_path == '':
-        request_search_path = '{}'
-    request_search = json.loads(request_search_path)
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    if requestor_path == '':
+        requestor_path = '{}'
+    requestor = json.loads(requestor_path)
+    print requestor
     if request.method == 'POST':
         form = forms.MappingMeta(request.POST)
         if form.is_valid():
-            map_id = process_form(form, request_search_path)
-            request_search['mapping'] = map_id
-            url = url_with_querystring(reverse('mapping_edit'),
-                                       ref=json.dumps(request_search))
-            response = HttpResponseRedirect(url)
+            map_id = process_form(form, requestor_path)
+            requestor['mapping'] = map_id
+            url = url_qstr(reverse('mapping_edit'),
+                                       ref=json.dumps(requestor))
+            return HttpResponseRedirect(url)
     else:
         ## look for mapping, if it exists, show it, with a warning
         ## if a partially matching mapping exists, handle this (somehow)
-        initial = {'source':request_search.get('mr:source').get('formatConcept')
+        initial = {'invertible':'"True"',
+                   'source':requestor.get('mr:source').get('component')
                    ,
-                   'target':request_search.get('mr:target').get('formatConcept')
+                   'target':requestor.get('mr:target').get('component')
                    , 'valueMaps':'&'.join([vm.get('valueMap') for vm
-                                         in request_search.get('mr:valueMap',
+                                         in requestor.get('mr:hasValueMap',
                                                                [])])}
-        map_id = request_search.get('mapping')
-        print map_id
+        map_id = requestor.get('mapping')
         if map_id:
-            mapping = moq.get_mapping_by_id(fuseki_process, map_id)
-            print 'mapping:', mapping
+            mapping = moq.get_mapping_by_id(fuseki_process, map_id, val=False)
             ts = initial['source'] == mapping['source']
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \
-                  mapping.get('valueMaps', '').split('&').sort()
+                  mapping.get('hasValueMaps', '').split('&').sort()
             if ts and tt and tvm:
-                initial = mapping                
+                initial = mapping
+                if mapping.get('valueMaps'):
+                    initial['valueMaps'] = '&'.join(mapping['valueMaps'])
+                if mapping.get('note'):
+                    initial['comment'] = mapping['note']
+                if mapping.get('reason'):
+                    initial['next_reason'] = mapping['reason']
+                if mapping.get('status'):
+                    initial['next_status'] = mapping['status']
+                if mapping.get('creator'):
+                    initial['last_editor'] = mapping['creator']
             else:
                 raise ValueError('mismatch in referrer')
         form = forms.MappingMeta(initial)
-        con_dict = {}
-        con_dict['mapping'] = request_search
-        con_dict['form'] = form
-        context = RequestContext(request, con_dict)
-        response = render_to_response('mapping_concept.html', context)
-    return response
+    con_dict = {}
+    con_dict['mapping'] = requestor
+    con_dict['form'] = form
+    con_dict['amend'] = {'url': url_qstr(reverse(mapping_concepts),
+                                                    ref=requestor_path),
+                        'label': 'Re-define this Mapping'}
+    context = RequestContext(request, con_dict)
+    return render_to_response('mapping_concept.html', context)
 
 
 
-def process_form(form, request_search_path):
+def process_form(form, requestor_path):
+    """
+    process the submitted form
+    pass the data to the fuseki server to input into the triplestore
+    
+    """
     globalDateTime = datetime.datetime.now().isoformat()
-    form_data=form.cleaned_data
+    data = form.cleaned_data
     mapping_p_o = collections.defaultdict(list)
     ## take the new values from the form and add all of the initial values
     ## not included in the 'remove' field
-    for label in ['owner','watcher']:
-        data = form.cleaned_data
-        #if data['add_()s'.format(label)] != '':
-        if data['add_%ss' % label] != '':
-            for val in data['add_%ss' % label].split(','):
-                mapping_p_o['mr:%s' % label].append('"%s"' % val)
-        if data['%ss' % label] != '':
-            for val in data['%ss' % label].split(','):
-                if val not in data['remove_%ss' % label].split(',') and\
-                    val not in mapping_p_o['mr:%s' % label].split(','):
-                    mapping_p_o['mr:%s' % label].append('"%s"' % val)
-        #if len(mapping_p_o['mr:%s' % label]) == 0:
-        #    mapping_p_o['mr:%s' % label] = ['"None"']
-
+    ## to be reimplemented
+    # for label in ['owner','watcher']:
+    #     if data['add_%ss' % label] != '':
+    #         for val in data['add_%ss' % label].split(','):
+    #             mapping_p_o['mr:%s' % label].append('"%s"' % val)
+    #     if data['%ss' % label] != '':
+    #         for val in data['%ss' % label].split(','):
+    #             if val not in data['remove_%ss' % label].split(',') and\
+    #                 val not in mapping_p_o['mr:%s' % label].split(','):
+    #                 mapping_p_o['mr:%s' % label].append('"%s"' % val)
     mapping_p_o['dc:creator'] = ['%s' % data['editor']]
     mapping_p_o['dc:date'] = ['"%s"^^xsd:dateTime' % globalDateTime]
-    mapping_p_o['mr:status'] = ['"%s"' % data['next_status']]
+    mapping_p_o['mr:status'] = ['%s' % data['next_status']]
     if data['mapping'] != "":
         mapping_p_o['dc:replaces'] = ['%s' % data['mapping']]
     if data['comment'] != '':
         mapping_p_o['skos:note'] = ['"%s"' % data['comment']]
-    mapping_p_o['mr:reason'] = ['"%s"' % data['next_reason']]
+    mapping_p_o['mr:reason'] = ['%s' % data['next_reason']]
     mapping_p_o['mr:source'] = ['%s' % data['source']]
     mapping_p_o['mr:target'] = ['%s' % data['target']]
-    mapping_p_o['mr:invertible'] = ['"%s"' % data['invertible']]
-    if data['valueMaps']:
-        mapping_p_o['mr:valueMap'] = ['%s' % vm for vm in
+    mapping_p_o['mr:invertible'] = ['%s' % data['invertible']]
+    if data.get('valueMaps'):
+        mapping_p_o['mr:hasValueMap'] = ['%s' % vm for vm in
                                   data['valueMaps'].split('&')]
 
-    # #check to see if the updated mapping record is simply the last one
-    # changed = False
-    # if mapping_p_o.has_key('mr:owner') and \
-    #     mapping_p_o['mr:owner'] != ['"%s"' % owner for owner in form.cleaned_data['owners'].split(',')]:
-    #     changed = True
-    #     print 'owner: changed = True'
-    # if mapping_p_o.has_key('mr:watcher') and \
-    #     mapping_p_o['mr:watcher'] != ['"%s"' % watcher for watcher in form.cleaned_data['watchers'].split(',')]:
-    #     changed = True
-    #     print 'watcher: changed = True'
-    # if mapping_p_o['dc:creator'] != ['<%s>' % form.cleaned_data['last_editor']]:
-    #     changed = True
-    #     print 'creator: changed = True'
-    # if mapping_p_o['mr:status'] != ['"%s"' % form.cleaned_data['current_status']]:
-    #     changed = True
-    #     print 'status: changed = True'
-    # if mapping_p_o.has_key('skos:note') and \
-    #     mapping_p_o['skos:note'] != ['"%s"' % form.cleaned_data['comment']]:
-    #     changed = True
-    #     print 'comment: changed = True'
-    # if mapping_p_o['mr:reason'] != ['"%s"' % form.cleaned_data['reason']]:
-    #     changed = True
-    #     print 'reason: changed = True'
-    # if mapping_p_o['mr:source'] != ['<%s>' % form.cleaned_data['source']]:
-    #     changed = True
-    #     print 'source: changed = True'
-    # if mapping_p_o['mr:target'] != ['<%s>' % form.cleaned_data['target']]:
-    #     changed = True
-    #     print 'target: changed = True'
-    # if mapping_p_o['mr:invertible'] != []:
-    #     changed = True
-    #     print 'invertible: changed = True'
-    # if mapping_p_o['mr:valueMaps'] != ['<%s>' % form.cleaned_data['target']]:
-    #     changed = True
-    #     print 'target: changed = True'
-
     mapping = mapping_p_o
-    mapping = moq.create_mapping(fuseki_process, mapping_p_o,True)
+    mapping = moq.create_mapping(fuseki_process, mapping_p_o)
     map_id = mapping[0]['map']
 
     return map_id
-
-
-def _retrieve_format_concept(fc_id):
-    """
-    recursive call to get all the formatConcept
-    information from a formatConcept
-    """
-    # fc_dict = {'formatConcept':'', 'mr:format': '', 'skos:member': []},
-    top_fc = moq.retrieve_format_concept(fuseki_process, fc_id)
-    print top_fc
-    if top_fc:
-        fc_dict = {'formatConcept':fc_id, 'mr:format': top_fc['format'],
-                   'skos:member':[]}
-        if isinstance(top_fc['member'], str):
-            top_fc['member'] = [top_fc['member']]
-        for member in top_fc['member']:
-            print 'member', member
-            if member.startswith('<http://www.metarelate.net/metOcean/value/'):
-                val_dict = moq.retrieve_value(fuseki_process, member)
-                fc_dict['skos:member'].append(val_dict)
-            elif member.startswith(
-                    '<http://www.metarelate.net/metOcean/formatConcept/'):
-                subfc_dict = _retrieve_format_concept(member)
-                fc_dict.append(subfc_dict)
-            else:
-                raise ValueError('{} a malformed formatConcept'.format(fc_id))
-    return fc_dict
-
-
-def _mapping_json(mapping_id):
-    """
-    returns the json for a mapping, fully expanded
-    from the mapping Id
-    """
-    referrer = {'mapping': mapping_id,
-                'mr:source': {'formatConcept': ''},
-                'mr:target': {'formatConcept': ''},
-                'mr:valueMap': []}
-    mapping = moq.get_mapping_by_id(fuseki_process, mapping_id)
-    if mapping:
-        referrer['mr:source'] = _retrieve_format_concept(mapping['source'])
-        referrer['mr:target'] = _retrieve_format_concept(mapping['target'])
-        if mapping.get('valueMaps'):
-            for valmap in mapping['valueMaps'].split('&'):
-                referrer['mr:valueMap'].append(moq.retrieve_valuemap(valmap))
-        else:
-            referrer['mr:valueMap'] = []
-    return referrer
 
 
 def invalid_mappings(request):
     """
     list mappings which reference the concept search criteria
     by concept by source then target
+    
     """
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    if request_search_path == '':
-        request_search_path = '{}'
-    request_search = json.loads(request_search_path)
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    if requestor_path == '':
+        requestor_path = '{}'
+    requestor = json.loads(requestor_path)
     invalids = []
-    for key, mappings in request_search.iteritems():
+    for key, inv_mappings in requestor.iteritems():
         invalid = {'label':key, 'mappings':[]}
-        for mapping in mappings:
-            map_json = _mapping_json(mapping['amap'])
-            url = url_with_querystring(reverse('mapping_edit'),
-                                           ref=json.dumps(map_json))
-            label = 'mapping'
-            
-            invalid['mappings'].append({'url':url,
-                                        'label':label})
+        for inv_map in inv_mappings:
+            mapping = moq.get_mapping_by_id(fuseki_process, inv_map['amap'])
+            referrer = fuseki_process.structured_mapping(mapping)
+            map_json = json.dumps(referrer)
+            url = url_qstr(reverse('mapping_edit'), ref=map_json)
+            sig = inv_map.get('signature', [])
+            label = []
+            if isinstance(sig, list):
+                for elem in sig:
+                    label.append(elem.split('/')[-1].strip('<>'))
+            else:
+                label.append(sig.split('/')[-1].strip('<>'))
+            if label:
+                '&'.join(label)
+            else:
+                label = 'mapping'
+            invalid['mappings'].append({'url':url, 'label':label})
         invalids.append(invalid)
-    print invalids
     context_dict = {'invalid': invalids}
     context = RequestContext(request, context_dict)
     return render_to_response('select_list.html', context)
 
 
-    
-##### non-functional: not for review ####################################
-
-
-def search_param(request):
-    '''
-    '''
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    param_list = request_search_path.split('|')
-    Searchform = forms.SearchParam
-    if request.method == 'POST': # If the form has been submitted...
-        form = Searchform(request.POST) # A form bound to the POST data
-        if form.is_valid():
-            param_list.append(form.cleaned_data['parameter'])
-            param_string = '|'.join(param_list).lstrip('|')
-            url = url_with_querystring(reverse('search'),ref=param_string)
-            response = HttpResponseRedirect(url)
-    else:
-        form = Searchform()
-        context = RequestContext(request, {
-            'form':form,
-            })
-        response = render_to_response('form.html', context)
-    return response
-
-def format_param(request, fformat):
-    '''
-    '''
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    param_list = request_search_path.split('|')
-    if fformat == 'umSTASH':
-        Searchform = forms.UMSTASHParam
-    elif fformat == 'umFC':
-        Searchform = forms.UMFCParam
-    elif fformat == 'cf':
-        Searchform = forms.CFParam
-    elif fformat == 'grib':
-        Searchform = forms.GRIBParam
-    else:
-        raise NameError("there is no form available for this format type")
-    if request.method == 'POST': # If the form has been submitted...
-        form = Searchform(request.POST) # A form bound to the POST data
-        if form.is_valid():
-            param_list.append(form.cleaned_data['parameter'])
-            param_string = '|'.join(param_list).lstrip('|')
-            if fformat.startswith('um'):
-                fformat = 'um'
-            url = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref=param_string)
-            response = HttpResponseRedirect(url)
-    else:
-        form = Searchform()
-        context = RequestContext(request, {
-            'form':form,
-            })
-        response = render_to_response('form.html', context)
-    return response
-
+### searching    
 
 def fsearch(request):
-    """
-    Select a format
-    """
+    """ Select a format """
     urls = {}
     formats = ['um', 'cf', 'grib']
     for form in formats:
-        searchurl = url_with_querystring(reverse('search', kwargs={'fformat':form}),ref='')
-        search = {'url':searchurl, 'label':'search for %s concepts' % form}
+        searchurl = url_qstr(reverse('search', kwargs={'fformat':form}),ref='')
+        search = {'url':searchurl, 'label':'search for %s components' % form}
         urls[form] = search
     context = RequestContext(request, urls)
     return render_to_response('main.html', context)
@@ -749,131 +1028,88 @@ def fsearch(request):
 def search(request, fformat):
     """Select a set of parameters for a concept search"""
     itemlist = ['Search Parameters:']
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    paramlist = request_search_path.split('|')
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    if requestor_path == '':
+        requestor_path = '[]'
+    paramlist = json.loads(requestor_path)
     for param in paramlist:
         itemlist.append(param)
     con_dict = {'itemlist' : itemlist}
-    if fformat == 'um':
-        stashurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat + 'STASH'}),ref=request_search_path)
-        addstash = {'url':stashurl, 'label': 'add STASH concept'}
-        con_dict['addstash'] = addstash
-        fcurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat + 'FC'}),ref=request_search_path)
-        addfc = {'url':fcurl, 'label': 'add Field Code'}
-        con_dict['addfc'] = addfc
-    else:
-        addurl = url_with_querystring(reverse('format_param', kwargs={'fformat':fformat}),ref=request_search_path)
-        add = {'url':addurl, 'label':'add parameter'}
-        con_dict['add'] = add
-    conurl = url_with_querystring(reverse('concepts', kwargs={'fformat':fformat}), ref=request_search_path)
-    concepts = {'url':conurl, 'label':'find partially matching concepts'}
-    xconurl = url_with_querystring(reverse('concept', kwargs={'fformat':fformat}), ref=request_search_path)
-    xconcepts = {'url':xconurl, 'label':'find exactly matching concepts'}
+    addurl = url_qstr(reverse('search_property',
+                                           kwargs={'fformat':fformat}),
+                                           ref=requestor_path)
+    add = {'url':addurl, 'label':'add parameter'}
+    con_dict['add'] = add
+    conurl = url_qstr(reverse('search_maps'),
+                                  ref=requestor_path)
+    concepts = {'url':conurl, 'label':'find mappings'}
     con_dict['search'] = concepts
-    con_dict['exact'] = xconcepts
-    clearurl = url_with_querystring(reverse('search', kwargs={'fformat':fformat}), ref='')
+    clearurl = url_qstr(reverse('search',
+                                            kwargs={'fformat':fformat}), ref='')
     con_dict['clear'] = {'url':clearurl, 'label':'clear parameters'}
     context = RequestContext(request,con_dict)
     return render_to_response('main.html', context)
 
-def concept(request, fformat):
+
+def search_property(request, fformat):
     """
-    returns a view of the concept exactly matching the search pattern
+    returns a view to define an individual property
     """
-    if fformat == 'grib':
-        fformat = 'grib/2'
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    search_path = request_search_path.split('|')
-    components = ['<%s>' % component for component in search_path]
-    po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
-                'mr:component':components}
-    context_dict = {}
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    requestor = json.loads(requestor_path)
     if request.method == 'POST':
-        form = forms.ConceptForm(request.POST)
+        form = forms.Value(request.POST, fformat=fformat)
         if form.is_valid():
-            #redirect
-            if form.cleaned_data['operation'] == 'create':
-                concept_match = moq.get_concept(fuseki_process, po_dict, create=True)
-            redirect = url_with_querystring(reverse('mappings'), ref=request_search_path)
-            response = HttpResponseRedirect(redirect)
-        else:
-            print form.errors
-            
-    else:        
-        concept_match = moq.get_concept(fuseki_process, po_dict, create=False)
-        con_strs = moq.concept_components(fuseki_process, concept_match)
-        if len(con_strs) == 1:
-            con = con_strs[0]
-            concept = con['concept']
-            components = con['components'].split('&')
-            component_view = [component.split('/')[-1] for component in components]
-            init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
-            form = forms.ConceptForm(initial = init)
-            
-        elif len(con_strs) == 0:
-            context_dict['create'] = True
-            component_view = [component.split('/')[-1] for component in search_path]
-            init = {'components': '&'.join(component_view), 'display': True}
-            form = forms.ConceptForm(initial = init)
-        else:
-            raise ValueError('Two exact matches for concept exist: %s' % search_path) 
-        context_dict['form'] = form
-        context_dict['read_only'] =  READ_ONLY
-        context = RequestContext(request, context_dict)
-        response = render_to_response('form.html', context)
-    return response
-
-
-def concepts(request, fformat):
-    """returns a view listing all the concepts which match or submatch the search pattern
-    """
-    if fformat == 'grib':
-        fformat = 'grib/2'
-    request_search_path = request.GET.get('ref', '')
-    request_search_path = urllib.unquote(request_search_path).decode('utf8')
-    request_search = request_search_path.split('|')
-    if request_search != [u'']:
-        search_path = request_search
-    else:
-        search_path = False#[('','')]
-    ConceptFormSet = formset_factory(forms.ConceptForm, extra=0)
-    if request.method == 'POST': # If the form has been submitted...
-        formlist = ConceptFormSet(data=request.POST)
-        concepts = []
-        if formlist.is_valid():
-            for form in formlist:
-                if form.cleaned_data['display'] is True:
-                    concepts.append(form.cleaned_data['concept'])
-            param_string = '|'.join(concepts)
-            url = url_with_querystring(reverse('mappings'),ref=param_string)
+            new_value = {}
+            if form.cleaned_data.get('name'):
+                new_value['mr:name'] = form.cleaned_data['name']
+            if form.cleaned_data['value'] != '""':
+                new_value['rdf:value'] =  form.cleaned_data['value']
+            if form.cleaned_data.get('operator'):
+                new_value['mr:operator'] = form.cleaned_data['operator']
+            requestor.append(new_value)
+            requestor_path = json.dumps(requestor)
+            url = url_qstr(reverse('search',
+                                               kwargs={'fformat':fformat}),
+                                       ref=requestor_path)
             response = HttpResponseRedirect(url)
         else:
-            print formlist.errors
+            con_dict = {'form':form}
+            context = RequestContext(request, con_dict)
+            response = render_to_response('simpleform.html', context)
     else:
-        if search_path:
-            components = ['<%s>' % component for component in search_path]
-            po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat,
-                   'mr:component':components}
-        else:
-            po_dict = {'mr:format':'<http://metarelate.net/metocean/format/%s>' % fformat}
-        concept_match = moq.get_superset_concept(fuseki_process, po_dict)
-        initial_dataset = []
-        con_strs = moq.concept_components(fuseki_process, concept_match)
-        for con in con_strs:
-            concept = con['concept']
-            components = con['components'].split('&')
-            component_view = [component.split('/')[-1] for component in components]
-            init = {'concept':concept, 'components': '&'.join(component_view), 'display': True}
-            initial_dataset.append(init)
-        formlist = ConceptFormSet(initial = initial_dataset)
-        context_dict = {
-            'formlist' : formlist,
-            'read_only' : READ_ONLY,
-            }
-        context = RequestContext(request, context_dict)
-        response = render_to_response('form.html', context)
+        form = forms.Value(fformat=fformat)
+        con_dict = {'form':form}
+        context = RequestContext(request, con_dict)
+        response = render_to_response('simpleform.html', context)
     return response
+
+
+def search_maps(request):
+    """
+    returns a view of the mappings containing the search pattern properties
+    """
+    requestor_path = request.GET.get('ref', '')
+    requestor_path = urllib.unquote(requestor_path).decode('utf8')
+    if requestor_path == '':
+        requestor_path = '[]'
+    prop_list = json.loads(requestor_path)
+    mappings = moq.mapping_by_properties(fuseki_process, prop_list)
+    mapurls = {'label': 'These mappings contain the search properties',
+               'mappings':[]}
+    for amap in mappings:
+        mapping = moq.get_mapping_by_id(fuseki_process, amap)
+        referrer = fuseki_process.structured_mapping(mapping)
+        map_json = json.dumps(referrer)
+        url = url_qstr(reverse('mapping_edit'), ref=map_json)
+        label = 'mapping'
+        mapurls['mappings'].append({'url':url, 'label':label})
+    context_dict = {'invalid': [mapurls]}  
+    context = RequestContext(request, context_dict)
+    response = render_to_response('select_list.html', context)
+    return response
+
 
               

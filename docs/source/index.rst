@@ -16,6 +16,7 @@ Contents:
    :maxdepth: 1
 
    gettingStarted/index
+   about/index
    exporting/index
    predicates/index
    developer/index

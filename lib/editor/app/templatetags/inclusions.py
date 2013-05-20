@@ -1,6 +1,4 @@
-{% extends "base.html" %}
 
-<!--
 # (C) British Crown Copyright 2011 - 2012, Met Office
 #
 # This file is part of metOcean-mapping.
@@ -17,46 +15,18 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
--->
-
-{% block title %}: {{ title }}{% endblock %}
-
-{% block head %}
-<script type="text/javascript" src="{{ STATIC_URL }}jquery-1.7.2.min.js"></script>
-<script src="{{ ADMIN_MEDIA_PREFIX }}js/admin/RelatedObjectLookups.js"></script>
-
-{% endblock %}
 
 
+from django import template
 
-{% block content %}
-
-
-{% if form %}
-<form action="" method="post">
-
-{% csrf_token %}
-
-<table class="recordtable">
-{{ form.as_table }}
-</table>
+register = template.Library()
 
 
-
-<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="define concept mapping" />
-
-</form>
-
+@register.inclusion_tag('prop.html')
+def show_property(aproperty):
+    return {'aproperty':aproperty}
 
 
-{% endif %} 
-
-{% if links %}
-<ul>
-{% for link in links %}
-<li><a href="{{ link.url }}">{{ link.label }}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% endblock %}
+@register.inclusion_tag('val.html')
+def show_value(avalmap):
+    return {'aval':avalmap}

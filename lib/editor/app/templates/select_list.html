@@ -31,32 +31,33 @@
 
 {% block content %}
 
+{% if invalid %}
 
-{% if form %}
-<form action="" method="post">
+{% for inv in invalid %}
 
-{% csrf_token %}
+  <h3>{{ inv.label }}</h3>
 
-<table class="recordtable">
-{{ form.as_table }}
-</table>
+  {% for mapping in inv.mappings %}
+    <ul>
+    <li><a href="{{ mapping.url }}">{{ mapping.label }}</a></li>
+    </ul>
+  {% endfor %}
 
-
-
-<input class="recordbutton" type="submit" {% if read_only %}disabled="disabled"{% endif %} value="define concept mapping" />
-
-</form>
-
-
-
-{% endif %} 
-
-{% if links %}
-<ul>
-{% for link in links %}
-<li><a href="{{ link.url }}">{{ link.label }}</a></li>
 {% endfor %}
+{% endif %}
+
+{% if mappings %}
+
+{% for mapping in mappings %}
+
+<ul>
+<li><a href="{{ mapping.url }}">{{ mapping.label }}</a></li>
 </ul>
+
+
+{% endfor %}
+
 {% endif %}
 
 {% endblock %}
+

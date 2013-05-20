@@ -1,0 +1,44 @@
+{% load dict_keys %}
+{% load inclusions %}
+
+{% if aval|multi_key:"mr:subject,mr:subject" %}
+  <ul>
+  {% show_value aval|multi_key:"mr:subject" %}
+  </ul>
+{% else %}
+  <ul>
+  <li>{{ aval|prefix_uri:"mr:subject,mr:scope"  }}</li>
+   <ul>
+    <li> {{ aval|prefix_uri:"mr:subject,mr:hasProperty,mr:name" }}</li>
+   </ul>
+  </ul>
+{% endif %}
+
+{% if aval|multi_key:"mr:operator" %}
+  <ul>
+  <li>  {{ aval|prefix_uri:"mr:operator" }}</li>
+  </ul>
+
+  {% if aval|multi_key:"mr:object,mr:subject" %}
+    <ul>
+    {% show_value aval|multi_key:"mr:object" %}
+    </ul>
+  {% else %}
+    {% if aval|multi_key:"mr:object,mr:scope" %}
+      <ul>
+      <li>{{ aval|prefix_uri:"mr:object,mr:scope"  }}</li>
+      <ul>
+        <li> {{ aval|prefix_uri:"mr:object,mr:hasProperty,mr:name" }}</li>
+      </ul>
+      </ul>
+    {% else %}
+      {% if aval|multi_key:"mr:object" %}
+        <ul>
+          <li>{{ aval|prefix_uri:"mr:object" }}</li>
+        </ul>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+{% endif %}
+

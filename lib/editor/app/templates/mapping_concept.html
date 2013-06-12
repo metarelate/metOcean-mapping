@@ -81,7 +81,7 @@
     <h4>Mediators</h4>
     <ul>
     {% else %}
-    {% if mapping|multi_key:"mr:source,dc:mediates" %}
+    {% if mapping|multi_key:"mr:source,dc:mediator" %}
         <tr><td>
         <h4>Mediators</h4>
         <ul>
@@ -100,13 +100,13 @@
       {% endif %}
     {% endfor %}
     {% endif %}
-    {% if mapping|multi_key:"mr:source,dc:mediates" %}
-    {% for elem in mapping|multi_key:"mr:source,dc:mediates" %}
+    {% if mapping|multi_key:"mr:source,dc:mediator" %}
+    {% for elem in mapping|multi_key:"mr:source,dc:mediator" %}
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
           </li>
       {% else %}
-        <li>dc:mediates</li>
+        <li>dc:mediator</li>
         <ul>
         <li>{{ elem }}</li>
         </ul>
@@ -172,7 +172,7 @@
     <h4>Mediators</h4>
     <ul>
     {% else %}
-    {% if mapping|multi_key:"mr:target,dc:mediates" %}
+    {% if mapping|multi_key:"mr:target,dc:mediator" %}
         <tr><td>
         <h4>Mediators</h4>
         <ul>
@@ -192,13 +192,13 @@
       {% endif %}
     {% endfor %}
     {% endif %}
-    {% if mapping|multi_key:"mr:target,dc:mediates" %}
-    {% for elem in mapping|multi_key:"mr:target,dc:mediates" %}
+    {% if mapping|multi_key:"mr:target,dc:mediator" %}
+    {% for elem in mapping|multi_key:"mr:target,dc:mediator" %}
       {% if elem.url %}
         <li> <a href="{{ elem.url }}">{{ elem.label }} </a>
           </li>
       {% else %}
-        <li>dc:mediates</li>
+        <li>dc:mediator</li>
         <ul>
         <li>{{ elem }}</li>
          </ul>

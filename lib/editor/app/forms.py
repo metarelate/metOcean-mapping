@@ -214,7 +214,7 @@ class Value(forms.Form):
         elif not name and not _name:
             # one name must be selected
             raise forms.ValidationError('a name must be selected')
-        else:
+        elif _name:
             n = '<http://'
             if self.fformat == 'cf':
                 n += 'def.cfconventions.org/datamodel/attribute_name#{}>'

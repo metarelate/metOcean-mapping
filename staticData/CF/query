@@ -1,5 +1,5 @@
 
-
+ 
 PREFIX owl: <http://www.w3.org/TR/2004/REC-owl-semantics-20040210/#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX cfsn: <http://def.cfconventions.org/standard_name/>
@@ -29,7 +29,7 @@ OPTIONAL{?nercID skos:related ?cunit.
          ?cunit skos:altLabel ?cunitstr.
 	 FILTER(regex(str(?cunit), "http://vocab.nerc.ac.uk/collection/P06/current"))
 	 }
-BIND(CONCAT("'canonical_unit': ", "'", str(?cunitstr), "'") as ?canon)
+BIND(CONCAT("'canonical_units': ", "'", str(?cunitstr), "'") as ?canon)
 
 }
 ORDER BY ?name

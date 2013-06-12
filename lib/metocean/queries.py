@@ -277,6 +277,22 @@ def print_records(res):
             print_string += '\n'
     return print_string
 
+def get_all_notation_note(fuseki_process, graph, debug=False):
+    """
+    return all names, skos:notes and skos:notations from the stated graph
+    """
+    qstr = '''SELECT ?name ?notation ?units
+    WHERE
+    {GRAPH <%s>{
+    ?name skos:note ?units ;
+          skos:notation ?notation .
+    }
+    }
+    order by ?name
+    ''' % graph
+    results = fuseki_process.run_query(qstr, debug=debug)
+    return results
+
 def get_label(fuseki_process, subject, debug=False):
     """
     return the skos:notation for a subject, if it exists
@@ -335,7 +351,7 @@ def valid_ordered_mappings(fuseki_process, s_format, t_format, debug=False):
     """
     qstr = '''
     SELECT ?mapping ?source ?sourceFormat ?target ?targetFormat ?inverted
-    (GROUP_CONCAT(DISTINCT(?valuemap); SEPARATOR = '&') AS ?valueMaps)
+    (GROUP_CONCAT(DISTINCT(?valueMap); SEPARATOR = '&') AS ?valueMaps)
     WHERE { 
     GRAPH <http://metarelate.net/mappings.ttl> { {
     ?mapping mr:source ?source ;
@@ -352,7 +368,7 @@ def valid_ordered_mappings(fuseki_process, s_format, t_format, debug=False):
              mr:status ?status ;
              mr:invertible "True" .
     BIND("True" AS ?inverted)
-    OPTIONAL {?mapping mr:valueMap ?valueMap . }
+    OPTIONAL {?mapping mr:hasValueMap ?valueMap . }
     FILTER (?status NOT IN ("Deprecated", "Broken"))
     MINUS {?mapping ^dc:replaces+ ?anothermap}
     } }
@@ -382,8 +398,9 @@ def get_property(fuseki_process, po_dict, debug=False):
     single_predicates = set(('mr:name', 'mr:operator', 'mr:hasComponent'))
     preds = set(po_dict)
     if not preds.issubset(allowed_predicates):
-        ec = '''{} is not a subset of the allowed predicates set
-                for a value record {}'''.format(preds, allowed_preds)
+        ec = '{} is not a subset of the allowed predicates set '\
+             'for a value record {}'
+        ec = ec.format(preds, allowed_predicates)
         raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/property'
     count_string = ''
@@ -458,7 +475,7 @@ def get_property(fuseki_process, po_dict, debug=False):
         elif len(results) == 0:
             results = None
         else:
-            raise ValueError('multiple results returned from get_property,'
+            raise ValueError('multiple results returned from get_property, '
                              'only one allowed {}'.format(str(results)))
     else:
         results = None
@@ -501,11 +518,11 @@ def get_component(fuseki_process, po_dict, debug=False):
 
     """
     allowed_prefixes = set(('mr:hasFormat','mr:hasComponent', 'mr:hasProperty',
-                            'dc:requires', 'dc:mediates'))
+                            'dc:requires', 'dc:mediator'))
     preds = set(po_dict)
     if not preds.issubset(allowed_prefixes):
-        ec = '''{} is not a subset of the allowed predicates set for
-                a component record {}'''
+        ec = '{} is not a subset of the allowed predicates set for '\
+             'a component record {}'
         ec = ec.format(preds, allowed_prefixes)
         raise ValueError(ec)
     subj_pref = 'http://www.metarelate.net/metOcean/component'
@@ -516,15 +533,13 @@ def get_component(fuseki_process, po_dict, debug=False):
     for pred in po_dict:
         if isinstance(po_dict[pred], list):
             if pred == 'mr:format' and len(po_dict[pred]) != 1:
-                ec = '''get_format_concept only accepts 1 mr:format statement
-                        The po_dict in this case is not valid
-                        {} '''
+                ec = 'get_format_concept only accepts 1 mr:format statement '\
+                     ' The po_dict in this case is not valid {} '
                 ec = ec.format(str(po_dict))
                 raise ValueError(ec)
-            elif pred == 'dc:mediates' and len(po_dict[pred]) != 1:
-                ec = '''get_format_concept only accepts 1 dc:mediates statement
-                        The po_dict in this case is not valid
-                        {} '''
+            elif pred == 'dc:mediator' and len(po_dict[pred]) != 1:
+                ec = 'get_format_concept only accepts 1 dc:mediator statement'\
+                     ' The po_dict in this case is not valid {} '
                 ec = ec.format(str(po_dict))
                 raise ValueError(ec)
             elif pred == 'dc:requires':
@@ -565,7 +580,7 @@ def get_component(fuseki_process, po_dict, debug=False):
         OPTIONAL { ?component  mr:hasProperty ?property . }
         OPTIONAL { ?component  mr:hasComponent ?subComponent . }
         OPTIONAL{?component dc:requires ?requires .}
-        OPTIONAL{?component dc:mediates ?mediates .}
+        OPTIONAL{?component dc:mediator ?mediates .}
         } }
         GROUP BY ?component ?format 
         }
@@ -616,7 +631,7 @@ def retrieve_component(fuseki_process, fcId, debug=False):
         OPTIONAL{?component mr:hasComponent ?acomponent .}
         OPTIONAL{?component mr:hasProperty ?aproperty .}
         OPTIONAL{?component dc:requires ?arequires .}
-        OPTIONAL{?component dc:mediates ?mediates .}
+        OPTIONAL{?component dc:mediator ?mediates .}
         FILTER(?component = %s)
         }
     }
@@ -1160,16 +1175,16 @@ def mapping_by_properties(fuseki_process, prop_list, debug=False):
         ?target mr:hasProperty ?property
         }
         UNION {
-        ?source mr:hasComponent|mr:hasProperty ?property
+        ?source mr:hasComponent/mr:hasProperty ?property
         }
         UNION {
-        ?target mr:hasComponent|mr:hasProperty ?property
+        ?target mr:hasComponent/mr:hasProperty ?property
         }
         UNION {
-        ?source mr:hasProperty|mr:hasComponent|mr:hasProperty ?property
+        ?source mr:hasProperty/mr:hasComponent/mr:hasProperty ?property
         }
         UNION {
-        ?target mr:hasProperty|mr:hasComponent|mr:hasProperty ?property
+        ?target mr:hasProperty/mr:hasComponent/mr:hasProperty ?property
         }
         ?property mr:name ?name .
         OPTIONAL{?property rdf:value ?value . }

@@ -73,8 +73,9 @@ class FusekiServer(object):
         
         """
         if not self._check_port():
-            print 'rm nohup.out'
-            os.remove('nohup.out')
+            if os.path.exists('nohup.out'):
+                print 'rm nohup.out'
+                os.remove('nohup.out')
             self._process = subprocess.Popen(['nohup',
                                        FUSEKIROOT +
                                        '/fuseki-server',
@@ -256,8 +257,7 @@ class FusekiServer(object):
             data = opener.open(urllib2.Request(BASEURL), qstr).read()
         except urllib2.URLError as err:
             ec = 'Error connection to Fuseki server on {}.\n server returned {}'
-            ec.format(BASEURL, err)
-            ec += .format(err)
+            ec = ec.format(BASEURL, err)
             raise RuntimeError(ec)
             # self.stop()
             # self.start()

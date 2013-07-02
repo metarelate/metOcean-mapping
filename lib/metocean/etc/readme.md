@@ -1,4 +1,4 @@
-This file should contain a configuartion file, of the form:
+This folder must contain a configuartion file, called metocean.config, of the form:
 
 [metocean]
 staticData = /path/to/the/static/data/location/

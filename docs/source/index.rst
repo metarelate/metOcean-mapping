@@ -17,8 +17,9 @@ Contents:
 
    gettingStarted/index
    about/index
+   forum/index
    exporting/index
-   predicates/index
+   vocabulary/index
    developer/index
    query/index
 

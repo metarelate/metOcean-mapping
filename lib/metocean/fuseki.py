@@ -256,8 +256,7 @@ class FusekiServer(object):
             data = opener.open(urllib2.Request(BASEURL), qstr).read()
         except urllib2.URLError as err:
             ec = 'Error connection to Fuseki server on {}.\n server returned {}'
-            ec.format(BASEURL, err)
-            ec += .format(err)
+            ec = ec.format(BASEURL, err)
             raise RuntimeError(ec)
             # self.stop()
             # self.start()

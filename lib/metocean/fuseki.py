@@ -73,8 +73,9 @@ class FusekiServer(object):
         
         """
         if not self._check_port():
-            print 'rm nohup.out'
-            os.remove('nohup.out')
+            if os.path.exists('nohup.out'):
+                print 'rm nohup.out'
+                os.remove('nohup.out')
             self._process = subprocess.Popen(['nohup',
                                        FUSEKIROOT +
                                        '/fuseki-server',

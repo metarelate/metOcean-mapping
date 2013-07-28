@@ -12,8 +12,4 @@ Contents:
    implementation/index
 
 
-Search
-======
-
-* :ref:`search`
 

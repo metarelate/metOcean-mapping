@@ -27,6 +27,7 @@ import time
 import urllib
 import urllib2
 
+import metocean
 import metocean.prefixes as prefixes
 import metocean.queries as queries
 
@@ -56,15 +57,15 @@ class FusekiServer(object):
         self._process = None
         self._port = port
         self._host = host
-        
+
     def __enter__(self):
         self.start()
         return self
-        
+
     def __exit__(self, *args):
         #print 'exiting'
         self.stop(save=False)
-        
+
     def start(self):
         """
         initialise the fuseki process, on the defined port,
@@ -90,8 +91,6 @@ class FusekiServer(object):
                 if i > 1000:
                     raise RuntimeError('Fuseki server not started up correctly')
 
-
-
     def stop(self, save=False):
         """
         stop the fuseki process
@@ -108,7 +107,6 @@ class FusekiServer(object):
                 time.sleep(0.1)
                 if i > 1000:
                     raise RuntimeError('Fuseki server not shut down correctly')
-            
 
     def status(self):
         """check status of instance (is it up?)"""
@@ -126,7 +124,6 @@ class FusekiServer(object):
             # the following error: %s" %(address, port, e) 
             return False
 
-
     def clean(self):
         """
         remove all of the files supporting the tbd instance
@@ -137,7 +134,6 @@ class FusekiServer(object):
         for TDBfile in glob.glob("%s*"% TDB):
             os.remove(TDBfile)
         return glob.glob("%s*"% TDB)
-        
 
     def save(self):
         """
@@ -157,7 +153,6 @@ class FusekiServer(object):
                         sg.write(line)
                         sg.write('\n')
 
-
     def revert(self):
         """
         identify all cached changes in the metocean graph
@@ -170,7 +165,6 @@ class FusekiServer(object):
             ingraph = infile.split('/')[-1]
             graph = 'http://%s/%s' % (maingraph, ingraph)
             revert_string = queries.revert_cache(self, graph)
-
 
     def query_cache(self):
         """
@@ -185,7 +179,6 @@ class FusekiServer(object):
             result = queries.query_cache(self, graph)
             results = results + result
         return results
-
 
     def load(self):
         """
@@ -205,7 +198,6 @@ class FusekiServer(object):
                 print space.join(loadCall)
                 subprocess.check_call(loadCall)
 
-
     def validate(self):
         """
         run the validation queries
@@ -217,7 +209,6 @@ class FusekiServer(object):
         invalid_vocab = 'The following mappings contain an undeclared URI'
         failures[invalid_vocab] = queries.valid_vocab(self)
         return failures
-
 
     def run_query(self, query_string, output='json', update=False, debug=False):
         """
@@ -273,8 +264,6 @@ class FusekiServer(object):
         else:
             return data
 
-
-
     def retrieve_mappings(self, s_format, t_format):
         """
         return the format specific mappings for a particular source
@@ -287,50 +276,50 @@ class FusekiServer(object):
             mapping_list.append(self.structured_mapping(mapping))
         return mapping_list
 
-    def _retrieve_component(self, c_id):
-        """
-        returns a dictionary of component information
-        recursive call to get all the nested formatConcept
-        information from a formatConcept
-        
-        """
-        # c_dict = {'formatConcept':'', 'mr:format': '', 'skos:member': []},
-        top_c = queries.retrieve_component(self, c_id)
-        if top_c:
-            c_dict = {'component':c_id, 'mr:hasFormat': top_c['format']}
-            if isinstance(top_c.get('property'), str):
-                top_c['property'] = [top_c['property']]
-            if isinstance(top_c.get('subComponent'), str):
-                top_c['subComponent'] = [top_c['subComponent']]
-            if top_c.get('property'):
-                c_dict['mr:hasProperty'] = []
-            if top_c.get('subComponent'):
-                c_dict['mr:hasComponent'] = []
-            for aproperty in top_c.get('property', []):
-                prop_dict = queries.retrieve_property(self, aproperty)
-                pref_prop_dict = {}
-                #pcomp = prop_dict.get('mr:hasComponent')
-                pcomp = prop_dict.get('component') 
-                if pcomp:
-                    comp = self._retrieve_component(pcomp)
-                    pref_prop_dict['mr:hasComponent'] = comp
-                if prop_dict.get('name'):
-                    pref_prop_dict['mr:name'] = prop_dict['name']
-                if prop_dict.get('operator'):
-                    pref_prop_dict['mr:operator'] = prop_dict['operator']
-                if prop_dict.get('value'):
-                    pref_prop_dict['rdf:value'] = prop_dict['value']
-                c_dict['mr:hasProperty'].append(pref_prop_dict)
-            for component in top_c.get('subComponent',[]):
-                subc_dict = self._retrieve_component(component)
-                c_dict['mr:hasComponent'].append(subc_dict)
-            if top_c.get('mediates'):
-                c_dict['dc:mediator'] = [top_c['mediates']]
-            if top_c.get('requires'):
-                c_dict['dc:requires'] = top_c['requires']
-        else:
-            raise ValueError('{} a malformed formatConcept'.format(fc_id))
-        return c_dict
+    def _retrieve_component(self, uri, base=True):
+        qcomp = queries.retrieve_component(self, uri)
+        if qcomp is None:
+            msg = 'Cannot retrieve URI {!r} from triple-store.'
+            raise ValueError(msg.format(uri))
+        for key in ['property', 'subComponent']:
+            if qcomp.get(key) is None:
+                qcomp[key] = []
+            if isinstance(qcomp[key], basestring):
+                qcomp[key] = [qcomp[key]]
+        if qcomp['property']:
+            properties = []
+            for puri in qcomp['property']:
+                qprop = queries.retrieve_property(self, puri)
+                name = qprop['name']
+                name = metocean.Item(name,
+                                     queries.get_label(self, name))
+                curi = qprop.get('component')
+                if curi is not None:
+                    value = self._retrieve_component(curi, base=False)
+                else:
+                    value = qprop.get('value')
+                    if value is not None:
+                        value = metocean.Item(value,
+                                              queries.get_label(self, value))
+                    op = qprop.get('operator')
+                    if op is not None:
+                        op = metocean.Item(op,
+                                           queries.get_label(self, op))
+                properties.append(metocean.Property(puri, name, value, op))
+            result = metocean.PropertyComponent(uri, properties)
+        if qcomp['subComponent']:
+            components = []
+            for curi in qcomp['subComponent']:
+                components.append(self._retrieve_component(curi, base=False))
+            if base:
+                result = components
+            else:
+                result = metocean.Component(uri, components)
+        if base:
+            scheme = qcomp['format']
+            scheme = metocean.Item(scheme, queries.get_label(self, scheme))
+            result = metocean.Concept(uri, scheme, result)
+        return result
 
     def _retrieve_value_map(self, valmap_id, inv):
         """
@@ -388,29 +377,11 @@ class FusekiServer(object):
                     value_dict[sc_prop] = pid
         return value_dict
 
-
-    def structured_mapping(self, mapping):
-        """
-        returns the json for a mapping, fully expanded
-        from the mapping Id
-        
-        """
-        referrer = {'mapping': mapping['mapping'],
-                    'mr:source': {'component': mapping['source']},
-                    'mr:target': {'component': mapping['target']},
-                    'mr:hasValueMap': []}
-        if mapping.get('source') and mapping.get('target'):
-            referrer['mr:source'] = self._retrieve_component(mapping['source'])
-            referrer['mr:target'] = self._retrieve_component(mapping['target'])
-            if mapping.get('valueMaps'):
-                if isinstance(mapping['valueMaps'], str):
-                    mapping['valueMaps'] = [mapping['valueMaps']]
-                for valmap in mapping['valueMaps']:#.split('&'):
-                    referrer['mr:hasValueMap'].append(self._retrieve_value_map(valmap, mapping['inverted']))
-        return referrer
-
-
-
+    def structured_mapping(self, template):
+        uri = template['mapping']
+        source = self._retrieve_component(template['source'])
+        target = self._retrieve_component(template['target'])
+        return metocean.Mapping(uri, source, target)
 
 
 def process_data(jsondata):
@@ -448,4 +419,3 @@ def process_data(jsondata):
         if tmpdict != {}:
             resultslist.append(tmpdict)
     return resultslist
-

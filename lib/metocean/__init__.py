@@ -138,6 +138,18 @@ class Mapping(_DotMixin, namedtuple('Mapping', 'uri source target')):
         graph.add_subgraph(tgraph)
         graph.write(filename, format=format)
 
+    def json_referrer(self):
+        """
+        return the data contents of the mapping instance ready for encoding
+        as a json string
+
+        """
+        referrer = {'mapping': self.uri.data, 'mr:hasValueMap': []}
+        referrer['mr:source'] = self.source.json_referrer()
+        referrer['mr:target'] = self.target.json_referrer()
+        return referrer
+
+
 
 class Component(_ComponentMixin, _DotMixin, MutableMapping):
     """
@@ -249,6 +261,30 @@ class Component(_ComponentMixin, _DotMixin, MutableMapping):
         graph.add_edge(edge)
         for comp in self.components:
             comp.dot(graph, node, 'Component')
+
+    def json_referrer(self):
+        """
+        return the data contents of the component instance ready for encoding
+        as a json string
+
+        """
+        referrer = {'component': self.uri.data,
+                    'mr:hasFormat': self.scheme.data}
+        if self.simple:
+            props = []
+            for item in self.components[0].iteritems():
+                pref_prop_dict = {}
+                pref_prop_dict['mr:name'] = item[1].name.data
+                pref_prop_dict['mr:operator'] = item[1].operator.data
+                pref_prop_dict['rdf:value'] = item[1].value.data
+                props.append(pref_prop_dict)
+            referrer['mr:hasProperty'] = props
+            referrer['mr:hasComponent'] = []
+        # else:
+        #     referrer['mr:hasProperty'] = []
+        #     referrer['mr:hasComponent'] = 
+        
+        return referrer
 
 
 class Concept(Component):
@@ -536,6 +572,15 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
         if self.value is not None and not isinstance(self.value, Item):
             # This property references a component.
             self.value.dot(graph, node, 'Component')
+
+    def json_referrer(self):
+        """
+        return the data contents of the property instance ready for encoding
+        as a json string
+
+        """
+        referrer = {}
+        return referrer
 
 
 class Item(_DotMixin, namedtuple('Item', 'data notation')):

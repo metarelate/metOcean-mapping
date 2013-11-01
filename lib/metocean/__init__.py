@@ -268,21 +268,36 @@ class Component(_ComponentMixin, _DotMixin, MutableMapping):
         as a json string
 
         """
+        
         referrer = {'component': self.uri.data,
-                    'mr:hasFormat': self.scheme.data}
-        if self.simple:
-            props = []
-            for item in self.components[0].iteritems():
-                pref_prop_dict = {}
-                pref_prop_dict['mr:name'] = item[1].name.data
-                pref_prop_dict['mr:operator'] = item[1].operator.data
-                pref_prop_dict['rdf:value'] = item[1].value.data
-                props.append(pref_prop_dict)
-            referrer['mr:hasProperty'] = props
-            referrer['mr:hasComponent'] = []
-        # else:
-        #     referrer['mr:hasProperty'] = []
-        #     referrer['mr:hasComponent'] = 
+                    'mr:hasFormat': self.scheme.data,
+                    'mr:hasProperty':[], 'mr:hasComponent': []}
+        
+        for comp in self.components:
+            ref = comp.json_referrer()
+            if isinstance(comp, Component):
+                referrer['mr:hasComponent'].append(ref)
+            elif isinstance(comp, PropertyComponent):
+                referrer['mr:hasProperty'] = ref
+            else:
+                raise TypeError('oops')
+            # if len(ref) == 1:
+            #     referrer[ref.keys()[0]].append(ref[ref.keys()[0]])
+            
+        # if self.simple:
+        #     props = []
+        #     for item in self.components[0].itervalues():
+        #         # pref_prop_dict = {}
+        #         # pref_prop_dict['mr:name'] = item.name.data
+        #         # pref_prop_dict['mr:operator'] = item.operator.data
+        #         # pref_prop_dict['rdf:value'] = item.value.data
+        #         # props.append(pref_prop_dict)
+        #         props.append(item.json_referrer())
+        #     referrer['mr:hasProperty'] = props
+        #     referrer['mr:hasComponent'] = []
+        # # else:
+        # #     referrer['mr:hasProperty'] = []
+        # #     referrer['mr:hasComponent'] = 
         
         return referrer
 
@@ -454,6 +469,18 @@ class PropertyComponent(_ComponentMixin, _DotMixin, MutableMapping):
             for prop in self.values():
                 prop.dot(graph, node, 'Property')
 
+    def json_referrer(self):
+        """
+        return the data contents of the propertyComponent instance
+        ready for encoding as a json string
+
+        """
+
+        props = []
+        for item in self.itervalues():
+            props.append(item.json_referrer())
+        return props
+
 
 class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
     """
@@ -580,6 +607,10 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
 
         """
         referrer = {}
+        referrer['property'] = self.uri.data
+        referrer['mr:name'] = self.name.data
+        referrer['mr:operator'] = self.operator.data
+        referrer['rdf:value'] = self.value.data
         return referrer
 
 

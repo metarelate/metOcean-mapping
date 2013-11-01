@@ -295,7 +295,7 @@ class FusekiServer(object):
                                      queries.get_label(self, name))
                 curi = qprop.get('component')
                 if curi is not None:
-                    value = self._retrieve_component(self, curi, base=False)
+                    value = self._retrieve_component(curi, base=False)
                 else:
                     value = qprop.get('value')
                     if value is not None:

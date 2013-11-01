@@ -933,10 +933,13 @@ def mapping_edit(request):
                 initial['last_editor'] = mapping['creator']
 #            else:
 #                raise ValueError('mismatch in referrer')
+        else:
+            fname = None
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = requestor
-    con_dict['map_rendering'] = fname
+    if fname:
+        con_dict['map_rendering'] = fname
     con_dict['form'] = form
     con_dict['amend'] = {'url': url_qstr(reverse(mapping_concepts),
                                                     ref=requestor_path),

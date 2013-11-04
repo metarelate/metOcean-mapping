@@ -335,19 +335,11 @@ class Concept(Component):
         as a json string
 
         """
-        if len(self) == 1:
-            if self.uri.data == self.components[0].uri.data:
-                prop_ref = self.components[0].json_referrer()
-                prop_ref['mr:hasFormat'] = self.scheme.data
-                referrer = prop_ref
-            else:
-                referrer = {'component': self.uri.data,
-                            'mr:hasFormat': self.scheme.data,
-                            'mr:hasComponent': []}
-                prop_ref = self.components[0].json_referrer()
-                prop_ref['mr:hasFormat'] = self.scheme.data
-                referrer['mr:hasComponent'].append(prop_ref)
-        if len(self) > 1:
+        if len(self) == 1 and self.uri.data == self.components[0].uri.data:
+            prop_ref = self.components[0].json_referrer()
+            prop_ref['mr:hasFormat'] = self.scheme.data
+            referrer = prop_ref
+        else:
             referrer = {'component': self.uri.data,
                         'mr:hasFormat': self.scheme.data,
                         'mr:hasComponent': []}

@@ -904,6 +904,13 @@ def mapping_edit(request):
         map_id = requestor.get('mapping')
         if map_id:
             mapping = moq.get_mapping_by_id(fuseki_process, map_id, val=False)
+            ## quick example of dot notation, needs refactor
+            amap = mapping.copy()
+            map_instance = fuseki_process.structured_mapping(amap)
+            fname = map_id.split('/')[-1].rstrip('>') + '.png'
+            outfile = os.path.join(os.path.dirname(__file__), 'static',
+                                   'tmp_images', fname)
+            map_instance.dot(outfile)
             ts = initial['source'] == mapping['source']
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \
@@ -926,9 +933,13 @@ def mapping_edit(request):
                 initial['last_editor'] = mapping['creator']
 #            else:
 #                raise ValueError('mismatch in referrer')
+        else:
+            fname = None
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = requestor
+    if fname:
+        con_dict['map_rendering'] = fname
     con_dict['form'] = form
     con_dict['amend'] = {'url': url_qstr(reverse(mapping_concepts),
                                                     ref=requestor_path),
@@ -998,6 +1009,7 @@ def invalid_mappings(request):
         for inv_map in inv_mappings:
             mapping = moq.get_mapping_by_id(fuseki_process, inv_map['amap'])
             referrer = fuseki_process.structured_mapping(mapping)
+            referrer = referrer.json_referrer()
             map_json = json.dumps(referrer)
             url = url_qstr(reverse('mapping_edit'), ref=map_json)
             sig = inv_map.get('signature', [])
@@ -1109,7 +1121,7 @@ def search_maps(request):
                'mappings':[]}
     for amap in mappings:
         mapping = moq.get_mapping_by_id(fuseki_process, amap)
-        referrer = fuseki_process.structured_mapping(mapping)
+        referrer = fuseki_process.structured_mapping(mapping).json_referrer()
         map_json = json.dumps(referrer)
         url = url_qstr(reverse('mapping_edit'), ref=map_json)
         label = 'mapping'

@@ -139,6 +139,17 @@ class Mapping(_DotMixin, namedtuple('Mapping', 'uri source target')):
         graph.add_subgraph(tgraph)
         graph.write(filename, format=format)
 
+    def json_referrer(self):
+        """
+        return the data contents of the mapping instance ready for encoding
+        as a json string
+
+        """
+        referrer = {'mapping': self.uri.data, 'mr:hasValueMap': []}
+        referrer['mr:source'] = self.source.json_referrer()
+        referrer['mr:target'] = self.target.json_referrer()
+        return referrer
+
 
 class Component(_ComponentMixin, _DotMixin, MutableMapping):
     """
@@ -318,6 +329,26 @@ class Concept(Component):
             comp.dot(graph, node, 'Component')
         return node
 
+    def json_referrer(self):
+        """
+        return the data contents of the component instance ready for encoding
+        as a json string
+
+        """
+        if len(self) == 1 and self.uri.data == self.components[0].uri.data:
+            prop_ref = self.components[0].json_referrer()
+            prop_ref['mr:hasFormat'] = self.scheme.data
+            referrer = prop_ref
+        else:
+            referrer = {'component': self.uri.data,
+                        'mr:hasFormat': self.scheme.data,
+                        'mr:hasComponent': []}
+            for comp in self.components:
+                prop_ref = comp.json_referrer()
+                prop_ref['mr:hasFormat'] = self.scheme.data
+                referrer['mr:hasComponent'].append(prop_ref)
+        return referrer
+
 
 class PropertyComponent(_ComponentMixin, _DotMixin, MutableMapping):
     """
@@ -420,6 +451,18 @@ class PropertyComponent(_ComponentMixin, _DotMixin, MutableMapping):
             graph.add_edge(edge)
             for prop in self.values():
                 prop.dot(graph, node, 'Property')
+
+    def json_referrer(self):
+        """
+        return the data contents of the propertyComponent instance
+        ready for encoding as a json string
+
+        """
+        referrer = {'component': self.uri.data,
+                    'mr:hasProperty':[]}
+        for item in self.itervalues():
+            referrer['mr:hasProperty'].append(item.json_referrer())
+        return referrer
 
 
 class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
@@ -527,7 +570,6 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
         if self.value is not None and isinstance(self.value, Item):
             items.append(self.value.dot())
         items = ' '.join(items)
-
         label = self.dot_escape('{}_{}'.format(parent.uri, self.uri.data))
         node = pydot.Node(label, label=items,
                           style='filled',
@@ -545,6 +587,24 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
         if self.value is not None and not isinstance(self.value, Item):
             # This property references a component.
             self.value.dot(graph, node, 'Component')
+
+    def json_referrer(self):
+        """
+        return the data contents of the property instance ready for encoding
+        as a json string
+
+        """
+        referrer = {}
+        referrer['property'] = self.uri.data
+        referrer['mr:name'] = self.name.data
+        if self.operator:
+            referrer['mr:operator'] = self.operator.data
+        if self.value:
+            if self.simple:
+                referrer['rdf:value'] = self.value.data
+            else:
+                referrer['mr:hasComponent'] = self.value.json_referrer()
+        return referrer
 
 
 class Item(_DotMixin, namedtuple('Item', 'data notation')):

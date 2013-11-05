@@ -61,6 +61,12 @@
 <li><a href="{{ amend.url }}">{{ amend.label }}</a></li>
 </ul>
 {% endif %}
+
+
+{% if map_rendering %}
+<img src="{{ STATIC_URL }}tmp_images/{{ map_rendering }}">
+{% endif %}
+
     <td>
 
     <h2>Mapping Source</h2>

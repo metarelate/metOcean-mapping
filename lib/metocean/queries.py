@@ -145,11 +145,12 @@ def save_cache(fuseki_process, graph, debug=False):
 def _vocab_graphs():
     """ returns a list of the graphs which contain thirds party vocabularies """
     vocab_graphs = []
+    vocab_graphs.append('<http://metarelate.net/formats.ttl>')
     vocab_graphs.append('<http://um/umdpF3.ttl>')
     vocab_graphs.append('<http://um/stashconcepts.ttl>')
     vocab_graphs.append('<http://um/fieldcode.ttl>')
-    vocab_graphs.append('<http://CF/cfmodel.ttl>')
-    vocab_graphs.append('<http://CF/cf-standard-name-table.ttl>')
+    vocab_graphs.append('<http://cf/cf-model.ttl>')
+    vocab_graphs.append('<http://cf/cf-standard-name-table.ttl>')
     vocab_graphs.append('<http://grib/apikeys.ttl>')
     vocab_graphs.append('<http://openmath/ops.ttl>')
     return vocab_graphs

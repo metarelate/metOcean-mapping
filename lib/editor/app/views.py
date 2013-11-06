@@ -910,7 +910,8 @@ def mapping_edit(request):
             fname = map_id.split('/')[-1].rstrip('>') + '.png'
             outfile = os.path.join(os.path.dirname(__file__), 'static',
                                    'tmp_images', fname)
-            map_instance.dot(outfile)
+            graph = map_instance.dot()
+            graph.write_dot(outfile)
             ts = initial['source'] == mapping['source']
             tt = initial['target'] == mapping['target']
             tvm = initial['valueMaps'].split('&').sort() == \

@@ -16,9 +16,23 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 from collections import Iterable, MutableMapping, namedtuple
+import os
 from urlparse import urlparse
 
 import pydot
+
+from metocean.config import update
+
+
+site_config = {
+    'root_dir': os.path.abspath(os.path.dirname(__file__)),
+    'test_dir': os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                             'tests'),
+    'fuseki_dataset': '/metocean',
+    'graph': 'metarelate.net',
+}
+
+update(site_config)
 
 
 class _ComponentMixin(object):
@@ -96,21 +110,30 @@ class Mapping(_DotMixin, namedtuple('Mapping', 'uri source target')):
                                        type(target).__name__))
         return super(Mapping, cls).__new__(cls, uri, source, target)
 
-    def dot(self, filename, format='png'):
+    def __eq__(self, other):
+        result = NotImplemented
+        if isinstance(other, Mapping):
+            result = self.uri == other.uri and \
+                self.source == other.source and \
+                self.target == other.target
+        return result
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is not NotImplemented:
+            result = not result
+        return result
+
+    def dot(self):
         """
         Generate a Dot digraph representation of this mapping.
 
-        Args:
-        * filename:
-            The name of the file to contain the rendered graph.
-
-        Kwargs:
-        * format:
-            Target graph image format. Defaults to png.
+        Returns:
+            The :class:`pydot.Dot` instance.
 
         """
         graph = pydot.Dot(graph_type='digraph',
-                          label='MetaRelate',
+                          label='MetOcean',
                           labelloc='t', labeljust='l',
                           fontsize=15)
         label = self.dot_escape(self.uri.data)
@@ -126,6 +149,7 @@ class Mapping(_DotMixin, namedtuple('Mapping', 'uri source target')):
                                style='filled', color='lightgrey')
         snode = self.source.dot(sgraph, node)
         edge = pydot.Edge(node, snode,
+                          label='Concept', fontsize=7,
                           tailport='s', headport='n')
         graph.add_edge(edge)
         graph.add_subgraph(sgraph)
@@ -134,10 +158,11 @@ class Mapping(_DotMixin, namedtuple('Mapping', 'uri source target')):
                                style='filled', color='lightgrey')
         tnode = self.target.dot(tgraph, node)
         edge = pydot.Edge(node, tnode,
+                          label='Concept', fontsize=7,
                           tailport='s', headport='n')
         graph.add_edge(edge)
         graph.add_subgraph(tgraph)
-        graph.write(filename, format=format)
+        return graph
 
     def json_referrer(self):
         """
@@ -192,18 +217,39 @@ class Component(_ComponentMixin, _DotMixin, MutableMapping):
                                            PropertyComponent.__name__,
                                            type(comp).__name__))
             temp.append(comp)
-        self.__dict__['_data'] = tuple(temp)
+        self.__dict__['_data'] = tuple(sorted(temp, key=lambda c: c.uri.data))
         self.__dict__['components'] = self._data
 
+    def __eq__(self, other):
+        result = NotImplemented
+        if isinstance(other, type(self)):
+            result = False
+            if self.uri == other.uri and len(self) == len(other):
+                for i, comp in enumerate(self):
+                    if comp != other[i]:
+                        break
+                else:
+                    result = True
+        return result
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is not NotImplemented:
+            result = not result
+        return result
+
     def __getitem__(self, key):
-        if self.compound:
-            self._compound_exception()
-        result = None
-        simple, = self.components
-        for name in simple:
-            if name == key:
-                result = simple[name]
-                break
+        if isinstance(key, int):
+            result = self.components[key]
+        else:
+            if self.compound:
+                self._compound_exception()
+            result = None
+            simple, = self.components
+            for name in simple:
+                if name == key:
+                    result = simple[name]
+                    break
         return result
 
     def __contains__(self, key):
@@ -294,6 +340,20 @@ class Concept(Component):
     def __init__(self, uri, scheme, components):
         super(Concept, self).__init__(uri, components)
         self.__dict__['scheme'] = Item(scheme)
+
+    def __eq__(self, other):
+        result = NotImplemented
+        if isinstance(other, Concept):
+            result = False
+            if self.scheme == other.scheme:
+                result = super(Concept, self).__eq__(other)
+        return result
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is not NotImplemented:
+            result = not result
+        return result
 
     def __repr__(self):
         fmt = '{cls}({self.uri!r}, {self.scheme!r}, {components!r})'
@@ -388,6 +448,24 @@ class PropertyComponent(_ComponentMixin, _DotMixin, MutableMapping):
                                            type(prop).__name__))
             self.__dict__['_data'][prop.name] = prop
 
+    def __eq__(self, other):
+        result = NotImplemented
+        if isinstance(other, PropertyComponent):
+            result = False
+            if self.uri == other.uri and set(self.keys()) == set(other.keys()):
+                for key in self.keys():
+                    if self[key] != other[key]:
+                        break
+                else:
+                    result = True
+        return result
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is not NotImplemented:
+            result = not result
+        return result
+
     def __getitem__(self, key):
         result = None
         for item in self._data.iterkeys():
@@ -397,7 +475,12 @@ class PropertyComponent(_ComponentMixin, _DotMixin, MutableMapping):
         return result
 
     def __contains__(self, key):
-        return self[key] is not None
+        result = False
+        if isinstance(key, (Item, basestring)):
+            result = self[key] is not None
+        elif isinstance(key, Property):
+            result = key == self[key.name]
+        return result
 
     def __repr__(self):
         fmt = '{cls}({self.uri!r}, {properties!r})'
@@ -459,7 +542,7 @@ class PropertyComponent(_ComponentMixin, _DotMixin, MutableMapping):
 
         """
         referrer = {'component': self.uri.data,
-                    'mr:hasProperty':[]}
+                    'mr:hasProperty': []}
         for item in self.itervalues():
             referrer['mr:hasProperty'].append(item.json_referrer())
         return referrer
@@ -482,12 +565,16 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
 
      * A property is *simple* iff its *value* references a :class:`Item`.
      * A property is *compound* iff its *value* references a
-       :class:`Component`.
+       :class:`PropertyComponent`.
 
     """
     def __new__(cls, uri, name, value=None, operator=None):
         new_uri = Item(uri)
         new_name = Item(name)
+        if (value is None and operator is not None) or \
+                (value is not None and operator is None):
+            msg = 'The {!r} and {!r} of a {!r} must be both set or unset.'
+            raise ValueError(msg.format('value', 'operator', cls.__name__))
         new_value = None
         new_operator = None
         if value is not None:
@@ -497,7 +584,7 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
                 new_value = value
             else:
                 msg = 'Invalid {!r} value, got {!r}.'
-                raise TypeError(msg.format(type(self).__name__,
+                raise TypeError(msg.format(cls.__name__,
                                            type(value).__name__))
         if operator is not None:
             new_operator = Item(operator)
@@ -649,7 +736,10 @@ class Item(_DotMixin, namedtuple('Item', 'data notation')):
             result = self.data == other.data and \
                 self.notation == other.notation
         elif isinstance(other, basestring):
-            result = self.data == other or self.notation == other
+            notation = self.notation
+            if isinstance(notation, basestring):
+                notation = notation.lower()
+            result = self.data == other or notation == other.lower()
         return result
 
     def __ne__(self, other):

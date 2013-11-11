@@ -1,0 +1,69 @@
+# (C) British Crown Copyright 2013, Met Office
+# 
+# This file is part of metOcean-mapping.
+# 
+# metOcean-mapping is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU Lesser General Public License 
+# as published by the Free Software Foundation, either version 3 of 
+# the License, or (at your option) any later version.
+# 
+# metOcean-mapping is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public License
+# along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
+
+@prefix cfm: <http://def.cfconventions.org/datamodel/> .
+@prefix cfsn: <http://def.cfconventions.org/standard_names/> .
+@prefix component:   <http://www.metarelate.net/metOcean/component/> .
+@prefix metocFormat: <http://www.metarelate.net/metOcean/format/> .
+@prefix moStCon: <http://reference.metoffice.gov.uk/def/um/stash/concept/> .
+@prefix moumdpF3: <http://reference.metoffice.gov.uk/def/um/umdp/F3/> .
+@prefix mr: <http://www.metarelate.net/vocabulary/index.html#> .
+@prefix openmathr1: <http://www.openmath.org/cd/relation1.xhtml#> .
+@prefix property:    <http://www.metarelate.net/metOcean/property/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+
+#
+# Test mapping #001.
+# UM stash code to CF standard_name and units.
+#
+component:c001
+	rdf:type	mr:Component ;
+	mr:hasFormat	metocFormat:um ;
+	mr:hasProperty	property:p001 .
+
+component:c002
+	rdf:type	mr:Component ;
+	mr:hasFormat	metocFormat:cf ;
+	mr:hasProperty	property:p002 ;
+	mr:hasProperty  property:p003 ;
+	mr:hasProperty  property:p004 .
+
+property:p001
+	rdf:type	mr:Property ;
+	mr:name		moumdpF3:stash ;
+	rdf:value	moStCon:m02s32i202 ;
+	mr:operator	openmathr1:eq .
+
+property:p002
+	rdf:type	mr:Property ;
+	mr:name		cfm:type ;
+	rdf:value	cfm:Field ;
+	mr:operator	openmathr1:eq .
+
+property:p003
+	rdf:type	mr:Property ;
+	mr:name		cfm:units ;
+	rdf:value	"m s-1" ;
+	mr:operator	openmathr1:eq .
+
+property:p004
+	rdf:type	mr:Property ;
+	mr:name		cfm:standard_name ;
+	rdf:value	cfsn:tendency_of_sea_ice_thickness_due_to_dynamics ;
+	mr:operator	openmathr1:eq .

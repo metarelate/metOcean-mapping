@@ -1,7 +1,27 @@
-lib/nohup.out
+*.py[co]
+
 tdbdump.*
-*.pyc
 settings_local.py
+
+# Sphinx documentation files.
 docs/build
-metocean_store/
+
+# Apache Jena triple store databases.
+metocean_store
+metocean_tdb
+tdb
+lib/metocean/tests/tdb
+
+# Created by configuring/running metOcean.
+lib/metocean/etc/site.cfg
+lib/metocean/nohup.out
+
+# Created by testing metOcean.
+lib/metocean/tests/nohup.out
+lib/metocean/tests/results/dot_actual
+
+# Created by editors.
 *~
+\#*
+\.\#*
+*.swp

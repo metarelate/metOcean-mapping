@@ -34,10 +34,10 @@ Installation
 Configuration
 -------------
 
-local configuration files are required to set up the environment
+Local configuration files are required to set up the metOcean environment:
 
-* ./lib/metocean/etc/metocean.config
- * see ./lib/metocean/etc/readme.md
+* ./lib/metocean/etc/site.cfg
+ * see ./lib/metocean/etc/sample.site.cfg
 * lib/editor/settings_local.py
  * see lib/editor/sample_settings_local.py
 

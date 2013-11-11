@@ -1,4 +1,4 @@
-# (C) British Crown Copyright 2011 - 2012, Met Office
+# (C) British Crown Copyright 2011 - 2013, Met Office
 # 
 # This file is part of metOcean-mapping.
 # 
@@ -16,7 +16,6 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 
-import ConfigParser
 import glob
 import json
 import os
@@ -31,109 +30,173 @@ import metocean
 import metocean.prefixes as prefixes
 import metocean.queries as queries
 
-# configure paths for the data, triple database and jena install
-ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
-CONFIG_PATH = os.path.join(ROOT_PATH, 'etc')
-parser = ConfigParser.SafeConfigParser()
-parser.read(os.path.join(CONFIG_PATH,'metocean.config'))
 
-STATICDATA = parser.get('metocean','staticData')
-TDB = parser.get('metocean','TDB')
-JENAROOT = parser.get('metocean','jenaroot')
-FUSEKIROOT = parser.get('metocean','fusekiroot')
-DATASET = '/metocean'
+# Configure the Apache Jena environment.
+if metocean.site_config.get('jena_dir') is not None:
+    os.environ['JENAROOT'] = metocean.site_config['jena_dir']
+else:
+    msg = 'The Apache Jena semantic web framework has not been configured ' \
+        'for metOcean.'
+    raise ValueError(msg)
 
-os.environ['JENAROOT'] = JENAROOT
-os.environ['FUSEKI_HOME'] = FUSEKIROOT
+# Configure the Apache Fuseki environment.
+if metocean.site_config.get('fuseki_dir') is not None:
+    os.environ['FUSEKI_HOME'] = metocean.site_config['fuseki_dir']
+else:
+    msg = 'The Apache Fuseki SPARQL server has not been configured ' \
+        'for metOcean.'
+    raise ValueError(msg)
 
 
 class FusekiServer(object):
     """
     A class to represent an instance of a process managing
-    a triple database and a Fuseki Server
+    an Apache Jena triple store database and Fuseki SPARQL server.
     
     """
-    def __init__(self, port, host='localhost'):
+    def __init__(self, host='localhost', test=False):
+
+        self._jena_dir = metocean.site_config['jena_dir']
+        self._fuseki_dir = metocean.site_config['fuseki_dir']
+
+        static_key = 'static_dir'
+        tdb_key = 'tdb_dir'
+        if test:
+            static_key = 'test_{}'.format(static_key)
+            tdb_key = 'test_{}'.format(tdb_key)
+        
+        if metocean.site_config.get(static_key) is None:
+            msg = 'The {}static data directory for the Apache Jena database' \
+                'has not been configured for metOcean.'
+            raise ValueError(msg.format('test ' if test else ''))
+        else:
+            self._static_dir = metocean.site_config[static_key]
+
+        if metocean.site_config.get(tdb_key) is None:
+            msg = 'The Apache Jena {}triple store database directory has not ' \
+                'been configured for metOcean.'
+            raise ValueError(msg.format('test ' if test else ''))
+        else:
+            self._tdb_dir = metocean.site_config[tdb_key]
+        
+        self._fuseki_dataset = metocean.site_config['fuseki_dataset']
+
+        port_key = 'port'
+        if test:
+            port_key = 'test_{}'.format(port_key)
+        self.port = metocean.site_config[port_key]
+
+        self.host = host
+        self.test = test
         self._process = None
-        self._port = port
-        self._host = host
 
     def __enter__(self):
         self.start()
         return self
 
     def __exit__(self, *args):
-        #print 'exiting'
-        self.stop(save=False)
-
+        self.stop()
+        
     def start(self):
         """
-        initialise the fuseki process, on the defined port,
-        using the created TDB in root_path/metocean.
-        returns a popen instance, the running fuseki server process
+        Initialise the Apache Fuseki SPARQL server process on the configured
+        port, using the configured Apache Jena triple store database.
         
         """
-        if not self._check_port():
-            if os.path.exists('nohup.out'):
-                print 'rm nohup.out'
-                os.remove('nohup.out')
-            self._process = subprocess.Popen(['nohup',
-                                       FUSEKIROOT +
-                                       '/fuseki-server',
-                                       '--loc=%s'%TDB,
-                                       '--update',
-                                       '--port=%i' % self._port,
-                                       DATASET])
-            i = 0
-            while not self._check_port():
-                i+=1
-                time.sleep(0.1)
-                if i > 1000:
-                    raise RuntimeError('Fuseki server not started up correctly')
+        if not self.alive():
+            nohup_dir = metocean.site_config['root_dir']
+            if self.test:
+                nohup_dir = metocean.site_config['test_dir']
+            nohup_file = os.path.join(nohup_dir, 'nohup.out')
+            if os.path.exists(nohup_file):
+                os.remove(nohup_file)
+            cwd = os.getcwd()
+            os.chdir(nohup_dir)
+            args = ['nohup',
+                    os.path.join(self._fuseki_dir, 'fuseki-server'),
+                    '--loc={}'.format(self._tdb_dir),
+                    '--update',
+                    '--port={}'.format(self.port),
+                    self._fuseki_dataset]
+            self._process = subprocess.Popen(args)
+            os.chdir(cwd)
+            for attempt in xrange(metocean.site_config['timeout_attempts']):
+                if self.alive():
+                    break
+                time.sleep(metocean.site_config['timeout_sleep'])
+            else:
+                msg = 'The metOcean Apache Fuseki SPARQL server failed ' \
+                    'to start.'
+                raise RuntimeError(msg)
 
     def stop(self, save=False):
         """
-        stop the fuseki process
+        Shutdown the metOcean Apache Fuseki SPARQL server.
+
+        Kwargs:
+        * save:
+            Save any cache results to the configured Apache Jena triple
+            store database.
+            
         """
         if save:
-            self.save_cache()
-        if self._process:
-            print 'stopping'
+            self.save()
+        if self.alive():
+            pid = self._process.pid
             self._process.terminate()
+            for attempt in xrange(metocean.site_config['timeout_attempts']):
+                if not self.alive():
+                    break
+                time.sleep(metocean.site_config['timeout_sleep'])
+            else:
+                msg = 'The metOcean Apache Fuseki SPARQL server failed ' \
+                    'to shutdown, PID={}.'
+                raise RuntimeError(msg.format(pid))
+                             
             self._process = None
-            i = 0
-            while self._check_port():
-                i += i
-                time.sleep(0.1)
-                if i > 1000:
-                    raise RuntimeError('Fuseki server not shut down correctly')
 
-    def status(self):
-        """check status of instance (is it up?)"""
-        return self._check_port()
+    def restart(self):
+        """
+        Restart the metOcean Apache Fuseki SPARQL server.
 
-    def _check_port(self):
+        """
+        self.stop()
+        self.start()
+
+    def alive(self):
+        """
+        Determine whether the Apache Fuseki SPARQL server is available
+        on the configured port.
+
+        Returns:
+            Boolean.
+
+        """
+        result = False
         s = socket.socket() 
-        #print "Attempting to connect to %s on port %s." %(address, port)
         try: 
-            s.connect((self._host, self._port)) 
-            #print "Connected to server %s on port %s." %(address, port) 
-            return True 
-        except socket.error, e: 
-            #print "Connecting to %s on port %s failed with
-            # the following error: %s" %(address, port, e) 
-            return False
+            s.connect((self.host, self.port))
+            s.close()
+            result = True
+        except socket.error:
+            pass
+        if result and self._process is None:
+            msg = 'There is currently another service on port {}.'
+            raise RuntimeError(msg.format(self.port))
+        return result
 
     def clean(self):
         """
-        remove all of the files supporting the tbd instance
+        Delete all of the files in the configured Apache Jena triple
+        store database.
 
         """
-        if self._process:
+        if self.alive():
             self.stop()
-        for TDBfile in glob.glob("%s*"% TDB):
-            os.remove(TDBfile)
-        return glob.glob("%s*"% TDB)
+        files = os.path.join(self._tdb_dir, '*')
+        for tdb_file in glob.glob(files):
+            os.remove(tdb_file)
+        return glob.glob(files)
 
     def save(self):
         """
@@ -142,14 +205,14 @@ class FusekiServer(object):
         remove saveCache flags after saving
         
         """
-        maingraph = 'metarelate.net'
-        for subgraph in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
-            graph = 'http://%s/%s' % (maingraph, subgraph.split('/')[-1])
+        main_graph = metocean.site_config['graph']
+        files = os.path.join(self._static_dir, main_graph, '*.ttl')
+        for subgraph in glob.glob(files):
+            graph = 'http://%s/%s' % (main_graph, subgraph.split('/')[-1])
             save_string = queries.save_cache(self, graph)
             with open(subgraph, 'a') as sg:
                 for line in save_string.splitlines():
                     if not line.startswith('@prefix'):
-                        #print 'writing', line
                         sg.write(line)
                         sg.write('\n')
 
@@ -160,10 +223,11 @@ class FusekiServer(object):
         as the saved ttl files
         
         """
-        maingraph = 'metarelate.net'
-        for infile in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
+        main_graph = metocean.site_config['graph']
+        files = os.path.join(self._static_dir, main_graph, '*.ttl')
+        for infile in glob.glob(files):
             ingraph = infile.split('/')[-1]
-            graph = 'http://%s/%s' % (maingraph, ingraph)
+            graph = 'http://%s/%s' % (main_graph, ingraph)
             revert_string = queries.revert_cache(self, graph)
 
     def query_cache(self):
@@ -172,35 +236,39 @@ class FusekiServer(object):
 
         """
         results = []
-        maingraph = 'metarelate.net'
-        for infile in glob.glob(os.path.join(STATICDATA, maingraph, '*.ttl')):
+        main_graph = metocean.site_config['graph']
+        files = os.path.join(self._static_dir, main_graph, '*.ttl')
+        for infile in glob.glob(files):
             ingraph = infile.split('/')[-1]
-            graph = 'http://%s/%s' % (maingraph, ingraph)
+            graph = 'http://%s/%s' % (main_graph, ingraph)
             result = queries.query_cache(self, graph)
             results = results + result
         return results
 
     def load(self):
         """
-        load data from all the ttl files in the STATICDATA folder into a new TDB
+        Load all the static data turtle files into the new Apache Jena
+        triple store database.
 
         """
-        print 'clean:'
         self.clean()
-        for ingraph in glob.glob(os.path.join(STATICDATA, '*')):
-            graph = ingraph.split('/')[-1] + '/'
-            for infile in glob.glob(os.path.join(ingraph, '*.ttl')):
-                subgraph = infile.split('/')[-1]
-                space = ' '
-                loadCall = [JENAROOT + '/bin/tdbloader',
-                            '--graph=http://%s%s' % (graph,subgraph),
-                            '--loc=%s'% TDB, infile]
-                print space.join(loadCall)
-                subprocess.check_call(loadCall)
+        graphs = os.path.join(self._static_dir, '*')
+        for ingraph in glob.glob(graphs):
+            graph = ingraph.split('/')[-1]
+            subgraphs = os.path.join(ingraph, '*.ttl')
+            for insubgraph in glob.glob(subgraphs):
+                subgraph = insubgraph.split('/')[-1]
+                tdb_load = [os.path.join(self._jena_dir, 'bin/tdbloader'),
+                            '--graph=http://{}/{}'.format(graph, subgraph),
+                            '--loc={}'.format(self._tdb_dir),
+                            insubgraph]
+                print ' '.join(tdb_load)
+                subprocess.check_call(tdb_load)
 
     def validate(self):
         """
         run the validation queries
+
         """
         failures = {}
         mm_string = 'The following mappings are ambiguous, providing multiple '\
@@ -216,9 +284,8 @@ class FusekiServer(object):
         return the results
         
         """
-        if not self.status():
-            self.stop()
-            self.start()
+        if not self.alive():
+            self.restart()
         # use null ProxyHandler to ignore proxy for localhost access
         proxy_support = urllib2.ProxyHandler({})
         opener = urllib2.build_opener(proxy_support)
@@ -241,8 +308,8 @@ class FusekiServer(object):
                 (action, "%s %s" % (pre.sparql, query_string)),
                 ("output", output),
                 ("stylesheet","/static/xml-to-html-links.xsl")])
-        BASEURL = "http://%s:%i%s/%s?" % (self._host, self._port,
-                                          DATASET, action)
+        BASEURL = "http://%s:%i%s/%s?" % (self.host, self.port,
+                                          self._fuseki_dataset, action)
         data = ''
         try:
             data = opener.open(urllib2.Request(BASEURL), qstr).read()
@@ -332,7 +399,6 @@ class FusekiServer(object):
             inv = True
         else:
             raise ValueError('inv = {}, not "True" or "False"'.format(inv))
-        #print '_retrieve_value_map'
         value_map = {'valueMap':valmap_id, 'mr:source':{}, 'mr:target':{}}
         vm_record = queries.retrieve_valuemap(self, valmap_id)
         if inv:

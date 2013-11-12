@@ -25,8 +25,8 @@ import metocean
 import metocean.tests as tests
 from metocean.fuseki import FusekiServer
 
-FORMAT_CF = '<http://www.metarelate.net/metOcean/format/cf>'
-FORMAT_UM = '<http://www.metarelate.net/metOcean/format/um>'
+SCHEME_CF = '<http://www.metarelate.net/metOcean/format/cf>'
+SCHEME_UM = '<http://www.metarelate.net/metOcean/format/um>'
 
 
 class TestFuseki(tests.MetOceanTestCase):
@@ -40,11 +40,15 @@ class TestFuseki(tests.MetOceanTestCase):
         cls.fuseki.stop()
 
     def test_retrieve_um_cf(self):
-        mappings = self.fuseki.retrieve_mappings(FORMAT_UM, FORMAT_CF)
+        # Provide the full scheme URI.
+        mappings = self.fuseki.retrieve_mappings(SCHEME_UM, SCHEME_CF)
+        self.assertEqual(len(mappings), 1)
+        # Provide only the scheme notation.
+        mappings = self.fuseki.retrieve_mappings('um', 'cf')
         self.assertEqual(len(mappings), 1)
 
     def test_dot_um_cf(self):
-        mappings = self.fuseki.retrieve_mappings(FORMAT_UM, FORMAT_CF)
+        mappings = self.fuseki.retrieve_mappings(SCHEME_UM, SCHEME_CF)
         for mapping in sorted(mappings, key=lambda mapping: mapping.uri.data):
             self.check_dot(mapping)
 

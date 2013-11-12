@@ -181,7 +181,7 @@ class FusekiServer(object):
         except socket.error:
             pass
         if result and self._process is None:
-            msg = 'There is currently another service on port {}.'
+            msg = 'There is currently another service on port {!r}.'
             raise RuntimeError(msg.format(self.port))
         return result
 
@@ -331,13 +331,21 @@ class FusekiServer(object):
         else:
             return data
 
-    def retrieve_mappings(self, s_format, t_format):
+    def retrieve_mappings(self, source, target):
         """
         return the format specific mappings for a particular source
         and target format
 
         """
-        mappings = queries.valid_ordered_mappings(self, s_format, t_format)
+        if isinstance(source, basestring) and \
+                not metocean.Item(source).is_uri():
+            source = os.path.join('<http://www.metarelate.net/metOcean/format',
+                                  '{}>'.format(source.lower()))
+        if isinstance(target, basestring) and \
+                not metocean.Item(target).is_uri():
+            target = os.path.join('<http://www.metarelate.net/metOcean/format',
+                                  '{}>'.format(target.lower()))
+        mappings = queries.valid_ordered_mappings(self, source, target)
         mapping_list = []
         for mapping in mappings:
             mapping_list.append(self.structured_mapping(mapping))

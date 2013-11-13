@@ -883,6 +883,7 @@ def mapping_edit(request):
         requestor_path = '{}'
     requestor = json.loads(requestor_path)
     print requestor
+    fname = None
     if request.method == 'POST':
         form = forms.MappingMeta(request.POST)
         if form.is_valid():
@@ -934,8 +935,8 @@ def mapping_edit(request):
                 initial['last_editor'] = mapping['creator']
 #            else:
 #                raise ValueError('mismatch in referrer')
-        else:
-            fname = None
+#         else:
+#            fname = None
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = requestor

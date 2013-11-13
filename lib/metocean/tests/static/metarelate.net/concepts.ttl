@@ -26,6 +26,8 @@
 @prefix property:    <http://www.metarelate.net/metOcean/property/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix gribapi: <http://def.ecmwf.int/api/grib/keys/> .
 
 
 #

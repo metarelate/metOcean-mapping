@@ -174,18 +174,18 @@ class Value(forms.Form):
                                                           choices=fc_choices)
         elif self.fformat == 'cf':
             cfRes = moq.subject_and_plabel(fuseki_process,
-                                         'http://CF/cfmodel.ttl')
+                                         'http://cf/cf-model.ttl')
             choices = [(cf['subject'], cf['notation']) for cf in cfRes]
             choices = [('','')] + choices
             self.fields['name'].choices = choices
             sns = moq.subject_and_plabel(fuseki_process,
-                                         'http://CF/cf-standard-name-table.ttl')
+                                         'http://cf/cf-standard-name-table.ttl')
             sn_choices = [('','')]
             sn_choices += [(sn['subject'], sn['notation']) for sn in sns]
             self.fields['standard_name'] = forms.ChoiceField(required=False,
                                                              choices=sn_choices)
             mod = moq.subject_and_plabel(fuseki_process,
-                                         'http://CF/cfmodel.ttl')
+                                         'http://cf/cf-model.ttl')
             md_choices = [('','')]
             md_choices += [(mo['subject'], mo['notation']) for mo in mod]
             print md_choices

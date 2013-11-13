@@ -323,7 +323,7 @@ def _component_links(key, request, amended):
                 #remover for each property
                 pelems = elem['mr:hasComponent'].get('mr:hasProperty', [])
                 pads = ad['mr:hasComponent'].get('mr:hasProperty', [])
-                for j, pelem, pad in enumerate(pelems):
+                for j, pelem in enumerate(pelems):
                     pad = pads[j]
                     rer = copy.deepcopy(request)
                     rmR = rer[key]['mr:hasComponent'][k]['mr:hasProperty'][i]

@@ -323,7 +323,7 @@ def _component_links(key, request, amended):
                 #remover for each property
                 pelems = elem['mr:hasComponent'].get('mr:hasProperty', [])
                 pads = ad['mr:hasComponent'].get('mr:hasProperty', [])
-                for j, pelem, pad in enumerate(pelems):
+                for j, pelem in enumerate(pelems):
                     pad = pads[j]
                     rer = copy.deepcopy(request)
                     rmR = rer[key]['mr:hasComponent'][k]['mr:hasProperty'][i]
@@ -883,6 +883,7 @@ def mapping_edit(request):
         requestor_path = '{}'
     requestor = json.loads(requestor_path)
     print requestor
+    fname = None
     if request.method == 'POST':
         form = forms.MappingMeta(request.POST)
         if form.is_valid():
@@ -934,8 +935,8 @@ def mapping_edit(request):
                 initial['last_editor'] = mapping['creator']
 #            else:
 #                raise ValueError('mismatch in referrer')
-        else:
-            fname = None
+#         else:
+#            fname = None
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = requestor

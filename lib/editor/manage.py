@@ -13,7 +13,8 @@ import settings
 import metocean.fuseki as fu
 
 if __name__ == "__main__":
-    with fu.FusekiServer(port=settings.FUSEKI_PORT) as server:
+#    with fu.FusekiServer(port=settings.FUSEKI_PORT) as server:
+    with fu.FusekiServer() as server:
         settings.fuseki_process = server
         execute_manager(settings)
 

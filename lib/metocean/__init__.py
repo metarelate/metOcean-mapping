@@ -632,8 +632,7 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
 
     @property
     def complete(self):
-        return self.simple and self.value is not None and \
-            self.operator is not None
+        return self.simple and self.value is not None and self.value.complete
 
     def dot(self, graph, parent, name=None):
         """
@@ -757,6 +756,10 @@ class Item(_DotMixin, namedtuple('Item', 'data notation')):
         if self.notation is not None:
             fmt = '{cls}(data={self.data!r}, notation={self.notation!r})'
         return fmt.format(self=self, cls=type(self).__name__)
+
+    @property
+    def complete(self):
+        return self.data is not None and self.notation is not None
 
     def dot(self):
         """

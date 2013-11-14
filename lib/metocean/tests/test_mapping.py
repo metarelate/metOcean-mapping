@@ -65,6 +65,11 @@ class TestItem(tests.MetOceanTestCase):
         i1 = metocean.Item('data', 'notation')
         self.assertNotEqual(i1, 'wibble')
 
+    def test_complete(self):
+        self.assertTrue(metocean.Item('data', 'notation').complete)
+        self.assertFalse(metocean.Item('data').complete)
+        self.assertFalse(metocean.Item(None).complete)
+
     def test_immutable(self):
         item = metocean.Item('data', 'notation')
         with self.assertRaises(TypeError):

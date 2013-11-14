@@ -36,8 +36,8 @@ from django.forms.models import inlineformset_factory
 
 
 import forms
+import metocean
 import metocean.prefixes as prefixes
-import metocean.queries as moq
 from settings import READ_ONLY
 from settings import fuseki_process
 
@@ -53,7 +53,19 @@ def home(request):
     cache_status = '{} statements in the local triple store are' \
                    ' flagged as not existing in the persistent ' \
                    'StaticData store'.format(len(persist))
-    cache_state = moq.print_records(persist)
+    print_string = ''
+    for r in persist:
+        if len(r.keys()) == 3 and r.has_key('s') and \
+            r.has_key('p') and r.has_key('o'):
+            print_string += '%s\n' % r['s']
+            print_string += '\t%s\n' % r['p']
+            print_string += '\t\t%s\n' % r['o']
+            print_string += '\n'
+        else:
+            for k,v in r.iteritems():
+                print_string += '%s %s\n' (k, v)
+            print_string += '\n'
+    cache_state = print_string
     if request.method == 'POST':
         form = forms.HomeForm(request.POST)
         if form.is_valid():
@@ -116,7 +128,8 @@ def _prop_id(members):
                 for i, (prop, new_prop) in enumerate(zip(props, new_props)):
                     # remove old property id
                     prop.pop('property', None)
-                    prop_res = moq.get_property(fuseki_process, prop)
+                    qstr, instr = metocean.Property.sparql_creator(prop)
+                    prop_res = fuseki_process.create(qstr)
                     cpid = '{}'.format(prop_res['property'])
                     props[i] = cpid
                     new_props[i]['component'] = cpid
@@ -124,12 +137,14 @@ def _prop_id(members):
                 #validation error please
                 raise ValueError('If a property has a component that component'
                                  'must itself reference properties')
-            cres = moq.get_component(fuseki_process, comp_mem)
+            qstr, instr = metocean.Component.sparql_creator(comp_mem)
+            cres = fuseki_process.create(qstr)
             mem['mr:hasComponent'] = cres['component']
             new_mem['mr:hasComponent']['component'] = cres['component']
         # remove old property id
         mem.pop('property', None)
-        res = moq.get_property(fuseki_process, mem)
+        qstr, instr = metocean.Property.sparql_creator(mem)
+        res = fuseki_process.create(qstr, instr)
         pid = res['property']
         new_mem['property'] = pid
         prop_ids.append(pid)
@@ -158,14 +173,15 @@ def _create_components(key, requestor, new_map, components):
             pr_ids, newm['mr:hasProperty'] = _prop_id(mem.get('mr:hasProperty'))
             sub_concept_dict = {
                 'mr:hasFormat': '%s' % requestor[key]['mr:hasFormat'],
-                'mr:hasProperty':pr_ids}                    
-            sub_comp = moq.get_component(fuseki_process,
-                                                 sub_concept_dict)
+                'mr:hasProperty':pr_ids}
+            qstr, instr = metocean.Component.sparql_creator(sub_concept_dict)
+            sub_comp = fuseki_process.create(qstr, instr)
             subc_ids.append('%s' % sub_comp['component'])
             newm['component'] = '%s' % sub_comp['component']
     comp_dict = {'mr:hasFormat':'%s' % requestor[key]['mr:hasFormat'],
                                 'mr:hasComponent':subc_ids}
-    comp = moq.get_component(fuseki_process, comp_dict)
+    qstr, instr = metocean.Component.sparql_creator()
+    comp = fuseki_process.create(qstr, instr)
     if comp:
         components[key] = comp['component']
     else:
@@ -187,7 +203,8 @@ def _create_properties(key, requestor, new_map, components):
         comp_dict['dc:mediator'] = requestor[key]['dc:mediator']
     if requestor[key].get('dc:requires'):
         comp_dict['dc:requires'] = requestor[key]['dc:requires']
-    comp = moq.get_component(fuseki_process, comp_dict)
+    qstr, instr = metocean.Component.sparql_creator(comp_dict)
+    comp = fuseki_process.create(qstr, instr)
     if comp:
         components[key] = comp['component']
     else:
@@ -598,7 +615,9 @@ def create_mediator(request, fformat):
         form = forms.NewMediator()
     if request.method == 'POST' and form.is_valid():
         mediator = form.cleaned_data['mediator']
-        moq.create_mediator(fuseki_process, mediator, fformat)
+        po_dict = {'mr:hasFormat': fformat,'rdf:label': mediator}
+        qstr, instr = metocean.Mediator.sparql_creator(po_dict)
+        res = fuseki_process.create(qstr, instr)
         kw = {'mediator':'dc:mediator','fformat':fformat}
         url = url_qstr(reverse('define_mediator', kwargs=kw),
                                    ref=requestor_path)
@@ -619,11 +638,13 @@ def _get_value(value):
     if value.get('mr:subject').get('mr:subject'):
         subj_id = _get_value(value.get('mr:subject'))
     else:
-        prop = moq.get_property(fuseki_process,
-                               value['mr:subject']['mr:hasProperty'])
-        sc_prop = moq.get_scoped_property(fuseki_process,
-                                      {'mr:hasProperty':prop['property'],
-                                    'mr:scope':value['mr:subject']['mr:scope']})
+        po_dict = value['mr:subject']['mr:hasProperty']
+        qstr, instr = metocean.Property.sparql_creator(po_dict)
+        prop = fuseki_process.create(qstr, instr)
+        po_dict = {'mr:hasProperty':prop['property'],
+                   'mr:scope':value['mr:subject']['mr:scope']}
+        qstr, instr = metocean.ScopedProperty.sparql_creator(po_dict)
+        sc_prop = fuseki_process.create(qstr, instr)
         subj_id = sc_prop['scopedProperty']
     new_val = {'mr:subject':subj_id}
     if value.get('mr:object'):
@@ -632,18 +653,21 @@ def _get_value(value):
             obj_id = _get_value(value.get('mr:object'))
         else:
             if isinstance(value.get('mr:object'), dict):
-                oprop = moq.get_property(fuseki_process,
-                               value['mr:object']['mr:hasProperty'])
-                o_sc_prop = moq.get_scoped_property(fuseki_process,
-                                      {'mr:hasProperty':oprop['property'],
-                                    'mr:scope':value['mr:object']['mr:scope']})
+                po_dict = value['mr:object']['mr:hasProperty']
+                qstr, instr = metocean.Property.sparql_creator(po_dict)
+                oprop = fuseki_process.create(qstr, instr)
+                po_dict = {'mr:hasProperty':oprop['property'],
+                           'mr:scope':value['mr:object']['mr:scope']}
+                qstr, instr = metocean.ScopedProperty.sparql_creator(po_dict)
+                o_sc_prop = fuseki_process.create(qstr, instr)
                 obj_id = o_sc_prop['scopedProperty']
             else:
                 obj_id = value.get('mr:object')
         new_val['mr:object'] = obj_id
     if value.get('mr:operator'):
         new_val['mr:operator'] = value.get('mr:operator')
-    value =  moq.get_value(fuseki_process, new_val)
+    qstr, instr = metocean.Value.sparql_creator(new_val)
+    value = fuseki_process.create(qstr, instr)
     v_id = value['value']
     return v_id
         
@@ -670,10 +694,10 @@ def value_maps(request):
         ## to mapping_edit for creation
         form = forms.MappingConcept(request.POST)
         for valuemap in requestor.get('mr:hasValueMap',[]):
-            # vmap = moq.get_value_map(fuseki_process, valmap)
             vmap_dict = {'mr:source':_get_value(valuemap['mr:source']),
                          'mr:target':_get_value(valuemap['mr:target'])}
-            vmap = moq.get_value_map(fuseki_process, vmap_dict)
+            qstr, instr = metocean.ValueMap.sparql_creator(vmap_dict)
+            vmap = fuseki_process.create(qstr, instr)
             valuemap['valueMap'] = vmap['valueMap']
             #value['value'] = val_id
         url = url_qstr(reverse('mapping_edit'),
@@ -882,7 +906,7 @@ def mapping_edit(request):
     if requestor_path == '':
         requestor_path = '{}'
     requestor = json.loads(requestor_path)
-    print requestor
+    # print requestor
     fname = None
     if request.method == 'POST':
         form = forms.MappingMeta(request.POST)
@@ -904,10 +928,12 @@ def mapping_edit(request):
                                                                [])])}
         map_id = requestor.get('mapping')
         if map_id:
-            mapping = moq.get_mapping_by_id(fuseki_process, map_id, val=False)
+            qstr = metocean.Mapping.sparql_retriever(map_id, valid=False)
+            mapping = fuseki_process.retrieve(qstr)
             ## quick example of dot notation, needs refactor
             amap = mapping.copy()
             map_instance = fuseki_process.structured_mapping(amap)
+            # print map_instance
             fname = map_id.split('/')[-1].rstrip('>') + '.png'
             outfile = os.path.join(os.path.dirname(__file__), 'static',
                                    'tmp_images', fname)
@@ -919,6 +945,7 @@ def mapping_edit(request):
                   mapping.get('hasValueMaps', '').split('&').sort()
             # if ts and tt and tvm:
             initial = mapping
+            initial['editor'] = initial.pop('creator')
             initial['source'] = requestor.get('mr:source').get('component')
             initial['target'] =  requestor.get('mr:target').get('component')
             initial['valueMaps'] = '&'.join([vm.get('valueMap') for vm in
@@ -933,10 +960,6 @@ def mapping_edit(request):
                 initial['next_status'] = mapping['status']
             if mapping.get('creator'):
                 initial['last_editor'] = mapping['creator']
-#            else:
-#                raise ValueError('mismatch in referrer')
-#         else:
-#            fname = None
         form = forms.MappingMeta(initial)
     con_dict = {}
     con_dict['mapping'] = requestor
@@ -988,8 +1011,9 @@ def process_form(form, requestor_path):
                                   data['valueMaps'].split('&')]
 
     mapping = mapping_p_o
-    mapping = moq.create_mapping(fuseki_process, mapping_p_o)
-    map_id = mapping[0]['map']
+    qstr, instr = metocean.Mapping.sparql_creator(mapping_p_o)
+    mapping = fuseki_process.create(qstr, instr)
+    map_id = mapping['mapping']
 
     return map_id
 
@@ -1009,7 +1033,8 @@ def invalid_mappings(request):
     for key, inv_mappings in requestor.iteritems():
         invalid = {'label':key, 'mappings':[]}
         for inv_map in inv_mappings:
-            mapping = moq.get_mapping_by_id(fuseki_process, inv_map['amap'])
+            qstr = metocean.Mapping.sparql_creator(inv_map['amap'])
+            mapping = fuseki_process.retrieve(qstr)
             referrer = fuseki_process.structured_mapping(mapping)
             referrer = referrer.json_referrer()
             map_json = json.dumps(referrer)
@@ -1118,11 +1143,12 @@ def search_maps(request):
     if requestor_path == '':
         requestor_path = '[]'
     prop_list = json.loads(requestor_path)
-    mappings = moq.mapping_by_properties(fuseki_process, prop_list)
+    mappings = fuseki_process.mapping_by_properties(prop_list)
     mapurls = {'label': 'These mappings contain the search properties',
                'mappings':[]}
     for amap in mappings:
-        mapping = moq.get_mapping_by_id(fuseki_process, amap)
+        qstr = metocean.Mapping.sparql_retriever(amap)
+        mapping = fuseki_process.retrieve(qstr)
         referrer = fuseki_process.structured_mapping(mapping).json_referrer()
         map_json = json.dumps(referrer)
         url = url_qstr(reverse('mapping_edit'), ref=map_json)

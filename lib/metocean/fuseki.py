@@ -28,7 +28,6 @@ import urllib2
 
 import metocean
 import metocean.prefixes as prefixes
-import metocean.queries as queries
 
 
 # Configure the Apache Jena environment.
@@ -205,16 +204,69 @@ class FusekiServer(object):
         remove saveCache flags after saving
         
         """
+        
         main_graph = metocean.site_config['graph']
         files = os.path.join(self._static_dir, main_graph, '*.ttl')
         for subgraph in glob.glob(files):
             graph = 'http://%s/%s' % (main_graph, subgraph.split('/')[-1])
-            save_string = queries.save_cache(self, graph)
+            save_string = self.save_cache(graph)
             with open(subgraph, 'a') as sg:
                 for line in save_string.splitlines():
                     if not line.startswith('@prefix'):
                         sg.write(line)
                         sg.write('\n')
+
+
+
+    def save_cache(self, graph, debug=False):
+        """
+        export new records from a graph in the triple store to an external location,
+        as flagged by the manager application
+        clear the 'not saved' flags on records, updating a graph in the triple store
+        with the fact that changes have been persisted to ttl
+
+        """
+        qstr = '''
+        CONSTRUCT
+        {
+            ?s ?p ?o .
+        }
+        WHERE
+        {
+        GRAPH <%s>
+        {
+        ?s ?p ?o ;
+            mr:saveCache "True" .
+        }
+        } 
+        ''' % graph
+        results = self.run_query(qstr, output="text", debug=debug)
+        qstr = '''
+        DELETE
+        {  GRAPH <%s>
+            {
+            ?s mr:saveCache "True" .
+            }
+        }
+        WHERE
+        {  GRAPH <%s>
+            {
+        ?s ?p ?o ;
+            mr:saveCache "True" .
+            }
+        } 
+        ''' % (graph,graph)
+        delete_results = self.run_query(qstr, update=True, debug=debug)
+        save_string = ''
+        for line in results.split('\n'):
+            if not line.strip().startswith('mr:saveCache'):
+                save_string += line
+                save_string += '\n'
+            else:
+                if line.endswith('.'):
+                    save_string += '\t.\n'
+        return save_string
+
 
     def revert(self):
         """
@@ -223,27 +275,55 @@ class FusekiServer(object):
         as the saved ttl files
         
         """
+        qstr = '''
+        DELETE
+        {  GRAPH <%s>
+            {
+            ?s ?p ?o .
+            }
+        }
+        WHERE
+        {  GRAPH <%s>
+            {
+            ?s ?p ?o ;
+            mr:saveCache "True" .
+            }
+        } 
+        '''
         main_graph = metocean.site_config['graph']
         files = os.path.join(self._static_dir, main_graph, '*.ttl')
         for infile in glob.glob(files):
             ingraph = infile.split('/')[-1]
             graph = 'http://%s/%s' % (main_graph, ingraph)
-            revert_string = queries.revert_cache(self, graph)
+            qstring = qstr % (graph, graph)
+            revert_string = self.run_query(qstring, update=True)
 
     def query_cache(self):
         """
         identify all cached changes in the metocean graph
 
         """
+        qstr = '''
+        SELECT ?s ?p ?o
+        WHERE
+        {  GRAPH <%s>
+            {
+        ?s ?p ?o ;
+            mr:saveCache "True" .
+            }
+        } 
+        '''
         results = []
         main_graph = metocean.site_config['graph']
         files = os.path.join(self._static_dir, main_graph, '*.ttl')
         for infile in glob.glob(files):
             ingraph = infile.split('/')[-1]
             graph = 'http://%s/%s' % (main_graph, ingraph)
-            result = queries.query_cache(self, graph)
+            query_string = qstr % (graph)
+            result = self.run_query(query_string)
             results = results + result
         return results
+
 
     def load(self):
         """
@@ -273,9 +353,9 @@ class FusekiServer(object):
         failures = {}
         mm_string = 'The following mappings are ambiguous, providing multiple '\
                     'targets in the same format for a particular source'
-        failures[mm_string] = queries.multiple_mappings(self)
+        failures[mm_string] = self.run_query(multiple_mappings())
         invalid_vocab = 'The following mappings contain an undeclared URI'
-        failures[invalid_vocab] = queries.valid_vocab(self)
+        failures[invalid_vocab] = self.run_query(valid_vocab())
         return failures
 
     def run_query(self, query_string, output='json', update=False, debug=False):
@@ -317,19 +397,81 @@ class FusekiServer(object):
             ec = 'Error connection to Fuseki server on {}.\n server returned {}'
             ec = ec.format(BASEURL, err)
             raise RuntimeError(ec)
-            # self.stop()
-            # self.start()
-            # try:
-            #     trydata = opener.open(urllib2.Request(BASEURL)).read()
-            # except urllib2.URLError as err2:
-            #     ec += ec + '\n' + '{}'.format(err2)
-            #     raise RuntimeError(ec)
         if output == "json":
             return process_data(data)
         elif output == "text":
             return data
         else:
             return data
+
+    def get_label(self, subject, debug=False):
+        """
+        return the skos:notation for a subject, if it exists
+
+        """
+        subject = str(subject)
+        if not subject.startswith('<') and not subject.startswith('"'):
+            subj_str = '"{}"'.format(subject)
+        else:
+            subj_str = subject
+        qstr = ''' SELECT ?notation 
+        WHERE { {'''
+        for graph in _vocab_graphs():
+            qstr += '\n\tGRAPH %s {' % graph
+            qstr += '\n\t?s skos:notation ?notation . }}\n\tUNION {'
+        qstr = qstr.rstrip('\n\tUNION {')
+        qstr += '\n\tFILTER(?s = %(sub)s) }' % {'sub':subj_str}
+        results = self.run_query(qstr, debug=debug)
+        if len(results) == 0:
+            hash_split = subject.split('#')
+            if len(hash_split) == 2 and hash_split[1].endswith('>'):
+                label = hash_split[1].rstrip('>')
+            else:
+                # raise ValueError('{} returns no notation'.format(subject))
+                label = subject
+        elif len(results) >1:
+            raise ValueError('{} returns multiple notation'.format(subject))
+        else:
+            label = results[0]['notation']
+        return label
+
+    def get_contacts(self, register, debug=False):
+        """
+        return a list of contacts from the tdb which are part of the named register
+
+        """
+        qstr = '''
+        SELECT ?s ?prefLabel ?def
+        WHERE
+        { GRAPH <http://metarelate.net/contacts.ttl> {
+            ?s skos:inScheme <http://www.metarelate.net/metOcean/%s> ;
+               skos:prefLabel ?prefLabel ;
+               skos:definition ?def ;
+               dc:valid ?valid .
+        } }
+        ''' % register
+        results = self.run_query(qstr, debug=debug)
+        return results
+
+
+    def subject_and_plabel(self, graph, debug=False):
+        """
+        selects subject and prefLabel from a particular graph
+
+        """
+        qstr = '''
+            SELECT ?subject ?prefLabel ?notation
+            WHERE {
+                GRAPH <%s> {
+                ?subject skos:notation ?notation .
+                OPTIONAL {?subject skos:prefLabel ?prefLabel . }}
+            }
+            ORDER BY ?subject
+        ''' % graph
+        results = self.run_query(qstr, debug=debug)
+        return results
+
+
 
     def retrieve_mappings(self, source, target):
         """
@@ -345,14 +487,47 @@ class FusekiServer(object):
                 not metocean.Item(target).is_uri():
             target = os.path.join('<http://www.metarelate.net/metOcean/format',
                                   '{}>'.format(target.lower()))
-        mappings = queries.valid_ordered_mappings(self, source, target)
+        qstr = '''
+        SELECT ?mapping ?source ?sourceFormat ?target ?targetFormat ?inverted
+        (GROUP_CONCAT(DISTINCT(?valueMap); SEPARATOR = '&') AS ?valueMaps)
+        WHERE { 
+        GRAPH <http://metarelate.net/mappings.ttl> { {
+        ?mapping mr:source ?source ;
+                 mr:target ?target ;
+                 mr:status ?status .
+        BIND("False" AS ?inverted)
+        OPTIONAL {?mapping mr:hasValueMap ?valueMap . }
+        FILTER (?status NOT IN ("Deprecated", "Broken"))
+        MINUS {?mapping ^dc:replaces+ ?anothermap}
+        }
+        UNION {
+        ?mapping mr:source ?target ;
+                 mr:target ?source ;
+                 mr:status ?status ;
+                 mr:invertible "True" .
+        BIND("True" AS ?inverted)
+        OPTIONAL {?mapping mr:hasValueMap ?valueMap . }
+        FILTER (?status NOT IN ("Deprecated", "Broken"))
+        MINUS {?mapping ^dc:replaces+ ?anothermap}
+        } }
+        GRAPH <http://metarelate.net/concepts.ttl> { 
+        ?source mr:hasFormat %s .
+        ?target mr:hasFormat %s .
+        }
+        }
+        GROUP BY ?mapping ?source ?sourceFormat ?target ?targetFormat ?inverted
+        ORDER BY ?mapping
+
+        ''' % (source, target)
+        mappings = self.run_query(qstr)
         mapping_list = []
         for mapping in mappings:
             mapping_list.append(self.structured_mapping(mapping))
         return mapping_list
 
     def _retrieve_component(self, uri, base=True):
-        qcomp = queries.retrieve_component(self, uri)
+        qstr = metocean.Component.sparql_retriever(uri)
+        qcomp = self.retrieve(qstr)
         if qcomp is None:
             msg = 'Cannot retrieve URI {!r} from triple-store.'
             raise ValueError(msg.format(uri))
@@ -364,22 +539,20 @@ class FusekiServer(object):
         if qcomp['property']:
             properties = []
             for puri in qcomp['property']:
-                qprop = queries.retrieve_property(self, puri)
+                qstr = metocean.Property.sparql_retriever(puri)
+                qprop = self.retrieve(qstr)
                 name = qprop['name']
-                name = metocean.Item(name,
-                                     queries.get_label(self, name))
+                name = metocean.Item(name, self.get_label(name))
                 curi = qprop.get('component')
                 if curi is not None:
                     value = self._retrieve_component(curi, base=False)
                 else:
                     value = qprop.get('value')
                     if value is not None:
-                        value = metocean.Item(value,
-                                              queries.get_label(self, value))
+                        value = metocean.Item(value, self.get_label(value))
                     op = qprop.get('operator')
                     if op is not None:
-                        op = metocean.Item(op,
-                                           queries.get_label(self, op))
+                        op = metocean.Item(op, self.get_label(op))
                 properties.append(metocean.Property(puri, name, value, op))
             result = metocean.PropertyComponent(uri, properties)
         if qcomp['subComponent']:
@@ -392,7 +565,7 @@ class FusekiServer(object):
                 result = metocean.Component(uri, components)
         if base:
             scheme = qcomp['format']
-            scheme = metocean.Item(scheme, queries.get_label(self, scheme))
+            scheme = metocean.Item(scheme, self.get_label(scheme))
             result = metocean.Concept(uri, scheme, result)
         return result
 
@@ -408,7 +581,8 @@ class FusekiServer(object):
         else:
             raise ValueError('inv = {}, not "True" or "False"'.format(inv))
         value_map = {'valueMap':valmap_id, 'mr:source':{}, 'mr:target':{}}
-        vm_record = queries.retrieve_valuemap(self, valmap_id)
+        qstr = metocean.ValueMap.sparql_retriever(valmap_id)
+        vm_record = self.retrieve(qstr)
         if inv:
             value_map['mr:source']['value'] = vm_record['target']
             value_map['mr:target']['value'] = vm_record['source']
@@ -426,13 +600,15 @@ class FusekiServer(object):
         
         """
         value_dict = {'value':val_id}
-        val = queries.retrieve_value(self, val_id)
+        qstr = metocean.Value.sparql_retriever(val_id)
+        val = self.retrieve(qstr)
         for key in val.keys():
             value_dict['mr:{}'.format(key)] = val[key]
         for sc_prop in ['mr:subject', 'mr:object']:
             pid = value_dict.get(sc_prop)
             if pid:
-                prop = queries.retrieve_scoped_property(self, pid)
+                qstr = metocean.ScopedProperty.sparql_retriever(pid)
+                prop = self.retrieve(qstr)
                 if prop:
                     value_dict[sc_prop] = {}
                     for pkey in prop:
@@ -440,7 +616,8 @@ class FusekiServer(object):
                         value_dict[sc_prop]['mr:{}'.format(pkey)] = pv
                         if pkey == 'hasProperty':
                             pr = value_dict[sc_prop]['mr:{}'.format(pkey)]
-                            aprop = queries.retrieve_property(self, pr)
+                            qstr = metocean.Property.sparql_retriever(pr)
+                            aprop = self.retrieve(qstr)
                             value_dict[sc_prop]['mr:{}'.format(pkey)] = {'property':pv}
                             for p in aprop:
                                 value_dict[sc_prop]['mr:{}'.format(pkey)]['mr:{}'.format(p)] = aprop[p]
@@ -456,6 +633,49 @@ class FusekiServer(object):
         source = self._retrieve_component(template['source'])
         target = self._retrieve_component(template['target'])
         return metocean.Mapping(uri, source, target)
+    
+
+    def retrieve(self, qstr, debug=False):
+        """
+        Return a record from the provided id
+        or None if one does not exist.
+
+        """
+        results = self.run_query(qstr, debug=debug)
+        if len(results) == 0:
+            fCon = None
+        elif len(results) >1:
+            raise ValueError('{} is a malformed component'.format(results))
+        else:
+            fCon = results[0]
+        return fCon
+
+    def create(self, qstr, instr, debug=False):
+        """obtain a json representation of a defined type
+        either by retrieving or creating it
+        qstr is a SPARQL query string 
+        instr is a SPARQL insert string
+        """
+        results = self.run_query(qstr, debug=debug)
+        if len(results) == 0:
+            insert_results = self.run_query(instr, update=True, debug=debug)
+            results = self.run_query(qstr, debug=debug)
+        if len(results) == 1:
+            results = results[0]
+        else:
+            ec = '{} results returned, one expected'.format(len(results))
+            raise ValueError(ec)
+        return results
+
+    def mapping_by_properties(self, prop_list):
+        results = self.run_query(mapping_by_properties(prop_list))
+        mapping = None
+        maps = set([r['mapping'] for r in results])
+        if not mapping:
+            mappings = maps
+        else:
+            mappings.intersection_update(maps)
+        return mappings
 
 
 def process_data(jsondata):
@@ -493,3 +713,200 @@ def process_data(jsondata):
         if tmpdict != {}:
             resultslist.append(tmpdict)
     return resultslist
+
+
+def multiple_mappings(test_source=None):
+    """
+    returns all the mappings which map the same source to a different target
+    where the targets are the same format
+    filter to a single test mapping with test_map
+    
+    """
+    tm_filter = ''
+    if test_source:
+        pattern = '<http.*>'
+        pattern = re.compile(pattern)
+        if pattern.match(test_source):
+            tm_filter = '\n\tFILTER(?asource = {})'.format(test_source)
+    qstr = '''SELECT ?amap ?asource ?atarget ?bmap ?bsource ?btarget
+    (GROUP_CONCAT(DISTINCT(?value); SEPARATOR='&') AS ?signature)
+    WHERE {
+    GRAPH <http://metarelate.net/mappings.ttl> { {
+    ?amap mr:status ?astatus ;
+         mr:source ?asource ;
+         mr:target ?atarget . } 
+    UNION 
+        { 
+    ?amap mr:invertible "True" ;
+         mr:status ?astatus ;
+         mr:target ?asource ;
+         mr:source ?atarget . } 
+    FILTER (?astatus NOT IN ("Deprecated", "Broken"))
+    MINUS {?amap ^dc:replaces+ ?anothermap} %s
+    } 
+    GRAPH <http://metarelate.net/mappings.ttl> { {
+    ?bmap mr:status ?bstatus ;
+         mr:source ?bsource ;
+         mr:target ?btarget . } 
+    UNION  
+        { 
+    ?bmap mr:invertible "True" ;
+         mr:status ?bstatus ;
+         mr:target ?bsource ;
+         mr:source ?btarget . } 
+    FILTER (?bstatus NOT IN ("Deprecated", "Broken"))
+    MINUS {?bmap ^dc:replaces+ ?bnothermap}
+    filter (?bmap != ?amap)
+    filter (?bsource = ?asource)
+    filter (?btarget != ?atarget)
+    } 
+    GRAPH <http://metarelate.net/concepts.ttl> {
+    ?asource mr:hasFormat ?asourceformat .
+    ?bsource mr:hasFormat ?bsourceformat .
+    ?atarget mr:hasFormat ?atargetformat .
+    ?btarget mr:hasFormat ?btargetformat .
+    }
+    filter (?btargetformat = ?atargetformat)
+    GRAPH <http://metarelate.net/concepts.ttl> { {
+    ?asource mr:hasProperty ?prop . }
+    UNION {
+    ?atarget mr:hasProperty ?prop . }
+    UNION {
+    ?asource mr:hasComponent|mr:hasProperty ?prop . }
+    UNION {
+    ?atarget mr:hasComponent|mr:hasProperty ?prop . }
+    UNION { 
+    ?asource mr:hasProperty|mr:hasComponent|mr:hasProperty ?prop . }
+    UNION { 
+    ?atarget mr:hasProperty|mr:hasComponent|mr:hasProperty ?prop . }
+    OPTIONAL { ?prop rdf:value ?value . }
+    } }
+    GROUP BY ?amap ?asource ?atarget ?bmap ?bsource ?btarget
+    ORDER BY ?asource
+    ''' % tm_filter
+    return qstr
+
+def valid_vocab():
+    """
+    find all valid mapping and every property they reference
+
+    """
+    qstr = '''
+    SELECT DISTINCT  ?amap 
+    (GROUP_CONCAT(DISTINCT(?vocab); SEPARATOR = '&') AS ?signature)
+    WHERE {      
+    GRAPH <http://metarelate.net/mappings.ttl> { {  
+    ?amap mr:status ?astatus ; 
+    FILTER (?astatus NOT IN ("Deprecated", "Broken")) 
+    MINUS {?amap ^dc:replaces+ ?anothermap}      }
+    { 
+    ?amap mr:source ?fc .      }
+    UNION {
+    ?amap mr:target ?fc .      } } 
+    GRAPH <http://metarelate.net/concepts.ttl> { {
+    ?fc mr:hasProperty ?prop . }
+    UNION {
+    ?fc mr:hasComponent|mr:hasProperty ?prop . }
+    UNION { 
+    ?fc mr:hasProperty|mr:hasComponent|mr:hasProperty ?prop .
+    }
+    { ?prop mr:name ?vocab . }
+    UNION {
+    ?prop mr:operator ?vocab . }
+    UNION {
+    ?prop rdf:value ?vocab . }
+    FILTER(ISURI(?vocab))  }
+    OPTIONAL {GRAPH ?g{?vocab ?p ?o .} }
+    FILTER(!BOUND(?g))      }
+    GROUP BY ?amap
+    '''
+    return qstr
+
+
+def mapping_by_properties(prop_list):
+    """
+    Return the mapping id's which contain all of the proerties
+    in the list of property dictionaries
+    
+    """
+    for prop_dict in prop_list:
+        fstr = ''
+        name = prop_dict.get('mr:name')
+        op = prop_dict.get('mr:operator')
+        value = prop_dict.get('rdf:value')
+        if name:
+            fstr += '\tFILTER(?name = {})\n'.format(name)
+        if op:
+            fstr += '\tFILTER(?operator = {})\n'.format(op)
+        if value:
+            fstr += '\tFILTER(?value = {})\n'.format(value)
+            
+        qstr = '''SELECT DISTINCT ?mapping 
+        WHERE {
+        GRAPH <http://metarelate.net/mappings.ttl> {    
+        ?mapping rdf:type mr:Mapping ;
+                 mr:source ?source ;
+                 mr:target ?target ;
+                 mr:status ?status ;
+
+        FILTER (?status NOT IN ("Deprecated", "Broken"))
+        MINUS {?mapping ^dc:replaces+ ?anothermap}
+        }
+        GRAPH <http://metarelate.net/concepts.ttl> { {
+        ?source mr:hasProperty ?property
+        }
+        UNION {
+        ?target mr:hasProperty ?property
+        }
+        UNION {
+        ?source mr:hasComponent/mr:hasProperty ?property
+        }
+        UNION {
+        ?target mr:hasComponent/mr:hasProperty ?property
+        }
+        UNION {
+        ?source mr:hasProperty/mr:hasComponent/mr:hasProperty ?property
+        }
+        UNION {
+        ?target mr:hasProperty/mr:hasComponent/mr:hasProperty ?property
+        }
+        ?property mr:name ?name .
+        OPTIONAL{?property rdf:value ?value . }
+        OPTIONAL{?property mr:operator ?operator . }
+        %s
+        }
+        }
+        ''' % fstr
+    return qstr
+
+
+# def get_all_notation_note(fuseki_process, graph, debug=False):
+#     """
+#     return all names, skos:notes and skos:notations from the stated graph
+#     """
+#     qstr = '''SELECT ?name ?notation ?units
+#     WHERE
+#     {GRAPH <%s>{
+#     ?name skos:note ?units ;
+#           skos:notation ?notation .
+#     }
+#     }
+#     order by ?name
+#     ''' % graph
+#     results = fuseki_process.run_query(qstr, debug=debug)
+#     return results
+
+
+
+def _vocab_graphs():
+    """returns a list of the graphs which contain thirds party vocabularies """
+    vocab_graphs = []
+    vocab_graphs.append('<http://metarelate.net/formats.ttl>')
+    vocab_graphs.append('<http://um/umdpF3.ttl>')
+    vocab_graphs.append('<http://um/stashconcepts.ttl>')
+    vocab_graphs.append('<http://um/fieldcode.ttl>')
+    vocab_graphs.append('<http://cf/cf-model.ttl>')
+    vocab_graphs.append('<http://cf/cf-standard-name-table.ttl>')
+    vocab_graphs.append('<http://grib/apikeys.ttl>')
+    vocab_graphs.append('<http://openmath/ops.ttl>')
+    return vocab_graphs

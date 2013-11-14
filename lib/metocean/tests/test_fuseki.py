@@ -33,6 +33,7 @@ class TestFuseki(tests.MetOceanTestCase):
     @classmethod
     def setUpClass(cls):
         cls.fuseki = FusekiServer(test=True)
+        cls.fuseki.load()
         cls.fuseki.start()
 
     @classmethod

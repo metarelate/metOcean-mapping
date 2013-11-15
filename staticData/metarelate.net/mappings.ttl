@@ -7882,3 +7882,158 @@ map:b6c1db67800ca83407946fd5a0604df6796516f8
       mr:target     <http://www.metarelate.net/metOcean/component/5b88027673e2ff2d6ecac4cea6b0a95148bc6a64> ;
       skos:note     "unit error" .
 
+
+<http://www.metarelate.net/metOcean/mapping/8f1ca9685d943df3e98c9dd4717265854cc6962e>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:19:07.596347"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/4a6590f3ab0f58038f7db29e7475580164416a61> ;
+      mr:invertible  "False" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/1802662fe582f7914d7e56ea11fcefc1d065c14a> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/d8dc1402fd0a81e26b73393d0d40bb5d6c0351f1> ;
+      skos:note     "altered eastward to x" .
+
+<http://www.metarelate.net/metOcean/mapping/03663fbef00b558b044e50be813035f6ba9aef93>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:20:44.989883"^^xsd:dateTime ;
+      dc:replaces   map:e2acf65658a81ebbd531fac0b10130d358c42996 ;
+      mr:invertible  "False" ;
+      mr:reason     "corrected links" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/fc7c624ba0c76eec3a987ea8ea6047d4774295cf> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/659392e86cc905674dccefaf9db007f1373e122f> ;
+      skos:note     "altered northward to y" .
+
+<http://www.metarelate.net/metOcean/mapping/0a2c1ebde8f0a36ff597848b3eea1a6b242e9c66>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:21:08.781391"^^xsd:dateTime ;
+      dc:replaces   map:d6329fd13ec52ce698700508b90278a16a91cac8 ;
+      mr:invertible  "False" ;
+      mr:reason     "corrected links" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/80964d4c941fb3ca62a4dae5bf4025d12bca26ea> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/659392e86cc905674dccefaf9db007f1373e122f> ;
+      skos:note     "altered northward to y" .
+
+<http://www.metarelate.net/metOcean/mapping/4b1c0726af8e244c43e59fd60fce5dac3fcbcca1>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:20:17.744228"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/9b96279b4cb4b4518a5bbac39f67171a43a8ee6a> ;
+      mr:invertible  "False" ;
+      mr:reason     "corrected links" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/8bd879e5c06434ef7b465a879f43240dcceb3333> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/659392e86cc905674dccefaf9db007f1373e122f> ;
+      skos:note     "altered northward to y" .
+
+map:b6ca0cd840f59feab5dcd76f1e19fb0c5614fe8d
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:21:34.441462"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/5e66546fdfeca97b6c4dbde25739a6b0fad287f9> ;
+      mr:invertible  "False" ;
+      mr:reason     "corrected links" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/c277c17ea0f78c24c46403fe81ec9c76744c7776> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/659392e86cc905674dccefaf9db007f1373e122f> ;
+      skos:note     "altered northward to y" .
+
+<http://www.metarelate.net/metOcean/mapping/4b4e42a9b872fc1061cdcb453dd4997a2c5b14f2>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:18:14.865832"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/2b3535b20817e2c51c97976c982cf17d4da445fa> ;
+      mr:invertible  "False" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/92a98c448abe45bd29f4b4c74ccb4dba5bda930c> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/d8dc1402fd0a81e26b73393d0d40bb5d6c0351f1> ;
+      skos:note     "altered eastward to x" .
+
+<http://www.metarelate.net/metOcean/mapping/18c56f6b4f4fcbfc1e10c146452e30d111319944>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:11:12.646665"^^xsd:dateTime ;
+      mr:invertible  "True" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/d590c6f971f1d847c2fca0954f2214a9eb0dcc79> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/eaf52490f3ca7b9904140982b4e590aed95eea60> ;
+      skos:note     "migrated from Iris 1.5" .
+
+<http://www.metarelate.net/metOcean/mapping/62b68bd017122a12c7918309a654cd9f334d9bad>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:15:42.687859"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/18c56f6b4f4fcbfc1e10c146452e30d111319944> ;
+      mr:invertible  "False" ;
+      mr:reason     "corrected metadata" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/d590c6f971f1d847c2fca0954f2214a9eb0dcc79> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/eaf52490f3ca7b9904140982b4e590aed95eea60> ;
+      skos:note     "non-invertible" .
+
+map:ed2cccd06985dc0a47b20f118a2584fa49450a88
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:18:39.314319"^^xsd:dateTime ;
+      dc:replaces   map:f3facb37acede7f0b906a9f726ef9a05f66a8fa5 ;
+      mr:invertible  "False" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/d4837771fc2f18148ab071c04cbfaaa5d9572e2a> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/d8dc1402fd0a81e26b73393d0d40bb5d6c0351f1> ;
+      skos:note     "altered eastward to x" .
+
+map:ae9a60458df08ff7d609c55a05627fdee99bdb0c
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:17:07.290910"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/2bd8248c0614b0891f01d12cdb09d3bc1e49f784> ;
+      mr:invertible  "False" ;
+      mr:reason     "corrected links" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/f6cfb223edb61462e66133a2b4a02db313445f69> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/d8dc1402fd0a81e26b73393d0d40bb5d6c0351f1> ;
+      skos:note     "altered eastward to x" .
+
+<http://www.metarelate.net/metOcean/mapping/0a48610051fd9df6270a9ab7b315603ae6838932>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:21:58.292471"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/5737fec52ab600ab599ca113187d5fcf6bfd6237> ;
+      mr:invertible  "False" ;
+      mr:reason     "corrected links" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/9bcd682b10aa22c63d361ba4799cecc52cd8355f> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/659392e86cc905674dccefaf9db007f1373e122f> ;
+      skos:note     "altered northward to y" .
+
+<http://www.metarelate.net/metOcean/mapping/70d4b8f90243dc30bb6e200d21813756f6749b77>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:17:50.999224"^^xsd:dateTime ;
+      dc:replaces   <http://www.metarelate.net/metOcean/mapping/5ccd13c26e60162114ae2769227880533d79dc20> ;
+      mr:invertible  "False" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/64fd537d469663233e7cac36640645be6f0963af> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/d8dc1402fd0a81e26b73393d0d40bb5d6c0351f1> ;
+      skos:note     "altered eastward to x" .
+
+map:a90a906ad7bdc398d3652b794305f40add5d9b14
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:15:46.743775"^^xsd:dateTime ;
+      mr:invertible  "False" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/006965fa70d49b94bf6eacfd21b3754d54a8b547> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/12cad1a78e66e5a0febe39d9e3e49e948ed6e9ad> ;
+      skos:note     "migrated from Iris 1.5" .
+

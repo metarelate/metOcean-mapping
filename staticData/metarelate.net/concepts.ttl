@@ -14248,3 +14248,46 @@
       mr:hasProperty  <http://www.metarelate.net/metOcean/property/4719d1091c00b73a18da5804d040781d50c945eb> ;
 	.
 
+
+<http://www.metarelate.net/metOcean/component/006965fa70d49b94bf6eacfd21b3754d54a8b547>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:um ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/24432069c58629de1c6a7687bc3c39530e4c3259> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/7b207e11ffa8d548b1c72b77c67dd4fb45ad7f7e>
+      rdf:type      mr:Property ;
+      rdf:value     moStCon:m01s03i250 ;
+      mr:name       moumdpF3:stash ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/property/24432069c58629de1c6a7687bc3c39530e4c3259>
+      rdf:type      mr:Property ;
+      rdf:value     moStCon:m01s16i256 ;
+      mr:name       moumdpF3:stash ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/component/d590c6f971f1d847c2fca0954f2214a9eb0dcc79>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:um ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/7b207e11ffa8d548b1c72b77c67dd4fb45ad7f7e> ;
+	.
+
+
+<http://www.metarelate.net/metOcean/property/b7111c586f8f5ccfb230544b96feaf05a2084dd9>
+      rdf:type      mr:Property ;
+      rdf:value     "large_scale_cloud_liquid_water_content_of_atmosphere_layer" ;
+      mr:name       cfm:long_name ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/component/c6ca4c7fe31a32c7e748fd1bae29238241c9a435>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:cf ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/8512d7640d2f3a04ae955a2424ed73461e2d5074> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/b7111c586f8f5ccfb230544b96feaf05a2084dd9> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/ab5ac235a3c2ddd084326ea3737a251eb3000f6e> ;
+	.
+

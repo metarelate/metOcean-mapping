@@ -8037,3 +8037,15 @@ map:a90a906ad7bdc398d3652b794305f40add5d9b14
       mr:target     <http://www.metarelate.net/metOcean/component/12cad1a78e66e5a0febe39d9e3e49e948ed6e9ad> ;
       skos:note     "migrated from Iris 1.5" .
 
+
+<http://www.metarelate.net/metOcean/mapping/3c9cd89e888964adfa823a6e17bcc74ca38b9261>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-15T15:39:16.373758"^^xsd:dateTime ;
+      mr:invertible  "False" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/95dd06e76d85e7f2c286daac1889467e06e522b5> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/c6ca4c7fe31a32c7e748fd1bae29238241c9a435> ;
+      skos:note     "interpreted from the MOSIG sourced translations" .
+

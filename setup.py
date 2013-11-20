@@ -1,5 +1,4 @@
 from distutils.core import setup, Command
-import multiprocessing
 import os
 import sys
 

@@ -453,7 +453,6 @@ class FusekiServer(object):
         results = self.run_query(qstr, debug=debug)
         return results
 
-
     def subject_and_plabel(self, graph, debug=False):
         """
         selects subject and prefLabel from a particular graph
@@ -470,8 +469,6 @@ class FusekiServer(object):
         ''' % graph
         results = self.run_query(qstr, debug=debug)
         return results
-
-
 
     def retrieve_mappings(self, source, target):
         """
@@ -634,7 +631,6 @@ class FusekiServer(object):
         target = self._retrieve_component(template['target'])
         return metocean.Mapping(uri, source, target)
     
-
     def retrieve(self, qstr, debug=False):
         """
         Return a record from the provided id
@@ -786,6 +782,7 @@ def multiple_mappings(test_source=None):
     ''' % tm_filter
     return qstr
 
+
 def valid_vocab():
     """
     find all valid mapping and every property they reference
@@ -895,7 +892,6 @@ def mapping_by_properties(prop_list):
 #     ''' % graph
 #     results = fuseki_process.run_query(qstr, debug=debug)
 #     return results
-
 
 
 def _vocab_graphs():

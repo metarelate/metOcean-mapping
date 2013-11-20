@@ -270,6 +270,7 @@ class Mapping(_DotMixin, namedtuple('Mapping', 'uri source target')):
         ''' % (mapping, search_string)
         return qstr, instr
 
+
 class Component(_ComponentMixin, _DotMixin, MutableMapping):
     """
     A component participates in a :class:`Property` hierarchy
@@ -507,6 +508,7 @@ class Component(_ComponentMixin, _DotMixin, MutableMapping):
             }
             ''' % (subj_pref, sha1, search_string)
         return qstr, instr
+
 
 class Concept(Component):
     """
@@ -984,6 +986,7 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
             }
             ''' % (subj_pref, sha1, search_string)
         return qstr, instr
+
 
 class Item(_DotMixin, namedtuple('Item', 'data notation')):
     """

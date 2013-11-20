@@ -129,7 +129,7 @@ def _prop_id(members):
                     # remove old property id
                     prop.pop('property', None)
                     qstr, instr = metocean.Property.sparql_creator(prop)
-                    prop_res = fuseki_process.create(qstr)
+                    prop_res = fuseki_process.create(qstr, instr)
                     cpid = '{}'.format(prop_res['property'])
                     props[i] = cpid
                     new_props[i]['component'] = cpid
@@ -180,7 +180,7 @@ def _create_components(key, requestor, new_map, components):
             newm['component'] = '%s' % sub_comp['component']
     comp_dict = {'mr:hasFormat':'%s' % requestor[key]['mr:hasFormat'],
                                 'mr:hasComponent':subc_ids}
-    qstr, instr = metocean.Component.sparql_creator()
+    qstr, instr = metocean.Component.sparql_creator(comp_dict)
     comp = fuseki_process.create(qstr, instr)
     if comp:
         components[key] = comp['component']
@@ -1033,7 +1033,7 @@ def invalid_mappings(request):
     for key, inv_mappings in requestor.iteritems():
         invalid = {'label':key, 'mappings':[]}
         for inv_map in inv_mappings:
-            qstr = metocean.Mapping.sparql_creator(inv_map['amap'])
+            qstr = metocean.Mapping.sparql_retriever(inv_map['amap'])
             mapping = fuseki_process.retrieve(qstr)
             referrer = fuseki_process.structured_mapping(mapping)
             referrer = referrer.json_referrer()

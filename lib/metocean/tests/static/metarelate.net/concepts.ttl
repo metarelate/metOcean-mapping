@@ -91,6 +91,7 @@ property:p004
       mr:hasComponent  <http://www.metarelate.net/metOcean/component/fd7212b2a586c3a8aca336ab7dc1d8432ad5bee4> ;
       mr:hasComponent  <http://www.metarelate.net/metOcean/component/f846df598a1a42e86558d2e848a0de0335244ed2> ;
       mr:hasFormat  metocFormat:cf ;
+      dc:requires <http://www.metarelate.net/metOcean/mediates/cf/coordinate_reference_system> ;
 	.
 
 <http://www.metarelate.net/metOcean/component/bd9616cad84e26fb6b6e93003c8e144b7bb4cdc1>

@@ -138,7 +138,7 @@ def _prop_id(members):
                 raise ValueError('If a property has a component that component'
                                  'must itself reference properties')
             qstr, instr = metocean.Component.sparql_creator(comp_mem)
-            cres = fuseki_process.create(qstr)
+            cres = fuseki_process.create(qstr, instr)
             mem['mr:hasComponent'] = cres['component']
             new_mem['mr:hasComponent']['component'] = cres['component']
         # remove old property id

@@ -28,9 +28,8 @@ from django.core.urlresolvers import reverse
 from django.utils import formats
 from django.utils.safestring import mark_safe
 
-
+import metocean
 import metocean.prefixes as prefixes
-import metocean.queries as moq
 from settings import READ_ONLY
 from settings import fuseki_process
 
@@ -106,13 +105,12 @@ class Mediator(forms.Form):
     def __init__(self, *args, **kwargs):
         fformat = kwargs.pop('fformat')
         super(Mediator, self).__init__(*args, **kwargs)
-        meds = moq.get_mediators(fuseki_process, fformat)
+        qstr = metocean.Mediator.sparql_retriever(fformat)
+        meds = fuseki_process.retrieve(qstr)
         if isinstance(meds, list):
             meds = [(med['mediator'], med['label']) for med in meds]
         else:
             meds = [(meds['mediator'], meds['label'])]
-        #meds = [('<http://www.metarelate.net/metocean/mediates/cf/calendar>',
-        #         'calendar')]
         self.fields['mediator'].choices = meds
 
 class NewMediator(forms.Form):
@@ -146,7 +144,7 @@ class Value(forms.Form):
     _name = forms.CharField(required=False)
     value = forms.CharField(required=False)
     operator = forms.CharField(required=False)
-    ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/tests.ttl')
+    ops = fuseki_process.subject_and_plabel('http://openmath/tests.ttl')
     ops = [(op['subject'], op['notation']) for op in ops]
     ops = [('','')] + ops
     operator = forms.ChoiceField(required=False, choices=ops)
@@ -155,45 +153,38 @@ class Value(forms.Form):
         self.fformat = kwargs.pop('fformat')
         super(Value, self).__init__(*args, **kwargs)
         if self.fformat == 'um':
-            umRes = moq.subject_and_plabel(fuseki_process,
-                                         'http://um/umdpF3.ttl')
+            umRes = fuseki_process.subject_and_plabel('http://um/umdpF3.ttl')
             choices = [(um['subject'], um['notation']) for um in umRes]
             choices = [('','')] + choices
             self.fields['name'].choices = choices
-            sns = moq.subject_and_plabel(fuseki_process,
-                                         'http://um/stashconcepts.ttl')
+            sns = fuseki_process.subject_and_plabel('http://um/stashconcepts.ttl')
             sn_choices = [('','')]
             sn_choices += [(um['subject'], um['notation']) for um in sns]
             self.fields['stash_code'] = forms.ChoiceField(required=False,
                                                           choices=sn_choices)
-            fcs = moq.subject_and_plabel(fuseki_process,
-                                         'http://um/fieldcode.ttl')
+            fcs = fuseki_process.subject_and_plabel('http://um/fieldcode.ttl')
             fc_choices = [('','')]
             fc_choices += [(um['subject'], um['notation']) for um in fcs]
             self.fields['field_code'] = forms.ChoiceField(required=False,
                                                           choices=fc_choices)
         elif self.fformat == 'cf':
-            cfRes = moq.subject_and_plabel(fuseki_process,
-                                         'http://cf/cf-model.ttl')
+            cfRes = fuseki_process.subject_and_plabel('http://cf/cf-model.ttl')
             choices = [(cf['subject'], cf['notation']) for cf in cfRes]
             choices = [('','')] + choices
             self.fields['name'].choices = choices
-            sns = moq.subject_and_plabel(fuseki_process,
-                                         'http://cf/cf-standard-name-table.ttl')
+            sns = fuseki_process.subject_and_plabel('http://cf/cf-standard-name-table.ttl')
             sn_choices = [('','')]
             sn_choices += [(sn['subject'], sn['notation']) for sn in sns]
             self.fields['standard_name'] = forms.ChoiceField(required=False,
                                                              choices=sn_choices)
-            mod = moq.subject_and_plabel(fuseki_process,
-                                         'http://cf/cf-model.ttl')
+            mod = fuseki_process.subject_and_plabel('http://cf/cf-model.ttl')
             md_choices = [('','')]
             md_choices += [(mo['subject'], mo['notation']) for mo in mod]
             print md_choices
             self.fields['cf model'] = forms.ChoiceField(required=False,
                                                         choices=md_choices)
         elif self.fformat == 'grib':
-            grRes = moq.subject_and_plabel(fuseki_process,
-                                           'http://grib/apikeys.ttl')
+            grRes = fuseki_process.subject_and_plabel('http://grib/apikeys.ttl')
             choices = [(grib['subject'], grib['notation']) for grib in grRes]
             choices = [('','')] + choices
             self.fields['name'].choices = choices
@@ -318,8 +309,7 @@ class DerivedValue(forms.Form):
     using the available values
     
     """        
-    ops = moq.subject_and_plabel(fuseki_process, 'http://openmath/ops.ttl')
-    #print ops
+    ops = fuseki_process.subject_and_plabel('http://openmath/ops.ttl')
     ops = [('','')] + [(op['subject'], op['notation']) for op in ops]
     _operator = forms.ChoiceField(choices=ops)
     _subject = forms.ChoiceField()
@@ -371,7 +361,7 @@ class MappingMeta(forms.Form):
                                   widget=forms.TextInput(
                                       attrs={'readonly':True}))
     editor = forms.ChoiceField([(r['s'],r['prefLabel'].split('/')[-1]) for
-                                r in moq.get_contacts(fuseki_process, 'people')]
+                                r in fuseki_process.get_contacts('people')]
                                 , required=False)
 #    editor = forms.ChoiceField([(r['s'],r['s'].split('/')[-1]) for
                                 # r in moq.get_contacts('people')],
@@ -415,7 +405,8 @@ class MappingMeta(forms.Form):
         #         raise forms.ValidationError(e)
         #  worried about this, prevents updates to deprecate etc
         if map_id:
-            mapping = moq.get_mapping_by_id(fuseki_process, map_id)
+            qstr = metocean.Mapping.sparql_retriever(map_id)
+            mapping = fuseki_process.retrieve(qstr)
             if not mapping:
                 raise forms.ValidationError('the mapping Id is not valid')
             changed = False

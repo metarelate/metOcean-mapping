@@ -16,13 +16,14 @@
 # along with metOcean-mapping. If not, see <http://www.gnu.org/licenses/>.
 
 from collections import Iterable, MutableMapping, namedtuple
+import hashlib
 import os
 from urlparse import urlparse
 
 import pydot
 
 from metocean.config import update
-
+import metocean.prefixes as prefixes
 
 site_config = {
     'root_dir': os.path.abspath(os.path.dirname(__file__)),
@@ -175,6 +176,100 @@ class Mapping(_DotMixin, namedtuple('Mapping', 'uri source target')):
         referrer['mr:target'] = self.target.json_referrer()
         return referrer
 
+    @staticmethod
+    def sparql_retriever(uri, valid=True, rep=True):
+        vstr = ''
+        if valid:
+            vstr += '\tFILTER (?status NOT IN ("Deprecated", "Broken"))'
+        if rep:
+            vstr += '\n\tMINUS {?mapping ^dc:replaces+ ?anothermap}'
+        qstr = '''SELECT ?mapping ?source ?target ?invertible ?replaces ?status
+                         ?note ?reason ?date ?creator ?inverted
+        (GROUP_CONCAT(DISTINCT(?owner); SEPARATOR = '&') AS ?owners)
+        (GROUP_CONCAT(DISTINCT(?watcher); SEPARATOR = '&') AS ?watchers)
+        (GROUP_CONCAT(DISTINCT(?valueMap); SEPARATOR = '&') AS ?valueMaps)
+        WHERE {
+        GRAPH <http://metarelate.net/mappings.ttl> {
+        ?mapping mr:source ?source ;
+             mr:target ?target ;
+             mr:invertible ?invertible ;
+             mr:status ?status ;
+             mr:reason ?reason ;
+             dc:date ?date ;
+             dc:creator ?creator .
+        BIND("False" AS ?inverted)
+        OPTIONAL {?mapping dc:replaces ?replaces .}
+        OPTIONAL {?mapping skos:note ?note .}
+        OPTIONAL {?mapping mr:hasValueMap ?valueMap .}
+        OPTIONAL {?mapping mr:owner ?owner .}
+        OPTIONAL {?mapping mr:watcher ?watcher .}
+        FILTER(?mapping = %s)
+        %s
+        }
+        }
+        GROUP BY ?mapping ?source ?target ?invertible ?replaces
+                 ?status ?note ?reason ?date ?creator ?inverted
+        ''' % (uri, vstr)
+        return qstr
+
+    @staticmethod
+    def sparql_creator(po_dict):
+        subj_pref = 'http://www.metarelate.net/metOcean/mapping'
+        allowed_preds = set(('mr:source', 'mr:target', 'mr:invertible',
+                                'dc:replaces', 'mr:hasValueMap', 'mr:status',
+                                'skos:note', 'mr:reason', 'dc:date', 'dc:creator',
+                                'mr:owner', 'mr:watcher'))
+        preds = set(po_dict)
+        if not preds.issubset(allowed_preds):
+            ec = '''{}
+            is not a subset of the allowed predicates set for a mapping record
+            {}'''
+            ec = ec.format(preds, allowed_preds)
+            raise ValueError(ec)
+        mandated_preds = set(('mr:source', 'mr:target', 'mr:invertible', 
+                                'mr:status',  'mr:reason',
+                                'dc:date', 'dc:creator'))
+        if not preds.issuperset(mandated_preds):
+            ec = '''{}
+            is not a superset of the mandated predicates set for a mapping record
+            {}'''
+            ec = ec.format(preds, mandated_preds)
+            raise ValueError(ec)
+        singular_preds = set(('mr:source', 'mr:target', 'mr:invertible',
+                                 'dc:replaces', 'mr:status', 'skos:note',
+                                 'mr:reason', 'dc:date', 'dc:creator'))
+        search_string = ''
+        for pred in po_dict:
+            if isinstance(po_dict[pred], list):
+                if pred in singular_preds and len(po_dict[pred]) != 1:
+                    ec = 'create_mapping limits {} to one statement per record '
+                    ec = ec.format(pred)
+                    raise ValueError(ec)
+                else:
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+            else:
+                search_string += '''
+                %s %s ;''' % (pred, po_dict[pred])
+        sha1 = make_hash(po_dict, ['''dc:date'''])
+        mapping = '%s/%s' % (subj_pref, sha1)
+        qstr = '''SELECT ?mapping
+        WHERE {
+        GRAPH <http://metarelate.net/mappings.ttl> {
+        ?mapping rdf:type mr:Mapping .
+        FILTER(?mapping = <%s>)
+        } }''' % mapping
+        instr = '''INSERT DATA {
+        GRAPH <http://metarelate.net/mappings.ttl> {
+        <%s> a mr:Mapping ;
+                    %s
+                    mr:saveCache "True" .
+        }
+        }
+        ''' % (mapping, search_string)
+        return qstr, instr
+
 
 class Component(_ComponentMixin, _DotMixin, MutableMapping):
     """
@@ -308,6 +403,111 @@ class Component(_ComponentMixin, _DotMixin, MutableMapping):
         graph.add_edge(edge)
         for comp in self.components:
             comp.dot(graph, node, 'Component')
+
+    @staticmethod
+    def sparql_retriever(uri):
+        qstr = '''SELECT ?component ?format ?mediates 
+        (GROUP_CONCAT(?acomponent; SEPARATOR='&') AS ?subComponent)
+        (GROUP_CONCAT(?aproperty; SEPARATOR='&') AS ?property)
+        (GROUP_CONCAT(?arequires; SEPARATOR='&') AS ?requires)
+        WHERE {
+        GRAPH <http://metarelate.net/concepts.ttl> {
+            ?component mr:hasFormat ?format .
+            OPTIONAL{?component mr:hasComponent ?acomponent .}
+            OPTIONAL{?component mr:hasProperty ?aproperty .}
+            OPTIONAL{?component dc:requires ?arequires .}
+            OPTIONAL{?component dc:mediator ?mediates .}
+            FILTER(?component = %s)
+            }
+        }
+        GROUP BY ?component ?format ?mediates
+        ''' % uri
+        return qstr
+
+    @staticmethod
+    def sparql_creator(po_dict):
+        allowed_prefixes = set(('mr:hasFormat','mr:hasComponent', 'mr:hasProperty',
+                                'dc:requires', 'dc:mediator'))
+        preds = set(po_dict)
+        if not preds.issubset(allowed_prefixes):
+            ec = '{} is not a subset of the allowed predicates set for '\
+                 'a component record {}'
+            ec = ec.format(preds, allowed_prefixes)
+            raise ValueError(ec)
+        subj_pref = 'http://www.metarelate.net/metOcean/component'
+        search_string = ''
+        n_propertys = 0
+        n_components = 0
+        n_reqs = 0
+        for pred in po_dict:
+            if isinstance(po_dict[pred], list):
+                if pred == 'mr:format' and len(po_dict[pred]) != 1:
+                    ec = 'get_format_concept only accepts 1 mr:format statement '\
+                         ' The po_dict in this case is not valid {} '
+                    ec = ec.format(str(po_dict))
+                    raise ValueError(ec)
+                elif pred == 'dc:mediator' and len(po_dict[pred]) != 1:
+                    ec = 'get_format_concept only accepts 1 dc:mediator statement'\
+                         ' The po_dict in this case is not valid {} '
+                    ec = ec.format(str(po_dict))
+                    raise ValueError(ec)
+                elif pred == 'dc:requires':
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+                        n_reqs +=1
+                elif pred == 'mr:hasProperty':
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+                        n_propertys +=1
+                elif pred == 'mr:hasComponent':
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+                        n_components +=1
+                else:
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+            else:
+                search_string += '''
+                %s %s ;''' % (pred, po_dict[pred])
+                if pred == 'skos:member':
+                    n_members =1
+        if search_string != '':
+            qstr = '''SELECT ?component ?format
+            WHERE { {
+            SELECT ?component ?format
+            (COUNT(DISTINCT(?property)) AS ?propertys)
+            (COUNT(DISTINCT(?subComponent)) AS ?subComponents)
+            (COUNT(DISTINCT(?requires)) AS ?requireses)        
+            WHERE{
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            ?component mr:hasFormat ?format ;
+                   %s .
+            OPTIONAL { ?component  mr:hasProperty ?property . }
+            OPTIONAL { ?component  mr:hasComponent ?subComponent . }
+            OPTIONAL{?component dc:requires ?requires .}
+            OPTIONAL{?component dc:mediator ?mediates .}
+            } }
+            GROUP BY ?component ?format 
+            }
+            FILTER(?subComponents = %i)
+            FILTER(?propertys = %i)
+            FILTER(?requireses = %i)
+            }
+            ''' % (search_string, n_components, n_propertys, n_reqs)
+            sha1 = make_hash(po_dict)
+            instr = '''INSERT DATA {
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> rdf:type mr:Component ;
+                    %s
+                    mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, sha1, search_string)
+        return qstr, instr
 
 
 class Concept(Component):
@@ -692,6 +892,101 @@ class Property(_DotMixin, namedtuple('Property', 'uri name value operator')):
                 referrer['mr:hasComponent'] = self.value.json_referrer()
         return referrer
 
+    @staticmethod
+    def sparql_retriever(uri):
+        qstr = '''SELECT ?property ?name ?operator ?component
+        (GROUP_CONCAT(?avalue; SEPARATOR='&') AS ?value)
+        WHERE {
+        GRAPH <http://metarelate.net/concepts.ttl> {
+            ?property mr:name ?name .
+            OPTIONAL { ?property rdf:value ?avalue ;
+                      mr:operator ?operator . }
+            OPTIONAL {?property mr:hasComponent ?component . }
+            FILTER(?property = %s)
+            }
+        }
+        GROUP BY ?property ?name ?operator ?component
+        ''' % uri
+        return qstr
+
+    @staticmethod
+    def sparql_creator(po_dict):
+        qstr = ''
+        instr = ''
+        allowed_predicates = set(('mr:name','rdf:value',
+                                'mr:operator', 'mr:hasComponent'))
+        single_predicates = set(('mr:name', 'mr:operator', 'mr:hasComponent'))
+        preds = set(po_dict)
+        if not preds.issubset(allowed_predicates):
+            ec = '{} is not a subset of the allowed predicates set '\
+                 'for a value record {}'
+            ec = ec.format(preds, allowed_predicates)
+            raise ValueError(ec)
+        subj_pref = 'http://www.metarelate.net/metOcean/property'
+        count_string = ''
+        search_string = ''
+        filter_string = ''
+        assign_string = ''
+        block_string = ''
+        for pred in allowed_predicates.intersection(preds):
+            if isinstance(po_dict[pred], list):
+                if len(po_dict[pred]) != 1 and pred in single_predicates:
+                    ec = 'get_property only accepts 1 statement per predicate {}'
+                    ec = ec.format(str(po_dict))
+                    raise ValueError(ec)
+                else:
+                    counter = 0
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+                        counter +=1
+                    assign_string += '''
+                    %s ?%s ;''' % (pred, pred.split(':')[-1])
+                    count_string += '''COUNT(DISTINCT(?%(p)s)) AS ?%(p)ss
+                    ''' % {'p':pred.split(':')[-1]}
+                    filter_string += '''
+                    FILTER(?%ss = %i)''' % (pred.split(':')[-1], counter)
+            else:
+                search_string += '''
+                %s %s ;''' % (pred, po_dict[pred])
+                assign_string += '''
+                %s ?%s ;''' % (pred, pred.split(':')[-1])
+                count_string += '''(COUNT(DISTINCT(?%(p)s)) AS ?%(p)ss)
+                ''' % {'p':pred.split(':')[-1]}
+                filter_string += '''
+                FILTER(?%ss = %i)''' % (pred.split(':')[-1], 1)
+        for pred in allowed_predicates.difference(preds):
+            block_string += '\n\t OPTIONAL{?property %s ?%s .}' % (pred, pred.split(':')[-1])
+            block_string += '\n\t FILTER(!BOUND(?%s))' % pred.split(':')[-1]
+        if search_string != '':
+            qstr = '''SELECT ?property
+            WHERE { {
+            SELECT ?property        
+            %(count)s
+            WHERE{
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            ?property %(assign)s %(search)s
+            .
+            %(block)s
+            } }
+            GROUP BY ?property
+            }
+            %(filter)s
+            }
+            ''' % {'count':count_string,'assign':assign_string,
+                   'search':search_string, 'filter':filter_string,
+                   'block':block_string}
+            sha1 = make_hash(po_dict)
+            instr = '''INSERT DATA {
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> rdf:type mr:Property ;
+                    %s
+            mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, sha1, search_string)
+        return qstr, instr
+
 
 class Item(_DotMixin, namedtuple('Item', 'data notation')):
     """
@@ -775,3 +1070,289 @@ class Item(_DotMixin, namedtuple('Item', 'data notation')):
         if self.notation is not None:
             label = self.dot_escape(str(self.notation))
         return label
+
+
+class ValueMap(object):
+    @staticmethod
+    def sparql_retriever(uri):
+        qstr = '''SELECT ?valueMap ?source ?target
+        WHERE {
+        GRAPH <http://metarelate.net/concepts.ttl> {
+            ?valueMap mr:source ?source ;
+                      mr:target ?target .
+            FILTER(?valueMap = %s)
+            }
+        }
+        ''' % uri
+        return qstr
+
+    @staticmethod
+    def sparql_creator(po_dict):
+        qstr = ''
+        instr = ''
+        allowed_preds = set(('mr:source','mr:target'))
+        preds = set(po_dict)
+        if not preds == allowed_preds:
+            ec = '''{} is not a subset of the allowed predicates set
+                    for a valueMap record
+                    {}'''
+            ec = ec.format(preds, allowed_preds)
+            raise ValueError(ec)
+        subj_pref = 'http://www.metarelate.net/metOcean/valueMap'
+        search_string = ''
+        for pred in po_dict:
+            if isinstance(po_dict[pred], list):
+                if len(po_dict[pred]) != 1:
+                    ec = 'get_format_concept only accepts 1 mr:format statement }'
+                    ec = ec.format(po_dict)
+                    raise ValueError(ec)
+                else:
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+            else:
+                search_string += '''
+                %s %s ;''' % (pred, po_dict[pred])
+        if search_string != '':
+            qstr = '''SELECT ?valueMap 
+            WHERE{
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            ?valueMap
+                   %s .
+            }
+            }
+            ''' % (search_string)
+            sha1 = make_hash(po_dict)
+            instr = '''INSERT DATA {
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> a mr:ValueMap ;
+                    %s
+                    mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, sha1, search_string)
+        return qstr, instr
+
+
+class Value(object):
+    @staticmethod
+    def sparql_retriever(uri):
+        qstr = '''SELECT ?value ?operator ?subject ?object
+        WHERE {
+        GRAPH <http://metarelate.net/concepts.ttl> {
+            ?value mr:subject ?subject .
+            OPTIONAL {?value mr:operator ?operator .}
+            OPTIONAL {?value mr:object ?object . }
+            FILTER(?value = %s)
+            }
+        }
+        ''' % uri
+        return qstr
+
+    @staticmethod
+    def sparql_creator(po_dict):
+        qstr = ''
+        instr = ''
+        allowed_preds = set(('mr:operator','mr:subject', 'mr:object'))
+        preds = set(po_dict)
+        if not preds.issubset(allowed_preds):
+            ec = '''{} is not a subset of the allowed predicates set
+                    for a value record
+                    {}'''
+            ec = ec.format(preds, allowed_preds)
+            raise ValueError(ec)
+        subj_pref = 'http://www.metarelate.net/metOcean/value'
+        search_string = ''
+        for pred in po_dict:
+            if isinstance(po_dict[pred], list):
+                if len(po_dict[pred]) != 1:
+                    ec = 'get_value only accepts 1 mr:format statement }'
+                    ec = ec.format(po_dict)
+                    raise ValueError(ec)
+                else:
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+            else:
+                search_string += '''
+                %s %s ;''' % (pred, po_dict[pred])
+        if search_string != '':
+            qstr = '''SELECT ?value
+            WHERE{
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            ?value
+                   %s .
+            }
+            }
+            ''' % (search_string)
+            sha1 = make_hash(po_dict)
+            instr = '''INSERT DATA {
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> a mr:Value ;
+                    %s
+                    mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, sha1, search_string)
+        return qstr, instr
+
+
+class ScopedProperty(object):
+    @staticmethod
+    def sparql_retriever(uri):
+        qstr = '''SELECT ?scopedProperty ?scope ?hasProperty
+        WHERE {
+        GRAPH <http://metarelate.net/concepts.ttl> {
+            ?scopedProperty mr:scope ?scope ;
+                      mr:hasProperty ?hasProperty .
+            FILTER(?scopedProperty = %s)
+            }
+        }
+        ''' % uri
+        return qstr
+
+    @staticmethod
+    def sparql_creator(po_dict):
+        qstr = ''
+        instr = ''
+        allowed_preds = set(('mr:scope','mr:hasProperty'))
+        preds = set(po_dict)
+        if not preds == allowed_preds:
+            ec = '''{} is not a subset of the allowed predicates set
+                    for a scopedProperty record
+                    {}'''
+            ec = ec.format(preds, allowed_preds)
+            raise ValueError(ec)
+        subj_pref = 'http://www.metarelate.net/metOcean/scopedProperty'
+        search_string = ''
+        for pred in po_dict:
+            if isinstance(po_dict[pred], list):
+                if len(po_dict[pred]) != 1:
+                    ec = 'get_scopedProperty only accepts 1 mr:format statement {}'
+                    ec = ec.format(po_dict)
+                    raise ValueError(ec)
+                else:
+                    for obj in po_dict[pred]:
+                        search_string += '''
+                        %s %s ;''' % (pred, obj)
+            else:
+                search_string += '''
+                %s %s ;''' % (pred, po_dict[pred])
+        if search_string != '':
+            qstr = '''SELECT ?scopedProperty
+            WHERE{
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            ?scopedProperty
+                   %s .
+            }
+            }
+            ''' % (search_string)
+            sha1 = make_hash(po_dict)
+            instr = '''INSERT DATA {
+            GRAPH <http://metarelate.net/concepts.ttl> {
+            <%s/%s> a mr:Property ;
+                    %s
+                    mr:saveCache "True" .
+            }
+            }
+            ''' % (subj_pref, sha1, search_string)
+        return qstr, instr
+
+
+class Mediator(object):
+    @staticmethod
+    def sparql_retriever(uri, fformat=''):
+        if fformat:
+            ffilter = 'FILTER(?format = <http://www.metarelate.net/metOcean/format/{}>)'
+            ffilter = ffilter.format(fformat)
+        else:
+            ffilter = ''
+        qstr = '''
+        SELECT ?mediator ?format ?label
+        WHERE
+        { GRAPH <http://metarelate.net/concepts.ttl> {
+            ?mediator mr:hasFormat ?format ;
+                      rdf:label ?label .
+        %s
+        } }
+        ''' % ffilter
+        return qstr
+
+    @staticmethod
+    def sparql_creator(po_dict):
+        allowed_preds = set(('mr:hasFormat','rdf:label'))
+        preds = set(po_dict)
+        if not preds == allowed_preds:
+            ec = '''{} is not a subset of the allowed predicates set
+                    for a scopedProperty record
+                    {}'''
+            ec = ec.format(preds, allowed_preds)
+            raise ValueError(ec)
+        fformat = po_dict['mr:hasFormat']
+        label = po_dict['rdf:label']
+        ff = fformat.rstrip('>').split('/')[-1]
+        med = '<http://www.metarelate.net/metOcean/mediates/{}/{}>'.format(ff, label)
+        qstr = '''
+        SELECT ?mediator
+        WHERE
+        { GRAPH <http://metarelate.net/concepts.ttl> {
+        %s a mr:Mediator ;
+             rdf:label "%s" ;
+             mr:hasFormat <http://www.metarelate.net/metOcean/format/%s> ;
+             mr:saveCache "True" .
+             } }
+        ''' % (med, label, fformat)
+        instr = '''
+        INSERT DATA
+        { GRAPH <http://metarelate.net/concepts.ttl> {
+        %s a mr:Mediator ;
+             rdf:label "%s" ;
+             mr:hasFormat <http://www.metarelate.net/metOcean/format/%s> ;
+             mr:saveCache "True" .
+             } }
+        ''' % (med, label, fformat)
+        return qstr, instr
+
+
+def make_hash(pred_obj, omitted=None):
+    """ creates and returns an sha-1 hash of the elements in the pred_obj
+    (object list) dictionary
+    skipping any 'ommited' (list) predicates and objects
+
+    Args:
+    
+    * pred_obj:
+        A dictionary of predicates and lists of objects, or single objects
+        which will be used, in order, to construct the hash
+    * omitted:
+        A list of predicate strings to be ignored when building the hash
+        
+    """
+    if omitted is None:
+        omitted = []
+    pre = prefixes.Prefixes()
+    sha1 = hashlib.sha1()
+    #sort keys
+    po_keys = pred_obj.keys()
+    po_keys.sort()
+    for pred in po_keys:
+        if pred not in omitted:
+            pred_elems = pred.split(':')
+            if len(pred_elems) == 2:
+                if pre.has_key(pred_elems[0]):
+                    predicate = '%s%s' % (pre[pred_elems[0]], pred_elems[1])
+                else:
+                    raise ValueError('predicate not in prefixes.py')
+            else:
+                raise ValueError('make hash passed a predicate '
+                                 'which is not of the form <prefix>:<item>')
+            if isinstance(pred_obj[pred], list):
+                for obj in pred_obj[pred]:
+                    sha1.update(predicate)
+                    sha1.update(obj)
+            else:
+                sha1.update(predicate)
+                sha1.update(pred_obj[pred])
+    sha1_hex = str(sha1.hexdigest())
+    return sha1_hex
+    

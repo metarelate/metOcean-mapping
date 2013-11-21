@@ -1,5 +1,4 @@
 from distutils.core import setup, Command
-import multiprocessing
 import os
 import sys
 
@@ -28,7 +27,7 @@ class TestRunner(Command):
         if not modules:
             raise ValueError('No tests were found to run.')
 
-        n_processors = max(multiprocessing.cpu_count() - 1, 1)
+        n_processors = 1
         args = ['', 'module', '--processes={}'.format(n_processors),
                 '--verbosity=2']
 

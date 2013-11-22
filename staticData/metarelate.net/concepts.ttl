@@ -14291,3 +14291,69 @@
       mr:hasProperty  <http://www.metarelate.net/metOcean/property/ab5ac235a3c2ddd084326ea3737a251eb3000f6e> ;
 	.
 
+
+<http://www.metarelate.net/metOcean/property/57db663206159a8976cf3816cf0c732587e7d08c>
+      rdf:type      mr:Property ;
+      rdf:value     64 ;
+      mr:name       gribapi:parameterNumber ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/component/582fb45f756615ffeb9bec4ea1d89084a9abdd23>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:cf ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/8d51430e6b3f2eea25e075c7f19aacb5299d12ae> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/ab5ac235a3c2ddd084326ea3737a251eb3000f6e> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c2d81e524b6ec8a47e2729ac303b965a164ab4ec> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/f044529020d5f3e497e563033c317e17c2e3d4e8>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:grib ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/0fab324a87eb9ff15fbd5a758cdade54cb1d63bb> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/a5837c8b1754cd36332301e9a0ba128c881dec58> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/560019a9108cea943c64fe160d0f14c598ee81be> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/3a8d67d37175cdfe45b1b0898a4fa890781de5a5> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/14b756c381e6ae20d0f60eacabc695c9966b849e>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:grib ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/57db663206159a8976cf3816cf0c732587e7d08c> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/6fd321e0ab482c69967e31f7b1feb84966104d4c> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/c54dabeb75d03ec846074971453d9b3eadd80bfe> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/560019a9108cea943c64fe160d0f14c598ee81be> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/2a99b9a03c13186e39eeb098cae474d634e39197>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:cf ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/ab5ac235a3c2ddd084326ea3737a251eb3000f6e> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/e2aa18295e7bb203cd008ec023624a0abf9f8840> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/02f26abe580640ab6d77556dc9cdbbea74d89e69> ;
+	.
+
+<http://www.metarelate.net/metOcean/property/cf931c22548024589c16cb16d80a04369b35f26c>
+      rdf:type      mr:Property ;
+      rdf:value     cfsn:atmosphere_mass_content_of_water_vapor ;
+      mr:name       cfm:standard_name ;
+      mr:operator   openmathr1:eq ;
+	.
+
+<http://www.metarelate.net/metOcean/component/c198ceb8fbe52bbbbfa4b3ed507fd2239066ea68>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:grib ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/3038d1a3d6b572febd80865c513cf289ed8b0a80> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/a5837c8b1754cd36332301e9a0ba128c881dec58> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/560019a9108cea943c64fe160d0f14c598ee81be> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/3a8d67d37175cdfe45b1b0898a4fa890781de5a5> ;
+	.
+
+<http://www.metarelate.net/metOcean/component/7806f1e1d7e819b75be999b4dab744bd3ec73e4e>
+      rdf:type      mr:Component ;
+      mr:hasFormat  metocFormat:cf ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/9049cc41298c503d54c39e99bb40faf6d38a5174> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/ab5ac235a3c2ddd084326ea3737a251eb3000f6e> ;
+      mr:hasProperty  <http://www.metarelate.net/metOcean/property/cf931c22548024589c16cb16d80a04369b35f26c> ;
+	.
+

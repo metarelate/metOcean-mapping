@@ -16,12 +16,11 @@ Contents:
    :maxdepth: 1
 
    gettingStarted/index
-   about/index
    forum/index
+   developer/index
+   api/index
    exporting/index
    vocabulary/index
-   developer/index
-   query/index
 
 
 Search

@@ -2,7 +2,7 @@ Discussion Forum
 *****************
 
 The 
-`Metarelate Questions <https://www.metarelate.net/forum/forum/questions/>`
+`Metarelate Questions <https://www.metarelate.net/forum/forum/questions/>`_
 forum is open and available for comment.
 
 Please use a supported OpenID provider to authenticate.

@@ -12,21 +12,23 @@ SPARQL queries may be run directly on the store to retrieve information in ways 
 API
 ====
 
-High Level Functions
----------------------
+Classes
+--------
 
-These functions provide the core interface to the metarelate repository.
+These Classes represent the metadata translations in the metarelate repository
+
+
+.. automodule:: metocean
+   :members:
+
+
+Control
+-------
+
+The fuseki module provides the interface to the metarelate repository, managing the communication with the data store.
 
 .. automodule:: metocean.fuseki
    :members:
 
-Queries
---------
-
-These functions wrap SPARQL queries to run on the metarelate repository
-
-
-.. automodule:: metocean.queries
-   :members:
 
 

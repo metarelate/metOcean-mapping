@@ -9,7 +9,6 @@ Contents:
 
    github/index
    design/index
-   implementation/index
 
 
 

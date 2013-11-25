@@ -8106,3 +8106,27 @@ map:f98ebcb690e7b17a6267883b5c82cde7a93d9548
       mr:target     <http://www.metarelate.net/metOcean/component/a09b71624cd96032e7830d28acb45f4e02a459e8> ;
       skos:note     "migrated from Iris 1.5" .
 
+
+<http://www.metarelate.net/metOcean/mapping/30c9208504fc8e1c5424317fbe4858c05804290c>
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-25T09:52:11.862273"^^xsd:dateTime ;
+      dc:replaces   map:f98ebcb690e7b17a6267883b5c82cde7a93d9548 ;
+      mr:invertible  "True" ;
+      mr:reason     "changed status" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/053524a1baa02ae3ab1f95d5e4a9e73c4f3ceedb> ;
+      mr:status     "Broken" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/2a99b9a03c13186e39eeb098cae474d634e39197> ;
+      skos:note     "mistaken entry, non-invertible reverse required" .
+
+map:cb9accf17e079ad479e9c8d3a2b9d9da9ef4f278
+      rdf:type      mr:Mapping ;
+      dc:creator    <http://www.metarelate.net/metOcean/people/marqh> ;
+      dc:date       "2013-11-25T09:51:09.376517"^^xsd:dateTime ;
+      mr:invertible  "False" ;
+      mr:reason     "new mapping" ;
+      mr:source     <http://www.metarelate.net/metOcean/component/2a99b9a03c13186e39eeb098cae474d634e39197> ;
+      mr:status     "Draft" ;
+      mr:target     <http://www.metarelate.net/metOcean/component/053524a1baa02ae3ab1f95d5e4a9e73c4f3ceedb> ;
+      skos:note     "migrated from Iris 1.5" .
+

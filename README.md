@@ -1,3 +1,7 @@
+This Project is now in a frozen state.  It is maintained for posterity.  Activity has moved to
+https://github.com/metarelate/metarelate
+https://github.com/metarelate/metOcean
+
 metOcean-mapping
 ================
 
